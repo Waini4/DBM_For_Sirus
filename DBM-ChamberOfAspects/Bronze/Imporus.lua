@@ -10,7 +10,7 @@ mod:SetUsedIcons(8)
 --mod.respawnTime = 20
 
 
-mod:RegisterEvents(
+mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 316523 316526 312197 312194",
 	"SPELL_CAST_SUCCESS 316519 316520 316523 316526 312199",
 	"SPELL_AURA_APPLIED 312199 316508",
