@@ -3,24 +3,56 @@ local L
 --Maulgar
 L = DBM:GetModLocalization("Maulgar")
 
-L:SetGeneralLocalization({
-	name = "High King Maulgar"
-})
+L:SetGeneralLocalization{
+	name = "Король Молгар"
+}
 
---Gruul the Dragonkiller
+L:SetTimerLocalization{
+	TimerWhirl = "Вихрь!",
+	timerActive = "%s активен"
+}
+
+L:SetWarningLocalization{
+	WarnMight = "%s активен",
+	Move = "%s отойдите!",
+	KickNow = "Прерывание %s"
+}
+
+L:SetOptionLocalization{
+	WarnMight = "Обявлять активацию минибоссов",
+	Move = "Обявлять опасные способности для милизоны",
+	AnnounceToChat = "Анонсировать об активации в чат",
+	KickNow = "Обявлять прерывание заклинания",
+	TimerWhirl = "Отсчитывать время до окончания вихря"
+}
+
+L:SetMiscLocalization{
+}
+
+--Gruul
 L = DBM:GetModLocalization("Gruul")
 
-L:SetGeneralLocalization({
-	name = "Gruul the Dragonkiller"
-})
+L:SetGeneralLocalization{
+	name = "Груул Драконобой"
+}
 
-L:SetWarningLocalization({
-	WarnGrowth	= "%s (%d)"
-})
+L:SetTimerLocalization{
+	Strike = "Хлопок!",
+	TimerFurnaceActive = "Печь активна",
+	TimerFurnaceInactive = "Печь не активна",
+	TimerBurnedFlesh = "Обожженная плоть (х2 урон)"
+}
 
-L:SetOptionLocalization({
-	WarnGrowth		= "Show warning for $spell:36300",
-	RangeDistance	= "Range frame distance for $spell:33654",
-	Smaller			= "Smaller distance (11)",
-	Safe			= "Safer distance (18)"
-})
+L:SetWarningLocalization{
+
+}
+
+L:SetOptionLocalization{
+	Strike = "Отсчет времени до хлопка",
+	TimerFurnaceActive = "Отсчет времени пока печь активна",
+	TimerFurnaceInactive = "Отсчет времени пока печь не активна",
+	TimerBurnedFlesh = "Отсчет времени пока длится х2 урон по боссу"
+}
+
+L:SetMiscLocalization{
+}

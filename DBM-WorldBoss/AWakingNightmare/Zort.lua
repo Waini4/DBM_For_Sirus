@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Zort", "DBM-WorldBoss", 2)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("20220616165100"):sub(12, -3))
+mod:SetRevision(("20220615151300"):sub(12, -3)) -- fxpw check 202206151120000
 mod:SetCreatureID(50702)
 mod:SetUsedIcons(1, 2, 3, 4, 5, 6, 7, 8)
 
@@ -62,7 +62,7 @@ local timerBreathNightmare	    		= mod:NewCDTimer(15, 308512)
 local timerAmonstrousblow	   			= mod:NewCDTimer(15, 307845)
 
 mod:AddSetIconOption("SetIconOnSveazTarget", 314606, true, true, {5, 6, 7})
-mod:AddSetIconOption("SetIconOnFlameTarget", 307839, true, true, {1, 2, 3})
+mod:AddSetIconOption("SetIconOnFlameTarget", 307839, true, true, {1, 2})
 mod:AddBoolOption("AnnounceSveaz", false)
 mod:AddBoolOption("AnnounceFlame", false)
 mod:AddBoolOption("AnnounceKnopk", false)
@@ -70,7 +70,7 @@ mod:AddBoolOption("RangeFrame", true)
 
 local SveazTargets = {}
 local FlameTargets = {}
-local FlameIcons = 3
+local FlameIcons = 2
 local SveazIcons = 7
 local warned_preP = false
 local warned_preP1 = false
@@ -96,11 +96,11 @@ end
 
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(307829) then
-		--warnkik:Show()
+		warnkik:Show()
 		timerkik:Start()
 		specWarnReturnInterrupt:Show()
 	elseif args:IsSpellID(307820, 307818, 307817) then
-		--warnShkval:Show()
+		warnShkval:Show()
 		timerShkval:Start()
 		specWarnshkval:Show()
 	elseif args:IsSpellID(308520) then
@@ -144,7 +144,7 @@ function mod:SPELL_AURA_APPLIED(args)
 				DBM.RangeCheck:Show(12)
 			end
 		end
-	elseif args:IsSpellID(308517, 308620) then
+	elseif args:IsSpellID(308517) then
 		SveazTargets[#SveazTargets + 1] = args.destName
 		self:ScheduleMethod(0.1, "SetSveazIcons")
 		timerSveazi:Start()
@@ -168,14 +168,14 @@ mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(307839) then
-		FlameIcons = 3
+		FlameIcons = 2
 		if self.Options.SetIconOnFlameTarget then
 			self:SetIcon(args.destName, 0)
 		end
 		if self.Options.RangeFrame then
 			DBM.RangeCheck:Hide()
 	 end
-	elseif args:IsSpellID(308517, 308620) then
+	elseif args:IsSpellID(308516, 308517) then
 		if self.Options.SetIconOnSveazTarget then
 			self:SetIcon(args.destName, 0)
 		end
@@ -201,16 +201,16 @@ do
 	end
 	function mod:SetFlameIcons()
 		table.sort(FlameTargets, sort_by_group)
-		for _, v in ipairs(FlameTargets) do
+		for v in ipairs(FlameTargets) do
 			if mod.Options.AnnounceFlame then
-				if DBM:GetRaidRank() > 0 then
+				if DBM:GetRaidRank() > 0 and self:AntiSpam(3) then
 					SendChatMessage(L.Flame:format(FlameIcons, UnitName(v)), "RAID_WARNING")
 				else
 					SendChatMessage(L.Flame:format(FlameIcons, UnitName(v)), "RAID")
 				end
 			end
 			if self.Options.SetIconOnFlameTarget then
-				self:SetIcon(UnitName(v), FlameIcons)
+				self:SetIcon(UnitName(v), FlameIcons, 15)
 			end
 			FlameIcons = FlameIcons - 1
 		end
@@ -220,7 +220,7 @@ do
 	function mod:SetSveazIcons()
 		if DBM:GetRaidRank() >= 0 then
 			table.sort(SveazTargets, sort_by_group)
-			for _, v in ipairs(SveazTargets) do
+			for v in ipairs(SveazTargets) do
 				if mod.Options.AnnounceSveaz then
 					if DBM:GetRaidRank() > 0 then
 						SendChatMessage(L.Sveaz:format(SveazIcons, UnitName(v)), "RAID_WARNING")
@@ -229,7 +229,7 @@ do
 					end
 				end
 				if self.Options.SetIconOnSveazTarget then
-					self:SetIcon(UnitName(v), SveazIcons)
+					self:SetIcon(UnitName(v), SveazIcons, 10)
 				end
 				SveazIcons = SveazIcons - 1
 			end
@@ -242,7 +242,7 @@ do
 	end
 end
 
---[[
+
 function mod:UNIT_HEALTH(uId)
 	local cid = self:GetUnitCreatureId(uId)
 		if self.vb.phase == 1 and not warned_preP and cid == 50702 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.73 then
@@ -263,7 +263,7 @@ function mod:UNIT_HEALTH(uId)
 			mod:SetStage(3)
 			warnPhase3:Show()
 		end
-end]]
+end
 
 function mod:UNIT_DIED(args)
 	if args.destName == L.Cudo then

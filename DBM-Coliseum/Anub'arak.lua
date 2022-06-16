@@ -90,7 +90,7 @@ local function EmergeFix(self)
 end
 
 function mod:OnCombatStart(delay)
-	DBM:FireCustomEvent("DBM_EncounterStart", 34564, "Anub'arak_Coliseum")
+	DBM:FireCustomEvent("DBM_EncounterStart", 34564, "Anub'arak")
 	self:SetStage(1)
 	self.vb.Burrowed = false
 	timerAdds:Start(10-delay)
@@ -107,7 +107,7 @@ function mod:OnCombatStart(delay)
 	end
 end
 function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 34564, "Anub'arak_Coliseum")
+	DBM:FireCustomEvent("DBM_EncounterEnd", 34564, "Anub'arak")
 end
 function mod:AnnouncePcoldIcons(uId, icon)
 	if self.Options.AnnouncePColdIcons and IsInGroup() and DBM:GetRaidRank() > 1 then

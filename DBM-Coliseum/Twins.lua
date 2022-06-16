@@ -1,4 +1,4 @@
-local mod	= DBM:NewMod("ValkTwins", "DBM-Coliseum")
+local mod	= DBM:NewMod("The Twin Val'kyr", "DBM-Coliseum")
 local L		= mod:GetLocalizedStrings()
 
 mod:SetRevision("20220518110528")
@@ -53,7 +53,7 @@ local debuffTargets = {}
 mod.vb.debuffIcon = 1
 
 function mod:OnCombatStart(delay)
-	DBM:FireCustomEvent("DBM_EncounterStart", 34497, "ValkTwins")
+	DBM:FireCustomEvent("DBM_EncounterStart", 34497, "The Twin Val'kyr")
 	timerSpecial:Start(-delay)
 	warnSpecial:Schedule(40-delay)
 	timerAchieve:Start(-delay)
@@ -66,7 +66,7 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
-	DBM:FireCustomEvent("DBM_EncounterStart", 34497, "ValkTwins")
+	DBM:FireCustomEvent("DBM_EncounterStart", 34497, "The Twin Val'kyr")
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
 	end
