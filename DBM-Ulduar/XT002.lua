@@ -42,7 +42,7 @@ mod:AddSetIconOption("SetIconOnGravityBombTarget", 64234, true, true, {8})
 mod:AddRangeFrameOption(12, nil, true)
 
 function mod:OnCombatStart(delay)
-	DBM:FireCustomEvent("DBM_EncounterStart", 33293, "XT002")
+	DBM:FireCustomEvent("DBM_EncounterStart", 33293, "XT-002 Deconstructor")
 	enrageTimer:Start(-delay)
 	timerAchieve:Start()
 	if self:IsDifficulty("normal10") then
@@ -53,7 +53,7 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
-	DBM:FireCustomEvent("DBM_EncounterStart", 33293, "XT002",wipe)
+	DBM:FireCustomEvent("DBM_EncounterStart", 33293, "XT-002 Deconstructor",wipe)
 
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
