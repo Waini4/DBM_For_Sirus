@@ -56,10 +56,10 @@ function mod:OnCombatStart(delay)
 	elseif mod:IsDifficulty("normal25") or mod:IsDifficulty("normal10") then
 		timerGrowthCD:Start(-delay)
 		timerGroundSlamCD:Start(40-delay)
-		-- if self.Options.RangeFrame then
-		-- 	DBM.RangeCheck:Show(self.Options.RangeDistance == "Smaller" and 11 or 18)
-		-- end
-		DBM:AddMsg("Ground Slam timer is not broken. This is an ability that has a 74 second minimum cooldown window, but after coming off CD can be delayed up to 21 seconds on when it's cast. Basically it's a 74-95sec window. DBM shows timer for the start of that window, but cannot control whether or not the boss casts it at 74, 85, or 95. Use this knowledge to inform you of when the ability can NOT be cast, not when it will be.")
+		if self.Options.RangeFrame then
+			DBM.RangeCheck:Show(self.Options.RangeDistance == "Smaller" and 11 or 18)
+		end
+		-- DBM:AddMsg("Ground Slam timer is not broken. This is an ability that has a 74 second minimum cooldown window, but after coming off CD can be delayed up to 21 seconds on when it's cast. Basically it's a 74-95sec window. DBM shows timer for the start of that window, but cannot control whether or not the boss casts it at 74, 85, or 95. Use this knowledge to inform you of when the ability can NOT be cast, not when it will be.")
 	end
 end
 

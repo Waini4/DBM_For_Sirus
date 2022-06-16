@@ -57,7 +57,7 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:SPELL_CAST_START(args)
-	if args.spellId == 33152 then--Prayer of Healing
+	if args:IsSpellID(33152) then--Prayer of Healing
 		if self:CheckInterruptFilter(args.sourceGUID, nil, true) then
 			specWarnPoH:Show(args.sourceName)
 			specWarnPoH:Play("kickcast")
@@ -65,7 +65,7 @@ function mod:SPELL_CAST_START(args)
 		else
 			warningPoH:Show()
 		end
-	elseif args.spellId == 33144 then--Heal
+	elseif args:IsSpellID(33144) then--Heal
 		if self:CheckInterruptFilter(args.sourceGUID, nil, true) then
 			specWarnHeal:Show(args.sourceName)
 			specWarnHeal:Play("kickcast")
@@ -74,15 +74,15 @@ function mod:SPELL_CAST_START(args)
 			warningHeal:Show()
 		end
 	elseif args:IsSpellID(305221) then	-- Пламенное очищение
-			specWarnKickCleanse:Show(args.sourceName)
-			specWarnKickCleanse:Play("kickcast")
+		specWarnKickCleanse:Show(args.sourceName)
+		specWarnKickCleanse:Play("kickcast")
 	else
-			warningCleanse:Show()
+		warningCleanse:Show()
 	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args.spellId == 33238 then	-- Вихрь
+	if args:IsSpellID(33238) then	-- Вихрь
 		if self.Options.SpecWarn33238run then
 			specWarnWhirlwind:Show()
 			specWarnWhirlwind:Play("justrun")
@@ -91,7 +91,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		timerWhirlwind:Start()
 		timerWhirlwindCD:Start()
-	elseif args.spellId == 33054 or args.spellId == 305247 and not args:IsDestTypePlayer() then	-- Щит заклятий(Гер)
+	elseif args:IsSpellID(33054,305247) and not args:IsDestTypePlayer() then	-- Щит заклятий(Гер)
 		warningShield:Show(args.destName)
 	elseif args.spellId == 33147 and not args:IsDestTypePlayer() then
 		warningPWS:Show(args.destName)
@@ -113,7 +113,7 @@ function mod:SPELL_AURA_APPLIED(args)
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
-	if args.spellId == 33131 then
+	if args:IsSpellID(33131) then
 		warningFelHunter:Show()
 		timerFelhunter:Start()
 	elseif args.IsSpellID(16508) then	-- Устрашающий рев
