@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Maulgar", "DBM-Gruul")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20220518110528") -- fxpw check 20220609123000
+mod:SetRevision("20220518110528") -- fxpw check 20220616123000
 mod:SetCreatureID(18831, 18832, 18834, 18835, 18836)
 
 mod:SetModelID(18831)
