@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Zort", "DBM-WorldBoss", 2)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("20220615151300"):sub(12, -3)) -- fxpw check 202206151120000
+mod:SetRevision(("20220616165100"):sub(12, -3))
 mod:SetCreatureID(50702)
 mod:SetUsedIcons(1, 2, 3, 4, 5, 6, 7, 8)
 
