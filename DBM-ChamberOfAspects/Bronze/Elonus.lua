@@ -282,7 +282,7 @@ do
 	end
 	function mod:SetRevCascIcons()
 		table.sort(RevCascTargets, sort_by_group)
-		for i, v in ipairs(RevCascTargets) do
+		for _, v in ipairs(RevCascTargets) do
 			if mod.Options.AnnounceReverCasc then
 				if DBM:GetRaidRank() > 0 then
 					SendChatMessage(L.RevCasc:format(RevCascIcons, UnitName(v)), "RAID_WARNING")
@@ -302,7 +302,7 @@ do
 
 	function mod:SetErapIcons()
 		table.sort(ErapTargets, sort_by_group)
-		for i, v in ipairs(ErapTargets) do
+		for _, v in ipairs(ErapTargets) do
 			if mod.Options.AnnounceErap then
 				if DBM:GetRaidRank() > 0 then
 					SendChatMessage(L.Erapc:format(ErapIcons, UnitName(v)), "RAID_WARNING")

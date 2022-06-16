@@ -93,7 +93,7 @@ do
 	end
 	function mod:SetExplosiveIcons()
 		table.sort(ExplosiveTargets, sort_by_group)
-		for i, v in ipairs(ExplosiveTargets) do
+		for _, v in ipairs(ExplosiveTargets) do
 			if mod.Options.AnnounceExplosive then
 				if DBM:GetRaidRank() > 0 then
 					SendChatMessage(L.ExplosiveIcon:format(ExplosiveIcons, UnitName(v)), "RAID_WARNING")

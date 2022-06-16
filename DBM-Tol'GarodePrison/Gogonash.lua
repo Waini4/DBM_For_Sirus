@@ -117,7 +117,7 @@ do
 	end
 	function mod:SetMarkIcons()
 		table.sort(MarkTargets, sort_by_group)
-		for i, v in ipairs(MarkTargets) do
+		for _, v in ipairs(MarkTargets) do
 			if mod.Options.AnnounceKor then
 				if DBM:GetRaidRank() > 0 then
 					SendChatMessage(L.MarkofFilthIcon:format(self.vb.MarkofFilthIcon, UnitName(v)), "RAID_WARNING")

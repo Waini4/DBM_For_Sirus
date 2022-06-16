@@ -28,14 +28,14 @@ function mod:ZONE_CHANGED_NEW_AREA()
 		inviteTimer:Stop()
 		SetMapToCurrentZone() -- for GetMapLandmarkInfo()
 	end
-	for i, v in ipairs(DBM:GetModByName("z402").timers) do v:Stop() end
-	for i, v in ipairs(DBM:GetModByName("z541").timers) do v:Stop() end
-	for i, v in ipairs(DBM:GetModByName("z444").timers) do v:Stop() end
-	for i, v in ipairs(DBM:GetModByName("z462").timers) do v:Stop() end
-	for i, v in ipairs(DBM:GetModByName("z483").timers) do v:Stop() end
-	for i, v in ipairs(DBM:GetModByName("z611").timers) do v:Stop() end
-	for i, v in ipairs(DBM:GetModByName("z861").timers) do v:Stop() end
-	for i, v in ipairs(DBM:GetModByName("z916").timers) do v:Stop() end
+	for _, v in ipairs(DBM:GetModByName("z402").timers) do v:Stop() end
+	for _, v in ipairs(DBM:GetModByName("z541").timers) do v:Stop() end
+	for _, v in ipairs(DBM:GetModByName("z444").timers) do v:Stop() end
+	for _, v in ipairs(DBM:GetModByName("z462").timers) do v:Stop() end
+	for _, v in ipairs(DBM:GetModByName("z483").timers) do v:Stop() end
+	for _, v in ipairs(DBM:GetModByName("z611").timers) do v:Stop() end
+	for _, v in ipairs(DBM:GetModByName("z861").timers) do v:Stop() end
+	for _, v in ipairs(DBM:GetModByName("z916").timers) do v:Stop() end
 	DBM:GetModByName("z402"):Unschedule()
 	DBM:GetModByName("z541"):Unschedule()
 	DBM:GetModByName("z444"):Unschedule()

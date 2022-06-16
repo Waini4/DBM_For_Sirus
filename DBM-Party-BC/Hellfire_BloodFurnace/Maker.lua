@@ -20,6 +20,7 @@ local timerMindControlCD	= mod:NewCDTimer(34.6, 30923, nil, nil, nil, 2)
 local timerMindControl		= mod:NewTargetTimer(10, 30923, nil, nil, nil, 3)
 
 local MC = 1
+local dominateMindTargets = {}
 
 mod:AddSetIconOption("SetIconOnDominateMind", 30923, true, true, {6})
 mod:AddBoolOption("RemoveWeaponOnMindControl", true)

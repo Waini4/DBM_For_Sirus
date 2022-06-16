@@ -137,7 +137,7 @@ do
 	end
 	function mod:SetSvazIcons()
 		table.sort(SvazTargets, sort_by_group)
-		for i, v in ipairs(SvazTargets) do
+		for _, v in ipairs(SvazTargets) do
 			if mod.Options.AnnounceSvaz then
 				if DBM:GetRaidRank() > 0 then
 					SendChatMessage(L.SvazIcon:format(SvazIcons, UnitName(v)), "RAID_WARNING")

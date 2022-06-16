@@ -163,7 +163,7 @@ do
 	end
 	function mod:SetPorchIcons()
 		table.sort(PorchTargets, sort_by_group)
-		for i, v in ipairs(PorchTargets) do
+		for _, v in ipairs(PorchTargets) do
 			if mod.Options.AnnouncePorch then
 				if DBM:GetRaidRank() > 0 then
 					SendChatMessage(L.Porch:format(self.vb.PorchIcons, UnitName(v)), "RAID_WARNING")

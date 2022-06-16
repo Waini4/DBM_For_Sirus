@@ -302,7 +302,7 @@ do
 	function mod:StaticAngerIcons() -- метки и анонс целей статического заряда
 		if DBM:GetRaidRank() >= 0 then
 			table.sort(StaticTargets, sort_by_group)
-			for i, v in ipairs(StaticTargets) do
+			for _, v in ipairs(StaticTargets) do
 				if mod.Options.AnnounceStatic then
 					if DBM:GetRaidRank() > 0 then
 						SendChatMessage(L.StaticIcon:format(StaticIcons, UnitName(v)), "RAID_WARNING")

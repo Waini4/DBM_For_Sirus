@@ -42,8 +42,7 @@ L:SetGeneralLocalization({
 })
 
 L:SetMiscLocalization({
-	EmoteNazan	= "Назан спускается с небес.",
-	
+	EmoteNazan	= "Назан спускается с небес."
 })
 
 -------------------------

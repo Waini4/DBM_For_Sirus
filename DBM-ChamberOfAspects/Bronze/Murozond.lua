@@ -123,11 +123,11 @@ function mod:OnCombatEnd(wipe)
 	end
 	if self.Options.AnnounceFails and DBM:GetRaidRank() >= 1 then
 		local lFear = ""
-		for k, v in pairs(FearTargets) do
+		for k, _ in pairs(FearTargets) do
 			table.insert(FearFails, k)
 		end
 		table.sort(FearFails, FearFails1)
-		for i, v in ipairs(FearFails) do
+		for _, v in ipairs(FearFails) do
 			lFear = lFear.." "..v.."("..(FearTargets[v] or "")..")"
 		end
 		SendChatMessage(L.Fear:format(lFear), "RAID")

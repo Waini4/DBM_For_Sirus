@@ -56,7 +56,7 @@ end
 local function getBasecount()
 	local alliance = 0
 	local horde = 0
-	for k,v in pairs(objectives) do
+	for _,v in pairs(objectives) do
 		if v == 11 then
 			alliance = alliance + 1
 		elseif v == 10 then

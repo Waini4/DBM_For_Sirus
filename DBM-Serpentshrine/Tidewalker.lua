@@ -158,7 +158,7 @@ do
 	end
 	function mod:SetSuhIcons()
 		table.sort(SuhTargets, sort_by_group)
-		for i, v in ipairs(SuhTargets) do
+		for _, v in ipairs(SuhTargets) do
 			if self.Options.SetIconOnSklepTargets then
 				self:SetIcon(UnitName(v), SuhIcons, 10)
 			end

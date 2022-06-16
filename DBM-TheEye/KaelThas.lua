@@ -734,7 +734,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			if self.Options.SetIconOnMC then
 				table.sort(mincControl, function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 				local MCIcons = 8
-				for i, v in ipairs(mincControl) do
+				for _, v in ipairs(mincControl) do
 					self:SetIcon(v, MCIcons)
 					MCIcons = MCIcons - 1
 				end

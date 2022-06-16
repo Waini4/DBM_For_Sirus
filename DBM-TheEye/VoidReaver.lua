@@ -122,7 +122,7 @@ do
 	function mod:SetSignIcons()
 		table.sort(SignTargets, sort_by_group)
 		if #SignTargets <= 6 then
-			for i, v in ipairs(SignTargets) do
+			for _, v in ipairs(SignTargets) do
 				if mod.Options.AnnounceSign then
 					if DBM:GetRaidRank() > 0 then
 						SendChatMessage(L.SignIcon:format(SignIcons, UnitName(v)), "RAID_WARNING")

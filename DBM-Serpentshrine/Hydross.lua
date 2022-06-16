@@ -181,7 +181,7 @@ do
 	end
 	function mod:SetSklepIcons()
 		table.sort(SklepTargets, sort_by_group)
-		for i, v in ipairs(SklepTargets) do
+		for _, v in ipairs(SklepTargets) do
 			if mod.Options.AnnounceSklep then
 				if DBM:GetRaidRank() > 0 then
 					SendChatMessage(L.SklepIcon:format(self.vb.SklepIcons, UnitName(v)), "RAID_WARNING")
@@ -202,7 +202,7 @@ do
 	end
 	function mod:SetKorIcons()
 		table.sort(KorTargets, sort_by_group)
-		for i, v in ipairs(KorTargets) do
+		for _, v in ipairs(KorTargets) do
 			if mod.Options.AnnounceKor then
 				if DBM:GetRaidRank() > 0 then
 					SendChatMessage(L.KorIcon:format(self.vb.KorIcon, UnitName(v)), "RAID_WARNING")

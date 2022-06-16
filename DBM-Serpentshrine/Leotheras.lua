@@ -241,7 +241,7 @@ do
 		if DBM:GetRaidRank() >= 0 then
 			table.sort(PepelTargets, sort_by_group)
 			local PepelIcons = 7
-			for i, v in ipairs(PepelTargets) do
+			for _, v in ipairs(PepelTargets) do
 				if mod.Options.AnnouncePepel then
 					if DBM:GetRaidRank() > 0 then
 						SendChatMessage(L.PepelIcon:format(PepelIcons, UnitName(v)), "RAID_WARNING")
@@ -268,7 +268,7 @@ function mod:WarnDemons()
 	if self.Options.SetIconOnDemonTargets then
 		table.sort(demonTargets, function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 		local k = 8
-		for i, v in ipairs(demonTargets) do
+		for _, v in ipairs(demonTargets) do
 			self:SetIcon(v, k)
 			k = k - 1
 		end

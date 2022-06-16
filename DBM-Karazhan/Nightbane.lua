@@ -120,7 +120,7 @@ function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(305375) then
 		timerGrievingFireCD:Start()
 	elseif args:IsSpellID(305377) then
-		-- local name = {"orgasm", "AAAAA", "AAAA_lew"} --танец		
+		-- local name = {"orgasm", "AAAAA", "AAAA_lew"} --танец
 		-- name  = name[math.random(#name)]
 		-- warnSound:Play(name)
 		if self.vb.conflCount <=1 then
@@ -168,7 +168,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			if self.Options.SetIconOnPyromancer then
 				table.sort(pyromancerTargets, function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 				local pyroIcons = 8
-				for i, v in ipairs(pyromancerTargets) do
+				for _, v in ipairs(pyromancerTargets) do
 					if self.Options.AnnouncePyromancerIcons then
 						SendChatMessage(L.PyromancerIconSet:format(pyroIcons, v), "RAID")
 					end

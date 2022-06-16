@@ -132,7 +132,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 	elseif spellId == 62604 then	-- Frostbolt Volley by Sif
 		timerFBVolley:Start()
 	elseif args:IsSpellID(312895, 312542, 300871, 64390, 64213) then
-		timerChainlightning:Start()
+		timerChainLightning:Start()
 	end
 end
 

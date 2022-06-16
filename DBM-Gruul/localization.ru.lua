@@ -37,7 +37,6 @@ L:SetTimerLocalization{
 	TimerFurnaceActive 			= "Печь активна",
 	TimerFurnaceInactive 		= "Печь не активна",
 	TimerBurnedFlesh 			= "Обожженная плоть (х2 урон)"
-	
 }
 
 L:SetMiscLocalization({
