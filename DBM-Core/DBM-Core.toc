@@ -16,7 +16,7 @@
 ## DefaultState: enabled
 ## Author: Barsoom, Bunny67, Zidras, DBM-Frostmourne contributors, original DBM team, fixes for sirus Stekolnyu, Waini, fxpw
 ## Version: 9.2.20_alpha
-X-Website: https://github.com/Zidras/DBM-Warmane/  #todo fxpw
+X-Website: https://github.com/Waini4/DBM_For_Sirus  #todo fxpw
 
 
 compat.lua
