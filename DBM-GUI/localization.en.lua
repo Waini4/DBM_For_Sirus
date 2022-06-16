@@ -4,9 +4,9 @@ local L = DBM_GUI_L
 
 L.MainFrame = "Deadly Boss Mods"
 
-L.DBMWarmane				= "DBM-Sirus" -- TODO: url
+L.DBMSirus				    = "DBM-Sirus" -- TODO: url
 L.TranslationByPrefix		= "Retail backport by "
-L.TranslationBy 			= "Barsoom, Bunny67, Zidras. Fixes for sirus Stekolnyu Waini fxpw"
+L.TranslationBy 			= "Barsoom, Bunny67, Zidras. Fixes for sirus Stekolnyu, Waini, fxpw"
 L.Website					= "Visit us on discord at |cFF73C2FBhttps://discord.gg/7cjU9xvcQY|r"
 L.WebsiteButton				= "Website"
 
