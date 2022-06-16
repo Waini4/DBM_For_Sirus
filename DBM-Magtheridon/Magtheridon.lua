@@ -10,11 +10,12 @@ mod:RegisterEvents(
 	"CHAT_MSG_MONSTER_YELL"
 )
 mod:RegisterEventsInCombat(
-	"SPELL_CAST_START",
-	"SPELL_CAST_SUCCESS",
-	"SPELL_AURA_APPLIED",
+	"SPELL_CAST_START 305158 305159 305160 305134 30616 30510",
+	"SPELL_CAST_SUCCESS 30572 305166",
+	"SPELL_AURA_APPLIED 305131 305135",
 	"UNIT_HEALTH",
-	"SPELL_DAMAGE 305133"
+	"SPELL_DAMAGE 305133",
+	"CHAT_MSG_MONSTER_YELL"
 )
 -- общее --
 mod:AddTimerLine(L.General)
@@ -115,8 +116,8 @@ function mod:SPELL_CAST_START(args)
 	end
 end
 
-function mod:SPELL_DAMAGE( _, _, _, _, _, destFlags, extraArg1)			-- слакер пишет в рейд что взорвал печать
-	if extraArg1 == 305133 and bit.band(destFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) ~= 0 and bit.band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 then
+function mod:SPELL_DAMAGE(_, _, _, _, _, destFlags, spellId)			-- слакер пишет в рейд что взорвал печать
+	if spellId == 305133 and bit.band(destFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) ~= 0 and bit.band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 then
 		SendChatMessage(L.YellHandfail, "RAID")
 	end
 end
