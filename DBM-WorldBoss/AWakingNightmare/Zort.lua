@@ -142,7 +142,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			yellFlameFade:Countdown(307839)
 			if self.Options.RangeFrame then
 				DBM.RangeCheck:Show(12)
-		 	end
+			end
 		end
 	elseif args:IsSpellID(308517, 308620) then
 		SveazTargets[#SveazTargets + 1] = args.destName
@@ -155,8 +155,8 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specCowardice:Show()
 			if self.Options.RangeFrame then
-           		DBM.RangeCheck:Show(6)
-        	end
+				DBM.RangeCheck:Show(6)
+			end
 		end
 	elseif args:IsSpellID(307833) then
         timerInternalbleeding:Start()
