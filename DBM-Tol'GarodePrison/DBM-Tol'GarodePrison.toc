@@ -1,0 +1,23 @@
+## Interface: 30300
+## Title-ruRU:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Тол'Гародская тюрьма|r
+## LoadOnDemand: 1
+## Author: Stekolnyu, Waini
+## RequiredDeps: DBM-Core
+## SavedVariables: DBMTol'GarodePrison_AllSavedVars
+## SavedVariablesPerCharacter: DBMTol'GarodePrison_SavedStats
+## X-DBM-Mod: 1
+## X-DBM-Mod-Type: RAID
+## X-DBM-Mod-Category: WotLK
+## X-DBM-Mod-Name: Tol'GarodePrison
+## X-DBM-Mod-Name-ruRU: Тол'Гародская тюрьма
+--## X-DBM-Mod-Sort: 946, 955
+## X-DBM-Mod-LoadZoneID: 955
+--## X-DBM-Mod-LoadCID: 70010
+## X-DBM-Mod-LoadZone: Tol'GarodePrison
+## X-DBM-Mod-LoadZone-ruRU: Тол'Гародская тюрьма
+
+localization.ru.lua
+
+Ctrax.lua
+Gogonash.lua
+MagicEater.lua

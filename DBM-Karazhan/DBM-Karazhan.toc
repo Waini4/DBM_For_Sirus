@@ -1,0 +1,34 @@
+﻿## Interface: 30300
+## Title:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Karazhan|r
+## Author: Ritual
+## LoadOnDemand: 1
+## RequiredDeps: DBM-Core
+## SavedVariables: DBMKarazhan_AllSavedVars
+## SavedVariablesPerCharacter: DBMKarazhan_SavedStats
+## X-DBM-Mod: 1
+## X-DBM-Mod-Category: BC
+## X-DBM-Mod-Has-Single-Format: 1
+## X-DBM-Mod-Name: Karazhan
+## X-DBM-Mod-Name-ruRU: Каражан
+## X-DBM-Mod-Sort: 306
+## X-DBM-Mod-LoadZone: Karazhan, Ледяной мир Малчезара, Огненный мир Малчезара, Мир нежити Малчезара
+## X-DBM-Mod-LoadZone-ruRU: Каражан, Ледяной мир Малчезара, Огненный мир Малчезара, Мир нежити Малчезара
+
+localization.en.lua
+localization.ru.lua
+
+Attumen.lua
+Moroes.lua
+MaidenOfVirtue.lua
+BigBadWolf.lua
+RomuloAndJulianne.lua
+WizardOfOz.lua
+Curator.lua
+TerestianIllhoof.lua
+ShadeOfAran.lua
+Netherspite.lua
+Chess.lua
+PrinceMalchezaar.lua
+Nightbane.lua
+NamedBeasts.lua
+Zluker.lua
