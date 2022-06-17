@@ -54,15 +54,13 @@ end
 
 function mod:OnCombatEnd()
 	DBM:FireCustomEvent("DBM_EncounterStart", 33293, "XT-002 Deconstructor",wipe)
-
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end
 end
 
 function mod:SPELL_CAST_START(args)
-	local spellId = args.spellId
-	if spellId == 62776 or spellId == 312586 or spellId == 312939 then
+	if args:IsSpellID(62776, 312586, 312939) then
 		timerTympanicTantrumCast:Start()
 		timerTympanicTantrumCD:Start()
 	end
@@ -70,21 +68,21 @@ end
 
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
-	if (spellId == 62775 or spellId == 312587 or spellId == 312940) and args.auraType == "DEBUFF" then	-- Tympanic Tantrum
+	if args:IsSpellID(62775, 312587, 312940) and args.auraType == "DEBUFF" then	-- Tympanic Tantrum
 		timerTympanicTantrum:Start()
-	elseif spellId == 63018 or spellId == 65121 or spellId == 312588 or spellId == 312941 then 	-- Light Bomb
+	elseif args:IsSpellID(63018, 65121, 312588, 312941) then 	-- Light Bomb
 		if args:IsPlayer() then
 			specWarnLightBomb:Show()
 			specWarnLightBomb:Play("runout")
 			yellLightBomb:Yell()
-			yellLightBombFades:Countdown(spellId)
+			yellLightBombFades:Countdown(312941)
 		end
 		if self.Options.SetIconOnLightBombTarget then
 			self:SetIcon(args.destName, 7)
 		end
 		warnLightBomb:Show(args.destName)
 		timerLightBomb:Start(args.destName)
-	elseif spellId == 63024 or spellId == 64234 or spellId == 312590 or spellId == 312943 then
+	elseif args:IsSpellID(63024, 64234, 312590, 312943) then
 		if args:IsPlayer() then
 			specWarnGravityBomb:Show()
 			specWarnGravityBomb:Play("runout")
@@ -99,14 +97,14 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		warnGravityBomb:Show(args.destName)
 		timerGravityBomb:Start(args.destName)
-	elseif spellId == 312945 or spellId == 63849 then
+	elseif args:IsSpellID(312945, 63849) then
 		timerHeart:Start()
 	end
 end
 
 function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
-	if spellId == 63018 or spellId == 65121 or spellId == 312588 or spellId == 312941 then 												-- Ополяющий свет
+	if args:IsSpellID(63018, 65121, 312588, 312941) then 												-- Ополяющий свет
 		if args:IsPlayer() then
 			DBM.RangeCheck:Hide()
 		end
@@ -116,7 +114,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		if args:IsPlayer() then
 			yellLightBombFades:Cancel()
 		end
-	elseif spellId == 63024 or spellId == 64234 or spellId == 312590 or spellId == 312943 then											-- Грави бомба
+	elseif args:IsSpellID(63024, 64234, 312590, 312943) then											-- Грави бомба
 		if args:IsPlayer() then
 				DBM.RangeCheck:Hide()
 		end
@@ -126,7 +124,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		if args:IsPlayer() then
 			yellGravityBombFades:Cancel()
 		end
-	elseif spellId == 312945 or spellId == 63849 then
+	elseif args:IsSpellID(312945, 63849) then
 		timerHeart:Stop()
 	end
 end
