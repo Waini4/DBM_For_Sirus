@@ -1,6 +1,7 @@
 local mod	= DBM:NewMod("Koralon", "DBM-VoA")
 local L		= mod:GetLocalizedStrings()
 
+local CL = DBM_COMMON_L
 mod:SetRevision("20220518110528")
 mod:SetCreatureID(35013)
 
@@ -19,8 +20,8 @@ local warnBurningFury		= mod:NewStackAnnounce(66721, 2, nil, "Tank|Healer")
 
 local specWarnCinder		= mod:NewSpecialWarningMove(66684, nil, nil, nil, 1, 2)
 
-local timerNextMeteor		= mod:NewNextTimer(47, 66725, nil, nil, nil, 5, nil, DBM_COMMON_L.TANK_ICON)
-local timerNextBurningFury	= mod:NewNextTimer(20, 66721, nil, nil, nil, 5, nil, DBM_COMMON_L.TANK_ICON..DBM_COMMON_L.HEALER_ICON)
+local timerNextMeteor		= mod:NewNextTimer(47, 66725, nil, nil, nil, 5, nil, CL.TANK_ICON)
+local timerNextBurningFury	= mod:NewNextTimer(20, 66721, nil, nil, nil, 5, nil, CL.TANK_ICON..CL.HEALER_ICON)
 local timerBreath			= mod:NewBuffActiveTimer(4.5, 66665, nil, nil, nil, 2)
 local timerBreathCD			= mod:NewCDTimer(45, 66665, nil, nil, nil, 2)--Seems to variate, but 45sec cooldown looks like a good testing number to start.
 
