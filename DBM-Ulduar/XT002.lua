@@ -11,7 +11,7 @@ mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 62776 312586 312939",
-	"SPELL_AURA_APPLIED 62775 312587 312940 63018 65121 312588 312941",
+	"SPELL_AURA_APPLIED 62775 312587 312940 63018 65121 312588 312941 312943 312590 64234 63024",
 	"SPELL_AURA_REMOVED 63018 65121 312588 312941 63024 64234 312590 312943 312945 63849",
 	"SPELL_DAMAGE 64208 64206",
 	"SPELL_MISSED 64208 64206"
@@ -84,7 +84,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		warnLightBomb:Show(args.destName)
 		timerLightBomb:Start(args.destName)
-	elseif spellId == 63024 or spellId == 64234 or spellId == 312590 or spellId == 312943 then		-- Gravity Bomb
+	elseif spellId == 63024 or spellId == 64234 or spellId == 312590 or spellId == 312943 then
 		if args:IsPlayer() then
 			specWarnGravityBomb:Show()
 			specWarnGravityBomb:Play("runout")
