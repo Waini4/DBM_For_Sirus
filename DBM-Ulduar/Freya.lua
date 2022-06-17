@@ -137,7 +137,7 @@ end
 function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.SpawnYell then
 		timerAlliesOfNature:Start()
-		if self.Options.HealthFrame then
+		if self.Options.MobsHealthFrame then
 			if not adds[33202] then DBM.BossHealth:AddBoss(33202, L.WaterSpirit) end -- ancient water spirit
 			if not adds[32916] then DBM.BossHealth:AddBoss(32916, L.Snaplasher) end  -- snaplasher
 			if not adds[32919] then DBM.BossHealth:AddBoss(32919, L.StormLasher) end -- storm lasher
@@ -163,7 +163,7 @@ end
 function mod:UNIT_DIED(args)
 	local cid = self:GetCIDFromGUID(args.destGUID)
 	if cid == 33202 or cid == 32916 or cid == 32919 then
-		if self.Options.HealthFrame then
+		if self.Options.MobsHealthFrame then
 			DBM.BossHealth:RemoveBoss(cid)
 		end
 		if (GetTime() - killTime) > 20 then
