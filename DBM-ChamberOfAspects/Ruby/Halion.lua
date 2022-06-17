@@ -17,7 +17,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_DAMAGE",
 	"SPELL_MISSED",
 	"CHAT_MSG_MONSTER_YELL",
-	"CHAT_MSG_RAID_BOSS_EMOTE",
+	-- "CHAT_MSG_RAID_BOSS_EMOTE",
 	"UPDATE_WORLD_STATES",
 	"UNIT_HEALTH boss1"
 )
@@ -178,7 +178,7 @@ function mod:SPELL_AURA_REMOVED(args)
 end
 
 function mod:SPELL_DAMAGE(_, _, _, destGUID, _, _, spellId)
-	if (spellId == 75952 or spellId == 75951 or spellId == 75950 or spellId == 75949 or spellId == 75948 or spellId ==  75947) and destGUID == UnitGUID("player") and self:AntiSpam() then
+	if (spellId == 75952 or spellId == 75951 or spellId == 75950 or spellId == 75949 or spellId == 75948 or spellId == 75947) and destGUID == UnitGUID("player") and self:AntiSpam() then
 		specWarnMeteorStrike:Show()
 		specWarnMeteorStrike:Play("runaway")
 	-- Physical/Shadow Realm detection:

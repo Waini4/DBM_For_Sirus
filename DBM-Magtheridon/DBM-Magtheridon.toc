@@ -10,7 +10,7 @@
 ## X-DBM-Mod-Type: RAID
 ## X-DBM-Mod-Category: BC
 ## X-DBM-Mod-Has-Single-Format: 1
-## X-DBM-StatTypes: normal
+## X-DBM-StatTypes: normal25,heroic25
 ## X-DBM-Mod-Name: Magtheridon
 ## X-DBM-Mod-Name-zhCN: 玛瑟里顿
 ## X-DBM-Mod-Name-ruRU: Магтеридон
@@ -21,11 +21,11 @@
 ## X-DBM-Mod-LoadZone-ruRU: Логово Магтеридона
 
 localization.en.lua
-localization.de.lua
-localization.es.lua
-localization.tw.lua
-localization.cn.lua
+# localization.de.lua
+# localization.es.lua
+# localization.tw.lua
+# localization.cn.lua
 localization.ru.lua
-localization.kr.lua
+# localization.kr.lua
 
 Magtheridon.lua

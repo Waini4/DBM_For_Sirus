@@ -7,14 +7,14 @@
 ## SavedVariables: DBMSerpentshrine_AllSavedVars
 ## SavedVariablesPerCharacter: DBMSerpentshrine_SavedStats
 ## X-DBM-Mod: 1
-## X-DBM-Mod-Category: BC
 ## X-DBM-Mod-Type: RAID
+## X-DBM-Mod-Category: BC
+## X-DBM-StatTypes: normal25,heroic25
 ## X-DBM-Mod-Has-Single-Format: 1
 ## X-DBM-Mod-Name: Serpentshrine Cavern
 ## X-DBM-Mod-Name-ruRU: Змеиное святилище
 ## X-DBM-Mod-Sort: 304
 ## X-DBM-Mod-MapID: 863
-## X-DBM-StatTypes: normal25,heroic25
 ## X-DBM-Mod-LoadZone: Serpentshrine Cavern
 ## X-DBM-Mod-LoadZone-ruRU: Змеиное святилище
 

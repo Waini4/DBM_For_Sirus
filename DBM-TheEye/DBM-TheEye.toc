@@ -7,10 +7,13 @@
 ## SavedVariables: DBMTheEye_AllSavedVars
 ## SavedVariablesPerCharacter: DBMTheEye_SavedStats
 ## X-DBM-Mod: 1
+## X-DBM-Mod-Type: RAID
 ## X-DBM-Mod-Category: BC
+## X-DBM-StatTypes: normal25,heroic25
 ## X-DBM-Mod-Has-Single-Format: 1
 ## X-DBM-Mod-Name: The Eye
 ## X-DBM-Mod-Name-ruRU: Крепость Бурь
+## X-DBM-Mod-MapID: 862
 ## X-DBM-Mod-Sort: 303
 ## X-DBM-Mod-LoadZone: Tempest Keep
 ## X-DBM-Mod-LoadZone-ruRU: Крепость Бурь
