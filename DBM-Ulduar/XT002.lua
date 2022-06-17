@@ -1,6 +1,6 @@
 local mod	= DBM:NewMod("XT002", "DBM-Ulduar")
 local L		= mod:GetLocalizedStrings()
-DBM_COMMON_L = {}
+
 local CL = DBM_COMMON_L
 
 mod:SetRevision("20220518110528")
