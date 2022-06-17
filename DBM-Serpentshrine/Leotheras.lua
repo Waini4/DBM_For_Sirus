@@ -157,7 +157,7 @@ mod:RegisterCombat("combat", 21215)
 mod:SetUsedIcons(4, 5, 6, 7, 8)
 mod:SetModelID(20514)
 
-mod:RegisterEvents(
+mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS 310481 310484 310478 310516",
 	"CHAT_MSG_MONSTER_YELL",
 	"SPELL_CAST_START 37676 310510 310508 310503 310487 310521 310514",
