@@ -59,7 +59,7 @@ mod.vb.fleshCount = 0
 local incinerateFleshTargetName
 
 function mod:OnCombatStart(delay)
-	DBM:FireCustomEvent("DBM_EncounterStart", 34780, "Jaraxxus")
+	DBM:FireCustomEvent("DBM_EncounterStart", 34780, "Lord Jaraxxus")
 	if self.Options.IncinerateShieldFrame then
 		DBM.BossHealth:Show(L.name)
 		DBM.BossHealth:AddBoss(34780, L.name)
@@ -76,7 +76,7 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 34780, "Jaraxxus", wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 34780, "Lord Jaraxxus", wipe)
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
 	end

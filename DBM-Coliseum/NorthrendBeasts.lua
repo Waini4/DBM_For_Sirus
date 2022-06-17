@@ -101,7 +101,7 @@ local function updateHealthFrame(phase)
 end
 
 function mod:OnCombatStart(delay)
-	DBM:FireCustomEvent("DBM_EncounterStart", 34796, "NorthrendBeasts")
+	DBM:FireCustomEvent("DBM_EncounterStart", 34796, "The Beasts of Northrend")
 	table.wipe(phases)
 	self.vb.burnIcon = 8
 	self.vb.DreadscaleActive = true
@@ -122,7 +122,7 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 34796, "NorthrendBeasts", wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 34796, "The Beasts of Northrend", wipe)
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end

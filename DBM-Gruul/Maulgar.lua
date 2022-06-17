@@ -1,105 +1,59 @@
-local mod	= DBM:NewMod("Maulgar", "DBM-Gruul")
-local L		= mod:GetLocalizedStrings()
+local mod 	= 	DBM:NewMod("Maulgar", "DBM-Gruul");
+local L		= 	mod:GetLocalizedStrings()
 
-mod:SetRevision("20220518110528") -- fxpw check 20220616123000
-mod:SetCreatureID(18831, 18832, 18834, 18835, 18836)
+mod:SetRevision(("$Revision: 183 $"):sub(12, -3))
+mod:SetCreatureID(18831)
+mod:SetUsedIcons(8,7,6,5,4)
 
-mod:SetModelID(18831)
-mod:RegisterCombat("combat")
-
+mod:RegisterCombat("combat", 18831)
 mod:RegisterEventsInCombat(
-	"SPELL_CAST_START 33152	33144 305221",
-	"SPELL_CAST_SUCCESS 33131 16508",
-	"SPELL_AURA_APPLIED 33238 33054 305247 33147 305236 305216",
-	"SPELL_AURA_REMOVED 305236"
+	"SPELL_CAST_START 305221",
+	"SPELL_CAST_SUCCESS 16508",
+	"SPELL_AURA_APPLIED 305216 305247 33238"
 )
 
---Maulgar
-mod:AddTimerLine(L.Maulgar)
-local timerWhirlwindCD		= mod:NewCDTimer(55, 33238, nil, nil, nil, 2)
-local timerWhirlwind		= mod:NewBuffActiveTimer(15, 33238, nil, nil, nil, 2)
-local warningWhirlwind		= mod:NewSpellAnnounce(33238, 4)
-local timerIntimidateCD     = mod:NewCDTimer(16, 16508, nil, nil, 4, "Melee")
-local specWarnWhirlwind		= mod:NewSpecialWarningRun(33238, "Melee", nil, nil, 4, 2)
---Olm
-mod:AddTimerLine(L.Olm)
+local isDispeller = select(2, UnitClass("player")) == "PRIEST" or select(2, UnitClass("player")) == "SHAMAN" or select(2, UnitClass("player")) == "MAGE"
 
-local timerFelhunter		= mod:NewCDTimer(48.5, 33131, nil, nil, nil, 1)--Buff Active or Cd timer?
-local warningFelHunter		= mod:NewSpellAnnounce(33131, 3, nil, mod:IsTank() or mod:UnitClass() == "WARLOCK")
---Krosh
-mod:AddTimerLine(L.Krosh)
-local warningShield			= mod:NewTargetNoFilterAnnounce(33054 or 305247, 3, nil, "MagicDispeller")	--Щит  заклятий
-mod:AddBoolOption("RangeFireBomb", 3, false)
---Blindeye
-mod:AddTimerLine(L.Blindeye)
-local warningPWS			= mod:NewTargetNoFilterAnnounce(33147, 3, nil, false)
-local warningPoH			= mod:NewCastAnnounce(33152, 4)
-local warningHeal			= mod:NewCastAnnounce(33144, 4)
+local timerWhirlCD                   = mod:NewCDTimer(55, 33238)
+local timerWhirl                     = mod:NewTimer(15, "TimerWhirl", 33238)
+local timerIntimidateCD              = mod:NewCDTimer(16, 16508)
+local specWarnMelee                  = mod:NewSpecialWarningMove(33238, "Melee")
+local timerMight                     = mod:NewTargetTimer(60, 305216, "timerActive")
+local timerMightCD                   = mod:NewCDTimer(65, 305216)
+local specWarnShield                 = mod:NewSpecialWarningDispel(305247, isDispeller)
+local specWarnKickCleanse            = mod:NewSpecialWarning("KickNow", "-Melee")
+local warnMight                      = mod:NewAnnounce("WarnMight", 2)
 
-local specWarnPoH			= mod:NewSpecialWarningInterrupt(33152, "HasInterrupt", nil, nil, 1, 2)
-local specWarnHeal			= mod:NewSpecialWarningInterrupt(33144, "HasInterrupt", nil, nil, 1, 2)
-
-local timerPoH				= mod:NewCastTimer(4, 33152, nil, nil, nil, 4, nil, DBM_COMMON_L.INTERRUPT_ICON)
-local timerHeal				= mod:NewCastTimer(2, 33144, nil, nil, nil, 4, nil, DBM_COMMON_L.INTERRUPT_ICON)
-
-mod:AddTimerLine(L.BlindeyeHeroic)
-local specWarnKickCleanse	= mod:NewSpecialWarningInterrupt(305221, "HasInterrupt", nil, nil, 1, 2)	--Пламенное очищение
-local warningCleanse		= mod:NewCastAnnounce(305221, 4)	--Пламенное очищение
-
-mod:AddTimerLine(L.Heroic)
-
-local timerMight            = mod:NewTargetTimer(60, 305216, "timerActive")	-- время действия Переполняющая мощь
-local timerMightCD          = mod:NewCDTimer(60, 305216)	-- Переполняющая мощь
-local warnMight             = mod:NewAnnounce("WarnMight", 4, 305216, nil, nil, nil, 305216)	-- Анонс активации(Переполняющая мощь)
+mod:AddBoolOption("WarnMight",true)
+mod:AddBoolOption("AnnounceToChat",false)
 
 function mod:OnCombatStart(delay)
-	timerWhirlwindCD:Start(58-delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 18831, "High King Maulgar")
+	if mod:IsDifficulty("heroic25") then
+		timerMight:Start(5)
+	end
+end
+
+function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 18831, "High King Maulgar", wipe)
 end
 
 function mod:SPELL_CAST_START(args)
-	if args:IsSpellID(33152) then--Prayer of Healing
-		if self:CheckInterruptFilter(args.sourceGUID, nil, true) then
-			specWarnPoH:Show(args.sourceName)
-			specWarnPoH:Play("kickcast")
-			timerPoH:Start()
-		else
-			warningPoH:Show()
-		end
-	elseif args:IsSpellID(33144) then--Heal
-		if self:CheckInterruptFilter(args.sourceGUID, nil, true) then
-			specWarnHeal:Show(args.sourceName)
-			specWarnHeal:Play("kickcast")
-			timerHeal:Start()
-		else
-			warningHeal:Show()
-		end
-	elseif args:IsSpellID(305221) then	-- Пламенное очищение
-		specWarnKickCleanse:Show(args.sourceName)
-		specWarnKickCleanse:Play("kickcast")
-	else
-		warningCleanse:Show()
+	if args:IsSpellID(305221) then
+		specWarnKickCleanse:Show(args.spellName)
+--	elseif args:IsSpellID(305231) then
+
+	end
+end
+
+function mod:SPELL_CAST_SUCCESS(args)
+	if args:IsSpellID(16508) then
+		timerIntimidateCD:Start()
 	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(33238) then	-- Вихрь
-		if self.Options.SpecWarn33238run then
-			specWarnWhirlwind:Show()
-			specWarnWhirlwind:Play("justrun")
-		else
-			warningWhirlwind:Show()
-		end
-		timerWhirlwind:Start()
-		timerWhirlwindCD:Start()
-	elseif args:IsSpellID(33054,305247) and not args:IsDestTypePlayer() then	-- Щит заклятий(Гер)
-		warningShield:Show(args.destName)
-	elseif args.spellId == 33147 and not args:IsDestTypePlayer() then
-		warningPWS:Show(args.destName)
-	elseif args:IsSpellID(305236) and args:IsPlayer() then	-- рендж при появлении на тебе живой бомбы
-		if self.Options.RangeFireBomb then
-			DBM.RangeCheck:Show(7)
-		end
-	elseif args:IsSpellID(305216) then	-- Активация
+	if args:IsSpellID(305216) then
 		local activeIcon
 		for i = 1,40 do
 			if UnitName("raid" .. i .. "target") == L.name then
@@ -109,22 +63,14 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerMightCD:Start()
 		warnMight:Show(args.destName, activeIcon or "Interface\\Icons\\Inv_misc_questionmark")
 		timerMight:Start(args.destName, activeIcon or "Interface\\Icons\\Inv_misc_questionmark")
-	end
-end
-
-function mod:SPELL_CAST_SUCCESS(args)
-	if args:IsSpellID(33131) then
-		warningFelHunter:Show()
-		timerFelhunter:Start()
-	elseif args.IsSpellID(16508) then	-- Устрашающий рев
-			timerIntimidateCD:Start()
-	end
-end
-
-function mod:SPELL_AURA_REMOVED(args)	-- убрать рендж при исчезновении
-	if args:IsSpellID(305236) and args:IsPlayer() then
-		if self.Options.RangeFireBomb then
-			DBM.RangeCheck:Hide()
+		if self.Options.AnnounceToChat then
+			SendChatMessage((activeIcon and ("{rt" .. activeIcon .. "} ") or "") .. args.destName .. " активен", "RAID")
 		end
+	elseif args:IsSpellID(305247) then
+		specWarnShield:Show()
+	elseif args:IsSpellID(33238) then
+		timerWhirlCD:Start()
+		timerWhirl:Start()
+		specWarnMelee:Show()
 	end
 end

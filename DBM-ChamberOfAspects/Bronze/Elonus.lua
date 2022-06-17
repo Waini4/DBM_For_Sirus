@@ -9,9 +9,9 @@ mod:RegisterCombat("combat", 50609)
 mod:SetUsedIcons(1, 2, 3, 4, 5, 6, 7, 8)
 --mod.respawnTime = 20
 
-mod:RegisterEvents(
+mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 312214 312211 312210 312204 317156",
-	"SPELL_CAST_SUCCESS",
+	-- "SPELL_CAST_SUCCESS",
 	"SPELL_AURA_APPLIED 312206 317158 317160 312208 312204 317156 317155 312213 317163 317165",
     "SPELL_AURA_APPLIED_DOSE 312206 317158 317160 312208 312204 317156 317155 312213 317163 317165",
 	-- "UNIT_TARGET",
@@ -238,9 +238,9 @@ function mod:SPELL_AURA_APPLIED(args)
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
-function mod:SPELL_CAST_SUCCESS(args)
-	local spellId = args.spellId
-end
+-- function mod:SPELL_CAST_SUCCESS(args)
+-- 	local spellId = args.spellId
+-- end
 
 function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId

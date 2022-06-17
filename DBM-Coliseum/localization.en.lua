@@ -114,7 +114,7 @@ L:SetMiscLocalization({
 ---------------------
 --  Val'kyr Twins  --
 ---------------------
-L = DBM:GetModLocalization("ValkTwins")
+L = DBM:GetModLocalization("The Twin Val'kyr")
 
 L:SetGeneralLocalization({
 	name = "Val'kyr Twins"
