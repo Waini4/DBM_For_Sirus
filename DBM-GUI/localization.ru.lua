@@ -91,6 +91,7 @@ L.TabCategory_WORLD_BOSS    = "Мировые боссы"
 L.TabCategory_PVP           = "PVP"
 L.TabCategory_ISLANDS   	= "Острова"
 L.TabCategory_OTHER    		= "Другое"
+L.TabCategory_CLASSIC		= "World of Warcraft (Классика)"
 
 L.BossModLoaded				= "%s - статистика"
 L.BossModLoad_now			= [[Модуль для этих боссов не загружен.
