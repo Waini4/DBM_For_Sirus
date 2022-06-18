@@ -1,26 +1,26 @@
 local mod	= DBM:NewMod("Zort", "DBM-WorldBoss", 2)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("20220615151300"):sub(12, -3)) -- fxpw check 202206151120000
+mod:SetRevision(("20220615151300"):sub(12, -3))
 mod:SetCreatureID(50702)
 mod:SetUsedIcons(1, 2, 3, 4, 5, 6, 7, 8)
 
 mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
-	"SPELL_CAST_START 307829 307820 307818 307817 308520 308512 307845",
-	"SPELL_CAST_SUCCESS 308520 307834",
-	"SPELL_AURA_APPLIED 307815 307839 308517 307834 307833",
-    "SPELL_AURA_APPLIED_DOSE 307815 307839 308517 307834 307833",
-	-- "UNIT_TARGET",
-    -- "SPELL_DAMAGE",
-    -- "SPELL_PERIODIC_DAMAGE",
-	"SPELL_AURA_REMOVED 307839 308516 308517",
-	"SPELL_INTERRUPT 307829",
-	-- "SPELL_CAST_FAILED",
+	"SPELL_CAST_START",
+	"SPELL_CAST_SUCCESS",
+	"SPELL_AURA_APPLIED",
+    "SPELL_AURA_APPLIED_DOSE",
+	"UNIT_TARGET",
+    "SPELL_DAMAGE",
+    "SPELL_PERIODIC_DAMAGE",
+	"SPELL_AURA_REMOVED",
+	"SPELL_INTERRUPT",
+	"SPELL_CAST_FAILED",
     "UNIT_HEALTH",
-	"UNIT_DIED"
-	-- "SWING_DAMAGE"
+	"UNIT_DIED",
+	"SWING_DAMAGE"
 )
 
 
@@ -28,12 +28,12 @@ local warnPhase2Soon   					= mod:NewPrePhaseAnnounce(2)
 local warnPhase2     					= mod:NewPhaseAnnounce(2)
 local warnPhase3Soon   					= mod:NewPrePhaseAnnounce(3)
 local warnPhase3     					= mod:NewPhaseAnnounce(3)
-local warnPech							= mod:NewTargetAnnounce(307814, 2)
+--local warnPech							= mod:NewTargetAnnounce(307814, 2)
 local warnFlame							= mod:NewTargetAnnounce(307839, 2)
-local warnSveaz							= mod:NewTargetAnnounce(308517, 3)
-local warnkik							= mod:NewCastAnnounce(307829, 2)
+local warnSveaz							= mod:NewTargetAnnounce(308620, 3)
+--local warnkik							= mod:NewCastAnnounce(307829, 2)
 local warnPriziv						= mod:NewCastAnnounce(307852, 3)
-local warnShkval						= mod:NewCastAnnounce(307821, 3)
+--local warnShkval						= mod:NewCastAnnounce(307821, 3)
 local warnTraitor						= mod:NewCountAnnounce(307814, 2, nil, false)
 local warnInternalbleeding	    		= mod:NewStackAnnounce(307833, 2, nil, "Tank|Healer")
 local warnInternalbgPre	    			= mod:NewPreWarnAnnounce(307833, 5, nil, nil, "Tank|Healer")
@@ -44,15 +44,15 @@ local specCowardice	           			= mod:NewSpecialWarning("|cff71d5ff|Hspell:307
 local specWarnshkval					= mod:NewSpecialWarningGTFO(307821, nil, nil, nil, 1, 2)
 local specWarnTraitor					= mod:NewSpecialWarningStack(307814, nil, 2, nil, nil, 1, 6)
 local specWarnReturnInterrupt			= mod:NewSpecialWarningInterrupt(307829, "HasInterrupt", nil, 2, 1, 2)
-local specWarnPechati					= mod:NewSpecialWarningCast(307814, nil, nil, nil, 1, 2) --предатель
+--local specWarnPechati					= mod:NewSpecialWarningCast(307814, nil, nil, nil, 1, 2) --предатель
 local specWarnFlame						= mod:NewSpecialWarningMoveAway(307839, nil, nil, nil, 3, 2)
-local specWarnSveaz						= mod:NewSpecialWarningYou(308516, nil, nil, nil, 3, 2)
+local specWarnSveaz						= mod:NewSpecialWarningYou(308620, nil, nil, nil, 3, 2)
 local yellFlame							= mod:NewYell(307839, nil, nil, nil, "YELL") --Огонь
 local yellFlameFade						= mod:NewShortFadesYell(307839, nil, nil, nil, "YELL")
 local yellCastsvFade					= mod:NewShortFadesYell(308520)
 
 local timerInternalbleeding	   			= mod:NewCDTimer(28, 307833)
-local timerSveazi						= mod:NewCDTimer(28, 308517, nil, nil, nil, 2)
+local timerSveazi						= mod:NewCDTimer(28, 308620, nil, nil, nil, 2)
 local timerPriziv						= mod:NewCDTimer(120, 307852, nil, nil, nil, 4)
 local timerkik							= mod:NewCDTimer(15, 307829, nil, nil, nil, 3)
 local timerShkval						= mod:NewCDTimer(20, 307821, nil, nil, nil, 3)
@@ -70,7 +70,7 @@ mod:AddBoolOption("RangeFrame", true)
 
 local SveazTargets = {}
 local FlameTargets = {}
-local FlameIcons = 2
+local FlameIcons = 3
 local SveazIcons = 7
 local warned_preP = false
 local warned_preP1 = false
@@ -96,11 +96,11 @@ end
 
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(307829) then
-		warnkik:Show()
+		--warnkik:Show()
 		timerkik:Start()
 		specWarnReturnInterrupt:Show()
 	elseif args:IsSpellID(307820, 307818, 307817) then
-		warnShkval:Show()
+		--warnShkval:Show()
 		timerShkval:Start()
 		specWarnshkval:Show()
 	elseif args:IsSpellID(308520) then
@@ -142,21 +142,21 @@ function mod:SPELL_AURA_APPLIED(args)
 			yellFlameFade:Countdown(307839)
 			if self.Options.RangeFrame then
 				DBM.RangeCheck:Show(12)
-			end
+		 	end
 		end
-	elseif args:IsSpellID(308517) then
+	elseif args:IsSpellID(308517, 308620, 308515) then
 		SveazTargets[#SveazTargets + 1] = args.destName
 		self:ScheduleMethod(0.1, "SetSveazIcons")
 		timerSveazi:Start()
-		if args:IsPlayer() and self:AntiSpam(2) then
+		if args:IsPlayer() then
 			specWarnSveaz:Show()
 		end
 	elseif args:IsSpellID(307834) then
 		if args:IsPlayer() then
 			specCowardice:Show()
 			if self.Options.RangeFrame then
-				DBM.RangeCheck:Show(6)
-			end
+           		DBM.RangeCheck:Show(6)
+        	end
 		end
 	elseif args:IsSpellID(307833) then
         timerInternalbleeding:Start()
@@ -201,7 +201,7 @@ do
 	end
 	function mod:SetFlameIcons()
 		table.sort(FlameTargets, sort_by_group)
-		for v in ipairs(FlameTargets) do
+		for _, v in ipairs(FlameTargets) do
 			if mod.Options.AnnounceFlame then
 				if DBM:GetRaidRank() > 0 and self:AntiSpam(3) then
 					SendChatMessage(L.Flame:format(FlameIcons, UnitName(v)), "RAID_WARNING")
@@ -220,7 +220,7 @@ do
 	function mod:SetSveazIcons()
 		if DBM:GetRaidRank() >= 0 then
 			table.sort(SveazTargets, sort_by_group)
-			for v in ipairs(SveazTargets) do
+			for _, v in ipairs(SveazTargets) do
 				if mod.Options.AnnounceSveaz then
 					if DBM:GetRaidRank() > 0 then
 						SendChatMessage(L.Sveaz:format(SveazIcons, UnitName(v)), "RAID_WARNING")
@@ -242,7 +242,7 @@ do
 	end
 end
 
-
+--[[
 function mod:UNIT_HEALTH(uId)
 	local cid = self:GetUnitCreatureId(uId)
 		if self.vb.phase == 1 and not warned_preP and cid == 50702 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.73 then
@@ -263,7 +263,7 @@ function mod:UNIT_HEALTH(uId)
 			mod:SetStage(3)
 			warnPhase3:Show()
 		end
-end
+end]]
 
 function mod:UNIT_DIED(args)
 	if args.destName == L.Cudo then

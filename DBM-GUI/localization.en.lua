@@ -18,6 +18,11 @@ L.OTabOptions	= GAMEOPTIONS_MENU
 L.OTabAbout		= "About"
 
 L.TabCategory_OTHER			= "Other Mods"
+L.TabCategory_WOTLK 		= "Wrath of the Lich King"
+L.TabCategory_BC 			= "The Burning Crusade"
+L.TabCategory_CLASSIC		= "World of Warcraft"
+L.TabCategory_PVP           = "PVP"
+L.TabCategory_ISLANDS   	= "Islands"
 
 L.BossModLoaded				= "%s statistics"
 L.BossModLoad_now			= [[This boss mod is not loaded.

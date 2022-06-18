@@ -7,12 +7,12 @@
 ## SavedVariablesPerCharacter: DBMTol'GarodePrison_SavedStats
 ## X-DBM-Mod: 1
 ## X-DBM-Mod-Type: RAID
-## X-DBM-Mod-Category: WotLK
+## X-DBM-StatTypes: normal, normal25
+## X-DBM-Mod-Category: ISLANDS
 ## X-DBM-Mod-Name: Tol'GarodePrison
 ## X-DBM-Mod-Name-ruRU: Тол'Гародская тюрьма
---## X-DBM-Mod-Sort: 946, 955
-## X-DBM-Mod-LoadZoneID: 955
---## X-DBM-Mod-LoadCID: 70010
+## X-DBM-Mod-Sort: 955
+## X-DBM-Mod-MapID: 955
 ## X-DBM-Mod-LoadZone: Tol'GarodePrison
 ## X-DBM-Mod-LoadZone-ruRU: Тол'Гародская тюрьма
 

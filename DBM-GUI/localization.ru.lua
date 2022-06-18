@@ -87,7 +87,10 @@ L.OTabBosses				= "Боссы"
 L.OTabOptions				= "Настройки"
 
 L.TabCategory_Options		= "Общие параметры"
-L.TabCategory_OTHER			= "Другие боссы"
+L.TabCategory_WORLD_BOSS    = "Мировые боссы"
+L.TabCategory_PVP           = "PVP"
+L.TabCategory_ISLANDS   	= "Острова"
+L.TabCategory_OTHER    		= "Другое"
 
 L.BossModLoaded				= "%s - статистика"
 L.BossModLoad_now			= [[Модуль для этих боссов не загружен.

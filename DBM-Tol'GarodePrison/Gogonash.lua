@@ -1,6 +1,6 @@
 local mod	= DBM:NewMod("Gogonash", "DBM-Tol'GarodePrison")
 local L		= mod:GetLocalizedStrings()
-local CL = DBM_COMMON_L
+
 mod:SetRevision("20220312000000") -- fxpw check 20220609123000
 mod:SetCreatureID(84000)
 mod:SetUsedIcons(7, 8)
@@ -18,7 +18,7 @@ mod:RegisterEventsInCombat(
 local warnLightningofFilth				= mod:NewSpellAnnounce(317549, 2)
 local warnMarkofFilth					= mod:NewTargetAnnounce(317544, 2)
 
-local specwarnPrimalHorror				= mod:NewSpecialWarningLookAway(317548, nil, nil, nil, 2, 2)
+local specwarnPrimalHorror				= mod:NewSpecialWarningLookAwayi(317548, nil, nil, nil, 2, 2)
 local specWarnMarkofFilthRun			= mod:NewSpecialWarningRun(317544, nil, nil, nil, 1, 2)
 local yellMarkofFilth					= mod:NewYell(317544, nil, nil, nil, "YELL") --317158
 local yellMarkofFilthFade				= mod:NewShortFadesYell(317544, nil, nil, nil, "YELL")
@@ -30,11 +30,11 @@ local CrushingBlowCast					= mod:NewCastTimer(2.5, 317541, nil, nil, nil, 2) -- 
 local MarkofFilthBuff					= mod:NewBuffActiveTimer(5, 317544, nil, nil, nil, 2)
 
 local timerLightningofFilth				= mod:NewCDTimer(15, 317549, nil, nil, nil, 3) -- Молния скверны
-local timerPrimalHorror					= mod:NewCDTimer(30, 317548, nil, nil, nil, 4, nil, CL.IMPORTANT_ICON, nil, 1)
-local timerCrushingBlowCast				= mod:NewCDTimer(35, 317541, nil, nil, nil, 2, nil, CL.DEADLY_ICON)
-local timerStrikingBlow					= mod:NewCDTimer(10, 317543, nil, "Tank|Healer", nil, 5, nil, CL.TANK_ICON)
-local timerMarkofFilth					= mod:NewCDTimer(19, 317544, nil, nil, nil, 4, nil, CL.IMPORTANT_ICON)
-local timerEndlessflameofFilth			= mod:NewCDTimer(18.5, 317540, nil, nil, nil, 4, nil, CL.MAGIC_ICON)
+local timerPrimalHorror					= mod:NewCDTimer(30, 317548, nil, nil, nil, 4, nil, DBM_CORE_IMPORTANT_ICON, nil, 1)
+local timerCrushingBlowCast				= mod:NewCDTimer(35, 317541, nil, nil, nil, 2, nil, DBM_CORE_DEADLY_ICON)
+local timerStrikingBlow					= mod:NewCDTimer(10, 317543, nil, "Tank|Healer", nil, 5, nil, DBM_CORE_TANK_ICON)
+local timerMarkofFilth					= mod:NewCDTimer(19, 317544, nil, nil, nil, 4, nil, DBM_CORE_IMPORTANT_ICON)
+local timerEndlessflameofFilth			= mod:NewCDTimer(18.5, 317540, nil, nil, nil, 4, nil, DBM_CORE_MAGIC_ICON)
 
 mod:AddSetIconOption("SetIconMarkofFilthTargets", 317544, true, true, {7,8})
 mod:AddBoolOption("AnnounceMarkofFilth", false)

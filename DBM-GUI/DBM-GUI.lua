@@ -765,16 +765,17 @@ do
 
 	local category = {}
 	local subTabId = 0
-	local expansions = {
-		"CLASSIC", "BC", "WOTLK"
-	}
 
 	function DBM_GUI:UpdateModList()
 		for _, addon in ipairs(DBM.AddOns) do
 			local cat = addon.category:upper()
 			if not category[cat] then
 				-- Create a Panel for "Wrath of the Lich King", "The Burning Crusade", "Classic" or "Other"
-				category[cat] = DBM_GUI:CreateNewPanel(_G["EXPANSION_NAME" .. (tIndexOf(expansions, cat) or 99) - 1] or L.TabCategory_OTHER, nil, cat == expansions[GetExpansionLevel() + 1])
+				category[cat] = DBM_GUI:CreateNewPanel(L["TabCategory_"..cat] or L.TabCategory_OTHER, nil, cat == "WOTLK")
+				if L["TabCategory_"..cat] then
+					local ptext = category[cat]:CreateText(L["TabCategory_"..cat])
+					ptext:SetPoint('TOPLEFT', category[cat].frame, "TOPLEFT", 10, -10)
+				end
 			end
 
 			if not addon.panel then

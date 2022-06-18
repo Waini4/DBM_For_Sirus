@@ -23,7 +23,7 @@ L:SetOptionLocalization{
 L = DBM:GetModLocalization("Zort")
 
 L:SetGeneralLocalization{
-	name = "Зорт"
+	name = "Зорт (Вне категории)"
 }
 
 L:SetTimerLocalization{
@@ -48,5 +48,5 @@ L:SetOptionLocalization{
 	AnnounceFlame			= "Объявлять игроков, на кого установлена метка $spell:307839, в рейд чат",
 	RangeFrame				= "Показывать окно проверки дистанции(6/12/20)",
 	AnnounceKnopk			= "Сказать в белый чат об нажитии кнопки",
-	AnnounceSveaz			= "Объявить игрока на которого установлена метка $spell:314606, в рейд чат"
+	AnnounceSveaz			= "Объявить игрока на которого установлена метка $spell:314606, в рейд чат",
 }

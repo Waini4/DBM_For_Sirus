@@ -6,14 +6,14 @@
 ## SavedVariablesPerCharacter: DBMMir_SavedStats
 ## X-DBM-Mod: 1
 ## X-DBM-Mod-Type: RAID
-## X-DBM-StatTypes: normal,normal25
+## X-DBM-StatTypes: normal, normal25
 ## X-DBM-Mod-Category: WORLD_BOSS
-## X-DBM-Mod-World-Boss: 0
+## X-DBM-Mod-World-Boss: 1
 ## X-DBM-StatTypes: normal
-## X-DBM-Mod-Name: Mir
-## X-DBM-Mod-Name-ruRU: Мир
-## X-DBM-Mod-SubCategories: Tol'GarodeNorigorn, A Waking Nightmare
-## X-DBM-Mod-SubCategories-ruRU: Тол'Гародский Норигорн, Кошмар Наяву
+## X-DBM-Mod-Name: Categories
+## X-DBM-Mod-Name-ruRU: Мировые боссы и боссы категорий
+## X-DBM-Mod-SubCategories: Tol'GarodeNorigorn, Сategories
+## X-DBM-Mod-SubCategories-ruRU: Тол'Гародский Норигорн, Категорий
 ## X-DBM-Mod-Sort: 946, 914
 ## X-DBM-Mod-MapID: 946, 914
 ## X-DBM-Mod-LoadCID: 70010

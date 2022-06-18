@@ -241,7 +241,7 @@ function OptionsList_OnLoad(self, ...)
 end
 
 local frameList = CreateFrame("Frame", "$parentList", frame, "DBM_GUI_OptionsFrameListTemplate")
-frameList:SetWidth(205)
+frameList:SetWidth(255)
 frameList:SetPoint("TOPLEFT", 22, -40)
 frameList:SetPoint("BOTTOMLEFT", frameWebsite, "TOPLEFT", 0, 5)
 frameList:SetScript("OnShow", function()
@@ -270,7 +270,7 @@ for i = 1, math.floor(UIParent:GetHeight() / 18) do
 	buttonHighlight:SetTexture("Interface\\QuestFrame\\UI-QuestLogTitleHighlight")
 	buttonHighlight:SetBlendMode("ADD")
 	buttonHighlight:SetPoint("TOPLEFT", 0, 1)
-	buttonHighlight:SetPoint("BOTTOMRIGHT", 0, 1)
+	buttonHighlight:SetPoint("BOTTOMRIGHT", 78, 1)
 	buttonHighlight:SetVertexColor(0.196, 0.388, 0.8)
 	button:SetHighlightTexture(buttonHighlight)
 	frameList.buttons[i] = button
