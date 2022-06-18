@@ -96,7 +96,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnMarkofFilthRun:Show()
 			timerMarkofFilth:Start()
 			yellMarkofFilth:Yell()
-			yellMarkofFilthFade:Countdown(spellId)
+			yellMarkofFilthFade:Countdown(317544)
 		end
 		self:ScheduleMethod(0.1, "SetMarkIcons")
 	end
