@@ -1,6 +1,9 @@
 local mod	= DBM:NewMod("Ctrax", "DBM-Tol'GarodePrison")
 local L		= mod:GetLocalizedStrings()
 
+local CML = DBM_COMMON_L
+local LCL = DBM_CORE_L
+
 mod:SetRevision("20210501000000") -- fxpw check 20220609123000
 mod:SetCreatureID(84002)
 
@@ -8,11 +11,11 @@ mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 317579 317596",
-	"SPELL_CAST_SUCCESS",
+	-- "SPELL_CAST_SUCCESS",
 	"SPELL_AURA_APPLIED 317594",
 	"SPELL_AURA_APPLIED_DOSE 317594",
-	"SPELL_AURA_REMOVED",
-	"SPELL_SUMMON",
+	-- "SPELL_AURA_REMOVED",
+	-- "SPELL_SUMMON",
 	"UNIT_HEALTH"
 )
 
@@ -30,10 +33,10 @@ local specWarnAncientCurseYou			= mod:NewSpecialWarningYou(317594, nil, nil, nil
 local yellAncientCurse					= mod:NewYell(317594, nil, nil, nil, "YELL") --317158
 local yellAncientCurseFade				= mod:NewShortFadesYell(317594, nil, nil, nil, "YELL")
 
-local timerEscapingDarkness				= mod:NewCDTimer(35, 317579, nil, nil, nil, 2, nil, DBM_CORE_DEADLY_ICON)
-local timerdar							= mod:NewCDTimer(8, 317601, nil, nil, nil, 2, nil, DBM_CORE_IMPORTANT_ICON)
-local timerRegionofDarkness				= mod:NewCDTimer(35, 317596, nil, nil, nil, 2, nil, DBM_CORE_IMPORTANT_ICON)
-local timerAncientCurse					= mod:NewCDTimer(20, 317594, nil, nil, nil, 2, nil, DBM_CORE_IMPORTANT_ICON)
+local timerEscapingDarkness				= mod:NewCDTimer(35, 317579, nil, nil, nil, 2, nil, CML.DEADLY_ICON)
+local timerdar							= mod:NewCDTimer(8, 317601, nil, nil, nil, 2, nil, CML.IMPORTANT_ICON)
+local timerRegionofDarkness				= mod:NewCDTimer(35, 317596, nil, nil, nil, 2, nil, CML.IMPORTANT_ICON)
+local timerAncientCurse					= mod:NewCDTimer(20, 317594, nil, nil, nil, 2, nil, CML.IMPORTANT_ICON)
 
 local warned_P1 = false
 local warned_P2 = false
@@ -51,7 +54,7 @@ function mod:OnCombatStart(delay)
 		end
 	end
 	if self.Options.InfoFrame then
-		DBM.InfoFrame:SetHeader(DBM_CORE_INFOFRAME_POWER)
+		DBM.InfoFrame:SetHeader(LCL.INFOFRAME_POWER)
 		DBM.InfoFrame:Show(2, "enemypower", 1)--TODO, figure out power type
 	end
 end
@@ -71,7 +74,7 @@ do	-- тест!!!!!
 			return last
 		end
 		for i = 0, GetNumRaidMembers(), 1 do
-			local unitId = ((i == 0) and "target") or "raid"..i.."target"
+			local unitId = ((i == 0) and "target") or ("raid"..i.."target")
 			guid = UnitGUID(unitId)
 			if mod:GetCIDFromGUID(guid) == 84002 then
 				last = math.floor(UnitPower(unitId)/UnitPowerMax(unitId) * 100)
@@ -95,9 +98,9 @@ function mod:SPELL_CAST_START(args)
 	end
 end
 
-function mod:SPELL_CAST_SUCCESS(args)
-	local spellId = args.spellId
-end
+-- function mod:SPELL_CAST_SUCCESS(args)
+-- 	local spellId = args.spellId
+-- end
 
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
@@ -113,9 +116,9 @@ function mod:SPELL_AURA_APPLIED(args)
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
-function mod:SPELL_AURA_REMOVED(args)
-	local spellId = args.spellId
-end
+-- function mod:SPELL_AURA_REMOVED(args)
+-- 	local spellId = args.spellId
+-- end
 
 function mod:UNIT_HEALTH(uId)	-- перефаза по хп
 	if not warned_P1 and self:GetUnitCreatureId(uId) == 84002 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.53 and mod:IsDifficulty("heroic25") then
