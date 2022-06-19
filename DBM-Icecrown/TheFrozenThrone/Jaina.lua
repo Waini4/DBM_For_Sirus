@@ -72,7 +72,7 @@ local vengerfulIceTargets = {}
 local iceMarkTargets = {}
 
 -- function mod:OnCombat()
-	
+
 -- end
 
 
