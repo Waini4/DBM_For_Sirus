@@ -36,7 +36,7 @@ local timerFire  	     	= mod:NewTargetTimer(10, 306504, nil, "Tank", nil, 4, ni
 local warnNextPhase         = mod:NewAnnounce("WarnNextPhase", 1)
 local warnUnstableMagicSoon = mod:NewSoonAnnounce(306468, 2)
 local warnArcaneStormSoon   = mod:NewSoonAnnounce(306464, 2)
-local warnIceWrath          = mod:NewSoonAnnounce(306549, 4)
+-- local warnIceWrath          = mod:NewSoonAnnounce(306549, 4)
 local warnFirewhirl         = mod:NewSpellAnnounce(306495, 2)
 local warnExplosiveFlame	= mod:NewTargetAnnounce(306487, 4)
 local warnWildFlame         = mod:NewTargetAnnounce(306502, 4)
@@ -55,7 +55,7 @@ local specWarnVengefulIce   = mod:NewSpecialWarningMove(306535, nil, nil, nil, 1
 local specWarnIceWrath      = mod:NewSpecialWarning("SpecWarnIceWrath", nil, nil, nil, 1, 2)
 local specWarnIceMark       = mod:NewSpecialWarningRun(306523, nil, nil, nil, 1, 2)
 local specWarnIceRush       = mod:NewSpecialWarningMove(306531, "Melee", nil, nil, 1, 2)
-local specWarnIceSpears     = mod:NewSpecialWarningSpell(306537, "Ranged", nil, nil, 1, 2)
+-- local specWarnIceSpears     = mod:NewSpecialWarningSpell(306537, "Ranged", nil, nil, 1, 2)
 
 local berserkTimer			= mod:NewBerserkTimer(1802)
 
@@ -71,7 +71,13 @@ local wildFlameTargets = {}
 local vengerfulIceTargets = {}
 local iceMarkTargets = {}
 
-function mod:OnCombat()
+-- function mod:OnCombat()
+	
+-- end
+
+
+function mod:OnCombatStart(delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 3392, "Lady Jaina Proudmoore")
 	self.vb.phase = 1
 	ExplosiveIcons = 8
 	berserkTimer:Start()
@@ -80,6 +86,13 @@ function mod:OnCombat()
 	timerUnstableMagicCD:Start(26)
 	warnArcaneStormSoon:Schedule(71)
 	warnUnstableMagicSoon:Schedule(23)
+end
+
+function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 3392, "Lady Jaina Proudmoore", wipe)
+	if self.Options.RangeFrame then
+		DBM.RangeCheck:Hide()
+	end
 end
 
 function mod:WildFlame()
@@ -261,15 +274,5 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 	end
 end
 
-function mod:OnCombatStart(delay)
-	DBM:FireCustomEvent("DBM_EncounterStart", 3392, "Lady Jaina Proudmoore")
-end
-
-function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 3392, "Lady Jaina Proudmoore", wipe)
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
-end
 
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
