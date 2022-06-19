@@ -33,14 +33,14 @@ local yellDevouringFlame			= mod:NewYell(64733)
 local specWarnFuseArmor				= mod:NewSpecialWarningStack(64771, nil, 2, nil, nil, 1, 6)
 local specWarnFuseArmorOther		= mod:NewSpecialWarningTaunt(64771, nil, nil, nil, 1, 2)
 
-local enrageTimer					= mod:NewBerserkTimer(600)
+local enrageTimer					= mod:NewBerserkTimer(840)
 local timerDeepBreathCooldown		= mod:NewCDTimer(21, 64021, nil, nil, nil, 5)
 local timerDeepBreathCast			= mod:NewCastTimer(2.5, 64021)
 local timerTurret1					= mod:NewTimer(53, "timerTurret1", 48642, nil, nil, 5)
-local timerTurret2					= mod:NewTimer(75, "timerTurret2", 48642, nil, nil, 5)
-local timerTurret3					= mod:NewTimer(95, "timerTurret3", 48642, nil, nil, 5)
-local timerTurret4					= mod:NewTimer(117, "timerTurret4", 48642, nil, nil, 5)
-local timerGrounded					= mod:NewTimer(45, "timerGrounded", nil, nil, nil, 6)
+local timerTurret2					= mod:NewTimer(73, "timerTurret2", 48642, nil, nil, 5)
+local timerTurret3					= mod:NewTimer(93, "timerTurret3", 48642, nil, nil, 5)
+local timerTurret4					= mod:NewTimer(113, "timerTurret4", 48642, nil, nil, 5)
+local timerGrounded					= mod:NewTimer(40, "timerGrounded", nil, nil, nil, 6)
 local timerFuseArmorCD				= mod:NewCDTimer(12.1, 64771, nil, "Tank", nil, 5, nil, CL.TANK_ICON)
 
 local combattime = 0
@@ -77,8 +77,8 @@ function mod:OnCombatStart(delay)
 		timerTurret1:Start(-delay)
 		timerTurret2:Start(-delay)
 	else
-		warnTurretsReadySoon:Schedule(95-delay)
-		warnTurretsReady:Schedule(117-delay)
+		warnTurretsReadySoon:Schedule(93-delay)
+		warnTurretsReady:Schedule(113-delay)
 		timerTurret1:Start(-delay) -- 53sec
 		timerTurret2:Start(-delay) -- +20
 		timerTurret3:Start(-delay) -- +20
