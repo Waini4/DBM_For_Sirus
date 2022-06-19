@@ -5,7 +5,7 @@ mod:SetRevision("20220612100000")
 mod:SetCreatureID(200000)
 mod:RegisterCombat("yell", L.YellPull)
 mod:SetUsedIcons(2, 3, 4, 5, 6, 7, 8)
-mod:SetMinSyncRevision(3392)
+-- mod:SetMinSyncRevision(3392)
 --mod:SetModelID(3392)
 
 mod:RegisterEvents(
@@ -72,7 +72,6 @@ local vengerfulIceTargets = {}
 local iceMarkTargets = {}
 
 -- function mod:OnCombat()
-
 -- end
 
 

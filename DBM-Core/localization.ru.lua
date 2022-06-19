@@ -418,7 +418,7 @@ L.AUTO_SPEC_WARN_OPTIONS.count 			= "Спецпредупреждение (со 
 L.AUTO_SPEC_WARN_OPTIONS.stack 			= "Спецпредупреждение, когда на Вас >=%d стаков $spell:%s"
 L.AUTO_SPEC_WARN_OPTIONS.switch			= "Спецпредупреждение о смене цели для $spell:%s"
 L.AUTO_SPEC_WARN_OPTIONS.switchcount 	= "Спецпредупреждение (со счётчиком) о смене цели для $spell:%s"
-L.AUTO_SPEC_WARN_OPTIONS.gtfo 			= "Спецпредупреждение выбегите из войды на земле"
+L.AUTO_SPEC_WARN_OPTIONS.gtfo 			= "Спецпредупреждение выбегите из войд зоны на земле"
 L.AUTO_SPEC_WARN_OPTIONS.adds			= "Спецпредупреждение сменить цель для прибывающих аддов"
 L.AUTO_SPEC_WARN_OPTIONS.addscustom		= "Спецпредупреждение для прибывающих аддов"
 L.AUTO_SPEC_WARN_OPTIONS.targetchange	= "Спецпредупреждение для смены приоритетной цели"

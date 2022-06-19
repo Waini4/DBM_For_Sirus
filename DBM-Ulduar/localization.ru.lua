@@ -58,7 +58,7 @@ L:SetTimerLocalization({
 	timerTurret2	= "Гарпунная пушка 2",
 	timerTurret3	= "Гарпунная пушка 3",
 	timerTurret4	= "Гарпунная пушка 4",
-	timerGrounded	= "на земле"
+	timerGrounded	= "На земле"
 })
 
 L:SetOptionLocalization({
