@@ -158,11 +158,11 @@ end
 
 
 do
-	local function sort_by_group(v1, v2)
-		return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
-	end
+	-- local function sort_by_group(v1, v2)
+	-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
+	-- end
 	function mod:SetPorchIcons()
-		table.sort(PorchTargets, sort_by_group)
+		table.sort(PorchTargets, DBM.SortByGroup)
 		for _, v in ipairs(PorchTargets) do
 			if mod.Options.AnnouncePorch then
 				if DBM:GetRaidRank() > 0 then

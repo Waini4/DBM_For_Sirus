@@ -100,11 +100,11 @@ function mod:WildFlame()
 end
 
 do
-	local function sort_by_group(v1, v2)
-		return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
-	end
+	-- local function sort_by_group(v1, v2)
+	-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
+	-- end
 	function mod:SetExplosiveIcons()
-		table.sort(ExplosiveTargets, sort_by_group)
+		table.sort(ExplosiveTargets, DBM.SortByGroup)
 		for _, v in ipairs(ExplosiveTargets) do
 			if mod.Options.AnnounceExplosive then
 				if DBM:GetRaidRank() > 0 then

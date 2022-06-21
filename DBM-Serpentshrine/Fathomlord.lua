@@ -132,11 +132,11 @@ local SvazTargets = {}
 local SvazIcons = 7
 
 do
-	local function sort_by_group(v1, v2)
-		return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
-	end
+	-- local function sort_by_group(v1, v2)
+	-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
+	-- end
 	function mod:SetSvazIcons()
-		table.sort(SvazTargets, sort_by_group)
+		table.sort(SvazTargets, DBM.SortByGroup)
 		for _, v in ipairs(SvazTargets) do
 			if mod.Options.AnnounceSvaz then
 				if DBM:GetRaidRank() > 0 then

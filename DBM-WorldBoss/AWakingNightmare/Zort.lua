@@ -196,11 +196,11 @@ function mod:SPELL_INTERRUPT(args)
 end
 
 do
-	local function sort_by_group(v1, v2)
-		return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
-	end
+	-- local function sort_by_group(v1, v2)
+	-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
+	-- end
 	function mod:SetFlameIcons()
-		table.sort(FlameTargets, sort_by_group)
+		table.sort(FlameTargets, DBM.SortByGroup)
 		for _, v in ipairs(FlameTargets) do
 			if mod.Options.AnnounceFlame then
 				if DBM:GetRaidRank() > 0 and self:AntiSpam(3) then
@@ -219,7 +219,7 @@ do
 	end
 	function mod:SetSveazIcons()
 		if DBM:GetRaidRank() >= 0 then
-			table.sort(SveazTargets, sort_by_group)
+			table.sort(SveazTargets, DBM.SortByGroup)
 			for _, v in ipairs(SveazTargets) do
 				if mod.Options.AnnounceSveaz then
 					if DBM:GetRaidRank() > 0 then

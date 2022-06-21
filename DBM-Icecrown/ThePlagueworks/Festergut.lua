@@ -55,11 +55,11 @@ local function ClearSporeTargets()
 end
 
 do
-	local function sort_by_group(v1, v2)
-		return DBM:GetRaidSubgroup(DBM:GetUnitFullName(v1)) < DBM:GetRaidSubgroup(DBM:GetUnitFullName(v2))
-	end
+	-- local function sort_by_group(v1, v2)
+	-- 	return DBM:GetRaidSubgroup(DBM:GetUnitFullName(v1)) < DBM:GetRaidSubgroup(DBM:GetUnitFullName(v2))
+	-- end
 	function mod:SetSporeIcons()
-		table.sort(gasSporeIconTargets, sort_by_group)
+		table.sort(gasSporeIconTargets, DBM.SortByGroup)
 		local gasSporeIcon = 8
 		for _, v in ipairs(gasSporeIconTargets) do
 			if self.Options.AnnounceSporeIcons and DBM:GetRaidRank() > 0 then

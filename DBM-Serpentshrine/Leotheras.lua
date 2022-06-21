@@ -234,12 +234,12 @@ local PepelTargets = {}
 local KleiIcons = 8
 
 do
-	local function sort_by_group(v1, v2)
-		return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
-	end
+	-- local function sort_by_group(v1, v2)
+	-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
+	-- end
 	function mod:SetPepelIcons()
 		if DBM:GetRaidRank() >= 0 then
-			table.sort(PepelTargets, sort_by_group)
+			table.sort(PepelTargets, DBM.SortByGroup)
 			local PepelIcons = 7
 			for _, v in ipairs(PepelTargets) do
 				if mod.Options.AnnouncePepel then

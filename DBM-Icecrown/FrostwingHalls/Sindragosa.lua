@@ -100,11 +100,11 @@ local function ClearBeaconTargets(self)
 end
 
 do
-	local function sort_by_group(v1, v2)
-		return DBM:GetRaidSubgroup(DBM:GetUnitFullName(v1)) < DBM:GetRaidSubgroup(DBM:GetUnitFullName(v2))
-	end
+	-- local function sort_by_group(v1, v2)
+	-- 	return DBM:GetRaidSubgroup(DBM:GetUnitFullName(v1)) < DBM:GetRaidSubgroup(DBM:GetUnitFullName(v2))
+	-- end
 	function mod:SetBeaconIcons()
-		table.sort(beaconIconTargets, sort_by_group)
+		table.sort(beaconIconTargets, DBM.SortByGroup)
 		local beaconIcons = 8
 		for _, v in ipairs(beaconIconTargets) do
 			if self.Options.AnnounceFrostBeaconIcons and DBM:GetRaidRank() > 0 then

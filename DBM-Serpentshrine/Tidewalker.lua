@@ -153,11 +153,11 @@ local SuhTargets = {}
 local SuhIcons = 8
 
 do
-	local function sort_by_group(v1, v2)
-		return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
-	end
+	-- local function sort_by_group(v1, v2)
+	-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
+	-- end
 	function mod:SetSuhIcons()
-		table.sort(SuhTargets, sort_by_group)
+		table.sort(SuhTargets, DBM.SortByGroup)
 		for _, v in ipairs(SuhTargets) do
 			if self.Options.SetIconOnSklepTargets then
 				self:SetIcon(UnitName(v), SuhIcons, 10)

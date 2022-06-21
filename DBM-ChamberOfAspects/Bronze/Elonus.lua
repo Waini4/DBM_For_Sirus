@@ -277,11 +277,11 @@ function mod:SPELL_AURA_REMOVED(args)
 end
 
 do
-	local function sort_by_group(v1, v2)
-		return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
-	end
+	-- local function sort_by_group(v1, v2)
+	-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
+	-- end
 	function mod:SetRevCascIcons()
-		table.sort(RevCascTargets, sort_by_group)
+		table.sort(RevCascTargets, DBM.SortByGroup)
 		for _, v in ipairs(RevCascTargets) do
 			if mod.Options.AnnounceReverCasc then
 				if DBM:GetRaidRank() > 0 then
@@ -301,7 +301,7 @@ do
 	end
 
 	function mod:SetErapIcons()
-		table.sort(ErapTargets, sort_by_group)
+		table.sort(ErapTargets,  DBM.SortByGroup)
 		for _, v in ipairs(ErapTargets) do
 			if mod.Options.AnnounceErap then
 				if DBM:GetRaidRank() > 0 then

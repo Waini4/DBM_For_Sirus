@@ -1,7 +1,7 @@
 ## Interface: 30300
 ## Title:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Serpentshrine Cavern|r
 ## Title-ruRU:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Змеиное святилище|r
-## Author: Ritual, aini, fxpw
+## Author: Ritual, waini, fxpw
 ## LoadOnDemand: 1
 ## RequiredDeps: DBM-Core
 ## SavedVariables: DBMSerpentshrine_AllSavedVars

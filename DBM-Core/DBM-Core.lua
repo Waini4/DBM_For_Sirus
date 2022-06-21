@@ -669,6 +669,8 @@ local function stripServerName(cap)
 	return DBM:GetShortServerName(cap:sub(2, -2))
 end
 
+
+
 --------------
 --  Events  --
 --------------
@@ -2016,6 +2018,18 @@ do
 		return (raid[name] and raid[name].subgroup) or 0
 	end
 
+	--------------
+	-- sort table
+	--------------
+
+	function DBM:SortByGroup(v1, v2)
+		return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
+	end
+
+	--------------
+	-- sort table
+	--------------
+
 	function DBM:GetRaidRoster(name)
 		if name then
 			return raid[name] ~= nil
@@ -2908,7 +2922,7 @@ end
 do
 	local modAdvertisementShown = false
 	local classicZones = {[718]=true,[767]=true,[756]=true,[697]=true}
-	local bcZones = {[797]=true,[776]=true,[800]=true,[777]=true,[780]=true,[781]=true,[790]=true,[776]=true}
+	local bcZones = {[797]=true,[776]=true,[800]=true,[777]=true,[780]=true,[781]=true,[790]=true,[776]=true} ----TODO Зачем 2 раза
 	local wrathZones = {[532]=true,[610]=true,[544]=true,[528]=true,[605]=true,[536]=true,[719]=true,[530]=true,[533]=true}
 	local pvpZones = {[402]=true,[444]=true,[462]=true,[483]=true,[513]=true,[541]=true}
 	local oldDungeons = {

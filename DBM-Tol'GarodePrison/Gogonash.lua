@@ -113,11 +113,11 @@ function mod:SPELL_AURA_REMOVED(args)
 end
 
 do
-	local function sort_by_group(v1, v2)
-		return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
-	end
+	-- local function sort_by_group(v1, v2)
+	-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
+	-- end
 	function mod:SetMarkIcons()
-		table.sort(MarkTargets, sort_by_group)
+		table.sort(MarkTargets, DBM.SortByGroup)
 		for _, v in ipairs(MarkTargets) do
 			if mod.Options.AnnounceKor then
 				if DBM:GetRaidRank() > 0 then

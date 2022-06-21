@@ -116,7 +116,7 @@ mod:SetModelID(20162)
 
 
 mod:RegisterEventsInCombat(
-	"SPELL_CAST_SUCCESS 38215 38216 38217 38218 38231 40584 38219 38220 38221 8222 38230 40583 38235 38246 309055",
+	"SPELL_CAST_SUCCESS 38215 38216 38217 38218 38231 40584 38219 38220 38221 38222 38230 40583 38235 38246 309055",
 	"SPELL_AURA_APPLIED 309046 309065 309068",
 	"SPELL_AURA_APPLIED_DOSE 309046 309065 309068",
 	"SPELL_AURA_REMOVED 309046 309065",
@@ -176,11 +176,11 @@ mod.vb.SklepIcon = 8
 mod.vb.KorlIcon = 8
 
 do
-	local function sort_by_group(v1, v2)
-		return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
-	end
+	-- local function sort_by_group(v1, v2)
+	-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
+	-- end
 	function mod:SetSklepIcons()
-		table.sort(SklepTargets, sort_by_group)
+		table.sort(SklepTargets, DBM.SortByGroup)
 		for _, v in ipairs(SklepTargets) do
 			if mod.Options.AnnounceSklep then
 				if DBM:GetRaidRank() > 0 then
@@ -201,7 +201,7 @@ do
 		end
 	end
 	function mod:SetKorIcons()
-		table.sort(KorTargets, sort_by_group)
+		table.sort(KorTargets, DBM.SortByGroup)
 		for _, v in ipairs(KorTargets) do
 			if mod.Options.AnnounceKor then
 				if DBM:GetRaidRank() > 0 then
