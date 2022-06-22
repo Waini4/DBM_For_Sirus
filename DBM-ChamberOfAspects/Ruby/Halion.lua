@@ -212,11 +212,11 @@ local bband = bit.band
 
 
 function mod:SPELL_DAMAGE(_, _, _, _, _, destFlags, spellId)
-	if spellIDs[spellId] and  bband(destFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) ~= 0 and bband(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) and GetTime() - lastflame > 2 then
+	if spellIDs[spellId] and  bband(args.destFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) ~= 0 and bband(args.destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 and GetTime() - lastflame > 2 then
 		specWarnMeteorStrike:Show()
 		specWarnMeteorStrike:Play("runaway")
 		lastflame = GetTime()
-	elseif spellIDs2[spellId] and bband(destFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) ~= 0 and bband(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) then
+	elseif spellIDs2[spellId] and bband(args.destFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) ~= 0 and bband(args.destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 then
 		lastshroud = GetTime()--keeps a time stamp for twilight realm damage to determin if you're still there or not for bosshealth frame.
 	end
 end
