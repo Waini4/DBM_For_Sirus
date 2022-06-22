@@ -104,7 +104,7 @@ do
 	-- 	return DBM:GetRaidSubgroup(DBM:GetUnitFullName(v1)) < DBM:GetRaidSubgroup(DBM:GetUnitFullName(v2))
 	-- end
 	function mod:SetBeaconIcons()
-		table.sort(beaconIconTargets, DBM.SortByGroup)
+		table.sort(beaconIconTargets, function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 		local beaconIcons = 8
 		for _, v in ipairs(beaconIconTargets) do
 			if self.Options.AnnounceFrostBeaconIcons and DBM:GetRaidRank() > 0 then

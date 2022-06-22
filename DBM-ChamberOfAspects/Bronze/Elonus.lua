@@ -281,7 +281,7 @@ do
 	-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
 	-- end
 	function mod:SetRevCascIcons()
-		table.sort(RevCascTargets, DBM.SortByGroup)
+		table.sort(RevCascTargets, function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 		for _, v in ipairs(RevCascTargets) do
 			if mod.Options.AnnounceReverCasc then
 				if DBM:GetRaidRank() > 0 then
@@ -301,7 +301,7 @@ do
 	end
 
 	function mod:SetErapIcons()
-		table.sort(ErapTargets,  DBM.SortByGroup)
+		table.sort(ErapTargets,  function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 		for _, v in ipairs(ErapTargets) do
 			if mod.Options.AnnounceErap then
 				if DBM:GetRaidRank() > 0 then

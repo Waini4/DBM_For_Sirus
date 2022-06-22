@@ -200,7 +200,7 @@ do
 	-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
 	-- end
 	function mod:SetFlameIcons()
-		table.sort(FlameTargets, DBM.SortByGroup)
+		table.sort(FlameTargets,function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 		for _, v in ipairs(FlameTargets) do
 			if mod.Options.AnnounceFlame then
 				if DBM:GetRaidRank() > 0 and self:AntiSpam(3) then
@@ -219,7 +219,7 @@ do
 	end
 	function mod:SetSveazIcons()
 		if DBM:GetRaidRank() >= 0 then
-			table.sort(SveazTargets, DBM.SortByGroup)
+			table.sort(SveazTargets, function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 			for _, v in ipairs(SveazTargets) do
 				if mod.Options.AnnounceSveaz then
 					if DBM:GetRaidRank() > 0 then

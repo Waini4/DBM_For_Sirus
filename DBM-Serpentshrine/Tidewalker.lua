@@ -157,7 +157,7 @@ do
 	-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
 	-- end
 	function mod:SetSuhIcons()
-		table.sort(SuhTargets, DBM.SortByGroup)
+		table.sort(SuhTargets, function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 		for _, v in ipairs(SuhTargets) do
 			if self.Options.SetIconOnSklepTargets then
 				self:SetIcon(UnitName(v), SuhIcons, 10)

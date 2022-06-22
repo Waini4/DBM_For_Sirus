@@ -120,7 +120,7 @@ do
 	-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
 	-- end
 	function mod:SetSignIcons()
-		table.sort(SignTargets, DBM.SortByGroup)
+		table.sort(SignTargets, function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 		if #SignTargets <= 6 then
 			for _, v in ipairs(SignTargets) do
 				if mod.Options.AnnounceSign then

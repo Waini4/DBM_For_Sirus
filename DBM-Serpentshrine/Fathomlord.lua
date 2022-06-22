@@ -136,7 +136,7 @@ do
 	-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
 	-- end
 	function mod:SetSvazIcons()
-		table.sort(SvazTargets, DBM.SortByGroup)
+		table.sort(SvazTargets, function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 		for _, v in ipairs(SvazTargets) do
 			if mod.Options.AnnounceSvaz then
 				if DBM:GetRaidRank() > 0 then

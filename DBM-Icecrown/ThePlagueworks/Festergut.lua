@@ -59,7 +59,7 @@ do
 	-- 	return DBM:GetRaidSubgroup(DBM:GetUnitFullName(v1)) < DBM:GetRaidSubgroup(DBM:GetUnitFullName(v2))
 	-- end
 	function mod:SetSporeIcons()
-		table.sort(gasSporeIconTargets, DBM.SortByGroup)
+		table.sort(gasSporeIconTargets, function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 		local gasSporeIcon = 8
 		for _, v in ipairs(gasSporeIconTargets) do
 			if self.Options.AnnounceSporeIcons and DBM:GetRaidRank() > 0 then

@@ -180,7 +180,7 @@ do
 	-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
 	-- end
 	function mod:SetSklepIcons()
-		table.sort(SklepTargets, DBM.SortByGroup)
+		table.sort(SklepTargets, function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 		for _, v in ipairs(SklepTargets) do
 			if mod.Options.AnnounceSklep then
 				if DBM:GetRaidRank() > 0 then
@@ -201,7 +201,7 @@ do
 		end
 	end
 	function mod:SetKorIcons()
-		table.sort(KorTargets, DBM.SortByGroup)
+		table.sort(KorTargets, function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 		for _, v in ipairs(KorTargets) do
 			if mod.Options.AnnounceKor then
 				if DBM:GetRaidRank() > 0 then

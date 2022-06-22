@@ -239,7 +239,7 @@ do
 	-- end
 	function mod:SetPepelIcons()
 		if DBM:GetRaidRank() >= 0 then
-			table.sort(PepelTargets, DBM.SortByGroup)
+			table.sort(PepelTargets, function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 			local PepelIcons = 7
 			for _, v in ipairs(PepelTargets) do
 				if mod.Options.AnnouncePepel then

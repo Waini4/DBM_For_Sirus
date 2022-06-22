@@ -2018,18 +2018,6 @@ do
 		return (raid[name] and raid[name].subgroup) or 0
 	end
 
-	--------------
-	-- sort table
-	--------------
-
-	function DBM:SortByGroup(v1, v2)
-		return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
-	end
-
-	--------------
-	-- sort table
-	--------------
-
 	function DBM:GetRaidRoster(name)
 		if name then
 			return raid[name] ~= nil

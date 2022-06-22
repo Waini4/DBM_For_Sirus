@@ -301,7 +301,7 @@ do
 	-- end
 	function mod:StaticAngerIcons() -- метки и анонс целей статического заряда
 		if DBM:GetRaidRank() >= 0 then
-			table.sort(StaticTargets, DBM.SortByGroup)
+			table.sort(StaticTargets, function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 			for _, v in ipairs(StaticTargets) do
 				if mod.Options.AnnounceStatic then
 					if DBM:GetRaidRank() > 0 then
