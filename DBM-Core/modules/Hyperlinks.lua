@@ -58,7 +58,7 @@ local function CreateOurFrame()
 end
 
 local function LinkHook(self, link)
-	local _, linkType, arg1, arg2, arg3, arg4, arg5, arg6 = strsplit(":", link)
+	local  linkType, arg1, arg2, arg3, arg4, arg5, arg6 = strsplit(":", link)
 	if linkType ~= "DBM" then
 		return
 	end
@@ -80,11 +80,26 @@ local function LinkHook(self, link)
 		local mod = DBM:GetModByName(arg2 or "")
 		if mod then
 			DBM:ShowNoteEditor(mod, arg3, arg4, arg5, arg6)--modvar, ability, text, sender
-		else--Should not happen, since mod was verified before getting this far, but just in case
+		else   --Should not happen, since mod was verified before getting this far, but just in case
 			DBM:Debug("Bad note share, mod not valid")
 		end
 	end
 end
+
+local _SetItemRef = SetItemRef
+
+
+function SetItemRef(link, textref, button, chatFrame)
+	if 	link:match("DBM:") then
+		-- print(link, textref, button, chatFrame)
+		LinkHook(chatFrame,link)
+	else
+		_SetItemRef(link, textref, button, chatFrame)
+	end
+
+end
+
+
 
 DEFAULT_CHAT_FRAME:HookScript("OnHyperlinkClick", LinkHook) -- Handles the weird case that the default chat frame is not one of the normal chat frames (3rd party chat frames or whatever causes this)
 local i = 1
