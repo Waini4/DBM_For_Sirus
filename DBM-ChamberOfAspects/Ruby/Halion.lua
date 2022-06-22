@@ -216,7 +216,7 @@ function mod:SPELL_DAMAGE(_, _, _, _, _, destFlags, spellId)
 		specWarnMeteorStrike:Show()
 		specWarnMeteorStrike:Play("runaway")
 		lastflame = GetTime()
-	elseif spellIDs2[spellId] and args:IsPlayer() then
+	elseif spellIDs2[spellId] and bband(destFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) ~= 0 and bband(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) then
 		lastshroud = GetTime()--keeps a time stamp for twilight realm damage to determin if you're still there or not for bosshealth frame.
 	end
 end
