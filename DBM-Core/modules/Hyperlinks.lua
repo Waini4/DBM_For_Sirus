@@ -101,11 +101,11 @@ end
 
 
 
-DEFAULT_CHAT_FRAME:HookScript("OnHyperlinkClick", LinkHook) -- Handles the weird case that the default chat frame is not one of the normal chat frames (3rd party chat frames or whatever causes this)
-local i = 1
-while _G["ChatFrame" .. i] do
-	if _G["ChatFrame" .. i] ~= DEFAULT_CHAT_FRAME then
-		_G["ChatFrame" .. i]:HookScript("OnHyperlinkClick", LinkHook)
-	end
-	i = i + 1
-end
+-- DEFAULT_CHAT_FRAME:HookScript("OnHyperlinkClick", LinkHook) -- Handles the weird case that the default chat frame is not one of the normal chat frames (3rd party chat frames or whatever causes this)
+-- local i = 1
+-- while _G["ChatFrame" .. i] do
+-- 	if _G["ChatFrame" .. i] ~= DEFAULT_CHAT_FRAME then
+-- 		_G["ChatFrame" .. i]:HookScript("OnHyperlinkClick", LinkHook)
+-- 	end
+-- 	i = i + 1
+-- end
