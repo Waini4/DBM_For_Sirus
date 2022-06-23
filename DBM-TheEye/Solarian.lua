@@ -143,6 +143,7 @@ mod:RegisterEventsInCombat(
 	-- "SPELL_DISPEL",
 	"SPELL_CAST_START 308562 308558 308585 308576",
 	"SPELL_CAST_SUCCESS",
+	"SPELL_AURA_REMOVED 42783",
 	"SPELL_AURA_APPLIED 308548 308544 308563 42783",
 	"SWING_DAMAGE",
 	"UNIT_DEAD"
@@ -291,6 +292,8 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerNextWrathN:Start()
 		warnWrathN:Show(args.destName)
 		timerWrathN:Start(args.destName)
+		---TODO elvui test
+		DBM.Nameplate:Show(args.destGUID, 42783)
 		self:SetIcon(args.destName, 8, 6)
 		if args:IsPlayer() then
 			specWarnWrathN:Show()
@@ -299,7 +302,12 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	end
 end
+function mod:SPELL_AURA_REMOVED(args)
+	if args:IsSpellID(42783) then
+		DBM.Nameplate:Show(args.destGUID, 42783)
+	end
 
+end
 function mod:Kolzo()
 	warnKol:Show(table.concat(KolTargets, "<, >"))
 	table.wipe(KolTargets)

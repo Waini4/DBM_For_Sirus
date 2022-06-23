@@ -194,6 +194,8 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 312208 or spellId == 317160 then
 		RevCascTargets[#RevCascTargets + 1] = args.destName
 		ReverseCascadeBuff:Start()
+		DBM.Nameplate:Show(args.destGUID, 317160)
+
 		if self.Options.InfoFrame and not DBM.InfoFrame:IsShown() then
 			DBM.InfoFrame:SetHeader(args.spellName)
 			DBM.InfoFrame:Show(10, "playerdebuffremaining", spellId)
@@ -263,6 +265,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnRevCascTargets then
 			self:SetIcon(args.destName, 0)
 		end
+		DBM.Nameplate:Hide(args.destGUID, 317160)
 		if args:IsPlayer() then
 			yellReverseCascadeFade:Cancel()
 			if self.Options.RangeFrame then
