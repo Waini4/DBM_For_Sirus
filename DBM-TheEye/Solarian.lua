@@ -304,7 +304,7 @@ function mod:SPELL_AURA_APPLIED(args)
 end
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(42783) then
-		DBM.Nameplate:Show(args.destGUID, 42783)
+		DBM.Nameplate:Hide(args.destGUID, 42783)
 	end
 
 end
