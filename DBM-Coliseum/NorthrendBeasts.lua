@@ -1,5 +1,7 @@
 local mod	= DBM:NewMod("NorthrendBeasts", "DBM-Coliseum")
 local L		= mod:GetLocalizedStrings()
+DBM_COMMON_L = {}
+local CL = DBM_COMMON_L
 
 mod:SetRevision("20220518110528")
 mod:SetMinSyncRevision(7007)
@@ -47,21 +49,21 @@ local specWarnChargeNear	= mod:NewSpecialWarningClose(52311, nil, nil, nil, 3, 2
 local specWarnFrothingRage	= mod:NewSpecialWarningDispel(66759, "RemoveEnrage", nil, nil, 1, 2)
 
 local enrageTimer			= mod:NewBerserkTimer(223)
-local timerCombatStart		= mod:NewCombatTimer(23)
+local timerCombatStart		= mod:NewCombatTimer(16.5)
 local timerNextBoss			= mod:NewTimer(190, "TimerNextBoss", 2457, nil, nil, 1)
 local timerSubmerge			= mod:NewTimer(45, "TimerSubmerge", "Interface\\AddOns\\DBM-Core\\textures\\CryptFiendBurrow.blp", nil, nil, 6)
 local timerEmerge			= mod:NewTimer(10, "TimerEmerge", "Interface\\AddOns\\DBM-Core\\textures\\CryptFiendUnBurrow.blp", nil, nil, 6)
 
 local timerBreath			= mod:NewCastTimer(5, 66689, nil, nil, nil, 3)--3 or 5? is it random target or tank?
-local timerNextStomp		= mod:NewNextTimer(20, 66330, nil, nil, nil, 2, nil, DBM_COMMON_L.INTERRUPT_ICON, nil, mod:IsSpellCaster() and 3 or nil, 3)
-local timerNextImpale		= mod:NewNextTimer(10, 66331, nil, "Tank|Healer", nil, 5, nil, DBM_COMMON_L.TANK_ICON)
+local timerNextStomp		= mod:NewNextTimer(20, 66330, nil, nil, nil, 2, nil, CL.INTERRUPT_ICON, nil, mod:IsSpellCaster() and 3 or nil, 3)
+local timerNextImpale		= mod:NewNextTimer(10, 66331, nil, "Tank|Healer", nil, 5, nil, CL.TANK_ICON)
 local timerRisingAnger      = mod:NewNextTimer(20.5, 66636, nil, nil, nil, 1)
-local timerStaggeredDaze	= mod:NewBuffActiveTimer(15, 66758, nil, nil, nil, 5, nil, DBM_COMMON_L.DAMAGE_ICON)
-local timerNextCrash		= mod:NewCDTimer(51, 66683, nil, nil, nil, 2, nil, DBM_COMMON_L.MYTHIC_ICON)
+local timerStaggeredDaze	= mod:NewBuffActiveTimer(15, 66758, nil, nil, nil, 5, nil, CL.DAMAGE_ICON)
+local timerNextCrash		= mod:NewCDTimer(51, 66683, nil, nil, nil, 2, nil, CL.MYTHIC_ICON)
 local timerSweepCD			= mod:NewCDTimer(21, 66794, nil, "Melee", nil, 3)
 local timerSlimePoolCD		= mod:NewCDTimer(12, 66883, nil, "Melee", nil, 3)
-local timerAcidicSpewCD		= mod:NewCDTimer(21, 66819, nil, "Tank", 2, 5, nil, DBM_COMMON_L.TANK_ICON)
-local timerMoltenSpewCD		= mod:NewCDTimer(21, 66820, nil, "Tank", 2, 5, nil, DBM_COMMON_L.TANK_ICON)
+local timerAcidicSpewCD		= mod:NewCDTimer(21, 66819, nil, "Tank", 2, 5, nil, CL.TANK_ICON)
+local timerMoltenSpewCD		= mod:NewCDTimer(21, 66820, nil, "Tank", 2, 5, nil, CL.TANK_ICON)
 local timerParalyticSprayCD	= mod:NewCDTimer(21, 66901, nil, nil, nil, 3)
 local timerBurningSprayCD	= mod:NewCDTimer(21, 66902, nil, nil, nil, 3)
 local timerParalyticBiteCD	= mod:NewCDTimer(25, 66824, nil, "Melee", nil, 3)
@@ -325,7 +327,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		timerCombatStart:Start()
 	elseif msg == L.Phase2 or msg:find(L.Phase2) then
 		self:ScheduleMethod(13.5, "WormsEmerge")
-		timerCombatStart:Start(13.5)
+		timerCombatStart:Start(11)
 		updateHealthFrame(2)
 		self:SetStage(2)
 		if self.Options.RangeFrame then
@@ -339,7 +341,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		end
 		self:UnscheduleMethod("WormsSubmerge")
 		self:UnscheduleMethod("WormsEmerge")
-		timerCombatStart:Start(10)
+		timerCombatStart:Start(5)
 		timerNextCrash:Start() -- 10 + 41
 		timerNextBoss:Cancel()
 		timerSubmerge:Cancel()
