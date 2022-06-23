@@ -164,19 +164,19 @@ end
 function mod:UNIT_HEALTH(uId)
 	if not warned_P2 and self:GetUnitCreatureId(uId) == 17257 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.53 and self:IsHeroic() then
 		warned_P2 = true
-		self:NewPrePhaseAnnounce()
+		self:NewPrePhaseAnnounce(2)
 	elseif not warned_P3 and self:GetUnitCreatureId(uId) == 17257 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.50 and self:IsHeroic() then
 		warned_P3 = true
-		self:NewPhaseAnnounce()
+		self:NewPhaseAnnounce(2)
 		self:SetStage(3)
 	elseif not warned_P3 and self:GetUnitCreatureId(uId) == 17257 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.33 and self:IsNormal() then
 		warned_P2 = true
-		self:NewPrePhaseAnnounce()
+		self:NewPrePhaseAnnounce(3)
 	elseif not warned_P3 and self:GetUnitCreatureId(uId) == 17257 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.30 and self:IsNormal() then
 		warned_P3 = true
 		self:SetStage(3)
-		self:NewPhaseAnnounce()
-                timerShakeCD:Start(10)
+		self:NewPhaseAnnounce(3)
+		timerShakeCD:Start(10)
 	end
 end
 
