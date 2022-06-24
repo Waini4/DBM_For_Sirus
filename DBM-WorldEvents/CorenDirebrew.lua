@@ -6,8 +6,8 @@ mod:SetCreatureID(23872)
 
 mod:RegisterCombat("combat")
 
-mod:RegisterEvents(
-	"SPELL_AURA_APPLIED",
+mod:RegisterEventsInCombat(
+	"SPELL_AURA_APPLIED 47376 47340 47442 51413",
 	"SPELL_CAST_START"
 )
 
@@ -22,6 +22,16 @@ local timerBrew				= mod:NewTargetTimer(10, 47376)
 local timerBrewStun			= mod:NewTargetTimer(6, 47340)
 
 mod:AddBoolOption("YellOnBarrel", true, "yell")
+
+function mod:OnCombatStart(delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 23872, "CorenDirebrew")
+end
+
+function mod:OnCombatEnd(delay)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 23872, "CorenDirebrew")
+end
+
+
 
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(47310) then

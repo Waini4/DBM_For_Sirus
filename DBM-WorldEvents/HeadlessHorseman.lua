@@ -7,8 +7,8 @@ mod:SetCreatureID(23682, 23775)
 mod:RegisterCombat("combat")
 mod:RegisterKill("say", L.SayCombatEnd)
 
-mod:RegisterEvents(
-	"SPELL_AURA_APPLIED",
+mod:RegisterEventsInCombat(
+	"SPELL_AURA_APPLIED 42380 42514",
 	"CHAT_MSG_MONSTER_SAY"
 )
 

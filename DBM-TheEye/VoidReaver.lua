@@ -62,17 +62,21 @@ mod:RegisterCombat("combat")
 mod:SetUsedIcons(3, 4, 5, 6, 7, 8)
 mod:RegisterCombat("yell", L.YellPull)
 
-mod:RegisterEvents(
-	"SPELL_CAST_SUCCESS",
-	"SPELL_AURA_REMOVED",
-	"SPELL_AURA_APPLIED",
-	"SPELL_CAST_START"
-)
+-- mod:RegisterEvents(
+-- 	"SPELL_CAST_SUCCESS",
+-- 	"SPELL_AURA_REMOVED",
+-- 	"SPELL_AURA_APPLIED",
+-- 	"SPELL_CAST_START"
+-- )
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS 25778 34162",
 	"SPELL_AURA_REMOVED 308471",
 	"SPELL_AURA_APPLIED 308465 308473 308471 308467",
-	"SPELL_CAST_START"
+	"SPELL_AURA_APPLIED_DOSE 308465 308473 308471 308467",
+	"UNIT_HEALTH"
+
+
+	-- "SPELL_CAST_START"
 )
 -----обычка-----
 local timerNextPounding         = mod:NewCDTimer(14, 34162, nil, nil, nil, 1)
@@ -150,7 +154,7 @@ function mod:OnCombatStart(delay)
 	    timerOrbCD:Start()
 		--timerKnockbackCD:Start()
 		if self.Options.RangeFrame then
-		DBM.RangeCheck:Show(15)
+			DBM.RangeCheck:Show(15)
 		end
 	else
 		berserkTimer:Start()
@@ -172,10 +176,9 @@ end
 ----------------------об--------------------------------------
 
 function mod:SPELL_CAST_SUCCESS(args)
-	local spellId = args.spellId
-	if spellId == 25778 then
+	if args:IsSpellID(25778) then
 		timerNextKnockback:Start()
-	elseif spellId == 34162 then
+	elseif args:IsSpellID(34162) then
 		timerNextPounding:Start()
 	end
 end
@@ -183,8 +186,8 @@ end
 -------------------------хм------------------------------------
 
 function mod:SPELL_AURA_APPLIED(args)
-	local spellId = args.spellId
-	if spellId == 308465 then --- 1 фаза
+	-- local spellId = args.spellId
+	if args:IsSpellID(308465) then --- 1 фаза
 		mod.vb.phase = 1
 		timerLoadCD:Start()
 		timerOrbCD:Start()
@@ -194,21 +197,22 @@ function mod:SPELL_AURA_APPLIED(args)
 		mod.vb.phase = 2
 		timerReloadCD:Start()
 		warnPhase2:Schedule(0)
-	elseif spellId == 308471 then
+	elseif args:IsSpellID(308471) then
 		if args:IsPlayer() then
 			specWarnSign:Show()
 			yellSign:Yell()
-			yellSignFades:Countdown(spellId)
+			yellSignFades:Countdown(308471)
 		end
+		DBM.Nameplate:Show(args.destGUID, 308471)
 		if self.Options.InfoFrame and not DBM.InfoFrame:IsShown() then
 			DBM.InfoFrame:SetHeader(args.spellName)
-			DBM.InfoFrame:Show(8, "playerdebuffremaining", spellId)
+			DBM.InfoFrame:Show(8, "playerdebuffremaining", 308471)
 		end
 		SignTargets[#SignTargets + 1] = args.destName
 		self:UnscheduleMethod("SetSignIcons")
 		self:ScheduleMethod(0.1, "SetSignIcons")
 		timerSignCD:Start()
-	elseif spellId == 308467 then
+	elseif args:IsSpellID(308467) then
 		MagnetTargets[#MagnetTargets + 1] = args.destName
 		if args:IsPlayer() then
 			specWarnMagnet:Show()
@@ -221,11 +225,11 @@ function mod:SPELL_AURA_APPLIED(args)
 end
 
 function mod:SPELL_AURA_REMOVED(args)
-	local spellId = args.spellId
-	if spellId == 308471 then
+	if args:IsSpellID(308471) then
 		if self.Options.SetIconOnSignTargets then
 			self:SetIcon(args.destName, 0)
 		end
+		DBM.Nameplate:Hide(args.destGUID, 308471)
 	end
 end
 

@@ -7,9 +7,9 @@ mod:SetCreatureID(25740)--25740 Ahune, 25755, 25756 the two types of adds
 mod:RegisterCombat("say", L.Pull)
 mod:SetMinCombatTime(15)
 
-mod:RegisterEvents(
-	"SPELL_AURA_APPLIED",
-	"SPELL_AURA_REMOVED"
+mod:RegisterEventsInCombat(
+	"SPELL_AURA_APPLIED 45954",
+	"SPELL_AURA_REMOVED 45954"
 )
 
 local warnSubmerged				= mod:NewAnnounce("Submerged", 2, "Interface\\AddOns\\DBM-Core\\textures\\CryptFiendBurrow.blp")
@@ -22,7 +22,13 @@ local timerEmerge				= mod:NewTimer(40, "EmergeTimer", "Interface\\AddOns\\DBM-C
 local timerSubmerge				= mod:NewTimer(95, "SubmergTimer", "Interface\\AddOns\\DBM-Core\\textures\\CryptFiendBurrow.blp")
 
 function mod:OnCombatStart(delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 25740, "Ahune")
 	timerCombatStart:Start(-delay)
+end
+
+function mod:OnCombatEnd(delay)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 25740, "Ahune")
+	timerCombatStart:Hide()
 end
 
 function mod:SPELL_AURA_APPLIED(args)

@@ -13,7 +13,8 @@ mod:RegisterEvents(
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 68821",
 	"SPELL_PERIODIC_DAMAGE 68927 68934",
-	"SPELL_PERIODIC_MISSED 68927 68934"
+	"SPELL_PERIODIC_MISSED 68927 68934",
+	"CHAT_MSG_MONSTER_SAY"
 )
 
 local warnChainReaction			= mod:NewCastAnnounce(68821, 3, nil, nil, "Melee", 2)
