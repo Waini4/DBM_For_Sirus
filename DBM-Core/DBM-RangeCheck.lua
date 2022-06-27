@@ -118,7 +118,8 @@ DBM:RegisterMapSize("CoTTheBlackMorass",	-- Caverns of Time: The Black Morass (P
 	0, 1087.5, 725
 )
 DBM:RegisterMapSize("CoilfangReservoir",	-- Coilfang: Serpentshrine Cavern (Raid-BC)
-	1, 1575.002975463, 1050.00201416
+	1, 1575.002975463, 1050.00201416,
+	2, 1574, 1050.002
 )
 DBM:RegisterMapSize("CrystalsongForest",	0, 2722.91662598, 1814.5830078099998)
 DBM:RegisterMapSize("Dalaran",
