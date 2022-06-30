@@ -14,7 +14,9 @@ mod:RegisterEvents(
 	"UNIT_HEALTH"
 )
 
+mod:AddTimerLine(L.name)
 
+mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(1))
 local warnseti 							= mod:NewCastAnnounce(317274, 2)
 local warnPhase1	   					= mod:NewPhaseAnnounce(1, 2)
 local warnPhase2Soon   					= mod:NewPrePhaseAnnounce(2, 2)
@@ -25,6 +27,7 @@ local warnzemlea						= mod:NewCastAnnounce(317624, 1.5)
 local specWarnCrushingEarthquake		= mod:NewSpecialWarningMove(317624, nil, nil, nil, 1, 2)
 local timerShpili						= mod:NewCDTimer(60, 317267, nil, nil, nil, 3)
 local timerzemio						= mod:NewCDTimer(90, 317624, nil, nil, nil, 4)
+local timerCDseti						= mod:NewCDTimer(10, 317274, nil, nil, nil, 3)
 local timerseti 						= mod:NewCastTimer(2, 317274)
 
 
@@ -48,6 +51,7 @@ function mod:SPELL_CAST_START(args)
 	if spellId == 317274 then
 		warnseti:Show()
 		timerseti:Start()
+		timerCDseti:Start()
 	elseif spellId == 317624 then
 		warnzemlea:Show()
 		timerzemio:Start()
