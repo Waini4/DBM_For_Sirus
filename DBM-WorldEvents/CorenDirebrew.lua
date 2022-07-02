@@ -31,8 +31,6 @@ function mod:OnCombatEnd(delay)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 23872, "CorenDirebrew")
 end
 
-
-
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(47310) then
 		specWarnDisarm:Show()
