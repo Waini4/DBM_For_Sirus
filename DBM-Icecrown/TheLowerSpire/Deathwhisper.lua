@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Deathwhisper", "DBM-Icecrown", 1)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20220518110528")
+mod:SetRevision("20220702001333")
 mod:SetCreatureID(36855)
 mod:SetUsedIcons(4, 5, 6, 7, 8)
 mod:RegisterCombat("combat")
@@ -47,7 +47,7 @@ mod:AddTimerLine(L.name)
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(1))
 local warnDominateMind				= mod:NewTargetAnnounce(71289, 3)
 
-local specWarnDeathDecay			= mod:NewSpecialWarningMove(71001, nil, nil, nil, 1, 2)
+local specWarnDeathDecay			= mod:NewSpecialWarningGTFO(71001, nil, nil, nil, 0, 8)
 
 local timerDominateMind				= mod:NewBuffActiveTimer(12, 71289)
 local timerDominateMindCD			= mod:NewCDTimer(40, 71289, nil, nil, nil, 3)
@@ -296,7 +296,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(71001, 72108, 72109, 72110) then
 		if args:IsPlayer() then
 			specWarnDeathDecay:Show()
-			--specWarnDeathDecay:Play("runaway")
+			specWarnDeathDecay:Play("watchfeet")
 		end
 	elseif spellId == 71237 and args:IsPlayer() then
 		specWarnCurseTorpor:Show()

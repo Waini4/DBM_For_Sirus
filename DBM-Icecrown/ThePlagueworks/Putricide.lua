@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Putricide", "DBM-Icecrown", 2)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20220518110528")
+mod:SetRevision("20220702001333")
 mod:SetCreatureID(36678)
 mod:SetUsedIcons(5, 6, 7, 8)
 mod:SetMinSyncRevision(3860)
@@ -97,7 +97,7 @@ local specWarnOozeVariable			= mod:NewSpecialWarningYou(70352, nil, nil, nil, ni
 local specWarnGasVariable			= mod:NewSpecialWarningYou(70353, nil, nil, nil, nil, nil, 3)		-- Heroic Ability
 
 local timerNextPhase				= mod:NewPhaseTimer(30)
---local timerTearGas					= mod:NewBuffFadesTimer(16, 71615, nil, nil, nil, 6)
+--local timerTearGas					= mod:NewBuffFadesTimer(16, 71617, nil, nil, nil, 6)
 --local timerPotions					= mod:NewBuffActiveTimer(30, 71621, nil, nil, nil, 6)
 
 local redOozeGUIDsCasts = {}
