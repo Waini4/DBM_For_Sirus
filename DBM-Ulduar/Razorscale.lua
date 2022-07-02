@@ -1,7 +1,7 @@
-local mod	= DBM:NewMod("Razorscale", "DBM-Ulduar")
-local L		= mod:GetLocalizedStrings()
+local mod    = DBM:NewMod("Razorscale", "DBM-Ulduar")
+local L      = mod:GetLocalizedStrings()
 DBM_COMMON_L = {}
-local CL = DBM_COMMON_L
+local CL     = DBM_COMMON_L
 
 mod:SetRevision("20220518110528")
 mod:SetCreatureID(33186)
@@ -21,27 +21,27 @@ mod:RegisterEvents(
 	"CHAT_MSG_RAID_BOSS_EMOTE"
 )
 
-local warnTurretsReadySoon			= mod:NewAnnounce("warnTurretsReadySoon", 1, 48642)
-local warnTurretsReady				= mod:NewAnnounce("warnTurretsReady", 3, 48642)
-local warnFlame						= mod:NewTargetAnnounce(62660, 2, nil, false)
-local warnFuseArmor					= mod:NewStackAnnounce(64771, 2, nil, "Tank")
+local warnTurretsReadySoon = mod:NewAnnounce("warnTurretsReadySoon", 1, 48642)
+local warnTurretsReady     = mod:NewAnnounce("warnTurretsReady", 3, 48642)
+local warnFlame            = mod:NewTargetAnnounce(62660, 2, nil, false)
+local warnFuseArmor        = mod:NewStackAnnounce(64771, 2, nil, "Tank")
 
-local specWarnDevouringFlame		= mod:NewSpecialWarningMove(64733, nil, nil, nil, 1, 2)
-local specWarnDevouringFlameYou		= mod:NewSpecialWarningYou(64733, false, nil, nil, 1, 2)
-local specWarnDevouringFlameNear	= mod:NewSpecialWarningClose(64733, false, nil, nil, 1, 2)
-local yellDevouringFlame			= mod:NewYell(64733)
-local specWarnFuseArmor				= mod:NewSpecialWarningStack(64771, nil, 2, nil, nil, 1, 6)
-local specWarnFuseArmorOther		= mod:NewSpecialWarningTaunt(64771, nil, nil, nil, 1, 2)
+local specWarnDevouringFlame     = mod:NewSpecialWarningMove(64733, nil, nil, nil, 1, 2)
+local specWarnDevouringFlameYou  = mod:NewSpecialWarningYou(64733, false, nil, nil, 1, 2)
+local specWarnDevouringFlameNear = mod:NewSpecialWarningClose(64733, false, nil, nil, 1, 2)
+local yellDevouringFlame         = mod:NewYell(64733)
+local specWarnFuseArmor          = mod:NewSpecialWarningStack(64771, nil, 2, nil, nil, 1, 6)
+local specWarnFuseArmorOther     = mod:NewSpecialWarningTaunt(64771, nil, nil, nil, 1, 2)
 
-local enrageTimer					= mod:NewBerserkTimer(840)
-local timerDeepBreathCooldown		= mod:NewCDTimer(21, 64021, nil, nil, nil, 5)
-local timerDeepBreathCast			= mod:NewCastTimer(2.5, 64021)
-local timerTurret1					= mod:NewTimer(53, "timerTurret1", 48642, nil, nil, 5)
-local timerTurret2					= mod:NewTimer(73, "timerTurret2", 48642, nil, nil, 5)
-local timerTurret3					= mod:NewTimer(93, "timerTurret3", 48642, nil, nil, 5)
-local timerTurret4					= mod:NewTimer(113, "timerTurret4", 48642, nil, nil, 5)
-local timerGrounded					= mod:NewTimer(40, "timerGrounded", nil, nil, nil, 6)
-local timerFuseArmorCD				= mod:NewCDTimer(12.1, 64771, nil, "Tank", nil, 5, nil, CL.TANK_ICON)
+local enrageTimer             = mod:NewBerserkTimer(840)
+local timerDeepBreathCooldown = mod:NewCDTimer(21, 64021, nil, nil, nil, 5)
+local timerDeepBreathCast     = mod:NewCastTimer(2.5, 64021)
+local timerTurret1            = mod:NewTimer(53, "timerTurret1", 48642, nil, nil, 5)
+local timerTurret2            = mod:NewTimer(73, "timerTurret2", 48642, nil, nil, 5)
+local timerTurret3            = mod:NewTimer(93, "timerTurret3", 48642, nil, nil, 5)
+local timerTurret4            = mod:NewTimer(113, "timerTurret4", 48642, nil, nil, 5)
+local timerGrounded           = mod:NewTimer(40, "timerGrounded", nil, nil, nil, 6)
+local timerFuseArmorCD        = mod:NewCDTimer(12.1, 64771, nil, "Tank", nil, 5, nil, CL.TANK_ICON)
 
 local combattime = 0
 local isGrounded = false
@@ -65,31 +65,33 @@ function mod:FlameTarget(targetname, uId)
 	end
 end
 
-function mod:OnCombatStart(delay)
+function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 33186, "Razorscale")
 	self:SetStage(1)
 	isGrounded = false
-	enrageTimer:Start(-delay)
+	enrageTimer:Start()
 	combattime = GetTime()
 	if self:IsDifficulty("normal10") then
-		warnTurretsReadySoon:Schedule(53-delay)
-		warnTurretsReady:Schedule(73-delay)
-		timerTurret1:Start(-delay)
-		timerTurret2:Start(-delay)
+		warnTurretsReadySoon:Schedule(53)
+		warnTurretsReady:Schedule(73)
+		timerTurret1:Start()
+		timerTurret2:Start()
 	else
-		warnTurretsReadySoon:Schedule(93-delay)
-		warnTurretsReady:Schedule(113-delay)
-		timerTurret1:Start(-delay) -- 53sec
-		timerTurret2:Start(-delay) -- +20
-		timerTurret3:Start(-delay) -- +20
-		timerTurret4:Start(-delay) -- +20
+		warnTurretsReadySoon:Schedule(93)
+		warnTurretsReady:Schedule(113)
+		timerTurret1:Start() -- 53sec
+		timerTurret2:Start() -- +20
+		timerTurret3:Start() -- +20
+		timerTurret4:Start() -- +20
 	end
 end
+
 function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterStart", 33186, "Razorscale",wipe)
+	DBM:FireCustomEvent("DBM_EncounterStart", 33186, "Razorscale", wipe)
 end
+
 function mod:SPELL_CAST_START(args)
-	if args:IsSpellID(63317, 64021) then	-- deep breath
+	if args:IsSpellID(63317, 64021) then -- deep breath
 		timerDeepBreathCast:Start()
 		timerDeepBreathCooldown:Start()
 	elseif args.spellId == 63236 then
@@ -100,15 +102,15 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	if args.spellId == 64771 then
 		local amount = args.amount or 1
-        if amount >= 2 then
-            if args:IsPlayer() then
-                specWarnFuseArmor:Show(args.amount)
-                specWarnFuseArmor:Play("stackhigh")
-            else
+		if amount >= 2 then
+			if args:IsPlayer() then
+				specWarnFuseArmor:Show(args.amount)
+				specWarnFuseArmor:Play("stackhigh")
+			else
 				local _, _, _, _, _, _, expireTime = DBM:UnitDebuff("player", args.spellName)
 				local remaining
 				if expireTime then
-					remaining = expireTime-GetTime()
+					remaining = expireTime - GetTime()
 				end
 				if not UnitIsDeadOrGhost("player") and (not remaining or remaining and remaining < 12) then
 					specWarnFuseArmorOther:Show(args.destName)
@@ -122,6 +124,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	end
 end
+
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 function mod:SPELL_DAMAGE(_, _, _, destGUID, _, _, spellId)
@@ -130,6 +133,7 @@ function mod:SPELL_DAMAGE(_, _, _, destGUID, _, _, spellId)
 		specWarnDevouringFlame:Play("runaway")
 	end
 end
+
 mod.SPELL_MISSED = mod.SPELL_DAMAGE
 
 function mod:CHAT_MSG_RAID_BOSS_EMOTE(emote)
@@ -169,7 +173,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, mob)
 end
 
 function mod:UNIT_SPELLCAST_SUCCEEDED(uId, spellName)
-	if spellName == GetSpellInfo(64821) then--Fuse Armor
+	if spellName == GetSpellInfo(64821) then --Fuse Armor
 		timerFuseArmorCD:Start()
 	end
 end
