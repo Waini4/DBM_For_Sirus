@@ -2832,10 +2832,19 @@ end
 
 function DBM:PLAYER_TALENT_UPDATE()
 	local lastSpecID = currentSpecID
-	self:SetCurrentSpecInfo()
+	if GetNumTalentTabs() == 0 then
+		self:Debug("No talents detected. Registering PLAYER_ALIVE for talent data")
+		self:RegisterEvents("PLAYER_ALIVE")
+	end
+	self:Schedule(0.1, self.SetCurrentSpecInfo) -- delay a bit because Unit API like UnitExists and UnitClass were returning nil on this event.
 	if currentSpecID ~= lastSpecID then--Don't fire specchanged unless spec actually has changed.
 		self:SpecChanged()
 	end
+end
+
+function DBM:PLAYER_ALIVE()
+	self:PLAYER_TALENT_UPDATE()
+	mainFrame:UnregisterEvent("PLAYER_ALIVE")
 end
 
 do
@@ -4799,17 +4808,21 @@ function checkWipe(self, confirm)
 					break
 				end
 			end
-		else -- Unit combat status detection. No combat unit in your party and no EncounterProgress marked, that means wipe
-			wipe = 1
-			local uId = ((GetNumRaidMembers() == 0) and "party") or "raid"
-			for i = 0, mmax(GetNumRaidMembers(), GetNumPartyMembers()) do
-				local id = (i == 0 and "player") or uId..i
-				if UnitAffectingCombat(id) and not UnitIsDeadOrGhost(id) then
-					wipe = 0 -- Someone still in combat. No wipe
-					break
+		end
+			-- Commenting this else check since there is no EncounterProgress info on WotLK, so whenever IEEU fired and there was no boss frames, it was considering a wipe without running the group unit combat detection
+		--else -- Unit combat status detection. No combat unit in your party and no EncounterProgress marked, that means wipe
+			if wipe ~= 0 then
+				wipe = wipe or 1
+				local uId = ((GetNumRaidMembers() == 0) and "party") or "raid"
+				for i = 0, mmax(GetNumRaidMembers(), GetNumPartyMembers()) do
+					local id = (i == 0 and "player") or uId..i
+					if UnitAffectingCombat(id) and not UnitIsDeadOrGhost(id) then
+						wipe = 0 -- Someone still in combat. No wipe
+						break
+					end
 				end
 			end
-		end
+
 		if wipe == 0 then
 			self:Schedule(3, checkWipe, self)
 		elseif confirm then
@@ -10462,7 +10475,7 @@ function bossModPrototype:AddBoolOption(name, default, cat, func, extraOption, e
 end
 
 function bossModPrototype:AddSpecialWarningOption(name, default, defaultSound, cat, spellId, optionType)
-	if checkDuplicateObjects[name] and name ~= "timer_berserk" then
+	if checkDuplicateObjects[name] and name ~= "timer_berserk" and name ~= "HealthFrame" then
 		DBM:Debug("|cffff0000Option already exists for: |r"..name)
 		return
 	else
