@@ -126,7 +126,7 @@ end
 
 local function ShouldDisplayLevel(tree)
 	local result = false
-	for k, v in ipairs(tree) do
+	for _, v in ipairs(tree) do
 		if v.children == nil and v.visible ~= false then
 			result = true
 		elseif v.children then
@@ -200,7 +200,7 @@ end
 local function Button_OnDoubleClick(button)
 	local self = button.obj
 	local status = self.status or self.localstatus
-	local status = (self.status or self.localstatus).groups
+	status = (self.status or self.localstatus).groups
 	status[button.uniquevalue] = not status[button.uniquevalue]
 	self:RefreshTree()
 end
@@ -269,7 +269,7 @@ end
 local function Dragger_OnMouseUp(frame)
 	local treeframe = frame:GetParent()
 	local self = treeframe.obj
-	local frame = treeframe:GetParent()
+	frame = treeframe:GetParent()
 	treeframe:StopMovingOrSizing()
 	--treeframe:SetScript("OnUpdate", nil)
 	treeframe:SetUserPlaced(false)
@@ -371,7 +371,7 @@ local methods = {
 		local groups = (self.status or self.localstatus).groups
 		local hasChildren = self.hasChildren
 
-		for i, v in ipairs(tree) do
+		for _, v in ipairs(tree) do
 			if v.children then
 				if not self.filter or ShouldDisplayLevel(v.children) then
 					local line = addLine(self, v, tree, level, parent)
@@ -389,7 +389,7 @@ local methods = {
 		local buttons = self.buttons
 		local lines = self.lines
 
-		for i, v in ipairs(buttons) do
+		for _, v in ipairs(buttons) do
 			v:Hide()
 		end
 		while lines[1] do

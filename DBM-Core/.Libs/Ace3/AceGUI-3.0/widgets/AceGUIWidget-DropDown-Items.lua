@@ -33,7 +33,7 @@ end
 
 -- ItemBase is the base "class" for all dropdown items.
 -- Each item has to use ItemBase.Create(widgetType) to
--- create an initial 'self' value. 
+-- create an initial 'self' value.
 -- ItemBase will add common functions and ui event handlers.
 -- Be sure to keep basic usage when you override functions.
 
@@ -217,20 +217,16 @@ end
 
 --[[
 	Template for items:
-	
 -- Item:
 --
 do
 	local widgetType = "Dropdown-Item-"
 	local widgetVersion = 1
-	
 	local function Constructor()
 		local self = ItemBase.Create(widgetType)
-		
 		AceGUI:RegisterAsWidget(self)
 		return self
 	end
-	
 	AceGUI:RegisterWidgetType(widgetType, Constructor, widgetVersion + ItemBase.version)
 end
 --]]

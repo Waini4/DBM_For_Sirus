@@ -295,7 +295,7 @@ do
 		line2:SetHeight(8)
 		line2:SetPoint("BOTTOMRIGHT", -8, 8)
 		line2:SetTexture("Interface\\Tooltips\\UI-Tooltip-Border")
-		local x = 0.1 * 8/17
+		x = 0.1 * 8/17
 		line2:SetTexCoord(0.05 - x, 0.5, 0.05, 0.5 + x, 0.05, 0.5 - x, 0.5 + x, 0.5)
 
 		local sizer_s = CreateFrame("Frame",nil,frame)

@@ -143,7 +143,7 @@ local methods = {
 	["SelectTab"] = function(self, value)
 		local status = self.status or self.localstatus
 		local found
-		for i, v in ipairs(self.tabs) do
+		for _, v in ipairs(self.tabs) do
 			if v.value == value then
 				v:SetSelected(true)
 				found = true
