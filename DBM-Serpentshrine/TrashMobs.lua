@@ -30,6 +30,6 @@ function mod:SPELL_AURA_APPLIED(args)
 	end
 end
 
-function mod:OnCombatEnd(wipe)
+function mod:OnCombatEnd()
 	DBM.RangeCheck:Hide()
 end

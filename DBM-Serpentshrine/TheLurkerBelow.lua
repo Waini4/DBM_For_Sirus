@@ -141,7 +141,7 @@ function mod:Emerge()
 	self:ScheduleMethod(115, "Submerge")
 end
 
-function mod:OnCombatStart(delay)
+function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 21217, "The Lurker Below")
 	timerSubmerge:Start(90)
 	self:ScheduleMethod(90, "Submerge")

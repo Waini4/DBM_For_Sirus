@@ -58,7 +58,7 @@ function mod:OnCombatStart(delay)
 	end
 end
 
-function mod:OnCombatEnd(wipe)
+function mod:OnCombatEnd()
 end
 
 function mod:SPELL_CAST_START(args)

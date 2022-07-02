@@ -56,7 +56,7 @@ local function updateHealthFrame(phase)--WIP
 	end
 end
 
-function mod:OnCombatStart(delay)
+function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 17534, "RomuloAndJulianne")
 	updateHealthFrame(1)
 	self.vb.JulianneDied = 0

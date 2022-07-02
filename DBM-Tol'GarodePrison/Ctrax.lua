@@ -43,7 +43,7 @@ local warned_P2 = false
 
 mod:AddInfoFrameOption(317579, false)
 
-function mod:OnCombatStart(delay)
+function mod:OnCombatStart()
 	self:SetStage(1)
 	timerEscapingDarkness:Start()
 	self:ScheduleMethod(0.5, "CreatePowerFrame")
@@ -59,7 +59,7 @@ function mod:OnCombatStart(delay)
 	end
 end
 
-function mod:OnCombatEnd(wipe)
+function mod:OnCombatEnd()
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
 	end

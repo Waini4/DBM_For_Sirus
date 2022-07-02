@@ -22,7 +22,7 @@ L:SetOptionLocalization{
 }
 
 L:SetMiscLocalization{
-	MarkofFilthIcon	= "Метка скверны {rt%d} установлена на: %s"
+	MarkofFilthIcon					= "Метка скверны {rt%d} установлена на: %s"
 }
 
 

@@ -63,7 +63,7 @@ local timerEvo					= mod:NewNextTimer(112, 30254)	-- Прилив сил
 -- героик --
 local warnUnstableTar				= mod:NewAnnounce("WarnUnstableTar", 3, 305309)
 
-local specWarnAnnihilationKick		= mod:NewSpecialWarning("Прерывание")
+-- local specWarnAnnihilationKick		= mod:NewSpecialWarning("Прерывание")
 local specWarnCond					= mod:NewSpecialWarningYou(305305, nil, nil, nil, 1, 2)
 local specWarnRunes					= mod:NewSpecialWarningRun(305296, nil, nil, nil, 1, 2)
 
@@ -79,7 +79,7 @@ mod.vb.ter = true
 mod.vb.isinCombat = false
 
 
-function mod:OnCombatStart(delay)
+function mod:OnCombatStart()
 	if mod:IsDifficulty("normal10") then
 		DBM:FireCustomEvent("DBM_EncounterStart", 15691, "The Curator")
 		timerEvo:Start()

@@ -26,7 +26,7 @@ function mod:ethereal()
 	timerEtherealSpawn:Start()
 	self:ScheduleMethod(10, "ethereal")
 end
-function mod:OnCombatStart(delay)
+function mod:OnCombatStart()
 	timerFireballCD:Start()
 	timerFrostboltCD:Start()
 	timerNovaCD:Start(15)
@@ -43,8 +43,8 @@ function mod:SPELL_CAST_SUCCESS(args)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(_, _, spellId)
-	if spellId == 32371 then
+function mod:UNIT_SPELLCAST_SUCCEEDED(_, spellName)
+	if spellName == GetSpellInfo(32371) then
 		self:SendSync("Adds")
 	end
 end

@@ -97,7 +97,7 @@ function mod:resetTolik()
     self.vb.tolik = true
 end
 
-function mod:OnCombatStart(delay)
+function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 15688, "Terestian Illhoof")
 	if mod:IsDifficulty("normal10") then
 		timerSacrifice:Start(28)

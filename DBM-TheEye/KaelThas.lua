@@ -485,7 +485,7 @@ function mod:AxeIcon()
 	end
 end
 
-function mod:OnCombatStart(delay)
+function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 19622, "Kael'thas Sunstrider")
 	self.vb.phase = 1
 	dominateMindIcon = 8

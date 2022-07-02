@@ -49,7 +49,7 @@ mod.vb.phase = 0
 mod.vb.lastCurse = 0
 mod.vb.phaseCounter = true
 
-function mod:PLAYER_REGEN_DISABLED(args)
+function mod:PLAYER_REGEN_DISABLED()
 	if not mod.inCombat then
 		mod:OnCombatStart()
 	end

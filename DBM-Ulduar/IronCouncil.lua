@@ -67,7 +67,7 @@ local enrageTimer				= mod:NewBerserkTimer(900)
 local disruptTargets = {}
 local disruptIcon = 7
 
-function mod:OnCombatStart(delay)
+function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 32857, "IronCouncil")
 	enrageTimer:Start()
 	timerRuneofPower:Start(21)
@@ -80,7 +80,7 @@ function mod:OnCombatEnd(wipe)
 	DBM.RangeCheck:Hide()
 end
 
-function mod:RuneTarget(targetname, uId)
+function mod:RuneTarget(targetname)
 	if not targetname then return end
 		warnRuneofPower:Show(targetname)
 end

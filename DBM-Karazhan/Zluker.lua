@@ -20,7 +20,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 	end
 end
 
-function mod:OnCombatStart(delay)
+function mod:OnCombatStart()
 	timerMagicCD:Start(66)
 end
 

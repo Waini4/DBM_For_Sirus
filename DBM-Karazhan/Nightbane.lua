@@ -95,7 +95,7 @@ mod:AddBoolOption("RemoveWeaponOnMindControl", true)
 mod:AddSetIconOption("SetIconOnPyromancer",305382, true, true, {6, 7, 8})
 mod:AddBoolOption("AnnouncePyromancerIcons", true)
 
-function mod:OnCombatStart(delay)
+function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 17225, "Nightbane")
 	if mod:IsDifficulty("normal10") then
 

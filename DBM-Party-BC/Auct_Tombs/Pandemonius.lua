@@ -22,7 +22,7 @@ function mod:blastreset()
 	firstBlast = true
 end
 
-function mod:OnCombatStart(delay)
+function mod:OnCombatStart()
 	timerBlastCD:Start()
 	timerShellCD:Start()
 	firstBlast = true
@@ -34,6 +34,7 @@ function mod:SPELL_CAST_START(args)
 		timerBlastCD:Start()
 		self:ScheduleMethod(10, "blastreset")
 	elseif args:IsSpellID(32358, 38759) then
+		timerShell:Start()
 		specWarnShell:Show(args.sourceName)
 		specWarnShell:Play("stopattack")
 		timerShellCD:Start()

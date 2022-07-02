@@ -13,3 +13,5 @@ mod:RegisterEventsInCombat(
 	"SPELL_SUMMON",
 	"UNIT_HEALTH"
 )
+
+-- смешно что он умер @Стекло

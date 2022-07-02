@@ -55,7 +55,7 @@ local killTime	= 0
 mod.vb.iconId = 6
 mod.vb.altIcon = true
 
-function mod:OnCombatStart(delay)
+function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 32906, "Freya")
 	self.vb.altIcon = true
 	self.vb.iconId = 6

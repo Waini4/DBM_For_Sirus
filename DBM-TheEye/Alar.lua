@@ -216,7 +216,7 @@ mod.vb.phase = 0
 local warned_preP1 = false
 -- local LKTank
 
-function mod:OnCombatStart(delay)
+function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 19514, "Al'ar")
 
 	self.vb.phase = 1

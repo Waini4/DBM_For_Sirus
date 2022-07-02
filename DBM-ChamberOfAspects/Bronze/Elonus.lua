@@ -120,7 +120,7 @@ do
 	end
 end
 
-function mod:OnCombatStart(delay)
+function mod:OnCombatStart()
     DBM:FireCustomEvent("DBM_EncounterStart", 50609 or 50610, "Elonus")
 	mod:SetStage(1)
 	self.vb.RetCount = 0
