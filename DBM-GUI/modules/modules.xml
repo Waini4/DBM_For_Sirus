@@ -1,0 +1,38 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+
+
+<Script file = "MainFramePrototype.lua"/>
+<Script file = "MainFrame.lua"/>
+<Script file = "ListFrameButtonsPrototype.lua"/>
+<Script file = "PanelPrototype.lua"/>
+
+<Script file = "options\general\General.lua"/>
+<Script file = "options\general\Core_GUI.lua"/>
+<Script file = "options\general\ExtraFeatures.lua"/>
+<Script file = "options\general\Profile.lua"/>
+
+<Script file = "options\alerts\Alerts.lua"/>
+<Script file = "options\alerts\Announcements.lua"/>
+<Script file = "options\alerts\SpecialAnnouncements.lua"/>
+<Script file = "options\alerts\ChatframeMessages.lua"/>
+<Script file = "options\alerts\SpokenAlerts.lua"/>
+<Script file = "options\alerts\EventSounds.lua"/>
+
+<Script file = "options\timers\Timers.lua"/>
+<Script file = "options\timers\Appearance.lua"/>
+<Script file = "options\timers\ColorbyType.lua"/>
+<Script file = "options\timers\Behavior.lua"/>
+
+<Script file = "options\filters\Filters.lua"/>
+<Script file = "options\filters\GlobalDisables.lua"/>
+<Script file = "options\filters\HideBlizzard.lua"/>
+<Script file = "options\filters\Privacy.lua"/>
+
+<Script file = "options\frames\Frames.lua"/>
+<Script file = "options\frames\InfoFrame.lua"/>
+<Script file = "options\frames\Range.lua"/>
+<Script file = "options\frames\Nameplate.lua"/>
+<Script file = "options\frames\BossHealth.lua"/>
+
+</Ui>
