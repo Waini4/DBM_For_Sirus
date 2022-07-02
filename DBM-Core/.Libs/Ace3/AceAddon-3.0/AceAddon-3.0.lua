@@ -659,15 +659,15 @@ AceAddon.frame:RegisterEvent("PLAYER_LOGIN")
 AceAddon.frame:SetScript("OnEvent", onEvent)
 
 -- upgrade embeded
-for name, addon in pairs(AceAddon.addons) do
+for _, addon in pairs(AceAddon.addons) do
 	Embed(addon, true)
 end
 
 -- 2010-10-27 nevcairiel - add new "orderedModules" table
 if oldminor and oldminor < 10 then
-	for name, addon in pairs(AceAddon.addons) do
+	for _, addon in pairs(AceAddon.addons) do
 		addon.orderedModules = {}
-		for module_name, module in pairs(addon.modules) do
+		for _, module in pairs(addon.modules) do
 			tinsert(addon.orderedModules, module)
 		end
 	end

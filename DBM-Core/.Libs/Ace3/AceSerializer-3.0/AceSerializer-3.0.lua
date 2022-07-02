@@ -268,7 +268,7 @@ local mixins = {
 AceSerializer.embeds = AceSerializer.embeds or {}
 
 function AceSerializer:Embed(target)
-	for k, v in pairs(mixins) do
+	for _, v in pairs(mixins) do
 		target[v] = self[v]
 	end
 	self.embeds[target] = true
@@ -276,6 +276,6 @@ function AceSerializer:Embed(target)
 end
 
 -- Update embeds
-for target, v in pairs(AceSerializer.embeds) do
+for target, _ in pairs(AceSerializer.embeds) do
 	AceSerializer:Embed(target)
 end

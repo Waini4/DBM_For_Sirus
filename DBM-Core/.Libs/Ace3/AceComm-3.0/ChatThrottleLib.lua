@@ -349,7 +349,7 @@ function ChatThrottleLib.OnUpdate(this,delay)
 
 	-- See how many of our priorities have queued messages (we only have 3, don't worry about the loop)
 	local n = 0
-	for prioname,Prio in pairs(self.Prio) do
+	for _,Prio in pairs(self.Prio) do
 		if Prio.Ring.pos or Prio.avail < 0 then
 			n = n + 1
 		end
@@ -358,7 +358,7 @@ function ChatThrottleLib.OnUpdate(this,delay)
 	-- Anything queued still?
 	if n<1 then
 		-- Nope. Move spillover bandwidth to global availability gauge and clear self.bQueueing
-		for prioname, Prio in pairs(self.Prio) do
+		for _, Prio in pairs(self.Prio) do
 			self.avail = self.avail + Prio.avail
 			Prio.avail = 0
 		end
@@ -371,7 +371,7 @@ function ChatThrottleLib.OnUpdate(this,delay)
 	local avail = self.avail/n
 	self.avail = 0
 
-	for prioname, Prio in pairs(self.Prio) do
+	for _, Prio in pairs(self.Prio) do
 		if Prio.Ring.pos or Prio.avail < 0 then
 			Prio.avail = Prio.avail + avail
 			if Prio.Ring.pos and Prio.avail > Prio.Ring.pos[1].nSize then

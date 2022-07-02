@@ -61,7 +61,7 @@ local mixins = {
 --
 -- Embeds AceEevent into the target object making the functions from the mixins list available on target:..
 function AceHook:Embed( target )
-	for k, v in pairs( mixins ) do
+	for _, v in pairs( mixins ) do
 		target[v] = self[v]
 	end
 	self.embeded[target] = true
@@ -506,6 +506,6 @@ function AceHook:IsHooked(obj, method)
 end
 
 --- Upgrade our old embeded
-for target, v in pairs( AceHook.embeded ) do
+for target, _ in pairs( AceHook.embeded ) do
 	AceHook:Embed( target )
 end

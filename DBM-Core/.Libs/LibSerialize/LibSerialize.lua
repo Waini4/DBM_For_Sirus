@@ -419,7 +419,7 @@ end
 -- 1. ReadBytes(bytelen)
 -- 2. ReaderBytesLeft()
 local function CreateReader(input)
-    local input = input
+    -- local input = input
     local inputLen = #input
     local nextPos = 1
 
@@ -628,7 +628,7 @@ function LibSerialize:_ReadTable(entryCount, value)
         self:_AddReference(tableRefs, value)
     end
 
-    for i = 1, entryCount do
+    for _ = 1, entryCount do
         local k, v = self:_ReadPair(self._ReadObject)
         value[k] = v
     end

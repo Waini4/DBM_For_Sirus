@@ -458,7 +458,7 @@ end
 -- have accumulated. It will be called in case this library version gets
 -- replaced by a new one
 function Core.Disable()
-	for guid, effects in pairs(activeEffectsBySpell) do
+	for guid, _ in pairs(activeEffectsBySpell) do
 		callbacks:Fire("UnitCleared", guid)
 	end
 
@@ -819,7 +819,7 @@ function Core.AddCombatTrigger(target, event, func)
 		-- There is already a list of callbacks, so we just add this one
 		if funcList then
 			-- We used a direct call so far, create a list and set up a handler
-			for k, v in pairs(funcList) do
+			for _, v in pairs(funcList) do
 				if v == func then
 					return
 				end
@@ -834,7 +834,7 @@ function Core.AddCombatTrigger(target, event, func)
 			eventTriggers[listIndex] = funcList
 
 			local handler = function(...)
-				for k, v in pairs(funcList) do
+				for _, v in pairs(funcList) do
 					v(...)
 				end
 			end
@@ -862,7 +862,7 @@ function Core.RemoveCombatTrigger(target, event, func)
 			local old_funcList = DeepTableCopy(funcList)
 			wipe(funcList)
 
-			for k, v in pairs(old_funcList) do
+			for _, v in pairs(old_funcList) do
 				if v ~= func then
 					tinsert(funcList, v)
 				end
@@ -1729,7 +1729,7 @@ local priest_PWS_Ranks = {
 --   Divine Aegis: [47753] = healFactor
 local priest_defaultScaling = {[PRIEST_DIVINEAEGIS_SPELLID] = 0}
 do
-	for k, v in pairs(priest_PWS_Ranks) do
+	for _, v in pairs(priest_PWS_Ranks) do
 		priest_defaultScaling[v[1]] = {v[3], 0.809}
 	end
 end
@@ -1807,7 +1807,7 @@ local function priest_ApplyScaling(guid, level, baseFactor, spFactor, daFactor)
 
 	local rankValue, rankSP
 
-	for k, v in pairs(priest_PWS_Ranks) do
+	for _, v in pairs(priest_PWS_Ranks) do
 		if v[2] <= level then
 			if level == 80 then
 				rankValue = v[3] + v[4]

@@ -222,7 +222,7 @@ local mixins = {
 -- Embeds AceConsole into the target object making the functions from the mixins list available on target:..
 -- @param target target object to embed AceBucket in
 function AceConsole:Embed( target )
-	for k, v in pairs( mixins ) do
+	for _, v in pairs( mixins ) do
 		target[v] = self[v]
 	end
 	self.embeds[target] = true
@@ -239,7 +239,7 @@ end
 
 function AceConsole:OnEmbedDisable( target )
 	if AceConsole.weakcommands[target] then
-		for command, func in pairs( AceConsole.weakcommands[target] ) do
+		for command, _ in pairs( AceConsole.weakcommands[target] ) do
 			target:UnregisterChatCommand( command ) -- TODO: this could potentially unregister a command from another application in case of command conflicts. Do we care?
 		end
 	end

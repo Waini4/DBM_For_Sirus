@@ -209,7 +209,7 @@ function CallbackHandler:New(target, RegisterName, UnregisterName, UnregisterAll
 			for i=1,select("#",...) do
 				local self = select(i,...)
 				if registry.insertQueue then
-					for eventname, callbacks in pairs(registry.insertQueue) do
+					for _, callbacks in pairs(registry.insertQueue) do
 						if callbacks[self] then
 							callbacks[self] = nil
 						end

@@ -291,7 +291,7 @@ local mixins = {
 -- Embeds AceComm-3.0 into the target object making the functions from the mixins list available on target:..
 -- @param target target object to embed AceComm-3.0 in
 function AceComm:Embed(target)
-	for k, v in pairs(mixins) do
+	for _, v in pairs(mixins) do
 		target[v] = self[v]
 	end
 	self.embeds[target] = true
@@ -303,6 +303,6 @@ function AceComm:OnEmbedDisable(target)
 end
 
 -- Update embeds
-for target, v in pairs(AceComm.embeds) do
+for target, _ in pairs(AceComm.embeds) do
 	AceComm:Embed(target)
 end

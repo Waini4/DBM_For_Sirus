@@ -387,13 +387,13 @@ function lib:OnRaidRosterUpdate()
 	end
 
 	if (next(additions)) then
-		for guid,unit in pairs(additions) do
+		for _,unit in pairs(additions) do
 			self:GetUnitTalents(unit)
 		end
 	end
 
 	if (next(changes)) then
-		for guid,unit in pairs(changes) do
+		for _,unit in pairs(changes) do
 			self:GetUnitTalents(unit)
 		end
 	end
@@ -407,10 +407,10 @@ function lib:OnRaidRosterUpdate()
 
 				local classStorageStrings = self.pendingStorageStrings[r.class]
 				if (classStorageStrings) then
-				    classStorageStrings[guid] = del(classStorageStrings[guid])
-				    if (not next(classStorageStrings)) then
-				    	self.pendingStorageStrings[r.class] = del(self.pendingStorageStrings[r.class])
-				    end
+					classStorageStrings[guid] = del(classStorageStrings[guid])
+					if (not next(classStorageStrings)) then
+						self.pendingStorageStrings[r.class] = del(self.pendingStorageStrings[r.class])
+					end
 				end
 			end
 		end
@@ -427,7 +427,7 @@ end
 
 -- ValidateUnit
 local function ValidateUnit(r, guid)
-	local unit = r.unit	
+	local unit = r.unit
 	if (UnitGUID(unit) ~= guid) then
 		local name = r.name .. (r.realm and "-" or "") .. (r.realm or "")
 		local index = UnitInRaid(name)
@@ -957,7 +957,7 @@ function lib:GetGUIDGlyphs(guid, group)
 		end
 	end
 end
-                                        
+
 -- UnitHasGlyph
 function lib:UnitHasGlyph(unit, glyphID, group)
 	return lib:GUIDHasGlyph(UnitGUID(unit), glyphID, group)
@@ -971,7 +971,7 @@ function lib:GUIDHasGlyph(guid, glyphID, group)
 		local g = r.glyphs and r.glyphs[group or r.active]
 		if (g) then
 			local temp = new(strsplit(",", g))
-			for i,str in ipairs(temp) do
+			for _,str in ipairs(temp) do
 				local id = tonumber(str)
 				if (type(glyphID) == "number") then
 					if (glyphID == id) then
@@ -1152,7 +1152,7 @@ end
 -- CheckForMissingTalents
 function lib:CheckForMissingTalents()
 	local any
-	for guid,info in pairs(self.roster) do
+	for _,info in pairs(self.roster) do
 		local namerealm = RosterInfoFullName(info)
 		if (not info.talents or (not UnitIsVisible(namerealm) and UnitExists(namerealm)) or info.refresh) then
 			any = true
@@ -1216,7 +1216,7 @@ do
 				if (class == "PRIEST") then
 					role = ((t1 + t2) > t3) and "healer" or "caster"
 				elseif (class == "WARRIOR") then
-					role = ((t1 + t2) > t3) and "melee" or "tank" 
+					role = ((t1 + t2) > t3) and "melee" or "tank"
 				else
 					local heavy = (t1 > t2 and t1 > t3 and 1) or (t2 > t1 and t2 > t3 and 2) or (t3 > t1 and t3 > t2 and 3) or 0
 					if (class == "PALADIN") then
@@ -1404,7 +1404,7 @@ function lib:CHAT_MSG_ADDON(prefix, msg, channel, sender)
 			local invalid
 			local pages = new(strsplit(";", str))
 			local glyphs = new()
-			for page,info in ipairs(pages) do
+			for _,info in ipairs(pages) do
 				local list = new(strsplit(",", info))
 				local tab = tonumber(tremove(list, 1))
 				if (tab) then
@@ -1465,7 +1465,7 @@ local function SendMy(sender, str)
 			lib:SendCommMessage(str, sender)
 		end
 	else
-		for guid,info in pairs(lib.roster) do
+		for _,info in pairs(lib.roster) do
 			if (info.version) then
 				local namerealm = RosterInfoFullName(info)
 				if (UnitIsConnected(namerealm)) then
@@ -1506,7 +1506,7 @@ end
 -- UserCount
 function lib:UserCount()
 	local count = 0
-	for guid,info in pairs(self.roster) do
+	for _,info in pairs(self.roster) do
 		if (info.version and not UnitIsUnit("player", RosterInfoFullName(info))) then
 			count = count + 1
 		end
@@ -1647,7 +1647,7 @@ end
 -- GetTalentCount
 function lib:GetTalentCount()
 	local count, missing = 0, 0
-	for guid,info in pairs(self.roster) do
+	for _,info in pairs(self.roster) do
 		if (info.talents) then
 			count = count + 1
 		else
@@ -1679,7 +1679,7 @@ end
 function lib:PurgeAndRescanTalents()
 	if (self.roster) then
 		wipe(self.pendingStorageStrings)
-		for guid,info in pairs(self.roster) do
+		for _,info in pairs(self.roster) do
 			info.talents = del(info.talents)
 			info.active = nil
 			info.numActive = nil

@@ -97,7 +97,7 @@ local mixins = {
 -- Embeds AceEvent into the target object making the functions from the mixins list available on target:..
 -- @param target target object to embed AceEvent in
 function AceEvent:Embed(target)
-	for k, v in pairs(mixins) do
+	for _, v in pairs(mixins) do
 		target[v] = self[v]
 	end
 	self.embeds[target] = true
@@ -121,6 +121,6 @@ AceEvent.frame:SetScript("OnEvent", function(this, event, ...)
 end)
 
 --- Finally: upgrade our old embeds
-for target, v in pairs(AceEvent.embeds) do
+for target, _ in pairs(AceEvent.embeds) do
 	AceEvent:Embed(target)
 end

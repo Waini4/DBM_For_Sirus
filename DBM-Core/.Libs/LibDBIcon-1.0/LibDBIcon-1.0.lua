@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 --[[
 Name: DBIcon-1.0
 Revision: $Rev: 15 $
@@ -259,7 +260,7 @@ end
 
 function lib:EnableLibrary()
 	lib.disabled = nil
-	for name, object in pairs(lib.objects) do
+	for _, object in pairs(lib.objects) do
 		if not object.db or (object.db and not object.db.hide) then
 			object:Show()
 			updatePosition(object)
@@ -269,7 +270,7 @@ end
 
 function lib:DisableLibrary()
 	lib.disabled = true
-	for name, object in pairs(lib.objects) do
+	for _, object in pairs(lib.objects) do
 		object:Hide()
 	end
 end

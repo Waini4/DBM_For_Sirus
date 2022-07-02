@@ -311,7 +311,7 @@ local function initdb(sv, defaults, defaultProfile, olddb, parent)
 	-- This allows us to use this function to reset an entire database
 	-- Clear out the old database
 	if olddb then
-		for k,v in pairs(olddb) do if not preserve_keys[k] then olddb[k] = nil end end
+		for k,_ in pairs(olddb) do if not preserve_keys[k] then olddb[k] = nil end end
 	end
 
 	-- Give this database the metatable so it initializes dynamically
@@ -401,7 +401,7 @@ function DBObjectLib:RegisterDefaults(defaults)
 
 	-- Remove any currently set defaults
 	if self.defaults then
-		for section,key in pairs(self.keys) do
+		for section,_ in pairs(self.keys) do
 			if self.defaults[section] and rawget(self, section) then
 				removeDefaults(self[section], self.defaults[section])
 			end
@@ -413,7 +413,7 @@ function DBObjectLib:RegisterDefaults(defaults)
 
 	-- Copy in any defaults, only touching those sections already created
 	if defaults then
-		for section,key in pairs(self.keys) do
+		for section,_ in pairs(self.keys) do
 			if defaults[section] and rawget(self, section) then
 				copyDefaults(self[section], defaults[section])
 			end
@@ -473,7 +473,7 @@ function DBObjectLib:GetProfiles(tbl)
 
 	-- Clear the container table
 	if tbl then
-		for k,v in pairs(tbl) do tbl[k] = nil end
+		for k,_ in pairs(tbl) do tbl[k] = nil end
 	else
 		tbl = {}
 	end
@@ -581,7 +581,7 @@ end
 function DBObjectLib:ResetProfile(noChildren, noCallbacks)
 	local profile = self.profile
 
-	for k,v in pairs(profile) do
+	for k,_ in pairs(profile) do
 		profile[k] = nil
 	end
 
@@ -612,7 +612,7 @@ function DBObjectLib:ResetDB(defaultProfile)
 	end
 
 	local sv = self.sv
-	for k,v in pairs(sv) do
+	for k,_ in pairs(sv) do
 		sv[k] = nil
 	end
 
