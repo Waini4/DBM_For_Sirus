@@ -645,7 +645,6 @@ do
 						end
 						break
 					end
-
 					del(part1)
 				else
 					retInfo = "Invalid string"
@@ -714,7 +713,7 @@ function GetClassTalentData(unit)
 							if (guid ~= unitGUID) then
 								lib:SetStorageString(str)
 							end
- 						end
+						end
 						lib.pendingStorageStrings[class] = del(lib.pendingStorageStrings[class])
 					end
 				else

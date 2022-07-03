@@ -1185,7 +1185,7 @@ end
 
 			self.Playing = false
 			self:Callback("OnFinished")
-			self.Group:CheckOrder() 
+			self.Group:CheckOrder()
 		else
 			-- Do any updating necessary here
 		end

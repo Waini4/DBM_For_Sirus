@@ -64,6 +64,12 @@ globals = {
 	"LibAnimStartUpdating",
 	"LibAnimUpdater",
 	"GetMinimapShape",
+	"_LibAnim",
+	"CreateAnimationGroup",
+	"LibAnimStartUpdating",
+	"LibAnimUpdater",
+	"LibAnimAddType",
+
 	-- compat
 	"tInvert",
 	"Round",
