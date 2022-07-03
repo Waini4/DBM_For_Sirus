@@ -53,6 +53,11 @@ ignore = {
 --	"431", -- shadowing upvalue
 	"43.", -- Shadowing an upvalue, an upvalue argument, an upvalue loop variable.
 	"542", -- An empty if branch
+	"131/CreateAnimationGroup",
+	"131/LibAnimStartUpdating",
+	"131/LibAnimUpdater",
+	"131/LibAnimAddType",
+
 }
 
 globals = {
@@ -65,10 +70,7 @@ globals = {
 	"LibAnimUpdater",
 	"GetMinimapShape",
 	"_LibAnim",
-	"CreateAnimationGroup",
-	"LibAnimStartUpdating",
-	"LibAnimUpdater",
-	"LibAnimAddType",
+
 
 	-- compat
 	"tInvert",
