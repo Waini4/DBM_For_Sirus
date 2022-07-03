@@ -1164,25 +1164,25 @@ end
 --[[
 	Want to create your own animations for this system? Follow the example below
 	If you make a custom animation I would love to see it!
-	
+
 	Example:
-	
+
 	local MyInitialize = function(self)
 		self.Timer = 0
-		
+
 		-- do any initialization right before the animation plays
-		
+
 		LibAnimStartUpdating(self)
 	end
-	
+
 	local MyUpdate = function(self, elapsed, i)
 		self.Timer = self.Timer + elapsed
-		
+
 		if (self.Timer >= self.Duration) then
 			table.remove(LibAnimUpdater, i)
-			
+
 			-- Set finished attributes here
-			
+
 			self.Playing = false
 			self:Callback("OnFinished")
 			self.Group:CheckOrder() 
@@ -1190,6 +1190,6 @@ end
 			-- Do any updating necessary here
 		end
 	end
-	
+
 	LibAnimAddType("MyAnim", MyInitialize, MyUpdate)
 --]]

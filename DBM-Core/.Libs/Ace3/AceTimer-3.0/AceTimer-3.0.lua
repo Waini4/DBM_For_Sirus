@@ -208,7 +208,7 @@ if oldminor and oldminor < 10 then
 	AceTimer.frame:SetScript("OnEvent", nil)
 	AceTimer.frame:UnregisterAllEvents()
 	-- convert timers
-	for object,timers in next, AceTimer.selfs do
+	for _,timers in next, AceTimer.selfs do
 		for handle,timer in next, timers do
 			if type(timer) == "table" and timer.callback then
 				local newTimer

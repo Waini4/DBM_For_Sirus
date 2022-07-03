@@ -56,6 +56,14 @@ ignore = {
 }
 
 globals = {
+
+
+	---- libs globals
+	"AceGUIEditBoxInsertLink",
+	"CreateAnimationGroup",
+	"LibAnimStartUpdating",
+	"LibAnimUpdater",
+	"GetMinimapShape",
 	-- compat
 	"tInvert",
 	"Round",

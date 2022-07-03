@@ -68,7 +68,7 @@ do
 	--       Used to close Submenus when an other item is entered
 	local function OnEnter(item)
 		local self = item.pullout
-		for k, v in ipairs(self.items) do
+		for _, v in ipairs(self.items) do
 			if v.CloseMenu and v ~= item then
 				v:CloseMenu()
 			end
@@ -397,7 +397,7 @@ do
 		local value = self.value
 
 		if not self.multiselect then
-			for i, item in this:IterateItems() do
+			for _, item in this:IterateItems() do
 				item:SetValue(item.userdata.value == value)
 			end
 		end
@@ -413,7 +413,7 @@ do
 
 	local function ShowMultiText(self)
 		local text
-		for i, widget in self.pullout:IterateItems() do
+		for _, widget in self.pullout:IterateItems() do
 			if widget.type == "Dropdown-Item-Toggle" then
 				if widget:GetValue() then
 					if text then
@@ -541,7 +541,7 @@ do
 	-- exported
 	local function SetItemValue(self, item, value)
 		if not self.multiselect then return end
-		for i, widget in self.pullout:IterateItems() do
+			for _, widget in self.pullout:IterateItems() do
 			if widget.userdata.value == item then
 				if widget.SetValue then
 					widget:SetValue(value)
@@ -553,7 +553,7 @@ do
 
 	-- exported
 	local function SetItemDisabled(self, item, disabled)
-		for i, widget in self.pullout:IterateItems() do
+		for _, widget in self.pullout:IterateItems() do
 			if widget.userdata.value == item then
 				widget:SetDisabled(disabled)
 			end

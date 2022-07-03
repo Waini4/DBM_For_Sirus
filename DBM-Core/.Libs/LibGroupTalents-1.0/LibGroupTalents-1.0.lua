@@ -544,7 +544,6 @@ do
 				local temp = table.concat(parts, ";", 1, #parts - 1)
 				if (crc32(temp) == strCRC) then
 					local part1 = new(strsplit(",", parts[1]))
-
 					while true do
 						local guid
 						local id = part1[1]
@@ -699,7 +698,6 @@ function GetClassTalentData(unit)
 
 				if (next(data)) then
 					lib.classTalentData[class] = data
-
 					--for guid,r in pairs(lib.roster) do
 					--	if (r.class == class and r.talents) then
 					--		-- We picked up class talent data for a class after receiving talents for them via comms
@@ -709,7 +707,6 @@ function GetClassTalentData(unit)
 					--		lib.events:Fire("LibGroupTalents_Update", guid, unit, spec, n1, n2, n3)
 					--	end
 					--end
-
 					local classStorageStrings = lib.pendingStorageStrings[class]
 					if (classStorageStrings) then
 						local unitGUID = UnitGUID(unit)
