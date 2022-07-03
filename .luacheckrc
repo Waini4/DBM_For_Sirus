@@ -53,10 +53,10 @@ ignore = {
 --	"431", -- shadowing upvalue
 	"43.", -- Shadowing an upvalue, an upvalue argument, an upvalue loop variable.
 	"542", -- An empty if branch
-	"131/CreateAnimationGroup",
-	"131/LibAnimStartUpdating",
-	"131/LibAnimUpdater",
-	"131/LibAnimAddType",
+	"131/CreateAnimationGroup", -- Unused global variable
+	"131/LibAnimStartUpdating", -- Unused global variable
+	"131/LibAnimUpdater", -- Unused global variable
+	"131/LibAnimAddType", -- Unused global variable
 
 }
 
