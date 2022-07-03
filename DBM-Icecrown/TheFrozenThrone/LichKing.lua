@@ -147,6 +147,7 @@ local timerSoulShriekCD		= mod:NewCDTimer(12, 69242, nil, nil, nil, 1)
 
 mod:AddRangeFrameOption(8, 72133)
 mod:AddSetIconOption("RagingSpiritIcon", 69200, false, true, {7})
+mod:AddBoolOption("DefileArrow")
 
 local warnedAchievement = false
 mod.vb.warned_preP2 = false
@@ -169,6 +170,37 @@ function mod:RemoveImmunes()
 	end
 end
 
+function mod:OldDefileTarget()
+	local targetname = self:GetBossTarget(36597)
+	if not targetname then return end
+		warnDefileCast:Show(targetname)
+		if self.Options.DefileIcon then
+			self:SetIcon(targetname, 8, 10)
+		end
+	if targetname == UnitName("player") then
+		specWarnDefileCast:Show()
+		specWarnDefileCast:Play("runout")
+		if self.Options.YellOnDefile then
+			SendChatMessage(L.YellDefile, "SAY")
+		end
+	elseif targetname then
+		local uId = DBM:GetRaidUnitId(targetname)
+		if uId then
+			local inRange = CheckInteractDistance(uId, 2)
+			local x, y = GetPlayerMapPosition(uId)
+			if x == 0 and y == 0 then
+				SetMapToCurrentZone()
+				x, y = GetPlayerMapPosition(uId)
+			end
+			if inRange then
+				specWarnDefileNear:Show()
+				if self.Options.DefileArrow then
+					DBM.Arrow:ShowRunAway(x, y, 15, 5)
+				end
+			end
+		end
+	end
+end
 local function NextPhase(self)
 	self:SetStage(0)
 	if self.vb.phase == 1 then
@@ -344,7 +376,8 @@ function mod:SPELL_CAST_START(args)
 		soundInfestSoon:Cancel()
 		soundInfestSoon:Schedule(22.5-2, "Interface\\AddOns\\DBM-Core\\sounds\\RaidAbilities\\infestSoon.mp3")
 	elseif spellId == 72762 then -- Defile
-		self:BossTargetScanner(36597, "DefileTarget", 0.05, 15)
+		-- self:BossTargetScanner(36597, "DefileTarget", 0.05, 15)
+		self:ScheduleMethod(0.1, "OldDefileTarget")
 		warnDefileSoon:Cancel()
 		warnDefileSoon:CancelVoice()
 		warnDefileSoon:Schedule(27)
