@@ -47,13 +47,13 @@
 ## X-DBM-Mod-LoadZone-esMX: Ciudadela de la Corona de Hielo
 
 localization.en.lua
-localization.de.lua
-localization.kr.lua
+# localization.de.lua
+# localization.kr.lua
 localization.ru.lua
-localization.tw.lua
-localization.cn.lua
-localization.fr.lua
-localization.es.lua
+# localization.tw.lua
+# localization.cn.lua
+# localization.fr.lua
+# localization.es.lua
 
 Trash.lua
 TheLowerSpire\LordMarrowgar.lua
