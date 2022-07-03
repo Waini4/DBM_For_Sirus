@@ -57,7 +57,7 @@ ignore = {
 	"131/LibAnimStartUpdating", -- Unused global variable
 	"131/LibAnimUpdater", -- Unused global variable
 	"131/LibAnimAddType", -- Unused global variable
-
+	"512", -- (W512) loop is executed at most once
 }
 
 globals = {
