@@ -21,7 +21,7 @@ mod:RegisterEventsInCombat(
 )
 local timerCombatStart		= mod:NewTimer(54, "TimerCombatStart", 2457, nil, nil, 6)
 local timerSummonElemenCD	= mod:NewCDTimer(46, 306454, nil, nil, nil, 1, nil, CL.TANK_ICON) --1я фаза элементали
-local timerArcaneStormCD	= mod:NewCDTimer(72, 306464, nil, nil, nil, 2, nil, CL.MAGIC_ICON) --шторм кд
+local timerArcaneStormCD	= mod:NewCDTimer(62, 306464, nil, nil, nil, 2, nil, CL.MAGIC_ICON) --шторм кд
 local timerArcaneStorm 		= mod:NewCastTimer(10, 306464, nil, nil, nil, 2, nil, CL.MAGIC_ICON) --шторм каст
 local timerUnstableMagicCD	= mod:NewCDTimer(22, 306468, nil, nil, nil, 4, nil, CL.DISEASE_ICON)--нестабилка коректить
 local timerRaysCD	        = mod:NewCDTimer(28, 306485, nil, nil, nil, 2, nil, CL.INTERRUPT_ICON) --лучи
@@ -81,9 +81,9 @@ function mod:OnCombatStart(delay)
 	ExplosiveIcons = 8
 	berserkTimer:Start()
 	timerSummonElemenCD:Start(27)
-	timerArcaneStormCD:Start(74)
+	timerArcaneStormCD:Start(64)
 	timerUnstableMagicCD:Start(26)
-	warnArcaneStormSoon:Schedule(71)
+	warnArcaneStormSoon:Schedule(61)
 	warnUnstableMagicSoon:Schedule(23)
 end
 
@@ -260,7 +260,7 @@ end
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(306464) then
 		timerArcaneStormCD:Start()
-		warnArcaneStormSoon:Schedule(68)
+		warnArcaneStormSoon:Schedule(62)
 	elseif args:IsSpellID(306549) then
 		timerIceWrathCD:Start()
 	end
