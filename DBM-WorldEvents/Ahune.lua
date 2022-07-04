@@ -35,7 +35,7 @@ end
 
 function mod:OnCombatEnd(delay)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 25740, "Ahune")
-	timerCombatStart:Hide()
+	timerCombatStart:Cancel()
 end
 
 function mod:SPELL_AURA_APPLIED(args)
