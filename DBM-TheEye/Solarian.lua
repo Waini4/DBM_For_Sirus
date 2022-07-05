@@ -257,7 +257,6 @@ function mod:SPELL_CAST_START(args)
 		priestsH = true
 		provid	 = true
 	elseif spellId == 308585 then -- УЖАС --fxpw страшно вырубай
-
 		specWarnFlashVoid:Show(self.vb.Fear)
 		timerFlashVoid:Schedule(5)
 	elseif spellId == 308576 then
@@ -358,15 +357,17 @@ function mod:SWING_DAMAGE(_, sourceName, sourceFlags, destGUID)
 end
 
 function mod:UNIT_HEALTH(uId)
-	if self.vb.phase == 1 and not warned_preP1 and self:GetUnitCreatureId(uId) == 18805 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.33 then
+	if DBM:GetStage("Solarian") and not warned_preP1 and self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 33 then
 		warned_preP1 = true
 		warnPhase2Soon:Show()
-	elseif not warned_preP2 and self:GetUnitCreatureId(uId) == 18805 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.30 then
+	elseif not warned_preP2 and self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 30 then
 		warned_preP2 = true
 		warnPhase2:Show()
 		timerAdds:Cancel()
-	elseif self:GetUnitCreatureId(uId) == 18805 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.40 and self:GetCurrentInstanceDifficulty() == "heroic25" then -- TODO: 2 фаза для хма, может багаться получается?
-		self.vb.phase = 2
+	elseif self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 40 and self:GetCurrentInstanceDifficulty() == "heroic25" then -- TODO: 2 фаза для хма, может багаться получается?
+		self:SetStage(2)
+	elseif self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 20 and self:GetCurrentInstanceDifficulty() == "normal25" then
+		self:SetStage(2)
 	end
 end
 
