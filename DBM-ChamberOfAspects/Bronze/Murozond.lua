@@ -13,8 +13,8 @@ mod:RegisterCombat("combat", 50612)
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 313116 313120 313118 313122 317252 317253 317255 317262",
 	"SPELL_CAST_SUCCESS 317259 313122",
-	"SPELL_AURA_APPLIED 313122 313115 313129 313130",
-	"SPELL_AURA_APPLIED_DOSE 313122 313115 313129 313130",
+	"SPELL_AURA_APPLIED 313122 313115 313129 313130 317260",
+	"SPELL_AURA_APPLIED_DOSE 313122 313115 313129 313130 317260",
 	-- "UNIT_DIED",
 	"SPELL_AURA_REMOVED 313122 317262",
 	"UNIT_HEALTH"
@@ -25,7 +25,7 @@ mod:RegisterEventsInCombat(
 local warnBredHM            = mod:NewStackAnnounce(317252, 5, nil, "Tank")
 local specWarnPerPhase      = mod:NewSpecialWarning("PrePhase", 313122, nil, nil, 1, 6) -- Перефаза
 local specwarnReflectSpells = mod:NewSpecialWarningCast(317262, "-Healer", nil, nil, 3, 2) -- Отражение заклинаний
-local specWarnTimeTrapGTFO  = mod:NewSpecialWarningGTFO(317260, nil, nil, nil, 1, 2)
+local specWarnTimeTrapGTFO  = mod:NewSpecialWarningGTFO(317260, nil, nil, nil, 3, 2)
 
 
 --local SummoningtheTimelessHM 	= mod:NewCDTimer(90, 313120, nil, nil, nil, 2) -- призыв аддов
