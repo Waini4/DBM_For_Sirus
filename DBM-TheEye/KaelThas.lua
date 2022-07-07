@@ -268,7 +268,7 @@ end
 
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(35941) then
- 		if mod:IsDifficulty("heroic25") then
+		if mod:IsDifficulty("heroic25") then
 			timerGravityH:Start()
 			timerGravityHCD:Start()
 		else
@@ -410,22 +410,22 @@ end
 
 
 function mod:SPELL_AURA_APPLIED(args)
-    if args:IsSpellID(308732) then --хм яростный удар
+	if args:IsSpellID(308732) then --хм яростный удар
 		warnFurious:Show(args.destName, args.amount or 1)
 		timerFurious:Start(args.destName)
 		timerFuriousCD:Start()
 	elseif args:IsSpellID(308741) then --хм Правосудие тенью
 		timerJusticeCD:Start()
-        warnJustice:Show(args.destName, args.amount or 1)
+		warnJustice:Show(args.destName, args.amount or 1)
 		timerJustice:Start(args.destName)
 	elseif args:IsSpellID(308750) then --бомба
-    	  BombTargets[#BombTargets + 1] = args.destName
-		  if args:IsPlayer() then
-		  if self.Options.SayBomb then
-	      	SendChatMessage(format("{череп}|cff71d5ff|Hspell:308750|h[Живая бомба ужаса]|h|r{череп}НА МНЕ{череп}"), "SAY")
-		  end
+		BombTargets[#BombTargets + 1] = args.destName
+		if args:IsPlayer() then
+		if self.Options.SayBomb then
+			SendChatMessage(format("{череп}|cff71d5ff|Hspell:308750|h[Живая бомба ужаса]|h|r{череп}НА МНЕ{череп}"), "SAY")
+		end
 		else
-		    local uId = DBM:GetRaidUnitId(args.destName)
+			local uId = DBM:GetRaidUnitId(args.destName)
 			if uId then
 				local inRange = CheckInteractDistance(uId, 3)
 				local x, y = GetPlayerMapPosition(uId)
@@ -437,60 +437,59 @@ function mod:SPELL_AURA_APPLIED(args)
 					specWarnBomb:Show(args.destName)
 			end	end
 		end
-        if self.Options.SetIconOnBombTargets then
+		if self.Options.SetIconOnBombTargets then
 			self:SetIcon(args.destName, BombIcons)
 			BombIcons = BombIcons - 1
 		end
 		if #BombTargets >= 2 then
-            warnBomb:Show(table.concat(BombTargets, "<, >"))
-            table.wipe(BombTargets)
-            BombIcons = 8
+			warnBomb:Show(table.concat(BombTargets, "<, >"))
+			table.wipe(BombTargets)
+			BombIcons = 8
 		end
 	elseif args:IsSpellID(308756) then --хм искрящий удар
 		warnIsc:Show(args.destName, args.amount or 1)
 		timerIsc:Start(args.destName)
-	    timerIscCD:Start()
-    elseif args:IsSpellID(308797) then --ВЗРЫВ
-	      timerVzrivCD:Start()
-		  timerVzrivCast:Start()
-		  warnVzriv:Show(args.destName)
-		  if self.Options.BoomIcon then
+		timerIscCD:Start()
+	elseif args:IsSpellID(308797) then --ВЗРЫВ
+		timerVzrivCD:Start()
+		timerVzrivCast:Start()
+		warnVzriv:Show(args.destName)
+		if self.Options.BoomIcon then
 			 self:SetIcon(args.destName, 8, 5)
-		  end
-		  if args:IsPlayer() then
-		     if self.Options.SayBoom then
-	            SendChatMessage(format("{череп}|cff71d5ff|Hspell:308797|h[Взрыв пустоты]|h|r{череп}НА МНЕ{череп}"), "SAY")
-		     end
-
-		  end
+		end
+		if args:IsPlayer() then
+			if self.Options.SayBoom then
+				SendChatMessage(format("{череп}|cff71d5ff|Hspell:308797|h[Взрыв пустоты]|h|r{череп}НА МНЕ{череп}"), "SAY")
+			end
+		end
 	elseif args:IsSpellID(36797) then
-        timerMCCD:Start()
-        warnMCSoon:Schedule(65)
-        mincControl[#mincControl + 1] = args.destName
-        if #mincControl >= 3 then
-            warnMC:Show(table.concat(mincControl, "<, >"))
-            if self.Options.SetIconOnMC then
-                table.sort(mincControl, function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
-                local MCIcons = 8
-                for _, v in ipairs(mincControl) do
-                    self:SetIcon(v, MCIcons)
-                    MCIcons = MCIcons - 1
-                end
-            end
-            table.wipe(mincControl)
-        end
-  end
+		timerMCCD:Start()
+		warnMCSoon:Schedule(65)
+		mincControl[#mincControl + 1] = args.destName
+		if #mincControl >= 3 then
+			warnMC:Show(table.concat(mincControl, "<, >"))
+			if self.Options.SetIconOnMC then
+				table.sort(mincControl, function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
+				local MCIcons = 8
+				for _, v in ipairs(mincControl) do
+					self:SetIcon(v, MCIcons)
+					MCIcons = MCIcons - 1
+				end
+			end
+			table.wipe(mincControl)
+		end
+	end
 end
 
 
 
 function mod:SPELL_AURA_REMOVED(args)
-    if args:IsSpellID(308750) then
-       if self.Options.SetIconOnBombTargets then
-	   self:SetIcon(args.destName, 0)
-	   end
-    elseif args:IsSpellID(36797) then
-        self:SetIcon(args.destName, 0)
+	if args:IsSpellID(308750) then
+		if self.Options.SetIconOnBombTargets then
+		self:SetIcon(args.destName, 0)
+		end
+	elseif args:IsSpellID(36797) then
+		self:SetIcon(args.destName, 0)
 	end
 end
 
