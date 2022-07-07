@@ -79,6 +79,9 @@ local default_settings = {
 		{ spell = 11420, bartext = default_bartext, cooldown = 60 }, 	-- Portal: Thunder Bluff
 		{ spell = 32667, bartext = default_bartext, cooldown = 60 }, 	-- Portal: Silvermoon
 		{ spell = 49361, bartext = default_bartext, cooldown = 60 }, 	-- Portal: Stonard
+	},
+	portal_renegade = {
+		--todo fxpw надо порталы для ренегатов переделать
 	}
 }
 DBM_SpellTimers_Settings = {}
@@ -326,6 +329,8 @@ do
 
 			if UnitFactionGroup("player") == "Alliance" then
 				myportals = settings.portal_alliance
+			elseif UnitFactionGroup("player") == "Renegade" then
+
 			else
 				myportals = settings.portal_horde
 			end
