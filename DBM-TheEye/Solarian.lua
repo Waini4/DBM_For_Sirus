@@ -127,24 +127,25 @@ mod:SetCreatureID(18805)
 mod:RegisterCombat("yell", L.YellPull)
 mod:SetUsedIcons(2, 6, 7, 8)
 
-mod:RegisterEvents(
-	"CHAT_MSG_MONSTER_YELL",
-	-- "UNIT_TARGET",
-	-- "SPELL_DISPEL",
-	-- "SPELL_CAST_START",
-	-- "SPELL_CAST_SUCCESS",
-	-- "SPELL_AURA_APPLIED",
-	-- "SWING_DAMAGE",
-	"UNIT_DEAD"
-)
+-- mod:RegisterEvents(
+-- 	"CHAT_MSG_MONSTER_YELL",
+-- 	-- "UNIT_TARGET",
+-- 	-- "SPELL_DISPEL",
+-- 	-- "SPELL_CAST_START",
+-- 	-- "SPELL_CAST_SUCCESS",
+-- 	-- "SPELL_AURA_APPLIED",
+-- 	-- "SWING_DAMAGE",
+-- 	"UNIT_DEAD"
+-- )
 mod:RegisterEventsInCombat(
 	"CHAT_MSG_MONSTER_YELL",
 	"UNIT_TARGET",
 	-- "SPELL_DISPEL",
 	"SPELL_CAST_START 308562 308558 308585 308576",
-	"SPELL_CAST_SUCCESS",
+	-- "SPELL_CAST_SUCCESS",
 	"SPELL_AURA_REMOVED 42783",
 	"SPELL_AURA_APPLIED 308548 308544 308563 42783",
+	"SPELL_AURA_APPLIED_DOSE 308548 308544 308563 42783",
 	"SWING_DAMAGE",
 	"UNIT_DEAD"
 )
@@ -181,7 +182,7 @@ local timerRing			= mod:NewCDTimer(20, 308562, nil, nil, nil, 1, nil, CL.ENRAGE_
 local timerNextHelp		= mod:NewTimer(40, "TimerNextHelp", 308558, nil, nil, 3, CL.TANK_ICON)
 local timerWrathH		= mod:NewTargetTimer(6, 308548, nil, "RemoveEnrage", nil, 1, nil, CL.ENRAGE_ICON	, nil, 1, 5)
 local timerNextWrathH	= mod:NewCDTimer(43, 308548, nil, "RemoveEnrage", nil, 1, nil, CL.ENRAGE_ICON	)
-local timerFlashVoid    = mod:NewCDTimer(75, 308585, nil, "RemoveEnrage", nil, 6, nil, CL.HEROIC_ICON)
+local timerFlashVoid    = mod:NewCDTimer(75, 308585, nil, "RemoveEnrage", true, 6, nil, CL.HEROIC_ICON)
 
 local priestsN = true
 local priestsH = true
