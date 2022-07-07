@@ -219,7 +219,7 @@ local warned_preP1 = false
 function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 19514, "Al'ar")
 
-	self.vb.phase = 1
+	self:SetStage(1)
 	if mod:IsDifficulty("heroic25") then
 		timerAnimatedCD:Start()
 		timerFireSignCD:Start()
@@ -267,7 +267,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 		specWarnPhase2:Show()
 		berserkTimerH:Cancel()
 		berserkTimerH2:Start()
-		self.vb.phase = 2
+		self:SetStage(2)
 	end
 end
 
