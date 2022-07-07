@@ -5,16 +5,16 @@ mod:SetRevision("20220518110528")
 mod:SetCreatureID(17257)
 
 mod:SetModelID(18527)
-mod:RegisterCombat("combat")
+mod:RegisterCombat("combat",17257)
 mod:RegisterEvents(
 	"CHAT_MSG_MONSTER_YELL"
 )
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 305158 305159 305160 305134 30616 30510",
-	"SPELL_CAST_SUCCESS 30572 305166",
+	"SPELL_CAST_SUCCESS 30572 305166 30510",
 	"SPELL_AURA_APPLIED 305131 305135",
 	"UNIT_HEALTH",
-	"SPELL_DAMAGE 305133",
+	"SPELL_DAMAGE",
 	"CHAT_MSG_MONSTER_YELL"
 )
 -- общее --
@@ -150,6 +150,12 @@ function mod:SPELL_CAST_SUCCESS(args)
 			table.wipe(handTargets)
 		end
 		timerHandOfMagtCD:Start()
+	elseif args:IsSpellID(30510) then	--таймер пула
+		if pullWarned then
+			timerPull:Start()
+			pullWarned = false
+			self:SetStage(1)
+		end
 	end
 end
 
@@ -162,17 +168,17 @@ function mod:SPELL_AURA_APPLIED(args)
 end
 
 function mod:UNIT_HEALTH(uId)
-	if not warned_P2 and self:GetUnitCreatureId(uId) == 17257 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.53 and self:IsHeroic() then
+	if not warned_P2 and self:GetUnitCreatureId(uId) == 17257 and DBM:GetBossHP(17257) <= 53 and self:IsHeroic() then
 		warned_P2 = true
 		self:NewPrePhaseAnnounce(2)
-	elseif not warned_P3 and self:GetUnitCreatureId(uId) == 17257 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.50 and self:IsHeroic() then
+	elseif not warned_P3 and self:GetUnitCreatureId(uId) == 17257 and DBM:GetBossHP(17257) <= 50 and self:IsHeroic() then
 		warned_P3 = true
 		self:NewPhaseAnnounce(2)
 		self:SetStage(3)
-	elseif not warned_P3 and self:GetUnitCreatureId(uId) == 17257 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.33 and self:IsNormal() then
+	elseif not warned_P3 and self:GetUnitCreatureId(uId) == 17257 and DBM:GetBossHP(17257) <= 33 and self:IsNormal() then
 		warned_P2 = true
 		self:NewPrePhaseAnnounce(3)
-	elseif not warned_P3 and self:GetUnitCreatureId(uId) == 17257 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.30 and self:IsNormal() then
+	elseif not warned_P3 and self:GetUnitCreatureId(uId) == 17257 and DBM:GetBossHP(17257) <= 30 and self:IsNormal() then
 		warned_P3 = true
 		self:SetStage(3)
 		self:NewPhaseAnnounce(3)

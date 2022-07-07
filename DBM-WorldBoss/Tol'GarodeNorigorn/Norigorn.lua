@@ -6,12 +6,12 @@ mod:SetCreatureID(70010)
 
 mod:RegisterCombat("combat", 70010)
 
-mod:RegisterEvents(
-	"SPELL_CAST_START",
-	"SPELL_AURA_APPLIED",
-	"SPELL_AURA_REMOVED",
-	"SPELL_SUMMON",
-	"UNIT_HEALTH"
+mod:RegisterEventsInCombat(
+	"SPELL_CAST_START 317274 317624",
+	"SPELL_AURA_APPLIED 317624",
+	-- "SPELL_AURA_REMOVED",
+	"SPELL_SUMMON 317267"
+	-- "UNIT_HEALTH"
 )
 
 mod:AddTimerLine(L.name)
