@@ -148,7 +148,14 @@ L:SetOptionLocalization{
 	RemoveWeaponOnMindControl   = "Убирать оружие на МК.",
 	SetIconOnMC = "Устанавливать иконки на цели заклинания $spell:36797",
 	VzrivIcon = DBML.AUTO_ICONS_OPTION_TARGETS:format(308797),
-	AnnounceVzriv = "Объявлять игроков, на кого установлен взрыв, в рейд чат"
+	AnnounceVzriv = "Объявлять игроков, на кого установлен взрыв, в рейд чат",
+	SayBoom                   = "Сообщения в чат /Say $spell:308797",
+	BoomIcon                  = "Устанавливать метки на $spell:308797",
+	SayBomb                   = "Сообщения в чат /Say $spell:308750",
+	SetIconOnBombTargets      = "Устанавливать метки на $spell:308750",
+	Avenger					   = "Показывать стрелку, когда $spell:308743 около вас",
+	YellOnAvenger				   = "Кричать, когда летит в вас $spell:308743",
+	AvengerLatencyCheck		   = "Отключить синхр-цию для $spell:308743\n(используйте только в случае возникновения проблем)"
 }
 
 L:SetMiscLocalization{
@@ -169,7 +176,8 @@ L:SetMiscLocalization{
 	TalaTarget = "смотрит на |3%-3%([%w\128-\255]+%).",
 	Axe = "Сокрушение",
 	Kel = "Кель'тас Солнечный Скиталец",
-	Vzriv		= "Взрыв {rt%d} установлен на %s"
+	Vzriv		= "Взрыв {rt%d} установлен на %s",
+	YellAvenger		= "{череп}|cff71d5ff|Hspell:308743|h[Щит мстителя]|h|r{череп}ЛЕТИТ В МЕНЯ!{череп}"
 }
 
 
