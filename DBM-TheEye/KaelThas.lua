@@ -11,12 +11,12 @@ mod:SetUsedIcons(5, 6, 7, 8)
 mod:RegisterEventsInCombat(
 	"CHAT_MSG_MONSTER_EMOTE",
 	"CHAT_MSG_MONSTER_YELL",
-	"SPELL_CAST_START 40636 37036 35941 308742 308790",
-	"SPELL_AURA_APPLIED 36797 308732 308741 308749 308756",
-	"SPELL_AURA_APPLIED_DOSE 36797 308732 308741 308749 308756",
+	"SPELL_CAST_START 35941 40636 37036 308742 308732 308790",
+	"SPELL_AURA_APPLIED 308732 308741 308750 308756	308797 36797",
+	"SPELL_AURA_APPLIED_DOSE 308732 308741 308750 308756 308797 36797",
 	"UNIT_TARGET",
-	"SPELL_AURA_REMOVED 36797 308797 34480 308969 308970",
-	"SPELL_CAST_SUCCESS 36797 37018 36723 36815 36731 308797"
+	"SPELL_AURA_REMOVED 308750 36797",
+	"SPELL_CAST_SUCCESS 37018 36723 308749 308743 36815 36731 308734 36797"
 )
 
 
@@ -35,7 +35,7 @@ local warnMC                = mod:NewTargetAnnounce(36797, 3)
 local warnGravitySoon       = mod:NewSoonAnnounce(35941, 2)
 
 local specWarnTalaTarget    = mod:NewSpecialWarning("SpecWarnTalaTarget")
-local specWarnFlameStrike   = mod:NewSpecialWarningMove(36731)
+-- local specWarnFlameStrike   = mod:NewSpecialWarningMove(36731)
 
 local timerNextAdd          = mod:NewTimer(30, "TimerNextAdd", "Interface\\Icons\\Spell_Nature_WispSplode")
 local timerPhase3           = mod:NewTimer(123, "TimerPhase3", "Interface\\Icons\\Spell_Shadow_AnimateDead")
@@ -75,6 +75,7 @@ local timerFurious		= mod:NewTargetTimer(30, 308732, nil, "Tank|Healer", nil, 5,
 local timerJusticeCD    = mod:NewCDTimer(9, 308741, nil, "Tank|Healer", nil, 5, nil, CL.TANK_ICON)
 local timerJustice		= mod:NewTargetTimer(30, 308741, nil, "Tank|Healer", nil, 5, nil, CL.TANK_ICON)
 local timerIsc	    	= mod:NewTargetTimer(15, 308756, nil, "Tank|Healer", nil, 5, nil, CL.TANK_ICON)
+local timerIscCD		= mod:NewCDTimer(6, 308756, nil, "Tank|Healer", nil, 5, nil, CL.TANK_ICON)
 local timerShadowCD		= mod:NewCDTimer(17, 308742, nil, nil, nil, 4)
 local timerBombhmCD		= mod:NewCDTimer(35, 308749, nil, nil, nil, 1)
 local timerCataCD		= mod:NewCDTimer(126, 308790, nil, nil, nil, 2)
@@ -267,28 +268,28 @@ end
 
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(35941) then
- 	    if mod:IsDifficulty("heroic25") then
-		   timerGravityH:Start()
-		   timerGravityHCD:Start()
+ 		if mod:IsDifficulty("heroic25") then
+			timerGravityH:Start()
+			timerGravityHCD:Start()
 		else
-		   timerGravity:Start()
-           timerGravityCD:Start()
-           warnGravitySoon:Schedule(85)
-	   end
-    elseif args:IsSpellID(40636) then
-        timerRoarCD:Start()
-    elseif args:IsSpellID(37036) then
-        warnBombSoon:Schedule(20)
-        timerBombCD:Start()
-    elseif args:IsSpellID(308742) then --освящение тенью
-	    timerShadowCD:Start()
+			timerGravity:Start()
+			timerGravityCD:Start()
+			warnGravitySoon:Schedule(85)
+		end
+	elseif args:IsSpellID(40636) then
+		timerRoarCD:Start()
+	elseif args:IsSpellID(37036) then
+		warnBombSoon:Schedule(20)
+		timerBombCD:Start()
+	elseif args:IsSpellID(308742) then --освящение тенью
+		timerShadowCD:Start()
 		warnShadow:Schedule(0)
 	elseif args:IsSpellID(308732) then
-        timerFuriousCD:Start()
-    elseif args:IsSpellID(308790) then --катаклизм
-	    timerCataCD:Start()
+		timerFuriousCD:Start()
+	elseif args:IsSpellID(308790) then --катаклизм
+		timerCataCD:Start()
 		timerCataCast:Start()
-	    specWarnCata:Show()
+		specWarnCata:Show()
 		DBM.RangeCheck:Show(40, GetRaidTargetIndex)
 		self:ScheduleMethod(10, "Timer")
 	end
@@ -300,32 +301,32 @@ end
 
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(37018) then
-        warnConflagrate:Show(args.destName)
-        warnConflagrateSoon:Cancel()
-        warnConflagrateSoon:Schedule(16)
-        timerConflagrateCD:Start()
-    elseif args:IsSpellID(36723) then
-        timerPhoenixCD:Start()
-        warnPhoenixSoon:Schedule(55)
+		warnConflagrate:Show(args.destName)
+		warnConflagrateSoon:Cancel()
+		warnConflagrateSoon:Schedule(16)
+		timerConflagrateCD:Start()
+	elseif args:IsSpellID(36723) then
+		timerPhoenixCD:Start()
+		warnPhoenixSoon:Schedule(55)
 	elseif args:IsSpellID(308749) then
-	    timerBombhmCD:Start()
+		timerBombhmCD:Start()
     elseif args:IsSpellID(308743) then
-	    timerAvengerS:Start()
+		timerAvengerS:Start()
 		if self.Options.AvengerLatencyCheck then
 			self:ScheduleMethod(0.1, "OldAvengerTarget")
 		else
 			self:ScheduleMethod(0.1, "AvengerTarget")
 		end
-    elseif args:IsSpellID(36815) then
-        timerBarrierCD:Start()
-        warnBarrierSoon:Schedule(65)
-    elseif args:IsSpellID(36731) then
-        timerFlameStrike:Start()
-    elseif args:IsSpellID(308734) then -- axe
-	    timerAxeCD:Start()
+	elseif args:IsSpellID(36815) then
+		timerBarrierCD:Start()
+		warnBarrierSoon:Schedule(65)
+	elseif args:IsSpellID(36731) then
+		timerFlameStrike:Start()
+	elseif args:IsSpellID(308734) then -- axe
+		timerAxeCD:Start()
 	elseif args:IsSpellID(36797) then
 		if args:IsPlayer() and self.Options.RemoveWeaponOnMindControl then
-		   if self:IsWeaponDependent("player") then
+			if self:IsWeaponDependent("player") then
 				PickupInventoryItem(16)
 				PutItemInBackpack()
 				PickupInventoryItem(17)
@@ -335,7 +336,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 				PutItemInBackpack()
 			end
 		end
-		    dominateMindTargets[#dominateMindTargets + 1] = args.destName
+			dominateMindTargets[#dominateMindTargets + 1] = args.destName
 			self:SetIcon(args.destName, dominateMindIcon, 12)
 			dominateMindIcon = dominateMindIcon - 1
 	end
