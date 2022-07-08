@@ -179,10 +179,10 @@ local yellWrathHObFades	= mod:NewShortFadesYell(42783, nil, nil, nil, "YELL")
 
 
 local timerRing			= mod:NewCDTimer(20, 308562, nil, nil, nil, 1, nil, CL.ENRAGE_ICON	)
-local timerNextHelp		= mod:NewTimer(40, "TimerNextHelp", 308558, nil, nil, 3, CL.TANK_ICON)
+local timerNextHelp		= mod:NewCDTimer(40, 308558, nil, nil, 3, CL.TANK_ICON)
 local timerWrathH		= mod:NewTargetTimer(6, 308548, nil, "RemoveEnrage", nil, 1, nil, CL.ENRAGE_ICON	, nil, 1, 5)
-local timerNextWrathH	= mod:NewCDTimer(43, 308548, nil, "RemoveEnrage", nil, 1, nil, CL.ENRAGE_ICON	)
-local timerFlashVoid    = mod:NewCDTimer(75, 308585, nil, "RemoveEnrage", true, 6, nil, CL.HEROIC_ICON)
+local timerNextWrathH	= mod:NewCDTimer(43, 308548, nil, "RemoveEnrage", nil, 1, nil, CL.ENRAGE_ICON)
+local timerFlashVoid    = mod:NewCDTimer(75, 308585, nil, nil, nil, 6, nil, CL.HEROIC_ICON)
 
 local priestsN = true
 local priestsH = true

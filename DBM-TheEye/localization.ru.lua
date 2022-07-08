@@ -125,7 +125,9 @@ L:SetTimerLocalization{
 	TimerPhase3 = "Фаза 3",
 	TimerPhase4 = "Фаза 4",
 	TimerTalaTarget = "Преследование на %s",
-	TimerGravity = "Падение"
+	TimerGravity = "Падение",
+	Keltac = "Отсчет появления келя"
+
 }
 
 L:SetWarningLocalization{
@@ -144,18 +146,18 @@ L:SetOptionLocalization{
 	WarnTalaTarget = "Обьявлять цели преследуемые Таладредом",
 	SpecWarnTalaTarget = "Спец. предупреждение для преследуемого Таладредом",
 	TimerTalaTarget = "Отсчет времени до смены цели Таладреда",
-	TimerGravity = "Отсчет времени до окончания $spell:35941",
+	TimerGravity = DBML.AUTO_YELL_OPTION_TEXT.fade:format(35941),
 	RemoveWeaponOnMindControl   = "Убирать оружие на МК.",
-	SetIconOnMC = "Устанавливать иконки на цели заклинания $spell:36797",
+	SetIconOnMC = DBML.AUTO_ICONS_OPTION_TARGETS:format(36797),
 	VzrivIcon = DBML.AUTO_ICONS_OPTION_TARGETS:format(308797),
 	AnnounceVzriv = "Объявлять игроков, на кого установлен взрыв, в рейд чат",
-	SayBoom                   = "Сообщения в чат /Say $spell:308797",
-	BoomIcon                  = "Устанавливать метки на $spell:308797",
-	SayBomb                   = "Сообщения в чат /Say $spell:308750",
-	SetIconOnBombTargets      = "Устанавливать метки на $spell:308750",
-	Avenger					   = "Показывать стрелку, когда $spell:308743 около вас",
-	YellOnAvenger				   = "Кричать, когда летит в вас $spell:308743",
-	AvengerLatencyCheck		   = "Отключить синхр-цию для $spell:308743\n(используйте только в случае возникновения проблем)"
+	SayBoom = DBML.AUTO_YELL_OPTION_TEXT.shortyell:format(308797),
+	BoomIcon  = DBML.AUTO_ICONS_OPTION_TARGETS:format(308797),
+	SayBomb = DBML.AUTO_YELL_OPTION_TEXT.shortyell:format(308750),
+	SetIconOnBombTargets = DBML.AUTO_ICONS_OPTION_TARGETS:format(308750),
+	Avenger = DBML.AUTO_ARROW_OPTION_TEXT:format(308743),
+	YellOnAvenger  = DBML.AUTO_YELL_OPTION_TEXT.shortyell:format(308743),
+	AvengerLatencyCheck = "Отключить синхр-цию для $spell:308743\n(используйте только в случае возникновения проблем)"
 }
 
 L:SetMiscLocalization{
