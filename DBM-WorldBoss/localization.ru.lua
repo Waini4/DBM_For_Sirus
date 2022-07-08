@@ -55,4 +55,5 @@ L:SetOptionLocalization {
 	AnnounceKnopk        = "Сказать в белый чат об нажитии кнопки",
 	AnnounceOFF          = "Отключить оповещение о нажатии",
 	AnnounceSveaz        = "Объявить игрока на которого установлена метка $spell:314606, в рейд чат",
+	Testicepi            = "Тест цепей"
 }
