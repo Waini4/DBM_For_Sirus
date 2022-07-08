@@ -2365,6 +2365,8 @@ function DBM:LoadModOptions(modId, inCombat, first)
 					if type(option) == "number" then -- is that fix?
 						option = tostring(option)
 					end
+					-- print(mod.DefaultOptions[option])
+					-- print(option)
 					if mod.DefaultOptions[option] == nil and not (option:find("talent") or option:find("FastestClear") or option:find("CVAR") or option:find("RestoreSetting") or option:find("Permanent")) then -- added Permanent for mod options that I want to keep between sessions e.g. Frame positions
 						savedOptions[id][profileNum][option] = nil
 					elseif mod.DefaultOptions[option] and (type(mod.DefaultOptions[option]) == "table") then--recover broken dropdown option
@@ -6772,6 +6774,19 @@ function bossModPrototype:SetStage(stage)
 	end
 end
 
+function bossModPrototype:NextStage()
+	if not self.vb.phase then return end--Person DCed mid fight and somehow managed to perfectly time running SetStage with a value of 0 before getting variable recovery
+		self.vb.phase = self.vb.phase + 1
+	--Separate variable to use SetStage totality for very niche weak aura practices
+	if not self.vb.stageTotality then
+		self.vb.stageTotality = 0
+	end
+	self.vb.stageTotality = self.vb.stageTotality + 1
+	if self.inCombat then--Safety, in event mod manages to run any phase change calls out of combat/during a wipe we'll just safely ignore it
+		fireEvent("DBM_SetStage", self, self.id, self.vb.phase, self.vb.stageTotality)--Mod, modId, Stage (if available), total number of times SetStage has been called since combat start
+		DBM:Debug("DBM_SetStage: " .. self.vb.phase .. "/" .. self.vb.stageTotality)
+	end
+end
 --------------
 --  Events  --
 --------------
@@ -6837,17 +6852,17 @@ function bossModPrototype:IsHeroic()
 	return diff == "heroic5" or diff == "heroic10" or diff == "heroic25"
 end
 
---Pretty much ANYTHING that has mythic mode
-function bossModPrototype:IsMythic()
-	local diff = savedDifficulty or DBM:GetCurrentInstanceDifficulty()
-	return diff == "mythic"
-end
+-- --Pretty much ANYTHING that has mythic mode
+-- function bossModPrototype:IsMythic()
+-- 	local diff = savedDifficulty or DBM:GetCurrentInstanceDifficulty()
+-- 	return diff == "mythic"
+-- end
 
--- Timewalking
-function bossModPrototype:IsTimewalking()
-	local diff = savedDifficulty or DBM:GetCurrentInstanceDifficulty()
-	return diff == "timewalker"
-end
+-- -- Timewalking
+-- function bossModPrototype:IsTimewalking()
+-- 	local diff = savedDifficulty or DBM:GetCurrentInstanceDifficulty()
+-- 	return diff == "timewalker"
+-- end
 
 function bossModPrototype:IsValidWarning(sourceGUID, customunitID, loose)	-- зидрас туда сюда
 	if loose and InCombatLockdown() and GetNumGroupMembers() < 2 then return true end--In a loose check, this basically just checks if we're in combat, important for solo runs of torghast to not gimp mod too much

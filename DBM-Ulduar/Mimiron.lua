@@ -324,9 +324,9 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
-	if spellId == 34098 then --ClearAllDebuffs
-		self.vb.phase = self.vb.phase + 1
+function mod:UNIT_SPELLCAST_SUCCEEDED(_, spellName, spellId)
+	if spellName == GetSpellInfo(34098) then --ClearAllDebuffs
+		self:NextStage()
 		if self.vb.phase == 2 then
 			timerNextShockblast:Stop()
 			timerProximityMines:Stop()
