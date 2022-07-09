@@ -1,5 +1,5 @@
-local mod	= DBM:NewMod("Algalon", "DBM-Ulduar")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Algalon", "DBM-Ulduar")
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20210501000000")
 mod:SetCreatureID(32871)
@@ -21,28 +21,28 @@ mod:RegisterEvents(
 	"CHAT_MSG_MONSTER_YELL"
 )
 
-local announceBigBang			= mod:NewSpellAnnounce(313034, 4)
-local warnPhase2				= mod:NewPhaseAnnounce(2)
-local warnPhase2Soon			= mod:NewAnnounce("WarnPhase2Soon", 2)
-local announcePreBigBang		= mod:NewPreWarnAnnounce(313034, 10, 3)
-local announceBlackHole			= mod:NewSpellAnnounce(313039, 2)
-local announceCosmicSmash		= mod:NewAnnounce("WarningCosmicSmash", 3, 313036)
-local announcePhasePunch		= mod:NewAnnounce("WarningPhasePunch", 4, 313039, "Tank")
+local announceBigBang     = mod:NewSpellAnnounce(313034, 4)
+local warnPhase2          = mod:NewPhaseAnnounce(2)
+local warnPhase2Soon      = mod:NewAnnounce("WarnPhase2Soon", 2)
+local announcePreBigBang  = mod:NewPreWarnAnnounce(313034, 10, 3)
+local announceBlackHole   = mod:NewSpellAnnounce(313039, 2)
+local announceCosmicSmash = mod:NewAnnounce("WarningCosmicSmash", 3, 313036)
+local announcePhasePunch  = mod:NewAnnounce("WarningPhasePunch", 4, 313039, "Tank")
 
-local specwarnStarLow			= mod:NewSpecialWarning("warnStarLow", "Tank", nil, nil, 1, 2)
-local specWarnPhasePunch		= mod:NewSpecialWarningStack(313033, nil, 4, nil, nil, 1, 6)
-local specWarnBigBang			= mod:NewSpecialWarningDefensive(313034, "Tank", nil, nil, 3, 2)
-local specWarnCosmicSmash		= mod:NewSpecialWarningCount(313036, nil, nil, nil, 2, 2)
+local specwarnStarLow     = mod:NewSpecialWarning("warnStarLow", "Tank", nil, nil, 1, 2)
+local specWarnPhasePunch  = mod:NewSpecialWarningStack(313033, nil, 4, nil, nil, 1, 6)
+local specWarnBigBang     = mod:NewSpecialWarningDefensive(313034, "Tank", nil, nil, 3, 2)
+local specWarnCosmicSmash = mod:NewSpecialWarningCount(313036, nil, nil, nil, 2, 2)
 
-local timerCombatStart		    = mod:NewTimer(8, "TimerCombatStart", 2457)
-local enrageTimer				= mod:NewBerserkTimer(360)
-local timerNextBigBang			= mod:NewNextTimer(90.5, 313034, nil, nil, nil, 2)
-local timerBigBangCast			= mod:NewCastTimer(8, 313034)
-local timerNextCollapsingStar	= mod:NewTimer(15, "NextCollapsingStar")
-local timerCDCosmicSmash		= mod:NewCDCountTimer(25, 313036, nil, nil, nil, 2)
-local timerCastCosmicSmash		= mod:NewCastTimer(4.5, 313036)
-local timerPhasePunch			= mod:NewBuffActiveTimer(45, 313033, nil, "Tank", nil, 6)
-local timerNextPhasePunch		= mod:NewNextTimer(16, 313033, nil, "Tank", nil, 6)
+local timerCombatStart        = mod:NewTimer(8, "TimerCombatStart", 2457)
+local enrageTimer             = mod:NewBerserkTimer(360)
+local timerNextBigBang        = mod:NewNextTimer(90.5, 313034, nil, nil, nil, 2)
+local timerBigBangCast        = mod:NewCastTimer(8, 313034)
+local timerNextCollapsingStar = mod:NewTimer(15, "NextCollapsingStar")
+local timerCDCosmicSmash      = mod:NewCDCountTimer(25, 313036, nil, nil, nil, 2)
+local timerCastCosmicSmash    = mod:NewCastTimer(4.5, 313036)
+local timerPhasePunch         = mod:NewBuffActiveTimer(45, 313033, nil, "Tank", nil, 6)
+local timerNextPhasePunch     = mod:NewNextTimer(16, 313033, nil, "Tank", nil, 6)
 
 mod.vb.SmashCount = 0
 local warned_preP2 = false
@@ -53,19 +53,11 @@ function mod:OnCombatStart(delay)
 	self.vb.SmashCount = 0
 	warned_preP2 = false
 	warned_star = false
-local text = select(3, GetWorldStateUIInfo(1))
-	local _, _, time = string.find(text, L.PullCheck)
-	if not time then
-		time = 120
-	end
-	time = tonumber(time)
-	if time == 120 then
-		timerCombatStart:Start(26.5-delay)
-		self:ScheduleMethod(26.5-delay, "startTimers")	-- 26 seconds roleplaying
-	else
-		timerCombatStart:Start(-delay)
-		self:ScheduleMethod(8-delay, "startTimers")	-- 8 seconds roleplaying
-	end
+	timerNextCollapsingStar:Start(22 - delay) -- one log review (2022/07/05)
+	timerCDCosmicSmash:Start(35 - delay) -- one log review (2022/07/05)
+	announcePreBigBang:Schedule(61 - delay)
+	timerNextBigBang:Start(71 - delay) -- one log review (2022/07/05)
+	enrageTimer:Start(360 - delay)
 end
 
 function mod:OnCombatEnd(wipe)
@@ -76,12 +68,12 @@ function mod:startTimers()
 	enrageTimer:Start()
 	timerNextBigBang:Start()
 	announcePreBigBang:Schedule(80)
-	timerCDCosmicSmash:Start(nil, self.vb.SmashCount+1)
+	timerCDCosmicSmash:Start(nil, self.vb.SmashCount + 1)
 	timerNextCollapsingStar:Start()
 end
 
 function mod:SPELL_CAST_START(args)
-	if args:IsSpellID(313034, 64443, 64584) then 	-- Суровый удар
+	if args:IsSpellID(313034, 64443, 64584) then -- Суровый удар
 		timerBigBangCast:Start()
 		timerNextBigBang:Start()
 		announceBigBang:Show()
@@ -93,13 +85,13 @@ function mod:SPELL_CAST_START(args)
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
-	if args:IsSpellID(313039, 64122, 65108) then 	-- Взрыв чёрной дыры
+	if args:IsSpellID(313039, 64122, 65108) then -- Взрыв чёрной дыры
 		announceBlackHole:Show()
 		warned_star = false
-	elseif args:IsSpellID(64598, 62301, 313037, 313036) then	-- Кара небесная
+	elseif args:IsSpellID(64598, 62301, 313037, 313036) then -- Кара небесная
 		self.vb.SmashCount = self.vb.SmashCount + 1
 		timerCastCosmicSmash:Start()
-		timerCDCosmicSmash:Start(nil, self.vb.SmashCount+1)
+		timerCDCosmicSmash:Start(nil, self.vb.SmashCount + 1)
 		announceCosmicSmash:Show()
 		specWarnCosmicSmash:Show(self.vb.SmashCount)
 	end
@@ -129,6 +121,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		warnPhase2:Show()
 	end
 end
+
 --[[
 function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 65311 then--Supermassive Fail (fires when he becomes actually active)
