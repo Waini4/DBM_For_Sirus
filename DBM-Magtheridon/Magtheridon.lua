@@ -1,11 +1,11 @@
-local mod	= DBM:NewMod("Magtheridon", "DBM-Magtheridon")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Magtheridon", "DBM-Magtheridon")
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20220518110528")
 mod:SetCreatureID(17257)
 
 mod:SetModelID(18527)
-mod:RegisterCombat("combat",17257)
+mod:RegisterCombat("combat", 17257)
 mod:RegisterEvents(
 	"CHAT_MSG_MONSTER_YELL"
 )
@@ -19,26 +19,26 @@ mod:RegisterEventsInCombat(
 )
 -- общее --
 mod:AddTimerLine(L.General)
-local timerNovaCD                   = mod:NewCDTimer(80, 305129, nil, nil, nil, 3) -- Кубы
-local timerPull				        = mod:NewTimer(112, "Pull", 305131, nil, nil, 6) -- Пулл босса
+local timerNovaCD = mod:NewCDTimer(80, 305129, nil, nil, nil, 3) -- Кубы
+local timerPull   = mod:NewTimer(112, "Pull", 305131, nil, nil, 6) -- Пулл босса
 
 -- обычка --
 mod:AddTimerLine(L.Normal)
-local timerShakeCD                  = mod:NewCDTimer(55, 55101, nil, nil, nil, 3) -- Сотрясение
+local timerShakeCD = mod:NewCDTimer(55, 55101, nil, nil, nil, 3) -- Сотрясение
 
 -- героик --
 mod:AddTimerLine(L.Heroic)
-local warningNovaCast               = mod:NewCastAnnounce(305129, 10) -- Вспышка скверны
-local warnHandOfMagt			    = mod:NewSpellAnnounce(305131, 1) -- Печать магтеридона
-local warnDevastatingStrike		    = mod:NewSpellAnnounce(305134, 3, nil, "Tank|Healer") -- сокрушительный удар
+local warningNovaCast       = mod:NewCastAnnounce(305129, 10) -- Вспышка скверны
+local warnHandOfMagt        = mod:NewSpellAnnounce(305131, 1) -- Печать магтеридона
+local warnDevastatingStrike = mod:NewSpellAnnounce(305134, 3, nil, "Tank|Healer") -- сокрушительный удар
 
-local specWarnNova                  = mod:NewSpecialWarningRun(305129, nil, nil, nil, 1, 2) -- Вспышка скверны
-local specWarnHandOfMagt            = mod:NewSpecialWarningSpell(305131, nil, nil, nil, 1, 2) -- Печать магтеридона
-local specWarnDevastatingStrike	    = mod:NewSpecialWarningYou(305134, "Tank", nil, nil, nil, 1, 2)	--Оповещение на экран о получении сокрушительного удара
+local specWarnNova              = mod:NewSpecialWarningRun(305129, nil, nil, nil, 1, 2) -- Вспышка скверны
+local specWarnHandOfMagt        = mod:NewSpecialWarningSpell(305131, nil, nil, nil, 1, 2) -- Печать магтеридона
+local specWarnDevastatingStrike = mod:NewSpecialWarningYou(305134, "Tank", nil, nil, nil, 1, 2) --Оповещение на экран о получении сокрушительного удара
 
-local timerHandOfMagtCD             = mod:NewCDTimer(15, 305131, nil, nil, nil, 3)	-- печать магтеридона
-local timerDevastatingStrikeCD		= mod:NewCDTimer(15, 305134, nil, "Tank|Healer", nil, 1)	-- сокрушительный удар
-local timerShatteredArmor           = mod:NewTargetTimer(30, 305135, nil, "Tank|Healer", nil, 1)	-- дебаф сокрушнительного удара
+local timerHandOfMagtCD        = mod:NewCDTimer(15, 305131, nil, nil, nil, 3) -- печать магтеридона
+local timerDevastatingStrikeCD = mod:NewCDTimer(15, 305134, nil, "Tank|Healer", nil, 1) -- сокрушительный удар
+local timerShatteredArmor      = mod:NewTargetTimer(30, 305135, nil, "Tank|Healer", nil, 1) -- дебаф сокрушнительного удара
 
 
 local pullWarned = true
@@ -52,7 +52,7 @@ local targetShattered
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 17257, "Magtheridon")
-	self:SetStage(2)
+	self:SetStage(1)
 	if self:IsHeroic() then
 		timerNovaCD:Start()
 		timerHandOfMagtCD:Start()
@@ -83,7 +83,7 @@ function mod:SPELL_CAST_START(args)
 		warnDevastatingStrike:Show(targetShattered)
 		specWarnDevastatingStrike:Show(targetShattered)
 		timerDevastatingStrikeCD:Start()
-	elseif args:IsSpellID(30616) then		-- таймер кубов на уровне костылей
+	elseif args:IsSpellID(30616) then -- таймер кубов на уровне костылей
 		specWarnNova:Show(args.sourceName)
 		if cub == 2 then
 			timerNovaCD:Start(74)
@@ -103,27 +103,28 @@ function mod:SPELL_CAST_START(args)
 		elseif cub == 7 then
 			timerNovaCD:Start(74)
 			cub = cub + 1
-		elseif cub == 8 then	--этот сделан на угад остальные по стриму [https://www.twitch.tv/videos/1303324658?t]
+		elseif cub == 8 then --этот сделан на угад остальные по стриму [https://www.twitch.tv/videos/1303324658?t]
 			timerNovaCD:Start(74)
 			cub = cub + 1
 		end
-	elseif args:IsSpellID(30510) then	--таймер пула
+	elseif args:IsSpellID(30510) then --таймер пула
 		if pullWarned then
 			timerPull:Start()
 			pullWarned = false
-			self:SetStage(1)
+			self:SetStage(2)
 		end
 	end
 end
 
-function mod:SPELL_DAMAGE(_, _, _, _, _, destFlags, spellId)			-- слакер пишет в рейд что взорвал печать
-	if spellId == 305133 and bit.band(destFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) ~= 0 and bit.band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 then
+function mod:SPELL_DAMAGE(_, _, _, _, _, destFlags, spellId) -- слакер пишет в рейд что взорвал печать
+	if spellId == 305133 and bit.band(destFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) ~= 0 and
+		bit.band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 then
 		SendChatMessage(L.YellHandfail, "RAID")
 	end
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
-	if args:IsSpellID(30572) then	-- Сотрясение оказывается разные таймера
+	if args:IsSpellID(30572) then -- Сотрясение оказывается разные таймера
 		if shake == 1 then
 			timerShakeCD:Start()
 			shake = shake + 1
@@ -150,17 +151,17 @@ function mod:SPELL_CAST_SUCCESS(args)
 			table.wipe(handTargets)
 		end
 		timerHandOfMagtCD:Start()
-	elseif args:IsSpellID(30510) then	--таймер пула
+	elseif args:IsSpellID(30510) then --таймер пула
 		if pullWarned then
 			timerPull:Start()
 			pullWarned = false
-			self:SetStage(1)
+			self:SetStage(2)
 		end
 	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(305131) and args:IsPlayer() then		-- возможно уберу в будущем пишет в чат если на тебе печать
+	if args:IsSpellID(305131) and args:IsPlayer() then -- возможно уберу в будущем пишет в чат если на тебе печать
 		specWarnHandOfMagt:Show()
 	elseif args:IsSpellID(305135) then
 		timerShatteredArmor:Start(args.destName)
@@ -186,15 +187,15 @@ function mod:UNIT_HEALTH(uId)
 	end
 end
 
-function mod:CHAT_MSG_MONSTER_YELL(msg)	-- идею взял с бс гер вайни --обновление таймера в случае потолка
+function mod:CHAT_MSG_MONSTER_YELL(msg) -- идею взял с бс гер вайни --обновление таймера в случае потолка
 	if msg == L.YellPhase2 then
 		if timerNovaCD:GetRemaining() then
 			local elapsed, total = timerNovaCD:GetTime()
-			local extend = total-elapsed
+			local extend = total - elapsed
 			timerNovaCD:Stop()
-			timerNovaCD:Update(0, 10+extend)
+			timerNovaCD:Update(0, 10 + extend)
 		end
-	elseif msg == L.YellPhase1 then	-- попытка словить активацию магика
+	elseif msg == L.YellPhase1 then -- попытка словить активацию магика
 		if self:IsHeroic() then
 			timerNovaCD:Start()
 			timerHandOfMagtCD:Start(20)
