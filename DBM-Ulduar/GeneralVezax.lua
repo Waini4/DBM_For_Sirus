@@ -1,7 +1,6 @@
-local mod    = DBM:NewMod("GeneralVezax", "DBM-Ulduar")
-local L      = mod:GetLocalizedStrings()
-DBM_COMMON_L = {}
-local CL     = DBM_COMMON_L
+local mod = DBM:NewMod("GeneralVezax", "DBM-Ulduar")
+local L   = mod:GetLocalizedStrings()
+local CL  = DBM_COMMON_L
 
 mod:SetRevision("20220518110528")
 mod:SetCreatureID(33271)
@@ -32,7 +31,6 @@ local specWarnLifeLeechYou    = mod:NewSpecialWarningMoveAway(312974, nil, nil, 
 local yellLifeLeech           = mod:NewYell(312974)
 local specWarnLifeLeechNear   = mod:NewSpecialWarningClose(312974, nil, nil, 2, 1, 2)
 local specWarnSearingFlames   = mod:NewSpecialWarningInterruptCount(312977, "HasInterrupt", nil, nil, 1, 2)
-local specWarnAnimus          = mod:NewSpecialWarningSwitch(63145, nil, nil, nil, 1, 2)
 
 local timerEnrage              = mod:NewBerserkTimer(600)
 local timerSearingFlamesCast   = mod:NewCastTimer(2, 312977)
@@ -42,11 +40,15 @@ local timerSaroniteVapors      = mod:NewNextCountTimer(30, 63322, nil, nil, nil,
 local timerShadowCrashCD       = mod:NewCDTimer(15, 312978, nil, nil, nil, 3)
 local timerLifeLeech           = mod:NewTargetTimer(10, 312974, nil, false, 2, 3)
 local timerLifeLeechCD         = mod:NewCDTimer(36, 312974, nil, nil, nil, 3)
-local timerHardmode            = mod:NewTimer(195, "hardmodeSpawn", nil, nil, nil, 1)
 
 mod:AddSetIconOption("SetIconOnShadowCrash", 312978, true, false, { 8 })
 mod:AddSetIconOption("SetIconOnLifeLeach", 312974, true, false, { 7 })
 mod:AddBoolOption("CrashArrow")
+
+mod:AddTimerLine(DBM_CORE_L.HARD_MODE)
+local specWarnAnimus = mod:NewSpecialWarningSwitch(63145, nil, nil, nil, 1, 2)
+
+local timerHardmode = mod:NewTimer(195, "hardmodeSpawn", nil, nil, nil, 1)
 
 mod.vb.interruptCount = 0
 mod.vb.vaporsCount = 0
@@ -85,8 +87,8 @@ function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 33271, "GeneralVezax")
 	self.vb.interruptCount = 0
 	self.vb.vaporsCount = 0
-	timerShadowCrashCD:Start(10.9 - delay)
-	timerLifeLeechCD:Start(26.9 - delay)
+	timerShadowCrashCD:Start(5 - delay)
+	timerLifeLeechCD:Start(-delay)
 	timerSaroniteVapors:Start(30 - delay, 1)
 	timerEnrage:Start(-delay)
 	timerHardmode:Start(-delay)
@@ -95,7 +97,6 @@ end
 
 function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 33271, "GeneralVezax", wipe)
-
 end
 
 function mod:SPELL_CAST_START(args)

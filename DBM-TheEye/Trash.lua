@@ -1,5 +1,5 @@
-local mod	= DBM:NewMod("Trash", "DBM-TheEye", 1)
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Trash", "DBM-TheEye", 1)
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20201012213000")
 
@@ -15,22 +15,20 @@ mod:RegisterEvents(
 )
 
 mod:RegisterEventsInCombat("SPELL_AURA_APPLIED 37135")
-local warnKontr	= mod:NewTargetAnnounce(37135, 4)
+local warnKontr = mod:NewTargetAnnounce(37135, 4)
 
 local KontrTargets = {}
 
 
-function mod:Kontr()
+local function Kontr()
 	warnKontr:Show(table.concat(KontrTargets, "<, >"))
 	table.wipe(KontrTargets)
 end
 
-
-
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(37135) then
 		KontrTargets[#KontrTargets + 1] = args.destName
-		self:UnscheduleMethod("Kontr")
-		self:ScheduleMethod(0.1, "Kontr")
+		self:Unschedule(Kontr)
+		self:Schedule(0.1, Kontr, self)
 	end
 end

@@ -1,5 +1,5 @@
-local mod	= DBM:NewMod("XT002", "DBM-Ulduar")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("XT002", "DBM-Ulduar")
+local L   = mod:GetLocalizedStrings()
 
 local CL = DBM_COMMON_L
 
@@ -17,28 +17,28 @@ mod:RegisterEventsInCombat(
 	"SPELL_MISSED 64208 64206"
 )
 
-local warnLightBomb					= mod:NewTargetAnnounce(312941, 3)
-local warnGravityBomb				= mod:NewTargetAnnounce(312943, 3)
+local warnLightBomb   = mod:NewTargetAnnounce(312941, 3)
+local warnGravityBomb = mod:NewTargetAnnounce(312943, 3)
 
-local specWarnLightBomb				= mod:NewSpecialWarningMoveAway(312941, nil, nil, nil, 1, 2)
-local yellLightBomb					= mod:NewYell(312941)
-local specWarnGravityBomb			= mod:NewSpecialWarningMoveAway(312943, nil, nil, nil, 1, 2)
-local yellGravityBomb				= mod:NewYell(312943, nil, nil, nil, "YELL")
-local specWarnConsumption			= mod:NewSpecialWarningMove(64206, nil, nil, nil, 1, 2)--Hard mode void zone dropped by Gravity Bomb
-local yellGravityBombFades			= mod:NewShortFadesYell(312943, nil, nil, nil, "YELL")
-local yellLightBombFades			= mod:NewShortFadesYell(312941)
+local specWarnLightBomb    = mod:NewSpecialWarningMoveAway(312941, nil, nil, nil, 1, 2)
+local yellLightBomb        = mod:NewYell(312941)
+local specWarnGravityBomb  = mod:NewSpecialWarningMoveAway(312943, nil, nil, nil, 1, 2)
+local yellGravityBomb      = mod:NewYell(312943, nil, nil, nil, "YELL")
+local specWarnConsumption  = mod:NewSpecialWarningMove(64206, nil, nil, nil, 1, 2) --Hard mode void zone dropped by Gravity Bomb
+local yellGravityBombFades = mod:NewShortFadesYell(312943, nil, nil, nil, "YELL")
+local yellLightBombFades   = mod:NewShortFadesYell(312941)
 
-local enrageTimer					= mod:NewBerserkTimer(600)
-local timerTympanicTantrumCast		= mod:NewCastTimer(62776)
-local timerTympanicTantrum			= mod:NewBuffActiveTimer(8, 312939, nil, nil, nil, 5, nil, CL.HEALER_ICON)
-local timerTympanicTantrumCD		= mod:NewCDTimer(60, 312939, nil, nil, nil, 2, nil, CL.HEALER_ICON, nil, 3)
-local timerHeart					= mod:NewCastTimer(30, 312945, nil, nil, nil, 6, nil, CL.DAMAGE_ICON)
-local timerLightBomb				= mod:NewTargetTimer(9, 312941, nil, nil, nil, 3)
-local timerGravityBomb				= mod:NewTargetTimer(9, 312943, nil, nil, nil, 3)
-local timerAchieve					= mod:NewAchievementTimer(205, 2937)
+local enrageTimer              = mod:NewBerserkTimer(600)
+local timerTympanicTantrumCast = mod:NewCastTimer(62776)
+local timerTympanicTantrum     = mod:NewBuffActiveTimer(8, 312939, nil, nil, nil, 5, nil, CL.HEALER_ICON)
+local timerTympanicTantrumCD   = mod:NewCDTimer(60, 312939, nil, nil, nil, 2, nil, CL.HEALER_ICON)
+local timerHeart               = mod:NewCastTimer(30, 312945, nil, nil, nil, 6, nil, CL.DAMAGE_ICON)
+local timerLightBomb           = mod:NewTargetTimer(9, 312941, nil, nil, nil, 3)
+local timerGravityBomb         = mod:NewTargetTimer(9, 312943, nil, nil, nil, 3)
+local timerAchieve             = mod:NewAchievementTimer(205, 2937)
 
-mod:AddSetIconOption("SetIconOnLightBombTarget", 312941, true, true, {7})
-mod:AddSetIconOption("SetIconOnGravityBombTarget", 64234, true, true, {8})
+mod:AddSetIconOption("SetIconOnLightBombTarget", 312941, true, true, { 7 })
+mod:AddSetIconOption("SetIconOnGravityBombTarget", 64234, true, true, { 8 })
 mod:AddRangeFrameOption(12, nil, true)
 
 function mod:OnCombatStart(delay)
@@ -46,14 +46,14 @@ function mod:OnCombatStart(delay)
 	enrageTimer:Start(-delay)
 	timerAchieve:Start()
 	if self:IsDifficulty("normal10") then
-		timerTympanicTantrumCD:Start(35-delay)
+		timerTympanicTantrumCD:Start(35 - delay)
 	else
-		timerTympanicTantrumCD:Start(60-delay)
+		timerTympanicTantrumCD:Start(60 - delay)
 	end
 end
 
 function mod:OnCombatEnd()
-	DBM:FireCustomEvent("DBM_EncounterStart", 33293, "XT-002 Deconstructor",wipe)
+	DBM:FireCustomEvent("DBM_EncounterStart", 33293, "XT-002 Deconstructor", wipe)
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end
@@ -68,9 +68,9 @@ end
 
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
-	if args:IsSpellID(62775, 312587, 312940) and args.auraType == "DEBUFF" then	-- Tympanic Tantrum
+	if args:IsSpellID(62775, 312587, 312940) and args.auraType == "DEBUFF" then -- Tympanic Tantrum
 		timerTympanicTantrum:Start()
-	elseif args:IsSpellID(63018, 65121, 312588, 312941) then 	-- Light Bomb
+	elseif args:IsSpellID(63018, 65121, 312588, 312941) then -- Light Bomb
 		if args:IsPlayer() then
 			specWarnLightBomb:Show()
 			specWarnLightBomb:Play("runout")
@@ -104,7 +104,7 @@ end
 
 function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
-	if args:IsSpellID(63018, 65121, 312588, 312941) then 												-- Ополяющий свет
+	if args:IsSpellID(63018, 65121, 312588, 312941) then -- Ополяющий свет
 		if args:IsPlayer() then
 			DBM.RangeCheck:Hide()
 		end
@@ -114,9 +114,9 @@ function mod:SPELL_AURA_REMOVED(args)
 		if args:IsPlayer() then
 			yellLightBombFades:Cancel()
 		end
-	elseif args:IsSpellID(63024, 64234, 312590, 312943) then											-- Грави бомба
+	elseif args:IsSpellID(63024, 64234, 312590, 312943) then -- Грави бомба
 		if args:IsPlayer() then
-				DBM.RangeCheck:Hide()
+			DBM.RangeCheck:Hide()
 		end
 		if self.Options.SetIconOnGravityBombTarget then
 			self:SetIcon(args.destName, 0)
@@ -135,4 +135,5 @@ function mod:SPELL_DAMAGE(_, _, _, destGUID, _, _, spellId)
 		specWarnConsumption:Play("runaway")
 	end
 end
+
 mod.SPELL_MISSED = mod.SPELL_DAMAGE

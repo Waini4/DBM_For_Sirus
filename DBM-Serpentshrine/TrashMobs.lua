@@ -1,4 +1,4 @@
-﻿local mod	= DBM:NewMod("TrashMobs", "DBM-Serpentshrine")
+﻿local mod = DBM:NewMod("TrashMobs", "DBM-Serpentshrine")
 -- local L		= mod:GetLocalizedStrings()
 
 mod:SetRevision("20220609123000") -- fxpw check 20220609123000
@@ -13,12 +13,12 @@ mod:SetCreatureID(21251)
 -- )
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 39042"
-	-- "SPELL_CAST_START",
-	-- "SPELL_CAST_SUCCESS",
-	-- "SPELL_AURA_REMOVED"
+-- "SPELL_CAST_START",
+-- "SPELL_CAST_SUCCESS",
+-- "SPELL_AURA_REMOVED"
 )
 
-local specWarnRange		= mod:NewSpecialWarningMoveAway(39042)
+local specWarnRange = mod:NewSpecialWarningMoveAway(39042)
 
 
 function mod:SPELL_AURA_APPLIED(args)

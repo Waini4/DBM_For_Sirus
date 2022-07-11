@@ -86,38 +86,87 @@ mod.vb.ErapCount = 0
 
 
 
-local setIncinerateTarget, clearIncinerateTarget
-local diffMaxAbsorb = { heroic25 = 1400000, normal25 = 400000 }
+local showShieldHealthBar, hideShieldHealthBar
 do
-	local incinerateTarget
-	local damaged = 0
-	local maxAbsorb = diffMaxAbsorb[DBM:GetCurrentInstanceDifficulty()] or 0
-
+	local frame = CreateFrame("Frame") -- using a separate frame avoids the overhead of the DBM event handlers which are not meant to be used with frequently occuring events like all damage events...
+	local shieldedMob
+	local absorbRemaining = 0
+	local maxAbsorb = 0
 	local function getShieldHP()
-		return math.max(100, math.floor(damaged / maxAbsorb * 100))
+		return math.max(1, math.floor(absorbRemaining / maxAbsorb * 100))
 	end
 
-	function mod:SPELL_DAMAGE(_, _, _, destGUID, _, _, _, _, _, _, _, absorbed)
-		if destGUID == incinerateTarget then
-			damaged = damaged + (absorbed or 0)
+	frame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	frame:SetScript("OnEvent", function(self, _, _, subEvent, _, _, _, destGUID, _, _, ...)
+		if shieldedMob == destGUID then
+			local absorbed
+			if subEvent == "SWING_MISSED" then
+				absorbed = select(2, ...)
+			elseif subEvent == "RANGE_MISSED" or subEvent == "SPELL_MISSED" or subEvent == "SPELL_PERIODIC_MISSED" then
+				absorbed = select(5, ...)
+			end
+			if absorbed then
+				absorbRemaining = absorbRemaining - absorbed
+			end
 		end
+	end)
+
+	function showShieldHealthBar(self, mob, shieldName, absorb)
+		shieldedMob = mob
+		absorbRemaining = absorb
+		maxAbsorb = absorb
+		DBM.BossHealth:RemoveBoss(getShieldHP)
+		DBM.BossHealth:AddBoss(getShieldHP, shieldName)
+		self:Schedule(15, hideShieldHealthBar)
 	end
 
-	mod.SPELL_PERIODIC_DAMAGE = mod.SPELL_DAMAGE
-
-	function setIncinerateTarget(mod, target, name)
-		incinerateTarget = target
-		damaged = 0
+	function hideShieldHealthBar()
 		DBM.BossHealth:RemoveBoss(getShieldHP)
-		DBM.BossHealth:AddBoss(getShieldHP, L.IncinerateTarget:format(name))
 	end
+end
 
-	function clearIncinerateTarget(self, name)
-		DBM.BossHealth:RemoveBoss(getShieldHP)
-		damaged = 0
-		if self.Options.IncinerateFleshIcon then
-			self:RemoveIcon(name)
+-- local function sort_by_group(v1, v2)
+-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
+-- end
+local function SetRevCascIcons()
+	table.sort(RevCascTargets, function(v1, v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
+	for _, v in ipairs(RevCascTargets) do
+		if mod.Options.AnnounceReverCasc then
+			if DBM:GetRaidRank() > 0 then
+				SendChatMessage(L.RevCasc:format(RevCascIcons, UnitName(v)), "RAID_WARNING")
+			else
+				SendChatMessage(L.RevCasc:format(RevCascIcons, UnitName(v)), "RAID")
+			end
 		end
+		if self.Options.SetIconOnRevCascTargets then
+			self:SetIcon(UnitName(v), RevCascIcons, 10)
+		end
+		RevCascIcons = RevCascIcons - 1
+	end
+	warnReverseCascade:Show(table.concat(RevCascTargets, "<, >"))
+	table.wipe(RevCascTargets)
+	RevCascIcons = 6
+end
+
+local function SetErapIcons()
+	table.sort(ErapTargets, function(v1, v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
+	for _, v in ipairs(ErapTargets) do
+		if mod.Options.AnnounceErap then
+			if DBM:GetRaidRank() > 0 then
+				SendChatMessage(L.Erapc:format(ErapIcons, UnitName(v)), "RAID_WARNING")
+			else
+				SendChatMessage(L.Erapc:format(ErapIcons, UnitName(v)), "RAID")
+			end
+		end
+		if self.Options.SetIconOnErapTargets then
+			self:SetIcon(UnitName(v), ErapIcons)
+		end
+		ErapIcons = ErapIcons - 1
+	end
+	if #ErapTargets >= 3 then
+		warnPowerWordErase:Show(table.concat(ErapTargets, "<, >"))
+		table.wipe(ErapTargets)
+		ErapIcons = 3
 	end
 end
 
@@ -209,11 +258,11 @@ function mod:SPELL_AURA_APPLIED(args)
 				DBM.RangeCheck:Show(8)
 			end
 		end
-		self:ScheduleMethod(0.1, "SetRevCascIcons")
+		self:Schedule(0.1, SetRevCascIcons, self)
 	elseif spellId == 312204 or spellId == 317156 then
 		ErapTargets[#ErapTargets + 1] = args.destName
 		if mod:IsDifficulty("normal25") then
-			self:ScheduleMethod(0.1, "SetErapIcons")
+			self:Schedule(0.1, SetErapIcons, self)
 		end
 		--specPowerWordErase:Show(args.destName)
 		warnPowerWordErase:Show(args.destName)
@@ -234,7 +283,11 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		ArcanePunishmentStack:Start()
 	elseif spellId == 312213 or spellId == 317163 then
-		setIncinerateTarget(self, args.destGUID, args.destName)
+		if mod:IsDifficulty("normal25") then
+			showShieldHealthBar(self, args.destGUID, args.spellName, 400000)
+		else
+			showShieldHealthBar(self, args.destGUID, args.spellName, 1400000)
+		end
 	elseif spellId == 317165 and args:IsPlayer() then
 		specWarnTimelessWhirlwindsGTFO:Show(args.spellName)
 	end
@@ -281,52 +334,6 @@ function mod:SPELL_AURA_REMOVED(args)
 	end
 end
 
-do
-	-- local function sort_by_group(v1, v2)
-	-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
-	-- end
-	function mod:SetRevCascIcons()
-		table.sort(RevCascTargets, function(v1, v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
-		for _, v in ipairs(RevCascTargets) do
-			if mod.Options.AnnounceReverCasc then
-				if DBM:GetRaidRank() > 0 then
-					SendChatMessage(L.RevCasc:format(RevCascIcons, UnitName(v)), "RAID_WARNING")
-				else
-					SendChatMessage(L.RevCasc:format(RevCascIcons, UnitName(v)), "RAID")
-				end
-			end
-			if self.Options.SetIconOnRevCascTargets then
-				self:SetIcon(UnitName(v), RevCascIcons, 10)
-			end
-			RevCascIcons = RevCascIcons - 1
-		end
-		warnReverseCascade:Show(table.concat(RevCascTargets, "<, >"))
-		table.wipe(RevCascTargets)
-		RevCascIcons = 6
-	end
-
-	function mod:SetErapIcons()
-		table.sort(ErapTargets, function(v1, v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
-		for _, v in ipairs(ErapTargets) do
-			if mod.Options.AnnounceErap then
-				if DBM:GetRaidRank() > 0 then
-					SendChatMessage(L.Erapc:format(ErapIcons, UnitName(v)), "RAID_WARNING")
-				else
-					SendChatMessage(L.Erapc:format(ErapIcons, UnitName(v)), "RAID")
-				end
-			end
-			if self.Options.SetIconOnErapTargets then
-				self:SetIcon(UnitName(v), ErapIcons)
-			end
-			ErapIcons = ErapIcons - 1
-		end
-		if #ErapTargets >= 3 then
-			warnPowerWordErase:Show(table.concat(ErapTargets, "<, >"))
-			table.wipe(ErapTargets)
-			ErapIcons = 3
-		end
-	end
-end
 function mod:UNIT_HEALTH(uId)
 	if mod:IsDifficulty("heroic25") then
 		if self.vb.phase == 1 and not warned_CopSoon and self:GetUnitCreatureId(uId) == 50609 and

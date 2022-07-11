@@ -432,12 +432,17 @@ L:SetGeneralLocalization {
 }
 
 L:SetMiscLocalization {
-	YellPull           = "Скоро мы сразимся с главарем этих извергов! Обратите гнев и ненависть против его прислужников!",
-	YellPhase2         = "Я – это сон наяву.",
-	Sara               = "Сара",
-	Mozg               = "Мозг Йог-Сарона",
-	HevTentacle        = "Тяжёлое щупальце",
-	WarningYellSqueeze = "Выдавливание на мне! Помогите!"
+	YellPull             = "Скоро мы сразимся с главарем этих извергов! Обратите гнев и ненависть против его прислужников!",
+	YellPhase2           = "Я – это сон наяву.",
+	Sara                 = "Сара",
+	Mozg                 = "Мозг Йог-Сарона",
+	HevTentacle          = "Тяжёлое щупальце",
+	WarningYellSqueeze   = "Выдавливание на мне! Помогите!",
+	S1TheLucidDream      = "Фаза 1: осознанный сон",
+	S2DescentIntoMadness = "Фаза 2: Провал Безумия",
+	S3TrueFaceofDeath    = "Фаза 3: истинный лик смерти",
+	DescentIntoMadness   = "Провал Безумия",
+	ImmortalGuardian     = "Бессмертный страж"
 }
 
 L:SetWarningLocalization {
