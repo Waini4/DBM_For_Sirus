@@ -128,7 +128,7 @@ end
 -- local function sort_by_group(v1, v2)
 -- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
 -- end
-local function SetRevCascIcons()
+local function SetRevCascIcons(self)
 	table.sort(RevCascTargets, function(v1, v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 	for _, v in ipairs(RevCascTargets) do
 		if mod.Options.AnnounceReverCasc then
@@ -148,7 +148,7 @@ local function SetRevCascIcons()
 	RevCascIcons = 6
 end
 
-local function SetErapIcons()
+local function SetErapIcons(self)
 	table.sort(ErapTargets, function(v1, v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 	for _, v in ipairs(ErapTargets) do
 		if mod.Options.AnnounceErap then
