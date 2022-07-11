@@ -330,7 +330,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	elseif spellId == 312213 or spellId == 317163 then
 		specWarnReturnInterrupt:Show()
 		specWarnReturnInterrupt:Play("kickcast")
-		clearIncinerateTarget(self, args.destName)
+		hideShieldHealthBar()
 	end
 end
 
