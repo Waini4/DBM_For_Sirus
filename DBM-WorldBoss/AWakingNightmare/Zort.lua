@@ -50,12 +50,13 @@ local specWarnTraitor         = mod:NewSpecialWarningStack(307814, nil, 2, nil, 
 local specWarnReturnInterrupt = mod:NewSpecialWarningInterrupt(307829, "HasInterrupt", nil, 2, 1, 2)
 --local specWarnPechati					= mod:NewSpecialWarningCast(307814, nil, nil, nil, 1, 2) --предатель
 local specWarnFlame           = mod:NewSpecialWarningMoveAway(307839, nil, nil, nil, 3, 2)
+local specWarnFlame2          = mod:NewSpecialWarningMoveAway(307861, nil, nil, nil, 3, 2)
 local specWarnSveaz           = mod:NewSpecialWarningYou(308620, nil, nil, nil, 3, 2)
 local yellFlame               = mod:NewYell(307839, nil, nil, nil, "YELL") --Огонь
 local yellFlameFade           = mod:NewShortFadesYell(307839, nil, nil, nil, "YELL")
 local yellCastsvFade          = mod:NewShortFadesYell(308520)
 
-local timerInternalbleeding = mod:NewCDTimer(28, 307833)
+local timerInternalbleeding = mod:NewCDTimer(26, 307833)
 local timerSveazi           = mod:NewCDTimer(28, 308620, nil, nil, nil, 2)
 local timerkik              = mod:NewCDTimer(15, 307829, nil, nil, nil, 3)
 local timerShkval           = mod:NewCDTimer(20, 307821, nil, nil, nil, 3)
@@ -63,6 +64,7 @@ local timerCowardice        = mod:NewCDTimer(33, 307834)
 local timerFlame            = mod:NewCDTimer(15, 307839)
 local timerBreathNightmare  = mod:NewCDTimer(15, 308512)
 local timerAmonstrousblow   = mod:NewCDTimer(15, 307845)
+local timerCDChep           = mod:NewCDTimer(6, 308520)
 
 mod:AddTimerLine(DBM_COMMON_L.ADDS)
 local warnPriziv  = mod:NewCastAnnounce(307852, 3)
@@ -74,8 +76,10 @@ mod:AddSetIconOption("SetIconOnFlameTarget", 307839, true, true, { 1, 2 })
 mod:AddBoolOption("AnnounceSveaz", false)
 mod:AddBoolOption("AnnounceFlame", false)
 mod:AddBoolOption("AnnounceKnopk", false)
+mod:AddBoolOption("Testicepi", true)
 mod:AddBoolOption("AnnounceOFF", false)
 mod:AddBoolOption("RangeFrame", true)
+mod:AddInfoFrameOption(308620, true)
 
 local SveazTargets = {}
 local FlameTargets = {}
@@ -87,6 +91,8 @@ local warned_kill3 = false
 local warned_P2 = false
 local warned_P3 = false
 local warned_P4 = false
+local warned_P5 = false
+
 local Trees = {}
 local Trees_HP = {}
 local Trees_num = 1
@@ -98,7 +104,7 @@ local function warnSveazTargets(self)
 end
 
 local function warnFlameTargets(self)
-	warnSveaz:Show(table.concat(FlameTargets, "<, >"))
+	warnFlame:Show(table.concat(FlameTargets, "<, >"))
 	table.wipe(FlameTargets)
 end
 
@@ -114,6 +120,9 @@ function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 50702, "Zort", wipe)
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
+	end
+	if self.Options.InfoFrame then
+		DBM.InfoFrame:Hide()
 	end
 	DBM.BossHealth:Clear()
 end
@@ -142,11 +151,19 @@ end
 
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(308520) then
+		timerCDChep:Start()
 		if mod.Options.AnnounceKnopk then
 			SendChatMessage(L.Razr, "SAY")
 		end
 	elseif args:IsSpellID(307834) then
 		timerCowardice:Start()
+	elseif args:IsSpellID(318956) then
+		mod:SetStage(3)
+		self:NewPhaseAnnounce(3)
+		timerCowardice:Cancel()
+		timerPriziv:Start(10)
+		timerSveazi:Start(20)
+		timerAmonstrousblow:Start(24)
 	end
 end
 
@@ -161,9 +178,14 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.SetIconOnFlameTarget and self.vb.FlameIcons > 0 then
 			self:SetIcon(args.destName, self.vb.FlameIcons, 10)
 		end
+		DBM.Nameplate:Show(args.destGUID, 307839)
 		self.vb.FlameIcons = self.vb.FlameIcons - 1
 		self:Unschedule(warnFlameTargets)
 		self:Schedule(0.3, warnFlameTargets, self)
+		if self.Options.InfoFrame then
+			DBM.InfoFrame:SetHeader(args.spellName)
+			DBM.InfoFrame:Show(10, "playerdebuffremaining", 307839)
+		end
 		if args:IsPlayer() then
 			specWarnFlame:Show()
 			yellFlame:Yell()
@@ -172,10 +194,21 @@ function mod:SPELL_AURA_APPLIED(args)
 				DBM.RangeCheck:Show(12)
 			end
 		end
+	elseif args:IsSpellID(308512) and self:AntiSpam(3) then
+		specWarnBreathNightmare:Show()
+		timerBreathNightmare:Start(45)
+	elseif args:IsSpellID(307861) then
+		if args:IsPlayer() then
+			specWarnFlame2:Show()
+		end
 	elseif args:IsSpellID(308517, 308620, 308515) then
 		SveazTargets[#SveazTargets + 1] = args.destName
 		if self.Options.SetIconOnSveazTarget and self.vb.SveazIcons > 0 then
 			self:SetIcon(args.destName, self.vb.SveazIcons, 10)
+		end
+		if self.Options.InfoFrame then
+			DBM.InfoFrame:SetHeader(args.spellName)
+			DBM.InfoFrame:Show(15, "playerdebuffremaining", 308620)
 		end
 		self.vb.SveazIcons = self.vb.SveazIcons - 1
 		self:Unschedule(warnSveazTargets)
@@ -205,13 +238,14 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnFlameTarget then
 			self:SetIcon(args.destName, 0)
 		end
+		DBM.Nameplate:Hide(args.destGUID, 307839)
 	elseif args:IsSpellID(308516, 308517) then
 		if self.Options.SetIconOnSveazTarget then
 			self:SetIcon(args.destName, 0)
 		end
-	elseif args:IsSpellID(318952) then
-		mod:SetStage(4)
+	elseif args:IsSpellID(318956) and not warned_P4 then
 		self:NewPhaseAnnounce(4)
+		warned_P4 = true
 		timerPriziv:Cancel()
 		timerSveazi:Cancel()
 		timerBreathNightmare:Start()
@@ -231,6 +265,15 @@ function mod:SPELL_INTERRUPT(args)
 	if args:IsSpellID(307829) then
 		timerkik:Start()
 		specWarnReturnInterrupt:Show()
+	end
+end
+
+function Chepi()
+	local start, duration = GetSpellCooldown(308520);
+	if (start > 1 and duration > 1) then
+		timerCDChep:Update(0, start + duration - GetTime())
+	else
+		SendChatMessage("Цепь готова", "RAID");
 	end
 end
 
@@ -284,72 +327,48 @@ do
 	end
 end]]
 
-function mod:UNIT_HEALTH(uId)
-	if self.vb.phase == 1 and not warned_kill1 and self:GetUnitCreatureId(uId) == 50702 and
-		UnitHealth(uId) / UnitHealthMax(uId) <= 0.73 then
+function mod:UNIT_HEALTH(uId, sourceGUID)
+	local uid = self:GetUnitCreatureId(uId)
+	if self.vb.phase == 1 and not warned_kill1 and uid == 50702 and
+		DBM:GetBossHP(50702) <= 0.73 then
+		mod:SetStage(2)
 		warned_kill1 = true
 		specwarnHp1:Show()
 	end
-	if self.vb.phase == 2 and not warned_kill2 and self:GetUnitCreatureId(uId) == 50702 and
-		UnitHealth(uId) / UnitHealthMax(uId) <= 0.43 then
+	if self.vb.phase == 2 and not warned_kill2 and uid == 50702 and
+		DBM:GetBossHP(50702) <= 0.43 then
+		mod:SetStage(3)
 		warned_kill2 = true
 		specwarnHp2:Show()
 	end
 	if self.vb.phase == 3 and not warned_kill2 and
 		(
-		(self:GetUnitCreatureId(uId) == 50716 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.01) or
-			(self:GetUnitCreatureId(uId) == 50715 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.98)) then
+		(uid == 50716 and DBM:GetBossHP(50716) <= 0.01) or
+			(uid == 50715 and DBM:GetBossHP(50715) <= 0.98)) then
 		warned_kill2 = true
 		specwarnHp3:Show()
 	end
 end
 
-function mod:UNIT_DIED(args, sourceGUID)
-	local Chasti = args.destName
-	if Chasti == L.Cudo or Chasti == L.Lic or Chasti == L.Shup and not warned_P2 then
-		warned_P2 = true
-		mod:SetStage(2)
-		self:NewPhaseAnnounce(2)
-		specwarnHp2:Show()
+function mod:UNIT_DIED(args)
+	if args.destName == L.Cudo then
 		timerCowardice:Start(10)
 		timerFlame:Start(5)
-	elseif Chasti == L.Cudo and Chasti == L.Lic and not Chasti == L.Shup or
-		Chasti == L.Cudo and Chasti == L.Shup and not Chasti == L.Lic or
-		Chasti == L.Shup and Chasti == L.Lic and not Chasti == L.Cudo and not warned_P3 then
-		mod:SetStage(3)
-		warned_P3 = true
-		self:NewPhaseAnnounce(3)
+		warnPhase2:Show()
+	elseif args.destName == L.Lic then
 		timerCowardice:Cancel()
 		timerPriziv:Start(10)
 		timerSveazi:Start(20)
 		timerAmonstrousblow:Start(24)
-		--[[elseif (((Chasti == L.Cudo and Chasti == L.Lic) and not Chasti == L.Shup) or ((Chasti == L.Cudo and Chasti == L.Shup) and not Chasti == L.Lic) or ((Chasti == L.Shup and Chasti == L.Lic) and not Chasti == L.Cudo)) and not warned_P3 then
-		mod:SetStage(3)
-		warned_P3 = true
-		specwarnHp3:Show()
-		self:NewPhaseAnnounce(3)
-		timerCowardice:Cancel()
-		timerTrees:Start()
-		timerPriziv:Start(10)
-		timerSveazi:Start(20)
-		timerAmonstrousblow:Start(24)]]
-	elseif Chasti == L.Cudo and Chasti == L.Lic and Chasti == L.Shup and not warned_P4 then
-		mod:SetStage(4)
-		warned_P4 = true
-		self:NewPhaseAnnounce(4)
+		warnPhase3:Show()
+	elseif args.destName == L.Shup then
+		warnPhase4:Show()
 		timerPriziv:Cancel()
 		timerSveazi:Cancel()
 		timerBreathNightmare:Start()
 		timerInternalbleeding:Start(64)
 		warnInternalbgPre:Schedule(59)
 		timerShkval:Start(60)
-	elseif args:IsSpellID(50707) then
-		if Trees[sourceGUID] then
-			local id = Trees[sourceGUID]
-			DBM.BossHealth:RemoveBoss(id)
-		else
-			DBM.BossHealth:RemoveLowest()
-		end
 	end
 end
 

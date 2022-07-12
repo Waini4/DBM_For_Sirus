@@ -6,6 +6,7 @@ mod:SetRevision(("20210501000000"):sub(12, -3))
 mod:SetCreatureID(70010)
 
 mod:RegisterCombat("combat", 70010)
+mod:EnableWBEngageSync()
 
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 317274 317624 317275",
