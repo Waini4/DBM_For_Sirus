@@ -268,6 +268,7 @@ function mod:SPELL_INTERRUPT(args)
 	end
 end
 
+--[[
 function Chepi()
 	local start, duration = GetSpellCooldown(308520);
 	if (start > 1 and duration > 1) then
@@ -275,7 +276,7 @@ function Chepi()
 	else
 		SendChatMessage("Цепь готова", "RAID");
 	end
-end
+end]]
 
 --[[
 do
