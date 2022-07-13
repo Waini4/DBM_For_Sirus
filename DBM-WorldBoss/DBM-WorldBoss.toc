@@ -6,14 +6,12 @@
 ## SavedVariablesPerCharacter: DBMWORLDBOSS_SavedStats
 ## X-DBM-Mod: 1
 ## X-DBM-Mod-Type: RAID
-## X-DBM-StatTypes: normal, normal25
-## X-DBM-Mod-Category: WORLD_BOSS
 ## X-DBM-StatTypes: normal
+## X-DBM-Mod-Category: WORLD_BOSS
 ## X-DBM-Mod-Name: Categories
 ## X-DBM-Mod-Name-ruRU: Мировые боссы и боссы категорий
 ## X-DBM-Mod-SubCategories: Tol'Garod, Сategories
 ## X-DBM-Mod-SubCategories-ruRU: Тол'Гарод, Категорий
-## X-DBM-Mod-World-Boss: 1
 ## X-DBM-Mod-Sort: 946, 914
 ## X-DBM-Mod-MapID: 946, 914
 ## X-DBM-Mod-LoadZone: Tol'Garod, A Waking Nightmare
