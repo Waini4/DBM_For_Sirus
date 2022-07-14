@@ -7,15 +7,15 @@ mod:SetCreatureID(17257)
 mod:SetModelID(18527)
 mod:RegisterCombat("combat", 17257)
 mod:RegisterEvents(
-	"CHAT_MSG_MONSTER_YELL"
+	"CHAT_MSG_MONSTER_YELL",
+	"SPELL_CAST_START 30510"
 )
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 305158 305159 305160 305134 30616 30510",
 	"SPELL_CAST_SUCCESS 30572 305166 30510",
 	"SPELL_AURA_APPLIED 305131 305135",
 	"UNIT_HEALTH",
-	"SPELL_DAMAGE",
-	"CHAT_MSG_MONSTER_YELL"
+	"SPELL_DAMAGE"
 )
 -- общее --
 mod:AddTimerLine(L.General)
@@ -151,12 +151,6 @@ function mod:SPELL_CAST_SUCCESS(args)
 			table.wipe(handTargets)
 		end
 		timerHandOfMagtCD:Start()
-	elseif args:IsSpellID(30510) then --таймер пула
-		if pullWarned then
-			timerPull:Start()
-			pullWarned = false
-			self:SetStage(2)
-		end
 	end
 end
 
