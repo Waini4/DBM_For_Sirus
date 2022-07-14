@@ -1079,7 +1079,7 @@ local addDefaultOptions, clearAllSpellBars
 					end
 				end
 				regenerate()
-				_G["DBM_GUI_OptionsFrame"]:DisplayFrame(panel.frame)
+				_G["DBM_GUI_OptionsFrame"]:DisplayFrame(changeoptions.frame)
 			end)
 
 			local version = area:CreateText("r"..Revision, nil, nil, GameFontDisableSmall, "RIGHT", 0)
@@ -1187,7 +1187,7 @@ local addDefaultOptions, clearAllSpellBars
 			end
 		end
 	end
-	
+
 -- end
 
 

@@ -1548,7 +1548,7 @@ function DBM:CreateProfile(name)
 	-- if DBTST then
 		-- DBTST:CreateProfile("DBMST")
 	-- end
-	
+
 	self:RepositionFrames()
 	self:AddMsg(L.PROFILE_CREATED:format(name))
 end
@@ -1613,7 +1613,7 @@ function DBM:DeleteProfile(name)
 	-- if DBTST then
 		-- DBTST:DeleteProfile(name, "DBMST")
 	-- end
-	
+
 	self:RepositionFrames()
 	self:AddMsg(L.PROFILE_DELETED:format(name))
 end
@@ -6505,7 +6505,7 @@ do
 		testSpecialWarning3:ScheduleVoice(60, "defensive")
 	end
 
-		
+
 end
 
 DBT:SetAnnounceHook(function(bar)
