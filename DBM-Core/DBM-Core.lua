@@ -1256,6 +1256,10 @@ do
 			onLoadCallbacks = nil
 			loadOptions(self)
 			DBT:LoadOptions("DBM")
+			-- DBT:LoadOptions("DBM")
+			-- if DBTST then
+			-- DBTST:LoadOptions("DBMST")
+			-- end
 			self.AddOns = {}
 			private:OnModuleLoad()
 			self.Arrow:LoadPosition()
@@ -1541,6 +1545,10 @@ function DBM:CreateProfile(name)
 	self.Options = DBM_AllSavedOptions[usedProfile]
 	-- rearrange position
 	DBT:CreateProfile("DBM")
+	-- if DBTST then
+		-- DBTST:CreateProfile("DBMST")
+	-- end
+	
 	self:RepositionFrames()
 	self:AddMsg(L.PROFILE_CREATED:format(name))
 end
@@ -1556,6 +1564,9 @@ function DBM:ApplyProfile(name)
 	self.Options = DBM_AllSavedOptions[usedProfile]
 	-- rearrange position
 	DBT:ApplyProfile("DBM")
+	-- if DBTST then
+		-- DBTST:ApplyProfile("DBMST")
+	-- end
 	self:RepositionFrames()
 	self:AddMsg(L.PROFILE_APPLIED:format(name))
 end
@@ -1573,6 +1584,9 @@ function DBM:CopyProfile(name)
 	self.Options = DBM_AllSavedOptions[usedProfile]
 	-- rearrange position
 	DBT:CopyProfile(name, "DBM", true)
+	-- if DBTST then
+		-- DBTST:CopyProfile(name, "DBMST", true)
+	-- end
 	self:RepositionFrames()
 	self:AddMsg(L.PROFILE_COPIED:format(name))
 end
@@ -1596,6 +1610,10 @@ function DBM:DeleteProfile(name)
 	end
 	-- rearrange position
 	DBT:DeleteProfile(name, "DBM")
+	-- if DBTST then
+		-- DBTST:DeleteProfile(name, "DBMST")
+	-- end
+	
 	self:RepositionFrames()
 	self:AddMsg(L.PROFILE_DELETED:format(name))
 end
@@ -6486,6 +6504,8 @@ do
 		testSpecialWarning3:Schedule(60, "Boom!")
 		testSpecialWarning3:ScheduleVoice(60, "defensive")
 	end
+
+		
 end
 
 DBT:SetAnnounceHook(function(bar)
@@ -6499,6 +6519,20 @@ DBT:SetAnnounceHook(function(bar)
 		return ("%s: %s  %d:%02d"):format(prefix, _G[bar.frame:GetName().."BarName"]:GetText(), floor(bar.timer / 60), bar.timer % 60)
 	end
 end)
+
+if DBTST then
+	DBTST:SetAnnounceHook(function(bar)
+		local prefix
+		if bar.color and bar.color.r == 1 and bar.color.g == 0 and bar.color.b == 0 then
+			prefix = L.HORDE or FACTION_HORDE
+		elseif bar.color and bar.color.r == 0 and bar.color.g == 0 and bar.color.b == 1 then
+			prefix = L.ALLIANCE or FACTION_ALLIANCE
+		end
+		if prefix then
+			return ("%s: %s  %d:%02d"):format(prefix, _G[bar.frame:GetName().."BarName"]:GetText(), floor(bar.timer / 60), bar.timer % 60)
+		end
+	end)
+end
 
 -- An anti spam function to throttle spammy events (e.g. SPELL_AURA_APPLIED on all group members)
 -- @param time the time to wait between two events (optional, default 2.5 seconds)

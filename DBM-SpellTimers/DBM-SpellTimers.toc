@@ -8,20 +8,19 @@
 ## Title-frFR:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff0055FFSpell Timers|r
 ## Title-ruRU:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff0055FFТаймеры заклинаний|r
 ## Notes: Creates bars for Long term cooldowns or durations
+## Notes-ruRU : Тут должен был быть какой то текст но мне впадлу было переводить
 ## LoadOnDemand: 0
-## RequiredDeps: DBM-Core
+# RequiredDeps: DBM-Core
 ## DefaultState: enabled
-## Author: Nitram and Tandanu
+## Author: Nitram and Tandanu, fxpw
 ## URL: http://www.deadlybossmods.com
 ## SavedVariables: DBM_SpellTimers_Settings
 
-localization.en.lua
-localization.de.lua
-localization.cn.lua
-localization.ru.lua
-localization.tw.lua
-localization.kr.lua
-localization.es.lua
-localization.fr.lua
 
-SpellTimers.lua
+SpellTimersCore.lua
+localization.en.lua
+localization.ru.lua
+
+
+
+SpellTimersUI.lua

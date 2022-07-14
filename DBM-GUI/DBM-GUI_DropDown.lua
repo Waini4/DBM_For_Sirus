@@ -322,6 +322,10 @@ function DBM_GUI:CreateDropdown(title, values, vartype, var, callfunc, width, he
 		dropdown:SetScript("OnShow", function()
 			dropdown:SetSelectedValue(DBT.Options[var])
 		end)
+	elseif vartype and vartype == "DBTST" then
+		dropdown:SetScript("OnShow", function()
+			dropdown:SetSelectedValue(DBTST.Options[var])
+		end)
 	elseif vartype then
 		dropdown:SetScript("OnShow", function()
 			dropdown:SetSelectedValue(vartype.Options[var])

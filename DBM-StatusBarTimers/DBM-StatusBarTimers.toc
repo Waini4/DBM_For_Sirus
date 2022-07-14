@@ -17,8 +17,8 @@
 ## SavedVariables: DBT_AllPersistentOptions
 ## LoadOnDemand: 0
 ## DefaultState: enabled
-## Author: MysticalOS, QartemisT
-## Version: 9.2.14_alpha
+## Author: MysticalOS, QartemisT, fxpw
+## Version: 9.2.2
 ## X-Website: https://deadlybossmods.com
 
 DBT.lua
