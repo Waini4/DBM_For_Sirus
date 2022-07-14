@@ -4,6 +4,7 @@ local CL  = DBM_COMMON_L
 
 mod:SetRevision(("20210501000000"):sub(12, -3))
 mod:SetCreatureID(70010)
+mod:SetMinCombatTime(10)
 
 mod:RegisterCombat("combat", 70010)
 
@@ -38,9 +39,9 @@ local warnCreatSoon    = mod:NewSoonAnnounce(317278, 2)
 local warnDistruptSoon = mod:NewSoonAnnounce(317279, 2)
 
 local specWarnCrushingEarthquake = mod:NewSpecialWarningMove(317624, nil, nil, nil, 1, 2)
-local specWarnEarth              = mod:NewSpecialWarningSwitch(317266, "-Healer|-Tank", nil, nil, 1, 2)
-local specWarnCreat              = mod:NewSpecialWarningSwitch(317278, "-Healer|-Tank", nil, nil, 1, 2)
-local specWarnDistrupt           = mod:NewSpecialWarningSwitch(317279, "-Healer|-Tank", nil, nil, 1, 2)
+local specWarnEarth              = mod:NewSpecialWarningSwitch(317266, "-Healer", nil, nil, 1, 2)
+local specWarnCreat              = mod:NewSpecialWarningSwitch(317278, "-Healer", nil, nil, 1, 2)
+local specWarnDistrupt           = mod:NewSpecialWarningSwitch(317279, "-Healer", nil, nil, 1, 2)
 
 local timerCDEarth    = mod:NewCDTimer(60, 317266, nil, nil, nil, 3)
 local timerCDCreat    = mod:NewCDTimer(60, 317278, nil, nil, nil, 3)
@@ -49,7 +50,7 @@ local timerzemio      = mod:NewCDTimer(90, 317624, nil, nil, nil, 4)
 
 mod:AddTimerLine(DBM_COMMON_L.INTERMISSION)
 
-local timerAcceptanceNature = mod:NewCastTimer(60, 317275)
+local timerAcceptanceNature = mod:NewCastTimer(62, 317275)
 
 function mod:OnCombatStart(_)
 	DBM:FireCustomEvent("DBM_EncounterStart", 70010, "Norigorn")
@@ -82,11 +83,11 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(317275) then
 		timerAcceptanceNature:Start()
 		warnEarthSoon:Cancel()
-		timerCDEarth:Cancel()
+		timerCDEarth:Stop()
 		warnCreatSoon:Cancel()
-		timerCDCreat:Cancel()
+		timerCDCreat:Stop()
 		warnDistruptSoon:Cancel()
-		timerCDDistrupt:Cancel()
+		timerCDDistrupt:Stop()
 	end
 end
 

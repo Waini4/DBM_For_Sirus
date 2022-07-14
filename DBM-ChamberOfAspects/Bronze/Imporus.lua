@@ -64,7 +64,7 @@ function mod:OnCombatStart(delay)
 		specWarnnRezonansSoon:Schedule(22)
 	end
 	if self.Options.RangeFrame then
-		DBM.RangeCheck:Show(10)
+		DBM.RangeCheck:Show(8)
 	end
 end
 

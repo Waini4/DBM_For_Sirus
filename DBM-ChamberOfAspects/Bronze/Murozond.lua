@@ -271,9 +271,9 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 313115 then
 		warnBred:Show(args.destName, args.amount or 1)
 		timerBred:Start(args.destName)
-	elseif spellId == 313129 and args:IsPlayer() and self.Options.AnnounceFear then
+	elseif spellId == 313129 and args:IsPlayer() and self.Options.AnnounceOrb then
 		specwarnCern:Schedule(1)
-	elseif spellId == 313130 and args:IsPlayer() and self.Options.AnnounceFear then
+	elseif spellId == 313130 and args:IsPlayer() and self.Options.AnnounceOrb then
 		specwarnBelay:Schedule(1)
 		-------------HM----------------
 	elseif spellId == 317262 then
