@@ -342,10 +342,8 @@ function mod:UNIT_HEALTH(uId, sourceGUID)
 		warned_kill2 = true
 		specwarnHp2:Show()
 	end
-	if self.vb.phase == 3 and not warned_kill2 and
-		(
-		(uid == 50716 and DBM:GetBossHP(50716) <= 1) or
-			(uid == 50715 and DBM:GetBossHP(50715) <= 98)) then
+	if self.vb.phase == 3 and not warned_kill2 and(
+			(uid == 50716 and DBM:GetBossHP(50716) <= 1) or	(uid == 50715 and DBM:GetBossHP(50715) <= 98)) then
 		warned_kill2 = true
 		specwarnHp3:Show()
 	end
