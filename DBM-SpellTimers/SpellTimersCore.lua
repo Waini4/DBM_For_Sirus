@@ -566,6 +566,9 @@ do
 		if small or small == nil then
 			self:CreateBar(20, "Move1", "Interface\\Icons\\Spell_Nature_WispSplode", nil, true):SetText(DBM_CORE_L.MOVABLE_BAR)
 		end
+		if large or large == nil then
+			self:CreateBar(20, "Move2", "Interface\\Icons\\Spell_Nature_WispSplode", true):SetText(DBM_CORE_L.MOVABLE_BAR)
+		end
 		updateClickThrough(self, false)
 		self.movable = true
 	end

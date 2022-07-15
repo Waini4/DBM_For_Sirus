@@ -218,6 +218,25 @@ local function creategui()
 		end
 	end
 	maindummybar:ApplyStyle()
+	local maindummybarHuge = DBTST:CreateDummyBar(nil, nil, LGUI.LARGE)
+	maindummybarHuge.frame:SetParent(BarSetup.frame)
+	maindummybarHuge.frame:SetPoint("TOP", color2text, "LEFT", 10, 35)
+	maindummybarHuge.frame:SetScript("OnUpdate", function(_, elapsed)
+		maindummybarHuge:Update(elapsed)
+	end)
+	maindummybarHuge.enlarged = true
+	maindummybarHuge.dummyEnlarge = true
+	do
+		-- Little hook to prevent this bar from changing size/scale
+		local old = maindummybarHuge.ApplyStyle
+		function maindummybarHuge:ApplyStyle(...)
+			old(self, ...)
+			self.frame:SetWidth(183)
+			self.frame:SetScale(0.9)
+			_G[self.frame:GetName() .. "Bar"]:SetWidth(183)
+		end
+	end
+	maindummybarHuge:ApplyStyle()
 
 	local Styles = {
 		{
@@ -465,6 +484,76 @@ local function creategui()
 		resetDBTSTValueToDefault(AlphaSlider, "Alpha")
 	end)
 
+	local BarSetupHuge = BarSetupPanel:CreateArea(LGUI.AreaTitle_BarSetupHuge)
+
+	BarSetupHuge:CreateCheckButton(LGUI.EnableHugeBar, true, nil, nil, "HugeBarsEnabled")
+
+	local hugedummybar = DBTST:CreateDummyBar(nil, nil, LGUI.LARGE)
+	hugedummybar.frame:SetParent(BarSetupHuge.frame)
+	hugedummybar.frame:SetPoint("BOTTOM", BarSetupHuge.frame, "TOP", 0, -50)
+	hugedummybar.frame:SetScript("OnUpdate", function(_, elapsed)
+		hugedummybar:Update(elapsed)
+	end)
+	hugedummybar.enlarged = true
+	hugedummybar.dummyEnlarge = true
+	hugedummybar:ApplyStyle()
+
+	local ExpandUpwardsLarge = BarSetupHuge:CreateCheckButton(LGUI.ExpandUpwards, false, nil, nil, "ExpandUpwardsLarge")
+	ExpandUpwardsLarge:SetPoint("TOPLEFT", hugedummybar.frame, "BOTTOMLEFT", -50, -15)
+
+	local FillUpBarsLarge = BarSetupHuge:CreateCheckButton(LGUI.FillUpBars, false, nil, nil, "FillUpLargeBars")
+	FillUpBarsLarge:SetPoint("TOPLEFT", hugedummybar.frame, "BOTTOMLEFT", 100, -15)
+
+	local HugeBarWidthSlider = BarSetupHuge:CreateSlider(LGUI.Slider_BarWidth, 100, 400, 1, 310)
+	HugeBarWidthSlider:SetPoint("TOPLEFT", BarSetupHuge.frame, "TOPLEFT", 20, -105)
+	HugeBarWidthSlider:SetValue(DBTST.Options.HugeWidth)
+	HugeBarWidthSlider:HookScript("OnValueChanged", createDBTSTOnValueChangedHandler("HugeWidth"))
+
+	local HugeBarHeightSlider = BarSetupHuge:CreateSlider(LGUI.Bar_Height, 5, 35, 1, 310)
+	HugeBarHeightSlider:SetPoint("TOPLEFT", HugeBarWidthSlider, "BOTTOMLEFT", 0, -10)
+	HugeBarHeightSlider:SetValue(DBTST.Options.HugeHeight)
+	HugeBarHeightSlider:HookScript("OnValueChanged", createDBTSTOnValueChangedHandler("HugeHeight"))
+
+	local HugeBarScaleSlider = BarSetupHuge:CreateSlider(LGUI.Slider_BarScale, 0.75, 2, 0.05, 310)
+	HugeBarScaleSlider:SetPoint("TOPLEFT", HugeBarHeightSlider, "BOTTOMLEFT", 0, -10)
+	HugeBarScaleSlider:SetValue(DBTST.Options.HugeScale)
+	HugeBarScaleSlider:HookScript("OnValueChanged", createDBTSTOnValueChangedHandler("HugeScale"))
+
+	local SortDropDownLarge = BarSetupHuge:CreateDropdown(LGUI.BarSort, Sorts, "DBTST", "HugeSort", function(value)
+		DBTST:SetOption("HugeSort", value)
+	end)
+	SortDropDownLarge:SetPoint("TOPLEFT", HugeBarScaleSlider, "BOTTOMLEFT", -20, -25)
+
+	local HugeBarOffsetXSlider = BarSetupHuge:CreateSlider(LGUI.Slider_BarOffSetX, -50, 50, 1, 120)
+	HugeBarOffsetXSlider:SetPoint("TOPLEFT", BarSetupHuge.frame, "TOPLEFT", 350, -105)
+	HugeBarOffsetXSlider:SetValue(DBTST.Options.HugeBarXOffset)
+	HugeBarOffsetXSlider:HookScript("OnValueChanged", createDBTSTOnValueChangedHandler("HugeBarXOffset"))
+	HugeBarOffsetXSlider.myheight = 0
+
+	local HugeBarOffsetYSlider = BarSetupHuge:CreateSlider(LGUI.Slider_BarOffSetY, -5, 35, 1, 120)
+	HugeBarOffsetYSlider:SetPoint("TOPLEFT", HugeBarOffsetXSlider, "BOTTOMLEFT", 0, -10)
+	HugeBarOffsetYSlider:SetValue(DBTST.Options.HugeBarYOffset)
+	HugeBarOffsetYSlider:HookScript("OnValueChanged", createDBTSTOnValueChangedHandler("HugeBarYOffset"))
+	HugeBarOffsetYSlider.myheight = 0
+
+	local HugeAlphaSlider = BarSetupHuge:CreateSlider(LGUI.Bar_Alpha, 0.1, 1, 0.1, 120)
+	HugeAlphaSlider:SetPoint("TOPLEFT", HugeBarOffsetYSlider, "BOTTOMLEFT", 0, -10)
+	HugeAlphaSlider:SetValue(DBTST.Options.HugeAlpha)
+	HugeAlphaSlider:HookScript("OnValueChanged", createDBTSTOnValueChangedHandler("HugeAlpha"))
+	HugeAlphaSlider.myheight = 0
+
+	local hugeBarResetbutton = BarSetupHuge:CreateButton(LGUI.SpecWarn_ResetMe, 120, 16)
+	hugeBarResetbutton:SetPoint("BOTTOMRIGHT", BarSetupHuge.frame, "BOTTOMRIGHT", -2, 4)
+	hugeBarResetbutton:SetNormalFontObject(GameFontNormalSmall)
+	hugeBarResetbutton:SetHighlightFontObject(GameFontNormalSmall)
+	hugeBarResetbutton:SetScript("OnClick", function()
+		resetDBTSTValueToDefault(HugeBarWidthSlider, "HugeWidth")
+		resetDBTSTValueToDefault(HugeBarHeightSlider, "HugeHeight")
+		resetDBTSTValueToDefault(HugeBarScaleSlider, "HugeScale")
+		resetDBTSTValueToDefault(HugeBarOffsetXSlider, "HugeBarXOffset")
+		resetDBTSTValueToDefault(HugeBarOffsetYSlider, "HugeBarYOffset")
+		resetDBTSTValueToDefault(HugeAlphaSlider, "HugeAlpha")
+	end)
 	---------------------------------------------------------------------------------------------2 subtab
 	--[[BarSetupPanel = DBM_GUI.SpellTimersMainTab:CreateNewPanel(LGUI.Panel_ColorByType, "option")
 
