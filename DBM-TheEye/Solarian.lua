@@ -347,7 +347,7 @@ function mod:UNIT_TARGET()
 	end
 end
 
-function mod:SWING_DAMAGE(sourceGUID, sourceName, sourceFlags, destGUID)
+function mod:SWING_DAMAGE(sourceGUID, sourceName, _, destGUID)
 	if self:GetCIDFromGUID(sourceGUID) == 3410 and destGUID == UnitGUID("player") then
 		if sourceName ~= UnitName("player") then
 			if self.Options.Zrec then
