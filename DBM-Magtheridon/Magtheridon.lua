@@ -72,6 +72,17 @@ function mod:OnCombatEnd(wipe)
 	shake = 1
 end
 
+local cubsTimers = {
+	[2] = 74,
+	[3] = 67,
+	[4] = 67,
+	[5] = 74,
+	[6] = 70,
+	[7] = 74,
+	[8] = 74 --этот сделан на угад остальные по стриму [https://www.twitch.tv/videos/1303324658?t]
+}
+
+
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(305158, 305159, 305160) then
 		warningNovaCast:Show()
@@ -85,26 +96,8 @@ function mod:SPELL_CAST_START(args)
 		timerDevastatingStrikeCD:Start()
 	elseif args:IsSpellID(30616) then -- таймер кубов на уровне костылей
 		specWarnNova:Show(args.sourceName)
-		if cub == 2 then
-			timerNovaCD:Start(74)
-			cub = cub + 1
-		elseif cub == 3 then
-			timerNovaCD:Start(67)
-			cub = cub + 1
-		elseif cub == 4 then
-			timerNovaCD:Start(67)
-			cub = cub + 1
-		elseif cub == 5 then
-			timerNovaCD:Start(74)
-			cub = cub + 1
-		elseif cub == 6 then
-			timerNovaCD:Start(70)
-			cub = cub + 1
-		elseif cub == 7 then
-			timerNovaCD:Start(74)
-			cub = cub + 1
-		elseif cub == 8 then --этот сделан на угад остальные по стриму [https://www.twitch.tv/videos/1303324658?t]
-			timerNovaCD:Start(74)
+		if cub >= 2 then
+			timerNovaCD:Start(cubsTimers[cub])
 			cub = cub + 1
 		end
 	elseif args:IsSpellID(30510) then --таймер пула
@@ -123,27 +116,21 @@ function mod:SPELL_DAMAGE(_, _, _, _, _, destFlags, spellId) -- слакер п�
 	end
 end
 
+local shakeCDTimers = {
+	[1] = 55,
+	[2] = 37,
+	[3] = 23,
+	[4] = 50,
+	[5] = 55,
+	[6] = 55
+}
+
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(30572) then -- Сотрясение оказывается разные таймера
-		if shake == 1 then
-			timerShakeCD:Start()
-			shake = shake + 1
-		elseif shake == 2 then
-			timerShakeCD:Start(37)
-			shake = shake + 1
-		elseif shake == 3 then
-			timerShakeCD:Start(23)
-			shake = shake + 1
-		elseif shake == 4 then
-			timerShakeCD:Start(50)
-			shake = shake + 1
-		elseif shake == 5 then
-			timerShakeCD:Start()
-			shake = shake + 1
-		elseif shake == 6 then
-			timerShakeCD:Start()
-			shake = shake + 1
-		end
+
+		timerShakeCD:Start(shake < 7 and shakeCDTimers[shake] or 55)
+		shake = shake + 1
+
 	elseif args:IsSpellID(305166) then
 		handTargets[#handTargets + 1] = args.destName
 		if #handTargets >= 3 then
@@ -163,21 +150,27 @@ function mod:SPELL_AURA_APPLIED(args)
 end
 
 function mod:UNIT_HEALTH(uId)
-	if not warned_P2 and self:GetUnitCreatureId(uId) == 17257 and DBM:GetBossHP(17257) <= 53 and self:IsHeroic() then
-		warned_P2 = true
-		self:NewPrePhaseAnnounce(2)
-	elseif not warned_P3 and self:GetUnitCreatureId(uId) == 17257 and DBM:GetBossHP(17257) <= 50 and self:IsHeroic() then
-		warned_P3 = true
-		self:NewPhaseAnnounce(2)
-		self:SetStage(3)
-	elseif not warned_P3 and self:GetUnitCreatureId(uId) == 17257 and DBM:GetBossHP(17257) <= 33 and self:IsNormal() then
-		warned_P2 = true
-		self:NewPrePhaseAnnounce(3)
-	elseif not warned_P3 and self:GetUnitCreatureId(uId) == 17257 and DBM:GetBossHP(17257) <= 30 and self:IsNormal() then
-		warned_P3 = true
-		self:SetStage(3)
-		self:NewPhaseAnnounce(3)
-		timerShakeCD:Start(10)
+	if self:GetUnitCreatureId(uId) == 17257 then
+		if self:IsHeroic() then
+			if not warned_P2  and DBM:GetBossHP(17257) <= 53 then
+				warned_P2 = true
+				self:NewPrePhaseAnnounce(2)
+			elseif not warned_P3 and DBM:GetBossHP(17257) <= 50 then
+				warned_P3 = true
+				self:NewPhaseAnnounce(2)
+				self:SetStage(3)
+			end
+		elseif self:IsNormal() then
+			 if  not warned_P3 and DBM:GetBossHP(17257) <= 33 then
+				warned_P2 = true
+				self:NewPrePhaseAnnounce(3)
+			elseif not warned_P3 and DBM:GetBossHP(17257) <= 30 then
+				warned_P3 = true
+				self:SetStage(3)
+				self:NewPhaseAnnounce(3)
+				timerShakeCD:Start(10)
+			end
+		end
 	end
 end
 

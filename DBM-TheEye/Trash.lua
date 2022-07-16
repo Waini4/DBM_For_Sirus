@@ -7,7 +7,7 @@ mod:SetCreatureID(20045)
 mod:RegisterCombat("combat")
 mod:RegisterCombat("yell", L.YellPull)
 
-mod:RegisterEvents(
+mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS",
 	"SPELL_AURA_REMOVED",
 	"SPELL_AURA_APPLIED 37135",
