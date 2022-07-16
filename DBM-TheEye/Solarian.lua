@@ -347,11 +347,11 @@ function mod:UNIT_TARGET()
 	end
 end
 
-function mod:SWING_DAMAGE(args)
-	if args:GetDestCreatureID() == 3410 and args:IsSrcTypePlayer() then
-		if args.sourceName ~= UnitName("player") then
+function mod:SWING_DAMAGE(sourceGUID, sourceName, sourceFlags, destGUID)
+	if self:GetCIDFromGUID(sourceGUID) == 3410 and destGUID == UnitGUID("player") then
+		if sourceName ~= UnitName("player") then
 			if self.Options.Zrec then
-				DBM.Arrow:ShowRunTo(args.sourceName, 0, 0)
+				DBM.Arrow:ShowRunTo(sourceName, 0, 0)
 			end
 		end
 	end
