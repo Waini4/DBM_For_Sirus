@@ -330,14 +330,12 @@ end]]
 
 function mod:UNIT_HEALTH(uId, sourceGUID)
 	local uid = self:GetUnitCreatureId(uId)
-	if self.vb.phase == 1 and not warned_kill1 and uid == 50702 and
-		DBM:GetBossHP(50702) <= 73 then
+	if self.vb.phase == 1 and not warned_kill1 and uid == 50702 and DBM:GetBossHP(50702) <= 73 then
 		mod:SetStage(2)
 		warned_kill1 = true
 		specwarnHp1:Show()
 	end
-	if self.vb.phase == 2 and not warned_kill2 and uid == 50702 and
-		DBM:GetBossHP(50702) <= 43 then
+	if self.vb.phase == 2 and not warned_kill2 and uid == 50702 and DBM:GetBossHP(50702) <= 43 then
 		mod:SetStage(3)
 		warned_kill2 = true
 		specwarnHp2:Show()
