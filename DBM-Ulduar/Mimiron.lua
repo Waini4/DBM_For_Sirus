@@ -398,6 +398,8 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(_, spellName)
 			timerRocketStrikeCD:Stop()
 			timerP2toP3:Start()
 		elseif self.vb.phase == 4 then
+			timerNextFlames:Stop()
+			timerNextFlames:Start()
 			timerP3toP4:Start()
 			if self.vb.hardmode then
 				timerNextFrostBomb:Start(32)
