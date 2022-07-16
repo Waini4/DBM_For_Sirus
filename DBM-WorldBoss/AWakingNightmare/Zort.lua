@@ -114,6 +114,7 @@ function mod:OnCombatStart(delay)
 	self.vb.SveazIcons = 7
 	timerkik:Start(-delay)
 	timerShkval:Start(-delay)
+	Trees_num = 1
 end
 
 function mod:OnCombatEnd(wipe)
@@ -125,6 +126,7 @@ function mod:OnCombatEnd(wipe)
 		DBM.InfoFrame:Hide()
 	end
 	DBM.BossHealth:Clear()
+	-- Trees_num = 1
 end
 
 function mod:SPELL_CAST_START(args)
@@ -328,24 +330,20 @@ do
 	end
 end]]
 
-function mod:UNIT_HEALTH(uId, sourceGUID)
-	local uid = self:GetUnitCreatureId(uId)
-	if self.vb.phase == 1 and not warned_kill1 and uid == 50702 and
-		DBM:GetBossHP(50702) <= 0.73 then
+function mod:UNIT_HEALTH(guid)
+	local uid = self:GetUnitCreatureId(guid)
+	if self.vb.phase == 1 and not warned_kill1 and uid == 50702 and DBM:GetBossHP(50702) <= 73 then
 		mod:SetStage(2)
 		warned_kill1 = true
 		specwarnHp1:Show()
 	end
-	if self.vb.phase == 2 and not warned_kill2 and uid == 50702 and
-		DBM:GetBossHP(50702) <= 0.43 then
+	if self.vb.phase == 2 and not warned_kill2 and uid == 50702 and DBM:GetBossHP(50702) <= 43 then
 		mod:SetStage(3)
 		warned_kill2 = true
 		specwarnHp2:Show()
 	end
-	if self.vb.phase == 3 and not warned_kill2 and
-		(
-		(uid == 50716 and DBM:GetBossHP(50716) <= 0.01) or
-			(uid == 50715 and DBM:GetBossHP(50715) <= 0.98)) then
+	if self.vb.phase == 3 and not warned_kill2 and(
+			(uid == 50716 and DBM:GetBossHP(50716) <= 1) or	(uid == 50715 and DBM:GetBossHP(50715) <= 98)) then
 		warned_kill2 = true
 		specwarnHp3:Show()
 	end
@@ -382,25 +380,29 @@ mod:RegisterOnUpdateHandler(function(self)
 			local targetGUID = UnitGUID(target)
 
 			if not Trees[targetGUID] then
-				Trees[targetGUID] = L.Tree .. " №" .. Trees_num
-				do
-					local last = 100
-					local function getTreesPercent()
-						local trackingGUID = targetGUID
-						for uId in DBM:GetGroupMembers() do
-							local unitId = uId .. "target"
-							if trackingGUID == UnitGUID(unitId) and mod:GetCIDFromGUID(trackingGUID) == 50707 then
-								last = math.floor(UnitHealth(unitId) / UnitHealthMax(unitId) * 100)
-								Trees_HP[trackingGUID] = last
-								return last
+				if targetGUID then
+					Trees[targetGUID] = L.Tree .. " №" .. Trees_num
+					do
+						local last = 100
+						local function getTreesPercent()
+							local trackingGUID = targetGUID
+							for uId2 in DBM:GetGroupMembers() do
+								local unitId = uId2 .. "target"
+								if trackingGUID == UnitGUID(unitId) and mod:GetCIDFromGUID(trackingGUID) == 50707 then
+									last = math.floor(UnitHealth(unitId) / UnitHealthMax(unitId) * 100)
+									if trackingGUID then
+										Trees_HP[trackingGUID] = last
+										return last
+									end
+								end
 							end
+							return Trees_HP[trackingGUID]
 						end
-						return Trees_HP[trackingGUID]
-					end
 
-					DBM.BossHealth:AddBoss(getTreesPercent, Trees[targetGUID])
+						DBM.BossHealth:AddBoss(getTreesPercent, Trees[targetGUID])
+					end
+					Trees_num = Trees_num + 1
 				end
-				Trees_num = Trees_num + 1
 			end
 		end
 	end

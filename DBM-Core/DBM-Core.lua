@@ -488,6 +488,7 @@ local GetActiveTalentGroup = GetActiveTalentGroup
 local UnitDetailedThreatSituation = UnitDetailedThreatSituation
 local UnitIsPartyLeader, UnitIsRaidOfficer = UnitIsPartyLeader, UnitIsRaidOfficer
 local PlaySoundFile, PlaySound = PlaySoundFile, PlaySound
+local GetMapInfo, GetCurrentMapDungeonLevel, DungeonUsesTerrainMap, GetPlayerMapPosition, SetMapToCurrentZone = GetMapInfo, GetCurrentMapDungeonLevel, DungeonUsesTerrainMap, GetPlayerMapPosition, SetMapToCurrentZone
 
 local SendAddonMessage = SendAddonMessage
 
@@ -6597,11 +6598,20 @@ function DBM:RegisterMapSize(zone, ...)
 	end
 end
 
-function DBM:GetMapSizes()
---	if not currentSizes then
-		DBM:UpdateMapSizes()
---	end
---	return currentSizes
+-- function DBM:GetMapSizes()
+-- --	if not currentSizes then
+-- 		DBM:UpdateMapSizes()
+-- --	end
+-- --	return currentSizes
+-- end
+
+function DBM:GetMapSize()
+	local mapName = GetMapInfo()
+	local level = GetCurrentMapDungeonLevel()
+	local usesTerrainMap = DungeonUsesTerrainMap()
+	level = usesTerrainMap and level - 1 or level
+	local dims = self.MapSizes[mapName] and self.MapSizes[mapName][level]
+	return dims[1], dims[2]
 end
 
 --------------------
