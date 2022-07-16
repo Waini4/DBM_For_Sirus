@@ -386,8 +386,8 @@ mod:RegisterOnUpdateHandler(function(self)
 						local last = 100
 						local function getTreesPercent()
 							local trackingGUID = targetGUID
-							for uId in DBM:GetGroupMembers() do
-								local unitId = uId .. "target"
+							for uId2 in DBM:GetGroupMembers() do
+								local unitId = uId2 .. "target"
 								if trackingGUID == UnitGUID(unitId) and mod:GetCIDFromGUID(trackingGUID) == 50707 then
 									last = math.floor(UnitHealth(unitId) / UnitHealthMax(unitId) * 100)
 									if trackingGUID then
