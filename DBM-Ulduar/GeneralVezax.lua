@@ -43,7 +43,7 @@ local timerLifeLeechCD         = mod:NewCDTimer(36, 312974, nil, nil, nil, 3)
 
 mod:AddSetIconOption("SetIconOnShadowCrash", 312978, true, false, { 8 })
 mod:AddSetIconOption("SetIconOnLifeLeach", 312974, true, false, { 7 })
-mod:AddBoolOption("CrashArrow")
+mod:AddBoolOption("CrashArrow", 62660, true)
 
 mod:AddTimerLine(DBM_CORE_L.HARD_MODE)
 local specWarnAnimus = mod:NewSpecialWarningSwitch(63145, nil, nil, nil, 1, 2)
@@ -62,23 +62,19 @@ function mod:ShadowCrashTarget(targetname, uId)
 		specWarnShadowCrash:Show()
 		specWarnShadowCrash:Play("runaway")
 		yellShadowCrash:Yell()
-	elseif targetname then
+	elseif self:CheckNearby(11, targetname) then
+		specWarnShadowCrashNear:Show(targetname)
+		specWarnShadowCrashNear:Play("runaway")
 		if uId then
-			local inRange = CheckInteractDistance(uId, 2)
 			local x, y = GetPlayerMapPosition(uId)
 			if x == 0 and y == 0 then
 				SetMapToCurrentZone()
 				x, y = GetPlayerMapPosition(uId)
 			end
-			if inRange then
-				specWarnShadowCrashNear:Show(targetname)
-				specWarnShadowCrashNear:Play("runaway")
-				if self.Options.CrashArrow then
-					DBM.Arrow:ShowRunAway(x, y, 15, 5)
-				end
-			else
-				warnShadowCrash:Show(targetname)
+			if self.Options.CrashArrow then
+				DBM.Arrow:ShowRunAway(x, y, 15, 5)
 			end
+			warnShadowCrash:Show(targetname)
 		end
 	end
 end
@@ -111,8 +107,7 @@ function mod:SPELL_CAST_START(args)
 		specWarnSearingFlames:Play("kick" .. kickCount .. "r")
 		timerSearingFlamesCast:Start()
 	elseif spellId == 312981 or spellId == 62662 then
-		local tanking, status = UnitDetailedThreatSituation("player", "boss1")
-		if tanking or (status == 3) then --Player is current target
+		if self:IsTanking("player", "boss1", nil, true) then
 			specWarnSurgeDarkness:Show()
 			specWarnSurgeDarkness:Play("defensive")
 		end
