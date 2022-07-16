@@ -191,8 +191,8 @@ local KolTargets = {}
 local warned_preP1 = false
 local warned_preP2 = false
 
-mod:AddBoolOption("Zrec")
-mod:AddBoolOption("RangeFrame", true)
+mod:AddBoolOption("Zrec", true)
+-- mod:AddBoolOption("RangeFrame", true)
 
 mod.vb.Fear = 0
 
@@ -347,11 +347,11 @@ function mod:UNIT_TARGET()
 	end
 end
 
-function mod:SWING_DAMAGE(sourceGUID, sourceName, _, destGUID)
-	if self:GetCIDFromGUID(sourceGUID) == 3410 and destGUID == UnitGUID("player") then
-		if sourceName ~= UnitName("player") then
+function mod:SWING_DAMAGE(_, _, sourceFlags, destGUID, destName)
+	if self:GetCIDFromGUID(destGUID) == 3410 and bit.band(sourceFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 then
+		if destName ~= UnitName("player") then
 			if self.Options.Zrec then
-				DBM.Arrow:ShowRunTo(sourceName, 0, 0)
+				DBM.Arrow:ShowRunTo(destName, 0, 0)
 			end
 		end
 	end
