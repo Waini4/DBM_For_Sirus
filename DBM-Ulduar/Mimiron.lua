@@ -374,7 +374,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 end
 
 function mod:UNIT_SPELLCAST_SUCCEEDED(_, spellName)
-	--[[if spellId == 34098 then --ClearAllDebuffs
+	if spellName == GetSpellInfo(34098) then --ClearAllDebuffs
 		self.vb.phase = self.vb.phase + 1
 		if self.vb.phase == 2 then
 			timerNextShockblast:Stop()
@@ -405,8 +405,8 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(_, spellName)
 			timerRocketStrikeCD:Start(50)
 			timerNextDarkGlare:Start(59.8)
 			timerNextShockblast:Start(81)
-		end]]
-	if spellName == GetSpellInfo(64402) or spellName == GetSpellInfo(65034) then --P2, P4 Rocket Strike
+		end
+	elseif spellName == GetSpellInfo(64402) or spellName == GetSpellInfo(65034) then --P2, P4 Rocket Strike
 		specWarnRocketStrike:Show()
 		specWarnRocketStrike:Play("watchstep")
 		timerRocketStrikeCD:Start()
