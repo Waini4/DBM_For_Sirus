@@ -5,7 +5,7 @@ local CL = DBM_COMMON_L
 mod:SetRevision("20220609123000") -- fxpw check 20220609123000
 
 mod:SetCreatureID(19622)
-mod:RegisterCombat("combat", "yell", L.YellPhase1)
+mod:RegisterCombat("combat_yell", L.YellPhase1)
 mod:SetUsedIcons(5, 6, 7, 8)
 
 mod:RegisterEventsInCombat(
@@ -19,7 +19,10 @@ mod:RegisterEventsInCombat(
 
 mod:RegisterEvents(
 	"CHAT_MSG_RAID_BOSS_EMOTE",
-	"CHAT_MSG_MONSTER_YELL"
+	"CHAT_MSG_MONSTER_YELL",
+	"SPELL_CAST_SUCCESS 36797",
+	"SPELL_AURA_APPLIED_DOSE 36797",
+	"SPELL_AURA_APPLIED 36797"
 )
 
 
@@ -53,7 +56,7 @@ local timerBarrierCD = mod:NewCDTimer(70, 36815, nil, nil, nil, 3)
 local timerPhoenixCD = mod:NewCDTimer(60, 36723, nil, nil, nil, 1, nil, CL.DAMAGE_ICON)
 local timerMCCD      = mod:NewCDTimer(70, 36797, nil, nil, nil, 3)
 
-local timerGravity   = mod:NewTimer(32.5, "TimerGravity", "Interface\\Icons\\Spell_Magic_FeatherFall", nil, nil, 4, nil,
+local timerGravity   = mod:NewBuffFadesTimer(32.5, 35941, nil, nil, nil, 4, nil,
 	CL.DEADLY_ICON, nil, 2, 5) --- хм
 local timerGravityCD = mod:NewCDTimer(90, 35941, nil, nil, nil, 4, nil, CL.DEADLY_ICON, nil, 2, 4) -- обычка
 
