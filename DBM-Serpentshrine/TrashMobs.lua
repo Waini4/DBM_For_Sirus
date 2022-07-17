@@ -11,7 +11,7 @@ mod:SetCreatureID(21251)
 -- 	"UNIT_TARGET",
 -- 	"CHAT_MSG_LOOT"
 -- )
-mod:RegisterEventsInCombat(
+mod:RegisterEvents(
 	"SPELL_AURA_APPLIED 39042"
 -- "SPELL_CAST_START",
 -- "SPELL_CAST_SUCCESS",
