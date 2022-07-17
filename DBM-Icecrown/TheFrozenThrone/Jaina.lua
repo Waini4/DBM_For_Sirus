@@ -75,7 +75,7 @@ local iceMarkTargets = {}
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 3392, "Lady Jaina Proudmoore")
-	self.vb.phase = 1
+	self:SetStage(1)
 	ExplosiveIcons = 8
 	berserkTimer:Start()
 	timerSummonElemenCD:Start(27)
