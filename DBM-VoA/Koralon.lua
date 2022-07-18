@@ -1,5 +1,5 @@
-local mod	= DBM:NewMod("Koralon", "DBM-VoA")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Koralon", "DBM-VoA")
+local L   = mod:GetLocalizedStrings()
 
 local CL = DBM_COMMON_L
 mod:SetRevision("20220518110528")
@@ -13,25 +13,25 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED_DOSE 66721"
 )
 
-local warnBreath			= mod:NewSpellAnnounce(66665, 3)
-local warnMeteor			= mod:NewSpellAnnounce(66725, 3)
-local warnMeteorSoon		= mod:NewPreWarnAnnounce(66725, 5, 2)
-local warnBurningFury		= mod:NewStackAnnounce(66721, 2, nil, "Tank|Healer")
+local warnBreath      = mod:NewSpellAnnounce(66665, 3)
+local warnMeteor      = mod:NewSpellAnnounce(66725, 3)
+local warnMeteorSoon  = mod:NewPreWarnAnnounce(66725, 5, 2)
+local warnBurningFury = mod:NewStackAnnounce(66721, 2, nil, "Tank|Healer")
 
-local specWarnCinder		= mod:NewSpecialWarningMove(66684, nil, nil, nil, 1, 2)
+local specWarnCinder = mod:NewSpecialWarningMove(66684, nil, nil, nil, 1, 2)
 
-local timerNextMeteor		= mod:NewNextTimer(47, 66725, nil, nil, nil, 5, nil, CL.TANK_ICON)
-local timerNextBurningFury	= mod:NewNextTimer(20, 66721, nil, nil, nil, 5, nil, CL.TANK_ICON..CL.HEALER_ICON)
-local timerBreath			= mod:NewBuffActiveTimer(4.5, 66665, nil, nil, nil, 2)
-local timerBreathCD			= mod:NewCDTimer(45, 66665, nil, nil, nil, 2)--Seems to variate, but 45sec cooldown looks like a good testing number to start.
+local timerNextMeteor      = mod:NewNextTimer(47, 66725, nil, nil, nil, 5, nil, CL.TANK_ICON)
+local timerNextBurningFury = mod:NewNextTimer(20, 66721, nil, nil, nil, 5, nil, CL.TANK_ICON .. "" .. CL.HEALER_ICON)
+local timerBreath          = mod:NewBuffActiveTimer(4.5, 66665, nil, nil, nil, 2)
+local timerBreathCD        = mod:NewCDTimer(45, 66665, nil, nil, nil, 2) --Seems to variate, but 45sec cooldown looks like a good testing number to start.
 
-local timerKoralonEnrage	= mod:NewBerserkTimer(300, nil, "KoralonEnrage")
+local timerKoralonEnrage = mod:NewBerserkTimer(300, nil, "KoralonEnrage")
 
 function mod:OnCombatStart(delay)
 	timerKoralonEnrage:Start(-delay)
 	timerNextMeteor:Start(-delay)
-	timerBreathCD:Start(12-delay)
-	warnMeteorSoon:Schedule(42-delay)
+	timerBreathCD:Start(12 - delay)
+	warnMeteorSoon:Schedule(42 - delay)
 	timerNextBurningFury:Start()
 end
 
@@ -56,4 +56,5 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerNextBurningFury:Start()
 	end
 end
+
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED

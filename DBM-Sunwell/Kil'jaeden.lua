@@ -1,5 +1,5 @@
-local mod	= DBM:NewMod("Kil", "DBM-Sunwell")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Kil", "DBM-Sunwell")
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20220518110528")
 mod:SetCreatureID(25315)
@@ -15,36 +15,36 @@ mod:RegisterEventsInCombat(
 	"CHAT_MSG_MONSTER_YELL"
 )
 
-local warnBloom			= mod:NewTargetAnnounce(45641, 2)
-local warnDarkOrb		= mod:NewAnnounce("WarnDarkOrb", 4, 45109)
-local warnDart			= mod:NewSpellAnnounce(45740, 3)
-local warnShield		= mod:NewSpellAnnounce(45848, 1)
-local warnBlueOrb		= mod:NewAnnounce("WarnBlueOrb", 1, 45109)
-local warnSpikeTarget	= mod:NewTargetAnnounce(46589, 3)
-local warnPhase2		= mod:NewPhaseAnnounce(2)
-local warnPhase3		= mod:NewPhaseAnnounce(3)
-local warnPhase4		= mod:NewPhaseAnnounce(4)
+local warnBloom       = mod:NewTargetAnnounce(45641, 2)
+local warnDarkOrb     = mod:NewAnnounce("WarnDarkOrb", 4, 45109)
+local warnDart        = mod:NewSpellAnnounce(45740, 3)
+local warnShield      = mod:NewSpellAnnounce(45848, 1)
+local warnBlueOrb     = mod:NewAnnounce("WarnBlueOrb", 1, 45109)
+local warnSpikeTarget = mod:NewTargetAnnounce(46589, 3)
+local warnPhase2      = mod:NewPhaseAnnounce(2)
+local warnPhase3      = mod:NewPhaseAnnounce(3)
+local warnPhase4      = mod:NewPhaseAnnounce(4)
 
-local specWarnSpike		= mod:NewSpecialWarningMove(46589)
-local yellSpike			= mod:NewYellMe(46589)
-local specWarnBloom		= mod:NewSpecialWarningYou(45641, nil, nil, nil, 1, 2)
-local yellBloom			= mod:NewYellMe(45641)
-local specWarnBomb		= mod:NewSpecialWarningMoveTo(46605, nil, nil, nil, 3, 2)--findshield
-local specWarnShield	= mod:NewSpecialWarningSpell(45848)
-local specWarnDarkOrb	= mod:NewSpecialWarning("SpecWarnDarkOrb", false)
-local specWarnBlueOrb	= mod:NewSpecialWarning("SpecWarnBlueOrb", false)
+local specWarnSpike   = mod:NewSpecialWarningMove(46589)
+local yellSpike       = mod:NewYellMe(46589)
+local specWarnBloom   = mod:NewSpecialWarningYou(45641, nil, nil, nil, 1, 2)
+local yellBloom       = mod:NewYellMe(45641)
+local specWarnBomb    = mod:NewSpecialWarningMoveTo(46605, nil, nil, nil, 3, 2) --findshield
+local specWarnShield  = mod:NewSpecialWarningSpell(45848)
+local specWarnDarkOrb = mod:NewSpecialWarning("SpecWarnDarkOrb", false)
+local specWarnBlueOrb = mod:NewSpecialWarning("SpecWarnBlueOrb", false)
 
-local timerBloomCD		= mod:NewCDTimer(20, 45641, nil, nil, nil, 2)
-local timerDartCD		= mod:NewCDTimer(20, 45740, nil, nil, nil, 2)--Targeted or aoe?
-local timerBomb			= mod:NewCastTimer(9, 46605, nil, nil, nil, 2, nil, DBM_COMMON_L.DEADLY_ICON)
-local timerBombCD		= mod:NewCDTimer(45, 46605, nil, nil, nil, 2, nil, DBM_COMMON_L.DEADLY_ICON)
-local timerSpike		= mod:NewCastTimer(28, 46680, nil, nil, nil, 3)
-local timerBlueOrb		= mod:NewTimer(37, "TimerBlueOrb", 45109, nil, nil, 5)
+local timerBloomCD = mod:NewCDTimer(20, 45641, nil, nil, nil, 2)
+local timerDartCD  = mod:NewCDTimer(20, 45740, nil, nil, nil, 2) --Targeted or aoe?
+local timerBomb    = mod:NewCastTimer(9, 46605, nil, nil, nil, 2, nil, DBM_COMMON_L.DEADLY_ICON)
+local timerBombCD  = mod:NewCDTimer(45, 46605, nil, nil, nil, 2, nil, DBM_COMMON_L.DEADLY_ICON)
+local timerSpike   = mod:NewCastTimer(28, 46680, nil, nil, nil, 3)
+local timerBlueOrb = mod:NewTimer(37, "TimerBlueOrb", 45109, nil, nil, 5)
 
-local berserkTimer		= mod:NewBerserkTimer(mod:IsTimewalking() and 600 or 900)
+--local berserkTimer		= mod:NewBerserkTimer(mod:IsTimewalking() and 600 or 900)
 
 mod:AddRangeFrameOption("12")
-mod:AddSetIconOption("BloomIcon", 45641, true, false, {4, 5, 6, 7, 8})
+mod:AddSetIconOption("BloomIcon", 45641, true, false, { 4, 5, 6, 7, 8 })
 
 local warnBloomTargets = {}
 local orbGUIDs = {}
@@ -62,7 +62,7 @@ function mod:OnCombatStart(delay)
 	table.wipe(orbGUIDs)
 	self.vb.bloomIcon = 8
 	self:SetStage(1)
-	berserkTimer:Start(-delay)
+	--berserkTimer:Start(-delay)
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Show()
 	end
@@ -166,7 +166,8 @@ function mod:SPELL_CAST_SUCCESS(args)
 end
 
 function mod:CHAT_MSG_MONSTER_YELL(msg)
-	if msg == L.OrbYell1 or msg:find(L.OrbYell1) or msg == L.OrbYell2 or msg:find(L.OrbYell2) or msg == L.OrbYell3 or msg:find(L.OrbYell3) or msg == L.OrbYell4 or msg:find(L.OrbYell4) then
+	if msg == L.OrbYell1 or msg:find(L.OrbYell1) or msg == L.OrbYell2 or msg:find(L.OrbYell2) or msg == L.OrbYell3 or
+		msg:find(L.OrbYell3) or msg == L.OrbYell4 or msg:find(L.OrbYell4) then
 		warnBlueOrb:Show()
 		specWarnBlueOrb:Show()
 	end

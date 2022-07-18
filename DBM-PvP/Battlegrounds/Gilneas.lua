@@ -1,9 +1,9 @@
-local mod	= DBM:NewMod("z916", "DBM-PvP", 2)
-local L			= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("z916", "DBM-PvP", 2)
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20200405141240")
 mod:SetZone(DBM_DISABLE_ZONE_DETECTION)
---[[
+
 mod:RegisterEvents(
 	"ZONE_CHANGED_NEW_AREA",
 	"CHAT_MSG_BG_SYSTEM_HORDE",
@@ -14,8 +14,8 @@ mod:RegisterEvents(
 )
 mod:RemoveOption("HealthFrame")
 
-local winTimer 		= mod:NewTimer(30, "TimerWin", "Interface\\Icons\\INV_Misc_PocketWatch_01")
-local capTimer 		= mod:NewTimer(63, "TimerCap", "Interface\\Icons\\Spell_Misc_HellifrePVPHonorHoldFavor")
+local winTimer = mod:NewTimer(30, "TimerWin", "Interface\\Icons\\INV_Misc_PocketWatch_01")
+local capTimer = mod:NewTimer(63, "TimerCap", "Interface\\Icons\\Spell_Misc_HellifrePVPHonorHoldFavor")
 
 local bgzone = false
 mod:AddBoolOption("ShowGilneasBasesToWin", false, nil, function()
@@ -34,9 +34,9 @@ local ResPerSec = {
 }
 
 local allyIcon = "IInterface\\Icons\\INV_BannerPVP_02.blp"
-local allyColor = {r = 0, g = 0, b = 1}
+local allyColor = { r = 0, g = 0, b = 1 }
 local hordeIcon = "Interface\\Icons\\INV_BannerPVP_01.blp"
-local hordeColor = {r = 1, g = 0, b = 0}
+local hordeColor = { r = 1, g = 0, b = 0 }
 
 local objectives = {
 	Lighthouse = 0,
@@ -69,7 +69,7 @@ end
 local function get_basecount()
 	local alliance = 0
 	local horde = 0
-	for k, v in pairs(objectives) do
+	for _, v in pairs(objectives) do
 		if v == 11 or v == 18 or v == 28 then
 			alliance = alliance + 1
 		elseif v == 10 or v == 20 or v == 30 then
@@ -80,7 +80,7 @@ local function get_basecount()
 end
 
 local function get_score()
-	if not bgzone then return 0,0 end
+	if not bgzone then return 0, 0 end
 	local AllyScore = tonumber(string.match((select(3, GetWorldStateUIInfo(1)) or ""), L.ScoreExpr)) or 0
 	local HordeScore = tonumber(string.match((select(3, GetWorldStateUIInfo(2)) or ""), L.ScoreExpr)) or 0
 	return AllyScore, HordeScore
@@ -93,6 +93,7 @@ do
 	function update_gametime()
 		gametime = time()
 	end
+
 	function get_gametime()
 		local systime = GetBattlefieldInstanceRunTime()
 		if systime > 0 then
@@ -126,6 +127,7 @@ local function Gilneas_Initialize()
 		end
 	end
 end
+
 mod.OnInitialize = Gilneas_Initialize
 mod.ZONE_CHANGED_NEW_AREA = Gilneas_Initialize
 
@@ -164,7 +166,6 @@ do
 	mod.CHAT_MSG_RAID_BOSS_EMOTE = schedule_check
 	mod.CHAT_MSG_BG_SYSTEM_NEUTRAL = schedule_check
 end
-
 
 do
 	local winner_is = 0 -- 0 = nobody 1 = alliance 2 = horde
@@ -219,7 +220,8 @@ do
 			winner_is = 2
 			winTimer:Update(get_gametime(), get_gametime() + HordeTime)
 			winTimer:DisableEnlarge()
-			local AllyPoints = math.floor(math.floor(((HordeTime * ResPerSec[last_alliance_bases]) + last_alliance_score) / 10) * 10)
+			local AllyPoints = math.floor(math.floor(((HordeTime * ResPerSec[last_alliance_bases]) + last_alliance_score) / 10) *
+				10)
 			winTimer:UpdateName(L.WinBarText:format(AllyPoints, 1500))
 			winTimer:SetColor(hordeColor)
 			winTimer:UpdateIcon(hordeIcon)
@@ -247,18 +249,18 @@ do
 				EnemyBases = last_alliance_bases
 			end
 			if ((1500 - FriendlyLast) / ResPerSec[FriendlyBases]) > ((1500 - EnemyLast) / ResPerSec[EnemyBases]) then
-				for i=1, 3 do
-					local EnemyTime = (1500 - EnemyLast) / ResPerSec[ 3 - i ]
-					local FriendlyTime = (1500 - FriendlyLast) / ResPerSec[ i ]
-					if( FriendlyTime < EnemyTime ) then
+				for i = 1, 3 do
+					local EnemyTime = (1500 - EnemyLast) / ResPerSec[3 - i]
+					local FriendlyTime = (1500 - FriendlyLast) / ResPerSec[i]
+					if (FriendlyTime < EnemyTime) then
 						baseLowest = FriendlyTime
 					else
 						baseLowest = EnemyTime
 					end
 
-					local EnemyFinal = math.floor( ( EnemyLast + math.floor( baseLowest * ResPerSec[ 3 - i ] + 0.5 ) ) / 10 ) * 10
-					local FriendlyFinal = math.floor( ( FriendlyLast + math.floor( baseLowest * ResPerSec[ i ] + 0.5 ) ) / 10 ) * 10
-					if( FriendlyFinal >= 1500 and EnemyFinal < 1500 ) then
+					local EnemyFinal = math.floor((EnemyLast + math.floor(baseLowest * ResPerSec[3 - i] + 0.5)) / 10) * 10
+					local FriendlyFinal = math.floor((FriendlyLast + math.floor(baseLowest * ResPerSec[i] + 0.5)) / 10) * 10
+					if (FriendlyFinal >= 1500 and EnemyFinal < 1500) then
 						self.ScoreFrameToWinText:SetText(L.BasesToWin:format(i))
 						break
 					end
@@ -278,7 +280,7 @@ function mod:ShowBasesToWin()
 			self.ScoreFrameToWin:SetHeight(10)
 			self.ScoreFrameToWin:SetWidth(200)
 			self.ScoreFrameToWin:SetPoint("TOPLEFT", "AlwaysUpFrame2", "BOTTOMLEFT", 22, 2)
-			self.ScoreFrameToWinText= self.ScoreFrameToWin:CreateFontString(nil, nil, "GameFontNormalSmall")
+			self.ScoreFrameToWinText = self.ScoreFrameToWin:CreateFontString(nil, nil, "GameFontNormalSmall")
 			self.ScoreFrameToWinText:SetAllPoints(self.ScoreFrameToWin)
 			self.ScoreFrameToWinText:SetJustifyH("LEFT")
 		end
@@ -293,4 +295,3 @@ function mod:HideBasesToWin()
 		self.ScoreFrameToWinText:SetText("")
 	end
 end
-]]
