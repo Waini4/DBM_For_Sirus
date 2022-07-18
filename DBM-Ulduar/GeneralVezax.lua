@@ -43,7 +43,7 @@ local timerLifeLeechCD         = mod:NewCDTimer(36, 312974, nil, nil, nil, 3)
 
 mod:AddSetIconOption("SetIconOnShadowCrash", 312978, true, false, { 8 })
 mod:AddSetIconOption("SetIconOnLifeLeach", 312974, true, false, { 7 })
-mod:AddBoolOption("CrashArrow", 62660, true)
+mod:AddBoolOption("CrashArrow", true)
 
 mod:AddTimerLine(DBM_CORE_L.HARD_MODE)
 local specWarnAnimus = mod:NewSpecialWarningSwitch(63145, nil, nil, nil, 1, 2)
