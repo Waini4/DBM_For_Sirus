@@ -15,7 +15,7 @@
 ## SavedVariables: DBMPvP_AllSavedVars
 ## X-DBM-Mod: 1
 ## X-DBM-Mod-Type: OTHER
-## X-DBM-Mod-Category: OTHER
+## X-DBM-Mod-Category: PVP
 ## X-DBM-Mod-No-Statistics: 1
 ## X-DBM-Mod-Name: PvP
 ## X-DBM-Mod-Name-deDE: PvP
