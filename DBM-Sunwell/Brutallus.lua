@@ -1,5 +1,5 @@
-local mod	= DBM:NewMod("Brutallus", "DBM-Sunwell")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Brutallus", "DBM-Sunwell")
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20220518110528")
 mod:SetCreatureID(24882)
@@ -16,27 +16,27 @@ mod:RegisterEventsInCombat(
 	"SPELL_MISSED 46394"
 )
 
-local warnMeteor		= mod:NewSpellAnnounce(45150, 3)
-local warnBurn			= mod:NewTargetAnnounce(46394, 3, nil, false, 2)
-local warnStomp			= mod:NewTargetAnnounce(45185, 3, nil, "Tank", 2)
+local warnMeteor = mod:NewSpellAnnounce(45150, 3)
+local warnBurn   = mod:NewTargetAnnounce(46394, 3, nil, false, 2)
+local warnStomp  = mod:NewTargetAnnounce(45185, 3, nil, "Tank", 2)
 
-local specwarnStompYou	= mod:NewSpecialWarningYou(45185, "Tank")
-local specwarnStomp		= mod:NewSpecialWarningTaunt(45185, "Tank")
-local specWarnMeteor	= mod:NewSpecialWarningStack(45150, nil, 4, nil, nil, 1, 6)
-local specWarnBurn		= mod:NewSpecialWarningYou(46394, nil, nil, nil, 1, 2)
-local yellBurn			= mod:NewYell(46394)
+local specwarnStompYou = mod:NewSpecialWarningYou(45185, "Tank")
+local specwarnStomp    = mod:NewSpecialWarningTaunt(45185, "Tank")
+local specWarnMeteor   = mod:NewSpecialWarningStack(45150, nil, 4, nil, nil, 1, 6)
+local specWarnBurn     = mod:NewSpecialWarningYou(46394, nil, nil, nil, 1, 2)
+local yellBurn         = mod:NewYell(46394)
 
-local timerMeteorCD		= mod:NewCDTimer(12, 45150, nil, nil, nil, 3)
-local timerStompCD		= mod:NewCDTimer(31, 45185, nil, nil, nil, 2)
-local timerBurn			= mod:NewTargetTimer(60, 46394, nil, "false", 2, 3)
-local timerBurnCD		= mod:NewCDTimer(20, 46394, nil, nil, nil, 3)
+local timerMeteorCD = mod:NewCDTimer(12, 45150, nil, nil, nil, 3)
+local timerStompCD  = mod:NewCDTimer(31, 45185, nil, nil, nil, 2)
+local timerBurn     = mod:NewTargetTimer(60, 46394, nil, "false", 2, 3)
+local timerBurnCD   = mod:NewCDTimer(20, 46394, nil, nil, nil, 3)
 
-local berserkTimer		= mod:NewBerserkTimer(mod:IsTimewalking() and 300 or 360)
+--local berserkTimer = mod:NewBerserkTimer(mod:IsTimewalking() and 300 or 360)
 
-mod:AddSetIconOption("BurnIcon", 46394, true, false, {1, 2, 3, 4, 5, 6, 7, 8})
+mod:AddSetIconOption("BurnIcon", 46394, true, false, { 1, 2, 3, 4, 5, 6, 7, 8 })
 mod:AddRangeFrameOption(4, 46394)
 mod:AddMiscLine(DBM_CORE_L.OPTION_CATEGORY_DROPDOWNS)
-mod:AddDropdownOption("RangeFrameActivation", {"AlwaysOn", "OnDebuff"}, "OnDebuff", "misc")
+mod:AddDropdownOption("RangeFrameActivation", { "AlwaysOn", "OnDebuff" }, "OnDebuff", "misc")
 
 mod.vb.burnIcon = 8
 local debuffName = DBM:GetSpellInfo(46394)
@@ -52,7 +52,7 @@ function mod:OnCombatStart(delay)
 	self.vb.burnIcon = 8
 	timerBurnCD:Start(-delay)
 	timerStompCD:Start(-delay)
-	berserkTimer:Start(-delay)
+	--berserkTimer:Start(-delay)
 	if self.Options.RangeFrame and self.Options.RangeFrameActivation == "AlwaysOn" then
 		DBM.RangeCheck:Show(4)
 	end
@@ -85,9 +85,9 @@ function mod:SPELL_AURA_APPLIED(args)
 			yellBurn:Yell()
 		end
 		if self.Options.RangeFrame and self.Options.RangeFrameActivation == "OnDebuff" then
-			if DBM:UnitDebuff("player", args.spellName) then--You have debuff, show everyone
+			if DBM:UnitDebuff("player", args.spellName) then --You have debuff, show everyone
 				DBM.RangeCheck:Show(4, nil)
-			else--You do not have debuff, only show players who do
+			else --You do not have debuff, only show players who do
 				DBM.RangeCheck:Show(4, DebuffFilter)
 			end
 		end
@@ -101,12 +101,13 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerStompCD:Start()
 	elseif args.spellId == 45150 and args:IsPlayer() then
 		local amount = args.amount or 1
-		if (amount >= 4) or (amount >= 2 and self:IsTimewalking()) then
+		--[[if (amount >= 4) or (amount >= 2 and self:IsTimewalking()) then
 			specWarnMeteor:Show(amount)
 			specWarnMeteor:Play("stackhigh")
-		end
+		end]]
 	end
 end
+
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 function mod:SPELL_AURA_REMOVED(args)

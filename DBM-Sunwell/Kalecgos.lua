@@ -1,6 +1,6 @@
-local mod	= DBM:NewMod("Kal", "DBM-Sunwell")
-local Kal 	= DBM:GetModByName("Kal")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Kal", "DBM-Sunwell")
+local Kal = DBM:GetModByName("Kal")
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20220518110528")
 mod:SetCreatureID(24850)
@@ -19,24 +19,24 @@ mod:RegisterEventsInCombat(
 	"UNIT_DIED"
 )
 
-local warnPortal		= mod:NewAnnounce("WarnPortal", 4, 46021)
-local warnBuffet		= mod:NewSpellAnnounce(45018, 3, nil, false, 2)
-local warnBreath		= mod:NewSpellAnnounce(44799, 3, nil, false)
-local warnCorrupt		= mod:NewTargetAnnounce(45029, 3)
+local warnPortal  = mod:NewAnnounce("WarnPortal", 4, 46021)
+local warnBuffet  = mod:NewSpellAnnounce(45018, 3, nil, false, 2)
+local warnBreath  = mod:NewSpellAnnounce(44799, 3, nil, false)
+local warnCorrupt = mod:NewTargetAnnounce(45029, 3)
 
-local specWarnBuffet	= mod:NewSpecialWarningStack(45018, nil, 10, nil, nil, 1, 6)
-local specWarnWildMagic	= mod:NewSpecialWarning("SpecWarnWildMagic")
+local specWarnBuffet = mod:NewSpecialWarningStack(45018, nil, 10, nil, nil, 1, 6)
+local specWarnWildMagic = mod:NewSpecialWarning("SpecWarnWildMagic")
 
-local timerNextPortal	= mod:NewNextCountTimer(25, 46021, nil, nil, nil, 5)
-local timerBreathCD		= mod:NewCDTimer(15, 44799, nil, false, nil, 5, nil, DBM_COMMON_L.TANK_ICON)--Tanks?
-local timerBuffetCD		= mod:NewCDTimer(8, 45018, nil, nil, nil, 2)
-local timerPorted		= mod:NewBuffActiveTimer(60, 46021, nil, nil, nil, 6)
-local timerExhausted	= mod:NewBuffActiveTimer(60, 44867, nil, nil, nil, 6)
+local timerNextPortal = mod:NewNextCountTimer(25, 46021, nil, nil, nil, 5)
+local timerBreathCD   = mod:NewCDTimer(15, 44799, nil, false, nil, 5, nil, DBM_COMMON_L.TANK_ICON) --Tanks?
+local timerBuffetCD   = mod:NewCDTimer(8, 45018, nil, nil, nil, 2)
+local timerPorted     = mod:NewBuffActiveTimer(60, 46021, nil, nil, nil, 6)
+local timerExhausted  = mod:NewBuffActiveTimer(60, 44867, nil, nil, nil, 6)
 
 local berserkTimer
-if mod:IsTimewalking() then
+--[[if mod:IsTimewalking() then
 	berserkTimer		= mod:NewBerserkTimer(300) -- Doesn't exist on retail
-end
+end]]
 
 mod:AddRangeFrameOption("12")
 mod:AddBoolOption("ShowRespawn", true)
@@ -54,9 +54,9 @@ mod.vb.portCount = 1
 
 function mod:OnCombatStart(delay)
 	self.vb.portCount = 1
-	if self:IsTimewalking() then
+	--[[if self:IsTimewalking() then
 		berserkTimer:Start(-delay)
-	end
+	end]]
 	if self.Options.ShowFrame then
 		Kal:CreateFrame()
 	end
@@ -124,6 +124,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	end
 end
+
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 function mod:SPELL_CAST_START(args)

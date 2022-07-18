@@ -1,5 +1,5 @@
-local mod	= DBM:NewMod("Twins", "DBM-Sunwell")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Twins", "DBM-Sunwell")
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20220518110528")
 mod:SetCreatureID(25165, 25166)
@@ -22,37 +22,37 @@ mod:SetBossHealthInfo(
 	25166, L.Alythess
 )
 
-local warnBlade				= mod:NewSpellAnnounce(45248, 3)
-local warnBlow				= mod:NewTargetAnnounce(45256, 3)
-local warnConflag			= mod:NewTargetAnnounce(45333, 3)
-local warnNova				= mod:NewTargetAnnounce(45329, 3)
+local warnBlade   = mod:NewSpellAnnounce(45248, 3)
+local warnBlow    = mod:NewTargetAnnounce(45256, 3)
+local warnConflag = mod:NewTargetAnnounce(45333, 3)
+local warnNova    = mod:NewTargetAnnounce(45329, 3)
 
-local specWarnConflag		= mod:NewSpecialWarningYou(45333, nil, nil, nil, 1, 2)
-local specWarnConflagNear	= mod:NewSpecialWarningClose(45333)
-local yellConflag			= mod:NewYell(45333, nil, false)
-local specWarnNova			= mod:NewSpecialWarningYou(45329, nil, nil, nil, 1, 2)
-local specWarnNovaNear		= mod:NewSpecialWarningClose(45329)
-local yellNova				= mod:NewYell(45329)
-local specWarnPyro			= mod:NewSpecialWarningDispel(45230, "MagicDispeller", nil, 2, 1, 2)
-local specWarnDarkTouch		= mod:NewSpecialWarningStack(45347, nil, 8, nil, nil, 1, 6)
-local specWarnFlameTouch	= mod:NewSpecialWarningStack(45348, false, 5, nil, nil, 1, 6)
+local specWarnConflag     = mod:NewSpecialWarningYou(45333, nil, nil, nil, 1, 2)
+local specWarnConflagNear = mod:NewSpecialWarningClose(45333)
+local yellConflag         = mod:NewYell(45333, nil, false)
+local specWarnNova        = mod:NewSpecialWarningYou(45329, nil, nil, nil, 1, 2)
+local specWarnNovaNear    = mod:NewSpecialWarningClose(45329)
+local yellNova            = mod:NewYell(45329)
+local specWarnPyro        = mod:NewSpecialWarningDispel(45230, "MagicDispeller", nil, 2, 1, 2)
+local specWarnDarkTouch   = mod:NewSpecialWarningStack(45347, nil, 8, nil, nil, 1, 6)
+local specWarnFlameTouch  = mod:NewSpecialWarningStack(45348, false, 5, nil, nil, 1, 6)
 
-local timerBladeCD			= mod:NewCDTimer(11.5, 45248, nil, "Melee", 2, 2)
-local timerBlowCD			= mod:NewCDTimer(20, 45256, nil, nil, nil, 3)
-local timerConflagCD		= mod:NewCDTimer(31, 45333, nil, nil, nil, 3, nil, nil, true) -- Added "keep" arg. Considerable variation, and 31s default might an overexageration
-local timerNovaCD			= mod:NewCDTimer(31, 45329, nil, nil, nil, 3)
-local timerConflag			= mod:NewCastTimer(3.5, 45333, nil, false, 2)
-local timerNova				= mod:NewCastTimer(3.5, 45329, nil, false, 2)
+local timerBladeCD   = mod:NewCDTimer(11.5, 45248, nil, "Melee", 2, 2)
+local timerBlowCD    = mod:NewCDTimer(20, 45256, nil, nil, nil, 3)
+local timerConflagCD = mod:NewCDTimer(31, 45333, nil, nil, nil, 3, nil, nil, true) -- Added "keep" arg. Considerable variation, and 31s default might an overexageration
+local timerNovaCD    = mod:NewCDTimer(31, 45329, nil, nil, nil, 3)
+local timerConflag   = mod:NewCastTimer(3.5, 45333, nil, false, 2)
+local timerNova      = mod:NewCastTimer(3.5, 45329, nil, false, 2)
 
-local berserkTimer			= mod:NewBerserkTimer(mod:IsTimewalking() and 300 or 360)
+--local berserkTimer			= mod:NewBerserkTimer(mod:IsTimewalking() and 300 or 360)
 
 mod:AddRangeFrameOption("12")
-mod:AddSetIconOption("ConflagIcon", 45333, false, false, {7})
-mod:AddSetIconOption("NovaIcon", 45329, false, false, {8})
+mod:AddSetIconOption("ConflagIcon", 45333, false, false, { 7 })
+mod:AddSetIconOption("NovaIcon", 45329, false, false, { 8 })
 
 function mod:OnCombatStart(delay)
 	self:SetStage(1)
-	berserkTimer:Start(-delay)
+	--berserkTimer:Start(-delay)
 	timerConflagCD:Start(18) -- variable (18-22?)
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Show()
@@ -81,6 +81,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	end
 end
+
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 function mod:SPELL_DAMAGE(_, _, _, _, destName, _, spellId)

@@ -1,5 +1,5 @@
-local mod	= DBM:NewMod("PT", "DBM-Party-BC", 12)
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("PT", "DBM-Party-BC", 12)
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20220518110528")
 
@@ -11,11 +11,11 @@ mod:RegisterEvents(
 mod.noStatistics = true
 
 -- Portals
-local warnWavePortalSoon	= mod:NewAnnounce("WarnWavePortalSoon", 2, 33404)
-local warnWavePortal		= mod:NewAnnounce("WarnWavePortal", 3, 33404)
-local warnBossPortal		= mod:NewAnnounce("WarnBossPortal", 4, 33341)
+local warnWavePortalSoon = mod:NewAnnounce("WarnWavePortalSoon", 2, 33404)
+local warnWavePortal     = mod:NewAnnounce("WarnWavePortal", 3, 33404)
+local warnBossPortal     = mod:NewAnnounce("WarnBossPortal", 4, 33341)
 
-local timerNextPortal		= mod:NewTimer(120, "TimerNextPortal", 33404, nil, nil, 6)
+local timerNextPortal = mod:NewTimer(125, "TimerNextPortal", 33404, nil, nil, 6)
 
 mod:AddBoolOption("ShowAllPortalTimers", false, "timer")
 
@@ -24,8 +24,8 @@ local lastPortal = 0
 function mod:UNIT_DIED(args)
 	local cid = self:GetCIDFromGUID(args.destGUID)
 	if cid == 17879 or cid == 17880 then
-		timerNextPortal:Start(122, lastPortal + 1)
-		warnWavePortalSoon:Schedule(112)
+		timerNextPortal:Start(125, lastPortal + 1)
+		warnWavePortalSoon:Schedule(120)
 	end
 end
 
@@ -45,8 +45,8 @@ function mod:UPDATE_WORLD_STATES()
 		else
 			warnWavePortal:Show(currentPortal)
 			if self.Options.ShowAllPortalTimers then
-				timerNextPortal:Start(122, currentPortal + 1)
-				warnWavePortalSoon:Schedule(112)
+				timerNextPortal:Start(125, currentPortal + 1)
+				warnWavePortalSoon:Schedule(120)
 			end
 		end
 		lastPortal = currentPortal

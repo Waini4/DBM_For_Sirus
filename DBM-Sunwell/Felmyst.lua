@@ -1,5 +1,5 @@
-local mod	= DBM:NewMod("Felmyst", "DBM-Sunwell")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Felmyst", "DBM-Sunwell")
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20220518110528")
 mod:SetCreatureID(25038)
@@ -16,30 +16,30 @@ mod:RegisterEventsInCombat(
 	"UNIT_SPELLCAST_SUCCEEDED"
 )
 
-local warnEncaps			= mod:NewTargetAnnounce(45665, 4)
-local warnVapor				= mod:NewTargetAnnounce(45402, 3)
-local warnPhase				= mod:NewAnnounce("WarnPhase", 1, 31550)
+local warnEncaps = mod:NewTargetAnnounce(45665, 4)
+local warnVapor  = mod:NewTargetAnnounce(45402, 3)
+local warnPhase  = mod:NewAnnounce("WarnPhase", 1, 31550)
 
-local specWarnGas			= mod:NewSpecialWarningSpell(45855, "Healer", nil, nil, 1, 2)
-local specWarnCorrosion		= mod:NewSpecialWarningTaunt(45866, nil, nil, nil, 1, 2)
-local specWarnEncaps		= mod:NewSpecialWarningYou(45665, nil, nil, nil, 1, 2)
-local yellEncaps			= mod:NewYell(45665)
-local specWarnEncapsNear	= mod:NewSpecialWarningClose(45665, nil, nil, nil, 1, 2)
-local specWarnVapor			= mod:NewSpecialWarningYou(45402, nil, nil, nil, 1, 2)
-local specWarnBreath		= mod:NewSpecialWarningCount(45717, nil, nil, nil, 3, 2)
+local specWarnGas        = mod:NewSpecialWarningSpell(45855, "Healer", nil, nil, 1, 2)
+local specWarnCorrosion  = mod:NewSpecialWarningTaunt(45866, nil, nil, nil, 1, 2)
+local specWarnEncaps     = mod:NewSpecialWarningYou(45665, nil, nil, nil, 1, 2)
+local yellEncaps         = mod:NewYell(45665)
+local specWarnEncapsNear = mod:NewSpecialWarningClose(45665, nil, nil, nil, 1, 2)
+local specWarnVapor      = mod:NewSpecialWarningYou(45402, nil, nil, nil, 1, 2)
+local specWarnBreath     = mod:NewSpecialWarningCount(45717, nil, nil, nil, 3, 2)
 
-local timerGasCast			= mod:NewCastTimer(1, 45855)
-local timerGasCD			= mod:NewCDTimer(19, 45855, nil, nil, nil, 3)
-local timerCorrosion		= mod:NewTargetTimer(10, 45866, nil, "Tank", 2, 5, nil, DBM_COMMON_L.TANK_ICON)
-local timerEncaps			= mod:NewTargetTimer(7, 45665, nil, nil, nil, 3)
-local timerEncapsCD			= mod:NewCDTimer(50, 45665, nil, nil, nil, 3)
-local timerBreath			= mod:NewCDCountTimer(17, 45717, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON)
-local timerPhase			= mod:NewTimer(60, "TimerPhase", 31550, nil, nil, 6)
+local timerGasCast   = mod:NewCastTimer(1, 45855)
+local timerGasCD     = mod:NewCDTimer(19, 45855, nil, nil, nil, 3)
+local timerCorrosion = mod:NewTargetTimer(10, 45866, nil, "Tank", 2, 5, nil, DBM_COMMON_L.TANK_ICON)
+local timerEncaps    = mod:NewTargetTimer(7, 45665, nil, nil, nil, 3)
+local timerEncapsCD  = mod:NewCDTimer(50, 45665, nil, nil, nil, 3)
+local timerBreath    = mod:NewCDCountTimer(17, 45717, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON)
+local timerPhase     = mod:NewTimer(60, "TimerPhase", 31550, nil, nil, 6)
 
-local berserkTimer			= mod:NewBerserkTimer(mod:IsTimewalking() and 500 or 600)
+--local berserkTimer			= mod:NewBerserkTimer(mod:IsTimewalking() and 500 or 600)
 
-mod:AddSetIconOption("EncapsIcon", 45665, true, false, {7})
-mod:AddSetIconOption("VaporIcon", 45402, true, true, {8})
+mod:AddSetIconOption("EncapsIcon", 45665, true, false, { 7 })
+mod:AddSetIconOption("VaporIcon", 45402, true, true, { 8 })
 
 mod.vb.breathCounter = 0
 
@@ -72,12 +72,11 @@ end
 
 function mod:OnCombatStart(delay)
 	self.vb.breathCounter = 0
-	timerGasCD:Start(17-delay)
+	timerGasCD:Start(17 - delay)
 	timerPhase:Start(-delay, L.Air)
-	berserkTimer:Start(-delay)
+	--berserkTimer:Start(-delay)
 	timerEncapsCD:Start()
 end
-
 
 function mod:SPELL_AURA_APPLIED(args)
 	if args.spellId == 45866 then
@@ -130,7 +129,7 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg)
 		specWarnBreath:Show(self.vb.breathCounter)
 		specWarnBreath:Play("breathsoon")
 		if self.vb.breathCounter < 3 then
-			timerBreath:Start(nil, self.vb.breathCounter+1)
+			timerBreath:Start(nil, self.vb.breathCounter + 1)
 		end
 	end
 end
