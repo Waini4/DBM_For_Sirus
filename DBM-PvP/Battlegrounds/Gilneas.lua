@@ -69,7 +69,7 @@ end
 local function get_basecount()
 	local alliance = 0
 	local horde = 0
-	for k, v in pairs(objectives) do
+	for _, v in pairs(objectives) do
 		if v == 11 or v == 18 or v == 28 then
 			alliance = alliance + 1
 		elseif v == 10 or v == 20 or v == 30 then
