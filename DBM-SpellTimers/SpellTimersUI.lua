@@ -1124,14 +1124,14 @@ local function creategui()
 			local bartext = auraarea:CreateEditBox(L.BarText, "", 190)
 			bartext.myheight = 0
 			bartext.guikey = CurCount
-			bartext:SetPoint('TOPLEFT', spellid, "TOPRIGHT", 20, 0)
+			bartext:SetPoint('TOPLEFT', spellid, "TOPRIGHT", 40, 0)
 			bartext:SetScript("OnTextChanged", onchange_spell("bartext"))
 			bartext:SetScript("OnShow", onshow_spell("bartext"))
 			-- print(716)
 			local cooldown = auraarea:CreateEditBox(L.Cooldown, "", 45)
 			cooldown.myheight = 0
 			cooldown.guikey = CurCount
-			cooldown:SetPoint("TOPLEFT", bartext, "TOPRIGHT", 20, 0)
+			cooldown:SetPoint("TOPLEFT", bartext, "TOPRIGHT", 40, 0)
 			cooldown:SetScript("OnTextChanged", onchange_spell("cooldown"))
 			cooldown:SetScript("OnShow", onshow_spell("cooldown"))
 			cooldown:SetNumeric(true)
