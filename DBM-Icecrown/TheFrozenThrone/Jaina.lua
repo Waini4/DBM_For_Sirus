@@ -5,8 +5,6 @@ mod:SetRevision("20220612100000")
 mod:SetCreatureID(200000)
 mod:RegisterCombat("yell", L.YellPull)
 mod:SetUsedIcons(2, 3, 4, 5, 6, 7, 8)
--- mod:SetMinSyncRevision(3392)
---mod:SetModelID(3392)
 
 mod:RegisterEvents(
 	"CHAT_MSG_MONSTER_YELL"
@@ -77,7 +75,7 @@ local iceMarkTargets = {}
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 3392, "Lady Jaina Proudmoore")
-	self.vb.phase = 1
+	self:SetStage(1)
 	ExplosiveIcons = 8
 	berserkTimer:Start()
 	timerSummonElemenCD:Start(27)
@@ -142,7 +140,7 @@ function mod:SPELL_CAST_START(args)
 		timerSummonElemenCD:Start()
 	elseif args:IsSpellID(306483) then  -- Phase 2
 		warnNextPhase:Show(2 .. ": " .. args.spellName)
-		self.vb.phase = 2
+		self:SetStage(2)
 		timerArcaneStormCD:Cancel()
 		timerUnstableMagicCD:Cancel()
 		warnArcaneStormSoon:Cancel()
@@ -248,7 +246,7 @@ end
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(306516) then  -- Phase 3
 		warnNextPhase:Show(3 .. ": " .. L.blackIce)
-		self.vb.phase = 3
+		self:SetStage(3)
 		timerRaysCD:Cancel()
 		timerMeteorCD:Cancel()
 		timerFirewhirlCD:Cancel()
@@ -268,7 +266,7 @@ end
 
 function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.YellStart then
-		self:ScheduleMethod(54, "OnCombat")
+		self:ScheduleMethod(54, "OnCombatStart")
 		timerCombatStart:Start()
 	end
 end
