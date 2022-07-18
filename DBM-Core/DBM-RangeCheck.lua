@@ -674,7 +674,7 @@ function createFrame()
 	if DBM.Options.RangeFrameUpdates == "Slow" then
 		updateRate = 0.5
 	elseif DBM.Options.RangeFrameUpdates == "Average" then
-		updateRate = 0.25
+		updateRate = 0.05
 	elseif DBM.Options.RangeFrameUpdates == "Fast" then
 		updateRate = 0.01
 	else
@@ -727,7 +727,7 @@ function createRadarFrame()
 	if DBM.Options.RangeFrameUpdates == "Slow" then
 		updateRate = 0.5
 	elseif DBM.Options.RangeFrameUpdates == "Average" then
-		updateRate = 0.25
+		updateRate = 0.05
 	elseif DBM.Options.RangeFrameUpdates == "Fast" then
 		updateRate = 0.01
 	else
