@@ -8,73 +8,7 @@ DBTST = {
 	numBars = 0
 }
 local DBTST = DBTST
-local testMod
-local testWarning1, testWarning2, testWarning3
-local testTimer1, testTimer2, testTimer3, testTimer4, testTimer5, testTimer6, testTimer7, testTimer8
-local testSpecialWarning1, testSpecialWarning2, testSpecialWarning3
 local L = DBM_CORE_L
-
-function DBM:DemoModeST()
-	if not testMod then
-		testMod = self:NewMod("TestMod")
-		self:GetModLocalization("TestMod"):SetGeneralLocalization { name = "Test Mod" }
-		testWarning1 = testMod:NewAnnounce("%s", 1, "Interface\\Icons\\Spell_Nature_WispSplode")
-		testWarning2 = testMod:NewAnnounce("%s", 2, "Interface\\Icons\\Spell_Shadow_Shadesofdarkness")
-		testWarning3 = testMod:NewAnnounce("%s", 3, "Interface\\Icons\\Spell_Fire_SelfDestruct")
-		testTimer1 = testMod:NewTimer(20, "%s", "Interface\\Icons\\Spell_Nature_WispSplode", nil, nil)
-		testTimer2 = testMod:NewTimer(20, "%s ", "Interface\\Icons\\INV_Misc_Head_Orc_01", nil, nil, 1)
-		testTimer3 = testMod:NewTimer(20, "%s  ", "Interface\\Icons\\Spell_Shadow_Shadesofdarkness", nil, nil, 3, L.MAGIC_ICON
-			, nil, 1, 4) --inlineIcon, keep, countdown, countdownMax
-		testTimer4 = testMod:NewTimer(20, "%s   ", "Interface\\Icons\\Spell_Nature_WispSplode", nil, nil, 4, L.INTERRUPT_ICON)
-		testTimer5 = testMod:NewTimer(20, "%s    ", "Interface\\Icons\\Spell_Fire_SelfDestruct", nil, nil, 2, L.HEALER_ICON,
-			nil, 3, 4) --inlineIcon, keep, countdown, countdownMax
-		testTimer6 = testMod:NewTimer(20, "%s     ", "Interface\\Icons\\Spell_Nature_WispSplode", nil, nil, 5, L.TANK_ICON, nil
-			, 2, 4) --inlineIcon, keep, countdown, countdownMax
-		testTimer7 = testMod:NewTimer(20, "%s      ", "Interface\\Icons\\Spell_Nature_WispSplode", nil, nil, 6)
-		testTimer8 = testMod:NewTimer(20, "%s       ", "Interface\\Icons\\Spell_Nature_WispSplode", nil, nil, 7)
-		testSpecialWarning1 = testMod:NewSpecialWarning("%s", nil, nil, nil, 1, 2)
-		testSpecialWarning2 = testMod:NewSpecialWarning(" %s ", nil, nil, nil, 2, 2)
-		testSpecialWarning3 = testMod:NewSpecialWarning("  %s  ", nil, nil, nil, 3, 2) -- hack: non auto-generated special warnings need distinct names (we could go ahead and give them proper names with proper localization entries, but this is much easier)
-	end
-	testTimer1:Stop("Test Bar")
-	testTimer2:Stop("Adds")
-	testTimer3:Stop("Evil Debuff")
-	testTimer4:Stop("Important Interrupt")
-	testTimer5:Stop("Boom!")
-	testTimer6:Stop("Handle your Role")
-	testTimer7:Stop("Next Stage")
-	testTimer8:Stop("Custom User Bar")
-	testTimer1:Start(10, "Test Bar")
-	testTimer2:Start(30, "Adds")
-	testTimer3:Start(43, "Evil Debuff")
-	testTimer4:Start(20, "Important Interrupt")
-	testTimer5:Start(60, "Boom!")
-	testTimer6:Start(35, "Handle your Role")
-	testTimer7:Start(50, "Next Stage")
-	testTimer8:Start(55, "Custom User Bar")
-	testWarning1:Cancel()
-	testWarning2:Cancel()
-	testWarning3:Cancel()
-	testSpecialWarning1:Cancel()
-	testSpecialWarning1:CancelVoice()
-	testSpecialWarning2:Cancel()
-	testSpecialWarning2:CancelVoice()
-	testSpecialWarning3:Cancel()
-	testSpecialWarning3:CancelVoice()
-	testWarning1:Show("Test-mode started...")
-	testWarning1:Schedule(62, "Test-mode finished!")
-	testWarning3:Schedule(50, "Boom in 10 sec!")
-	testWarning3:Schedule(20, "Pew Pew Laser Owl!")
-	testWarning2:Schedule(38, "Evil Spell in 5 sec!")
-	testWarning2:Schedule(43, "Evil Spell!")
-	testWarning1:Schedule(10, "Test bar expired!")
-	testSpecialWarning1:Schedule(20, "Pew Pew Laser Owl")
-	testSpecialWarning1:ScheduleVoice(20, "runaway")
-	testSpecialWarning2:Schedule(43, "Fear!")
-	testSpecialWarning2:ScheduleVoice(43, "fearsoon")
-	testSpecialWarning3:Schedule(60, "Boom!")
-	testSpecialWarning3:ScheduleVoice(60, "defensive")
-end
 
 local ipairs, pairs, next, type, setmetatable, tinsert, tsort = ipairs, pairs, next, type, setmetatable, table.insert,
 	table.sort

@@ -218,7 +218,7 @@ local function creategui()
 		end
 	end
 	maindummybar:ApplyStyle()
-	local maindummybarHuge = DBTST:CreateDummyBar(nil, nil, LGUI.LARGE)
+	local maindummybarHuge = DBTST:CreateDummyBar(nil, nil, L.Big)
 	maindummybarHuge.frame:SetParent(BarSetup.frame)
 	maindummybarHuge.frame:SetPoint("TOP", color2text, "LEFT", 10, 35)
 	maindummybarHuge.frame:SetScript("OnUpdate", function(_, elapsed)
@@ -488,7 +488,7 @@ local function creategui()
 
 	BarSetupHuge:CreateCheckButton(LGUI.EnableHugeBar, true, nil, nil, "HugeBarsEnabled")
 
-	local hugedummybar = DBTST:CreateDummyBar(nil, nil, LGUI.LARGE)
+	local hugedummybar = DBTST:CreateDummyBar(nil, nil, L.Big)
 	hugedummybar.frame:SetParent(BarSetupHuge.frame)
 	hugedummybar.frame:SetPoint("BOTTOM", BarSetupHuge.frame, "TOP", 0, -50)
 	hugedummybar.frame:SetScript("OnUpdate", function(_, elapsed)
