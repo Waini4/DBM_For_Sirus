@@ -498,10 +498,11 @@ do
 
 	function DBTST:ShowMovableBar(small, large)
 		if small or small == nil then
-			self:CreateBar(20, "Move1", "Interface\\Icons\\Spell_Nature_WispSplode", nil, true):SetText(DBM_CORE_L.MOVABLE_BAR)
+			self:CreateBar(20, "Move1", "Interface\\Icons\\Spell_Nature_WispSplode", nil, true):SetText(DBM_SpellsUsed_Translations
+				.RecoveryMove)
 		end
 		if large or large == nil then
-			self:CreateBar(20, "Move2", "Interface\\Icons\\Spell_Nature_WispSplode", true):SetText(DBM_CORE_L.MOVABLE_BAR)
+			self:CreateBar(20, "Move2", "Interface\\Icons\\Spell_Nature_WispSplode", true):SetText(DBM_SpellsUsed_Translations.BigSmoke)
 		end
 		updateClickThrough(self, false)
 		self.movable = true
