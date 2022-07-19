@@ -43,8 +43,8 @@ local specWarnEarth              = mod:NewSpecialWarningSwitch(317266, "-Healer"
 local specWarnCreat              = mod:NewSpecialWarningSwitch(317278, "-Healer", nil, nil, 1, 2)
 local specWarnDistrupt           = mod:NewSpecialWarningSwitch(317279, "-Healer", nil, nil, 1, 2)
 
-local timerCDEarth    = mod:NewCDTimer(60, 317266, nil, nil, nil, 3)
-local timerCDCreat    = mod:NewCDTimer(60, 317278, nil, nil, nil, 3)
+local timerCDEarth    = mod:NewCDTimer(60, 317266, nil, nil, nil, 2)
+local timerCDCreat    = mod:NewCDTimer(60, 317278, nil, nil, nil, 5)
 local timerCDDistrupt = mod:NewCDTimer(60, 317279, nil, nil, nil, 3)
 local timerzemio      = mod:NewCDTimer(90, 317624, nil, nil, nil, 4)
 

@@ -10,7 +10,7 @@ mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 31458 38592",
-	"SPELL_AURA_REMOVED 31458"
+	"SPELL_AURA_REMOVED 31458 38592"
 )
 
 local specWarnSpellReflect = mod:NewSpecialWarningReflect(38592, nil, nil, 2, 1, 2)
@@ -43,5 +43,7 @@ end
 function mod:SPELL_AURA_REMOVED(args)
 	if args.spellId == 31458 then
 		timerHasten:Stop(args.destName)
+	elseif args.spellId == 38592 then
+		timerSpellReflect:Start()
 	end
 end
