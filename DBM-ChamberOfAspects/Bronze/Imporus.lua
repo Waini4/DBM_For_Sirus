@@ -17,35 +17,38 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_REMOVED"
 )
 
-
-local RezonansCDOb    = mod:NewCDTimer(33, 312194, nil, nil, nil, 3, nil, CL.DEADLY_ICON_SMALL)
-local BurningTimeCDOb = mod:NewCDTimer(33, 312197, nil, nil, nil, 3, nil, CL.DEADLY_ICON_SMALL)
-
-
------------------------------------------heroic25---------------------------------------
-local warnTemporalArrow   = mod:NewTargetAnnounce(316519, 4)
---local specWarnnRezonansSoon 	= mod:NewPreWarnAnnounce(316523, 5, 3)
-local warnTemporalBeat    = mod:NewStackAnnounce(316508, 5, nil, "Tank")
 local warnRezonansCast    = mod:NewSpellAnnounce(316523, 3)
 local warnBurningTimeCast = mod:NewSpellAnnounce(316526, 3)
 
-local specWarnTemporalBeat     = mod:NewSpecialWarningTaunt(316508, "Tank", nil, nil, 1, 2)
-local specWarnnBurningTimeSoon = mod:NewSpecialWarningSoon(316526, nil, nil, nil, 4, 2)
-local specWarnnRezonansSoon    = mod:NewSpecialWarningSoon(316523, nil, nil, nil, 4, 2)
+local warnTemporalBeat = mod:NewStackAnnounce(316508, 5, nil, "Tank")
 
-local RezonansCast      = mod:NewCastTimer(3, 316523, nil, nil, nil, 2)
-local BurningTimeCast   = mod:NewCastTimer(3, 316526, nil, nil, nil, 2)
-local TemporalBeatStack = mod:NewBuffActiveTimer(30, 316508, nil, "Tank", nil, 5, nil, CL.TANK_ICON)
-local IadCD             = mod:NewCDTimer(58, 312199, nil, nil, nil, 3, nil, CL.POISON_ICON)
-local RezonansCD        = mod:NewCDTimer(48, 316523, nil, nil, nil, 3, nil, CL.DEADLY_ICON_SMALL)
-local BurningTimeCD     = mod:NewCDTimer(48, 316526, nil, nil, nil, 1, nil, CL.DEADLY_ICON_SMALL)
-local TemporalArrow     = mod:NewCDTimer(20, 316519, nil, nil, nil, 3)
-local enrage            = mod:NewBerserkTimer(600)
+local specWarnnBurningTimeSoon = mod:NewSpecialWarningSoon(316526, nil, nil, nil, 1, 2)
+local specWarnnRezonansSoon    = mod:NewSpecialWarningSoon(316523, nil, nil, nil, 4, 2)
+local specWarnTemporalBeat     = mod:NewSpecialWarningTaunt(316508, "Tank", nil, nil, 1, 2)
+
+local RezonansCast    = mod:NewCastTimer(3, 316523, nil, nil, nil, 2)
+local BurningTimeCast = mod:NewCastTimer(3, 316526, nil, nil, nil, 2)
+local enrage          = mod:NewBerserkTimer(600)
 
 mod:AddSetIconOption("SetIconOnTemporalBeat", 316519, true, false, { 8 })
+
+mod:AddTimerLine(DBM_CORE_L.NORMAL_MODE25)
+local RezonansCDOb    = mod:NewCDTimer(33, 312194, nil, nil, nil, 3, nil, CL.DEADLY_ICON)
+local BurningTimeCDOb = mod:NewCDTimer(33, 312197, nil, nil, nil, 3, nil, CL.DEADLY_ICON)
+
+mod:AddTimerLine(DBM_CORE_L.HEROIC_MODE25 .. " " .. CL.HEROIC_ICON)
+
+local warnTemporalArrow = mod:NewTargetAnnounce(316519, 4)
+
+local TemporalBeatStack = mod:NewBuffActiveTimer(30, 316508, nil, "Tank", nil, 5, nil, CL.TANK_ICON)
+local IadCD             = mod:NewCDTimer(58, 312199, nil, nil, nil, 3, nil, CL.POISON_ICON)
+local RezonansCD        = mod:NewCDTimer(48, 316523, nil, nil, nil, 3, nil, CL.DEADLY_ICON)
+local BurningTimeCD     = mod:NewCDTimer(48, 316526, nil, nil, nil, 1, nil, CL.DEADLY_ICON)
+local TemporalArrow     = mod:NewCDTimer(20, 316519, nil, nil, nil, 3)
+
 mod:AddBoolOption("YellOnTemporalCrash", true, "announce")
--- mod:AddBoolOption("BossHealthFrame", true, "misc") --- TODO: чекнуть работает ли стандартное хп
 mod:AddBoolOption("RangeFrame", true)
+-- mod:AddBoolOption("BossHealthFrame", true, "misc") --- TODO: чекнуть работает ли стандартное хп
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 50608, "Imporus")
