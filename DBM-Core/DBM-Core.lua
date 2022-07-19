@@ -6801,7 +6801,7 @@ function bossModPrototype:UnregisterOnUpdateHandler()
 end
 
 function bossModPrototype:SetStage(stage)
-	if stage == 0 then--Increment request instead of hard value
+	if stage == 0 or not stage then--Increment request instead of hard value
 		if not self.vb.phase then return end--Person DCed mid fight and somehow managed to perfectly time running SetStage with a value of 0 before getting variable recovery
 		self.vb.phase = self.vb.phase + 1
 	else
@@ -6809,7 +6809,7 @@ function bossModPrototype:SetStage(stage)
 	end
 	--Separate variable to use SetStage totality for very niche weak aura practices
 	if not self.vb.stageTotality then
-		self.vb.stageTotality = 0
+		self.vb.stageTotality = stage or 1
 	end
 	self.vb.stageTotality = self.vb.stageTotality + 1
 	if self.inCombat then--Safety, in event mod manages to run any phase change calls out of combat/during a wipe we'll just safely ignore it
