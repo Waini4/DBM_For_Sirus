@@ -182,7 +182,6 @@ function mod:OnCombatStart()
 	TemporalCascade:Start()
 	ResonantScream:Start()
 	EraseCount:Start(66, self.vb.ErapCount + 1)
-	enrage:Start()
 	if mod:IsDifficulty("normal25") then
 		ReplicCount:Start(25, self.vb.RepCount + 1)
 		ReturnCount:Start(30, self.vb.RetCount + 1)
