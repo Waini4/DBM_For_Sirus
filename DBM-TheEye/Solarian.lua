@@ -232,8 +232,15 @@ end
 function mod:SWING_DAMAGE(_, sourceName, sourceFlags, destGUID, destName)
 	if self:GetCIDFromGUID(destGUID) == 3410 and bit.band(sourceFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 then
 		if sourceName ~= UnitName("player") then
-			if self.Options.Zrec then
-				DBM.Arrow:ShowRunTo(destName, 0, 0)
+			for i = 1,25 do
+				local unit = "raid"..i.."target"
+				if not UnitExists("raid"..i) then break end
+				if UnitGUID(unit) == destGUID then
+					if self.Options.Zrec then
+						DBM.Arrow:ShowRunTo(unit, 0, 0)
+						break
+					end
+				end
 			end
 		end
 	end
