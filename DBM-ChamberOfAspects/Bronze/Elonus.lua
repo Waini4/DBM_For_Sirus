@@ -293,7 +293,6 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.InfoFrame then
 			DBM.InfoFrame:Hide()
 		end
-		TempCascIcon = 8
 		if args:IsPlayer() then
 			yellTemporalCascadeFade:Cancel()
 		end
