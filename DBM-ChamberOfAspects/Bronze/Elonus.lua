@@ -286,6 +286,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	elseif spellId == 312206 or spellId == 317158 then
 		if self.Options.SetIconTempCascIcon then
 			self:SetIcon(args.destName, 0)
+			self.vb.TempCascIcon = 8
 		end
 		if self.Options.InfoFrame then
 			DBM.InfoFrame:Hide()
