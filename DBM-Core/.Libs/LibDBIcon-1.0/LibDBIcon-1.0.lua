@@ -51,6 +51,7 @@ function lib:IconCallback(event, name, key, value, dataobj)
 		lib.objects[name].icon:SetTexture(dataobj.icon)
 	end
 end
+
 if not lib.callbackRegistered then
 	ldb.RegisterCallback(lib, "LibDataBroker_AttributeChanged__icon", "IconCallback")
 	lib.callbackRegistered = true
@@ -60,9 +61,9 @@ end
 local function getAnchors(frame)
 	local x, y = frame:GetCenter()
 	if not x or not y then return "CENTER" end
-	local hhalf = (x > UIParent:GetWidth()*2/3) and "RIGHT" or (x < UIParent:GetWidth()/3) and "LEFT" or ""
-	local vhalf = (y > UIParent:GetHeight()/2) and "TOP" or "BOTTOM"
-	return vhalf..hhalf, frame, (vhalf == "TOP" and "BOTTOM" or "TOP")..hhalf
+	local hhalf = (x > UIParent:GetWidth() * 2 / 3) and "RIGHT" or (x < UIParent:GetWidth() / 3) and "LEFT" or ""
+	local vhalf = (y > UIParent:GetHeight() / 2) and "TOP" or "BOTTOM"
+	return vhalf .. hhalf, frame, (vhalf == "TOP" and "BOTTOM" or "TOP") .. hhalf
 end
 
 local function onEnter(self)
@@ -87,20 +88,20 @@ end
 --------------------------------------------------------------------------------
 
 local minimapShapes = {
-	["ROUND"] = {true, true, true, true},
-	["SQUARE"] = {false, false, false, false},
-	["CORNER-TOPLEFT"] = {true, false, false, false},
-	["CORNER-TOPRIGHT"] = {false, false, true, false},
-	["CORNER-BOTTOMLEFT"] = {false, true, false, false},
-	["CORNER-BOTTOMRIGHT"] = {false, false, false, true},
-	["SIDE-LEFT"] = {true, true, false, false},
-	["SIDE-RIGHT"] = {false, false, true, true},
-	["SIDE-TOP"] = {true, false, true, false},
-	["SIDE-BOTTOM"] = {false, true, false, true},
-	["TRICORNER-TOPLEFT"] = {true, true, true, false},
-	["TRICORNER-TOPRIGHT"] = {true, false, true, true},
-	["TRICORNER-BOTTOMLEFT"] = {true, true, false, true},
-	["TRICORNER-BOTTOMRIGHT"] = {false, true, true, true},
+	["ROUND"] = { true, true, true, true },
+	["SQUARE"] = { false, false, false, false },
+	["CORNER-TOPLEFT"] = { true, false, false, false },
+	["CORNER-TOPRIGHT"] = { false, false, true, false },
+	["CORNER-BOTTOMLEFT"] = { false, true, false, false },
+	["CORNER-BOTTOMRIGHT"] = { false, false, false, true },
+	["SIDE-LEFT"] = { true, true, false, false },
+	["SIDE-RIGHT"] = { false, false, true, true },
+	["SIDE-TOP"] = { true, false, true, false },
+	["SIDE-BOTTOM"] = { false, true, false, true },
+	["TRICORNER-TOPLEFT"] = { true, true, true, false },
+	["TRICORNER-TOPRIGHT"] = { true, false, true, true },
+	["TRICORNER-BOTTOMLEFT"] = { true, true, false, true },
+	["TRICORNER-BOTTOMRIGHT"] = { false, true, true, true },
 }
 
 local function updatePosition(button)
@@ -111,17 +112,19 @@ local function updatePosition(button)
 	local minimapShape = GetMinimapShape and GetMinimapShape() or "ROUND"
 	local quadTable = minimapShapes[minimapShape]
 	if quadTable[q] then
-		x, y = x*80, y*80
+		x, y = x * 80, y * 80
 	else
 		local diagRadius = 103.13708498985 --math.sqrt(2*(80)^2)-10
-		x = math.max(-80, math.min(x*diagRadius, 80))
-		y = math.max(-80, math.min(y*diagRadius, 80))
+		x = math.max(-80, math.min(x * diagRadius, 80))
+		y = math.max(-80, math.min(y * diagRadius, 80))
 	end
 	button:SetPoint("CENTER", Minimap, "CENTER", x, y)
 end
 
 local function onClick(self, b) if self.dataObject.OnClick then self.dataObject.OnClick(self, b) end end
+
 local function onMouseDown(self) self.icon:SetTexCoord(0, 1, 0, 1) end
+
 local function onMouseUp(self) self.icon:SetTexCoord(0.05, 0.95, 0.05, 0.95) end
 
 local function onUpdate(self)
@@ -153,25 +156,28 @@ local function onDragStop(self)
 end
 
 local function createButton(name, object, db)
-	local button = CreateFrame("Button", "LibDBIcon10_"..name, Minimap)
+	local button = CreateFrame("Button", "LibDBIcon10_" .. name, Minimap)
 	button.dataObject = object
 	button.db = db
 	button:SetFrameStrata("MEDIUM")
-	button:SetWidth(31); button:SetHeight(31)
+	button:SetWidth(31);
+	button:SetHeight(31)
 	button:SetFrameLevel(8)
 	button:RegisterForClicks("anyUp")
 	button:RegisterForDrag("LeftButton")
 	button:SetHighlightTexture("Interface\\Minimap\\UI-Minimap-ZoomButton-Highlight")
 	local overlay = button:CreateTexture(nil, "OVERLAY")
-	overlay:SetWidth(53); overlay:SetHeight(53)
-	overlay:SetTexture("Interface\\Minimap\\MiniMap-TrackingBorder")
+	overlay:SetWidth(31);
+	overlay:SetHeight(31)
+	overlay:SetTexture("Interface\\AddOns\\DBM-Core\\textures\\Minimap-Button-Up")
 	overlay:SetPoint("TOPLEFT")
 	local background = button:CreateTexture(nil, "BACKGROUND")
 	background:SetSize(20, 20)
 	background:SetTexture("Interface\\Minimap\\UI-Minimap-Background")
 	background:SetPoint("TOPLEFT", 7, -5)
 	local icon = button:CreateTexture(nil, "ARTWORK")
-	icon:SetWidth(20); icon:SetHeight(20)
+	icon:SetWidth(20);
+	icon:SetHeight(20)
 	icon:SetTexture(object.icon)
 	icon:SetTexCoord(0.05, 0.95, 0.05, 0.95)
 	icon:SetPoint("TOPLEFT", 7, -5)
@@ -228,7 +234,7 @@ function lib:Register(name, object, db)
 	if not db or not db.hide then
 		createButton(name, object, db)
 	else
-		lib.notCreated[name] = {object, db}
+		lib.notCreated[name] = { object, db }
 	end
 end
 
@@ -236,15 +242,18 @@ function lib:Hide(name)
 	if not lib.objects[name] then return end
 	lib.objects[name]:Hide()
 end
+
 function lib:Show(name)
 	if lib.disabled then return end
 	check(name)
 	lib.objects[name]:Show()
 	updatePosition(lib.objects[name])
 end
+
 function lib:IsRegistered(name)
 	return (lib.objects[name] or lib.notCreated[name]) and true or false
 end
+
 function lib:Refresh(name, db)
 	if lib.disabled then return end
 	check(name)
@@ -274,4 +283,3 @@ function lib:DisableLibrary()
 		object:Hide()
 	end
 end
-
