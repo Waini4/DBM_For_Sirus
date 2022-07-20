@@ -93,9 +93,9 @@ local warned_kill2 = false
 local warned_P4 = false
 -- local warned_P5 = false
 
-local Trees = {}
-local Trees_HP = {}
-local Trees_num = 1
+-- local Trees = {}
+-- local Trees_HP = {}
+-- local Trees_num = 1
 
 local function warnSveazTargets(self)
 	warnSveaz:Show(table.concat(SveazTargets, "<, >"))
