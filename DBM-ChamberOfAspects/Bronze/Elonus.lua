@@ -96,7 +96,7 @@ end
 local function warnTempTargets(self)
 	warnTemporalCascade:Show(table.concat(TempCascTargets, "<, >"))
 	table.wipe(TempCascTargets)
-	self.vb.RevCascIcons = 8
+	self.vb.TempCascIcon = 8
 end
 
 local function warnerapTargets(self)
@@ -219,7 +219,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 312208 or spellId == 317160 then
 		RevCascTargets[#RevCascTargets + 1] = args.destName
 		if self.Options.SetIconOnRevCascTargets then
-			self:SetIcon(args.destName, self.vb.TempCascIcon, 10)
+			self:SetIcon(args.destName, self.vb.RevCascIcons, 10)
 		end
 		ReverseCascadeBuff:Start()
 		DBM.Nameplate:Show(args.destGUID, 317160)
