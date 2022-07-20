@@ -87,11 +87,11 @@ mod.vb.FlameIcons = 2
 mod.vb.SveazIcons = 7
 local warned_kill1 = false
 local warned_kill2 = false
-local warned_kill3 = false
-local warned_P2 = false
-local warned_P3 = false
+-- local warned_kill3 = false
+-- local warned_P2 = false
+-- local warned_P3 = false
 local warned_P4 = false
-local warned_P5 = false
+-- local warned_P5 = false
 
 local Trees = {}
 local Trees_HP = {}
