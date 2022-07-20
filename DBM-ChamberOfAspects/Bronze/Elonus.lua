@@ -22,16 +22,14 @@ mod:RegisterEventsInCombat(
 -- "SWING_DAMAGE"
 )
 
-
+mod:AddTimerLine(L.name)
 
 local warnArcanePunishment = mod:NewStackAnnounce(317155, 5, nil, "Tank")
 
-local specWarnArcanePunishment       = mod:NewSpecialWarningTaunt(317155, "Tank", nil, nil, 1, 2)
-local specWarnReplicaSpawnedSoon     = mod:NewSpecialWarning("WarningReplicaSpawnedSoon", 312211, nil, nil, 1, 6) -- Перефаза
+local specWarnArcanePunishment   = mod:NewSpecialWarningTaunt(317155, "Tank", nil, nil, 1, 2)
+local specWarnReplicaSpawnedSoon = mod:NewSpecialWarning("WarningReplicaSpawnedSoon", 312211, nil, nil, 1, 6) -- Перефаза
 -- local specWarnReturnSoon					= mod:NewSpecialWarning("WarnirnReturnSoon", 312214, nil, nil, 1, 6)
-local specWarnTimelessWhirlwindsGTFO = mod:NewSpecialWarningGTFO(317165, nil, nil, nil, 1, 2)
 
-local TimelessWhirlwinds    = mod:NewCDTimer(20, 317165, nil, nil, nil, 2) --Вневременные вихри
 local ArcanePunishmentStack = mod:NewBuffActiveTimer(30, 317155, nil, "Tank", nil, 5, nil, CL.TANK_ICON)
 
 local warned_CopSoon = false
@@ -48,20 +46,19 @@ local specWarnResonantScream         = mod:NewSpecialWarningCast(312210, "SpellC
 local specWarnReturnInterrupt        = mod:NewSpecialWarningInterrupt(312214, "HasInterrupt", nil, 2, 1, 2)
 local specWarnReturn                 = mod:NewSpecialWarningSwitch(312214, "-Healer", nil, nil, 1, 2)
 local specWarnTemporalCascadeYou     = mod:NewSpecialWarningYou(312206, nil, nil, nil, 3, 2)
-local specWarnReverseCascadeMoveAway = mod:NewSpecialWarningMoveAway(312208, nil, nil, nil, 1, 2)
+local specWarnReverseCascadeMoveAway = mod:NewSpecialWarningMoveAway(312208, nil, nil, nil, 1, 3)
 local yellTemporalCascade            = mod:NewYell(312206, nil, nil, nil, "YELL") --317158
 local yellReverseCascade             = mod:NewYell(312208, nil, nil, nil, "YELL")
 local yellTemporalCascadeFade        = mod:NewShortFadesYell(312206, nil, nil, nil, "YELL")
 local yellReverseCascadeFade         = mod:NewShortFadesYell(312208, nil, nil, nil, "YELL")
 
-local EraseCount          = mod:NewCDCountTimer(60, 312204, nil, nil, nil, 2) --Слово силы: Стереть
+local EraseCount          = mod:NewCDCountTimer(60, 312204, nil, nil, nil, 4, nil, CL.MAGIC_ICON .. "" .. CL.HEALER_ICON) --Слово силы: Стереть
 local ResonantScream      = mod:NewCDTimer(12, 312210, nil, "SpellCaster", nil, 1, nil, nil, nil, 1) --Резонирующий крик(кик)
-local ReplicCount         = mod:NewCDCountTimer(120, 312211, nil, nil, nil, 2) --Временные линии(копии)
+local ReplicCount         = mod:NewCDCountTimer(120, 312211, nil, nil, nil, 2, nil, CL.IMPORTANT_ICON) --Временные линии(копии)
 local ReturnCount         = mod:NewCDCountTimer(120, 312214, nil, nil, nil, 2) --Возврат
-local TemporalCascade     = mod:NewCDTimer(20, 312206, nil, nil, nil, 2) --Темпоральный каскад
-local TemporalCascadeBuff = mod:NewBuffFadesTimer(10, 312206, nil, nil, nil, 6) --Темпоральный каскад
-local ReverseCascadeBuff  = mod:NewBuffFadesTimer(10, 312208, nil, nil, nil, 6) --Обратный каскад
-local enrage              = mod:NewBerserkTimer(600)
+local TemporalCascade     = mod:NewCDTimer(20, 312206, nil, nil, nil, 3, nil, CL.DEADLY_ICON) --Темпоральный каскад
+local TemporalCascadeBuff = mod:NewBuffFadesTimer(10, 312206, nil, nil, nil, 6, nil, CL.DEADLY_ICON) --Темпоральный каскад
+local ReverseCascadeBuff  = mod:NewBuffFadesTimer(10, 312208, nil, nil, nil, 6, nil, CL.DEADLY_ICON) --Обратный каскад
 
 mod:AddSetIconOption("SetIconTempCascIcon", 312206, true, false, { 7, 8 })
 mod:AddSetIconOption("SetIconOnRevCascTargets", 312208, true, false, { 1, 2, 3, 4, 5, 6 })
@@ -72,6 +69,12 @@ mod:AddBoolOption("AnnounceTempCasc", false)
 mod:AddInfoFrameOption(312208, true)
 -- mod:AddBoolOption("BossHealthFrame", true, "misc")
 mod:AddBoolOption("RangeFrame", true)
+
+mod:AddTimerLine(DBM_CORE_L.HEROIC_MODE25 .. " " .. CL.HEROIC_ICON)
+
+local specWarnTimelessWhirlwindsGTFO = mod:NewSpecialWarningGTFO(317165, nil, nil, nil, 1, 2)
+
+local TimelessWhirlwinds = mod:NewCDTimer(20, 317165, nil, nil, nil, 2) --Вневременные вихри
 
 
 local RevCascTargets = {}
@@ -179,7 +182,6 @@ function mod:OnCombatStart()
 	TemporalCascade:Start()
 	ResonantScream:Start()
 	EraseCount:Start(66, self.vb.ErapCount + 1)
-	enrage:Start()
 	if mod:IsDifficulty("normal25") then
 		ReplicCount:Start(25, self.vb.RepCount + 1)
 		ReturnCount:Start(30, self.vb.RetCount + 1)

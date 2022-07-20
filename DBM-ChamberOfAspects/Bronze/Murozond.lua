@@ -21,39 +21,49 @@ mod:RegisterEventsInCombat(
 )
 
 
+mod:AddTimerLine(CL.INTERMISSION)
+local warnPhase1     = mod:NewPhaseAnnounce(1, 2)
+local warnPhase2Soon = mod:NewPrePhaseAnnounce(2, 2)
+
+local NewPrePhaseAnnounce = mod:NewCDCountTimer(180, 313122, nil, nil, nil, 2)
+
+local warnPhase2 = mod:NewPhaseAnnounce(2, 2)
+local warnEndofTimeSoonEnd = mod:NewAnnounce("EndofTimeSoonEnd", 2, 313122, nil, nil, nil, 313122)
+
+local specWarnPerPhase  = mod:NewSpecialWarning("PrePhase", 313122, nil, nil, 1, 6) -- Перефаза
+local specwarnBelay     = mod:NewSpecialWarning("BelayaSfera", 313125, nil, nil, 1, 6)
+local specwarnCern      = mod:NewSpecialWarning("Cernsfera", 313126, nil, nil, 1, 6)
+local specwarnPerebejka = mod:NewSpecialWarning("Perebejkai", 313122, nil, nil, 1, 6)
+
+local EndofTime     = mod:NewCastTimer(10, 313122, nil, nil, nil, 2) --перефаза
+local EndofTimeBuff = mod:NewBuffActiveTimer(60, 313122, nil, nil, nil, 3, nil, CL.DEADLY_ICON)
+
+mod:AddBoolOption("AnnounceOrb", false)
 --------------------------------------HM--------------------------------
+mod:AddTimerLine(DBM_CORE_L.HEROIC_MODE25 .. " " .. CL.HEROIC_ICON)
+
 local warnBredHM            = mod:NewStackAnnounce(317252, 5, nil, "Tank")
-local specWarnPerPhase      = mod:NewSpecialWarning("PrePhase", 313122, nil, nil, 1, 6) -- Перефаза
 local specwarnReflectSpells = mod:NewSpecialWarningCast(317262, "-Healer", nil, nil, 3, 2) -- Отражение заклинаний
 local specWarnTimeTrapGTFO  = mod:NewSpecialWarningGTFO(317260, nil, nil, nil, 3, 2)
 
-
 --local SummoningtheTimelessHM 	= mod:NewCDTimer(90, 313120, nil, nil, nil, 2) -- призыв аддов
-local DistortionWaveHM    = mod:NewCDTimer(40, 317253, nil, nil, nil, 5, nil, CL.HEALER_ICON) -- Волна искажений
-local timerReflectBuff    = mod:NewBuffActiveTimer(5, 317262, nil, nil, nil, 2) --отражение
-local NewPrePhaseAnnounce = mod:NewCDCountTimer(180, 313122, nil, nil, nil, 2)
-local TimeTrapCD          = mod:NewCDTimer(30, 317259, nil, nil, nil, 3) -- Ловушка времени
-local BreathofInfinityHm  = mod:NewCDTimer(15, 317252, nil, "Tank", nil, 5, nil, CL.TANK_ICON) -- танк дабаф хм
-local ReflectSpellsCD     = mod:NewCDTimer(20, 317262, nil, "SpellCaster|-Healer", nil, 3, nil, CL.DEADLY_ICON, nil, 1) -- Отражение заклинаний
-local timerBredHM         = mod:NewTargetTimer(120, 313115, nil, "Tank", nil, 5, nil, CL.TANK_ICON)
-local TerrifyingFutureHM  = mod:NewCDTimer(40, 317255, nil, "Melee", nil, 2, nil, CL.DEADLY_ICON, nil, 1) -- Мили Фир
-local GibVremea           = mod:NewCDTimer(5, 317258, nil, nil, nil, 4, nil, CL.HEALER_ICON) -- призыв аддов
+local DistortionWaveHM   = mod:NewCDTimer(40, 317253, nil, nil, nil, 5, nil, CL.HEALER_ICON) -- Волна искажений
+local timerReflectBuff   = mod:NewBuffActiveTimer(5, 317262, nil, nil, nil, 2) --отражение
+local TimeTrapCD         = mod:NewCDTimer(30, 317259, nil, nil, nil, 3) -- Ловушка времени
+local BreathofInfinityHm = mod:NewCDTimer(15, 317252, nil, "Tank", nil, 5, nil, CL.TANK_ICON) -- танк дабаф хм
+local ReflectSpellsCD    = mod:NewCDTimer(20, 317262, nil, "SpellCaster|-Healer", nil, 3, nil, CL.DEADLY_ICON, nil, 1) -- Отражение заклинаний
+local timerBredHM        = mod:NewTargetTimer(120, 313115, nil, "Tank", nil, 5, nil, CL.TANK_ICON)
+local TerrifyingFutureHM = mod:NewCDTimer(40, 317255, nil, "Melee", nil, 2, nil, CL.DEADLY_ICON, nil, 1) -- Мили Фир
+local GibVremea          = mod:NewCDTimer(5, 317258, nil, nil, nil, 4, nil, CL.HEALER_ICON)
 
+mod:AddBoolOption("GibVr", false)
 
 ---------------------------------------------ОБ---------------------------------
+mod:AddTimerLine(DBM_CORE_L.NORMAL_MODE25)
+local warnBred = mod:NewStackAnnounce(313115, 5, nil, "Tank")
 
-local warnBred       = mod:NewStackAnnounce(313115, 5, nil, "Tank")
-local warnPhase1     = mod:NewPhaseAnnounce(1, 2)
-local warnPhase2Soon = mod:NewPrePhaseAnnounce(2, 2)
-local warnPhase2     = mod:NewPhaseAnnounce(2, 2)
-
-local specwarnBelay        = mod:NewSpecialWarning("BelayaSfera", 313129, nil, nil, 1, 6)
-local specwarnCern         = mod:NewSpecialWarning("Cernsfera", 313122, nil, nil, 1, 6)
-local specwarnPerebejka    = mod:NewSpecialWarning("Perebejkai", 313122, nil, nil, 1, 6)
 local warnTerrifyingFuture = mod:NewSpecialWarningLookAway(313118, "Melee", nil, nil, 2, 2)
 
-local EndofTime            = mod:NewCastTimer(10, 313122, nil, nil, nil, 2) --перефаза
-local EndofTimeBuff        = mod:NewBuffActiveTimer(60, 313122, nil, nil, nil, 3)
 local DistortionWave       = mod:NewCDTimer(40, 313116, nil, nil, nil, 2) -- Волна искажений
 local SummoningtheTimeless = mod:NewCDTimer(90, 313120, nil, nil, nil, 2) -- призыв аддов
 local BreathofInfinity     = mod:NewCDTimer(50, 313115, nil, "Tank", nil, 5, nil, CL.TANK_ICON) -- танк дабаф
@@ -62,15 +72,12 @@ local TerrifyingFuture     = mod:NewCDTimer(40, 313118, nil, "Melee", nil, 2, ni
 
 local warned_preP1 = false
 local warned_preP2 = false
-
-
 mod.vb.PreHuy = 0
 mod.vb.FearMili = 0
 -- mod:AddBoolOption("BossHealthFrame", true, "misc")
-mod:AddBoolOption("AnnounceFails", true, "announce")
-mod:AddBoolOption("GibVr", false)
+
+mod:AddBoolOption("AnnounceFails", false, "announce")
 mod:AddBoolOption("AnnounceFear", false, "announce")
-mod:AddBoolOption("AnnounceOrb", false, "announce")
 local FearTargets = {}
 
 function mod:OnCombatStart()
@@ -117,6 +124,7 @@ function mod:OnCombatEnd(wipe)
 	BreathofInfinity:Stop()
 	TerrifyingFuture:Stop()
 	warnTerrifyingFuture:Cancel()
+	warnEndofTimeSoonEnd:Cancel()
 	if self.Options.GibVr then
 		GibVremea:Stop()
 		self:UnscheduleMethod("Vremea")
@@ -154,6 +162,7 @@ function mod:SPELL_CAST_START(args)
 	elseif spellId == 313122 and not warned_preP2 then
 		self.vb.PreHuy = self.vb.PreHuy + 1
 		EndofTime:Start()
+		warnEndofTimeSoonEnd:Schedule(65)
 		self:SetStage(2)
 		warnPhase2:Show()
 		warned_preP2 = true

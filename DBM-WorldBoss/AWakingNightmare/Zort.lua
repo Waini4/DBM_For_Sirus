@@ -332,20 +332,22 @@ end]]
 
 function mod:UNIT_HEALTH(guid)
 	local uid = self:GetUnitCreatureId(guid)
-	if self.vb.phase == 1 and not warned_kill1 and uid == 50702 and DBM:GetBossHP(50702) <= 73 then
+	if self.vb.phase == 1 and not warned_kill1 and uid == 50702 and DBM:GetBossHP(50702) <= 68 then
 		mod:SetStage(2)
+		warnPhase2:Show()
 		warned_kill1 = true
-		specwarnHp1:Show()
+		--specwarnHp1:Show()
 	end
 	if self.vb.phase == 2 and not warned_kill2 and uid == 50702 and DBM:GetBossHP(50702) <= 43 then
 		mod:SetStage(3)
+		warnPhase3:Show()
 		warned_kill2 = true
-		specwarnHp2:Show()
+		--	specwarnHp2:Show()
 	end
-	if self.vb.phase == 3 and not warned_kill2 and(
-			(uid == 50716 and DBM:GetBossHP(50716) <= 1) or	(uid == 50715 and DBM:GetBossHP(50715) <= 98)) then
-		warned_kill2 = true
-		specwarnHp3:Show()
+	if self.vb.phase == 3 and not warned_kill3 and (
+		(uid == 50716 and DBM:GetBossHP(50716) <= 1) or (uid == 50715 and DBM:GetBossHP(50715) <= 98)) then
+		warned_kill3 = true
+		--specwarnHp3:Show()
 	end
 end
 
@@ -371,6 +373,7 @@ function mod:UNIT_DIED(args)
 	end
 end
 
+--[[
 mod:RegisterOnUpdateHandler(function(self)
 	if not self:IsInCombat() then return end
 	for uId in DBM:GetGroupMembers() do
@@ -407,3 +410,4 @@ mod:RegisterOnUpdateHandler(function(self)
 		end
 	end
 end, 0.1)
+]]
