@@ -114,7 +114,7 @@ function mod:OnCombatStart(delay)
 	self.vb.SveazIcons = 7
 	timerkik:Start(-delay)
 	timerShkval:Start(-delay)
-	Trees_num = 1
+	--Trees_num = 1
 end
 
 function mod:OnCombatEnd(wipe)
