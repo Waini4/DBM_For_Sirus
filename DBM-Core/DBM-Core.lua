@@ -3447,7 +3447,7 @@ do
 				--if dbmRevision < 10481 then return end
 				if mod and delay and (not mod.zones or mod.zones[LastInstanceMapID] or mod.zones[LastInstanceZoneName]) and
 					(not mod.minSyncRevision or modRevision >= mod.minSyncRevision) then
-					DBM:StartCombat(mod, delay + lag, "SYNC from - " .. sender, true, startHp, event)
+					DBM:StartCombat(mod, delay + lag, L.SYNCFrom .. sender, true, startHp, event)
 					if mod.revision < modHFRevision then --mod.revision because we want to compare to OUR revision not senders
 						--There is a newer RELEASE version of DBM out that has this mods fixes that we do not possess
 						if DBM.HighestRelease >= modHFRevision and DBM.ReleaseRevision < modHFRevision then
@@ -3494,8 +3494,8 @@ do
 			private.canSetIcons[optionName] = false
 		end
 		local name = DBM:GetFullPlayerNameByGUID(iconSetPerson[optionName]) or CL.UNKNOWN
-		DBM:Debug(name .. " was elected icon setter for " .. optionName, 2)
-		DBM:AddMsg(name .. " was elected icon setter for " .. optionName)
+		DBM:Debug(name .. L.WasSelectedFor .. optionName, 2)
+		DBM:AddMsg(name .. L.WasSelectedFor .. optionName)
 	end
 
 	syncHandlers["DBMv4-Kill"] = function(_, cId)

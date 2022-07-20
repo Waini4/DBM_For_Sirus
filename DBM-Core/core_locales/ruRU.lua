@@ -670,3 +670,8 @@ L.NORMAL_MODE10        = "Нормальный (10) режим"
 L.NORMAL_MODE25        = "Нормальный (25) режим"
 L.HEROIC_MODE10        = "Героический (10) режим"
 L.HEROIC_MODE25        = "Героический (25) режим"
+
+
+--some ru locs
+L.WasSelectedFor = " был выбран для установки метки -> "
+L.SYNCFrom = "Синхронизация  от "
