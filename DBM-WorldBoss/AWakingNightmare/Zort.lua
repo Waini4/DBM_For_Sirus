@@ -42,9 +42,9 @@ local specWarnBreathNightmare = mod:NewSpecialWarningDispel(308512, "RemoveDisea
 local specWarnRazrsveaz       = mod:NewSpecialWarning("KnopSv", 3)
 local specCowardice           = mod:NewSpecialWarning("|cff71d5ff|Hspell:307834|hПечать: Трусость|h|r Бей босcа - Держи радиус 6 метров!"
 	, 3)
-local specwarnHp1             = mod:NewSpecialWarning("Hp1", 3)
-local specwarnHp2             = mod:NewSpecialWarning("Hp2", 3)
-local specwarnHp3             = mod:NewSpecialWarning("Hp3", 3)
+-- local specwarnHp1             = mod:NewSpecialWarning("Hp1", 3)
+-- local specwarnHp2             = mod:NewSpecialWarning("Hp2", 3)
+-- local specwarnHp3             = mod:NewSpecialWarning("Hp3", 3)
 local specWarnshkval          = mod:NewSpecialWarningGTFO(307821, nil, nil, nil, 1, 2)
 local specWarnTraitor         = mod:NewSpecialWarningStack(307814, nil, 2, nil, nil, 1, 6)
 local specWarnReturnInterrupt = mod:NewSpecialWarningInterrupt(307829, "HasInterrupt", nil, 2, 1, 2)
@@ -68,7 +68,7 @@ local timerCDChep           = mod:NewCDTimer(6, 308520)
 
 mod:AddTimerLine(DBM_COMMON_L.ADDS)
 local warnPriziv  = mod:NewCastAnnounce(307852, 3)
-local timerTrees  = mod:NewCDTimer(5, 307852, nil, nil, nil, 4)
+-- local timerTrees  = mod:NewCDTimer(5, 307852, nil, nil, nil, 4)
 local timerPriziv = mod:NewCDTimer(120, 307852, nil, nil, nil, 4)
 
 mod:AddSetIconOption("SetIconOnSveazTarget", 314606, true, true, { 5, 6, 7 })
