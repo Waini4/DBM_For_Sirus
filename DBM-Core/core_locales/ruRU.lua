@@ -188,7 +188,7 @@ L.VOICE_COUNT_MISSING       = "Голос отсчёта %d использует
 L.BIG_WIGS                  = "BigWigs"
 
 L.UPDATEREMINDER_HEADER         = "Ваша версия " ..
-	L.DEADLY_BOSS_MODS .. " устарела.\n Версия %s (r%d) доступна для загрузки здесь:"
+	L.DEADLY_BOSS_MODS .. " устарела.\n Версия %s (r%s) доступна для загрузки здесь:"
 L.UPDATEREMINDER_FOOTER         = "Нажмите " ..
 	(IsMacClient() and "Cmd-C" or "Ctrl-C") .. ", чтобы скопировать ссылку загрузки в буфер обмена."
 L.UPDATEREMINDER_FOOTER_GENERIC = "Нажмите " ..
