@@ -242,7 +242,7 @@ L:SetOptionLocalization {
 	AnnounceTempCasc      = "Объявить игрока на которого установлена метка $spell:312206, в рейд чат",
 	AnnounceErap          = "Объявлять игроков, на кого установлена метка $spell:312204, в рейд чат",
 	WarningReplicaSpawned = "Предупреждение о появлении копии Элонуса",
-	RangeFrame            = "Показывать окно проверки дистанции (6м)",
+	RangeFrame            = "Показывать окно проверки дистанции (8м)",
 	TempCascIcon          = DBML.AUTO_ICONS_OPTION_TARGETS:format(312206),
 	BossHealthFrame       = "Показывать здоровье босса"
 }
