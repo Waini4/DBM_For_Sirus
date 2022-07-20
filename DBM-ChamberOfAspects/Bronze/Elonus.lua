@@ -12,12 +12,12 @@ mod:SetUsedIcons(1, 2, 3, 4, 5, 6, 7, 8)
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 312214 312211 312210 312204 317156",
 	-- "SPELL_CAST_SUCCESS",
-	"SPELL_AURA_APPLIED 312206 317158 317160 312208 312204 317156 317155 312213 317163 317165",
-	"SPELL_AURA_APPLIED_DOSE 312206 317158 317160 312208 312204 317156 317155 312213 317163 317165",
+	"SPELL_AURA_APPLIED 312206 317158 317160 312208 312204 317156 317155 312213 317163 317165 317161 312209",
+	"SPELL_AURA_APPLIED_DOSE 312206 317158 317160 312208 312204 317156 317155 312213 317163 317165 317161 312209",
 	-- "UNIT_TARGET",
 	"SPELL_DAMAGE",
 	"SPELL_PERIODIC_DAMAGE",
-	"SPELL_AURA_REMOVED 312204 317156 312206 317158 312208 317160 312213 317163",
+	"SPELL_AURA_REMOVED 312204 317156 312206 317158 312208 317160 312213 317163 317161 312209",
 	"UNIT_HEALTH"
 -- "SWING_DAMAGE"
 )
@@ -198,7 +198,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
 	if spellId == 312206 or spellId == 317158 then
 		TempCascTargets[#TempCascTargets + 1] = args.destName
-		if self.Options.SetIconTempCascIcon then
+		if self.Options.SetIconTempCascIcon and self.vb.TempCascIcon > 0 then
 			self:SetIcon(args.destName, self.vb.TempCascIcon, 10)
 		end
 		TemporalCascade:Start()
@@ -213,9 +213,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		self.vb.TempCascIcon = self.vb.TempCascIcon - 1
 		self:Unschedule(warnTempTargets)
 		self:Schedule(0.3, warnTempTargets, self)
-	elseif spellId == 312208 or spellId == 317160 then
+	elseif args:IsSpellID(312208, 317160, 317161, 312209) then
 		RevCascTargets[#RevCascTargets + 1] = args.destName
-		if self.Options.SetIconOnRevCascTargets then
+		if self.Options.SetIconOnRevCascTargets and self.vb.RevCascIcons > 0 then
 			self:SetIcon(args.destName, self.vb.RevCascIcons, 10)
 		end
 		ReverseCascadeBuff:Start()
@@ -235,10 +235,10 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 312204 or spellId == 317156 then
 		if mod:IsDifficulty("normal25") then
 			ErapTargets[#ErapTargets + 1] = args.destName
-			if self.Options.SetIconOnErapTargets then
-				self:SetIcon(args.destName, self.vb.ErapTargets, 10)
+			if self.Options.SetIconOnErapTargets and self.vb.ErapIcons > 0 then
+				self:SetIcon(args.destName, self.vb.ErapIcons, 10)
 			end
-			self.vb.ErapTargets = self.vb.ErapTargets - 1
+			self.vb.ErapIcons = self.vb.ErapIcons - 1
 			self:Unschedule(warnerapTargets)
 			self:Schedule(0.3, warnerapTargets, self)
 		end
@@ -293,7 +293,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		if args:IsPlayer() then
 			yellTemporalCascadeFade:Cancel()
 		end
-	elseif spellId == 312208 or spellId == 317160 then
+	elseif args:IsSpellID(312208, 317160, 317161, 312209) then
 		if self.Options.SetIconOnRevCascTargets then
 			self:SetIcon(args.destName, 0)
 		end
