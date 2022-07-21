@@ -46,7 +46,7 @@ local specWarnResonantScream         = mod:NewSpecialWarningCast(312210, "SpellC
 local specWarnReturnInterrupt        = mod:NewSpecialWarningInterrupt(312214, "HasInterrupt", nil, 2, 1, 2)
 local specWarnReturn                 = mod:NewSpecialWarningSwitch(312214, "-Healer", nil, nil, 1, 2)
 local specWarnTemporalCascadeYou     = mod:NewSpecialWarningYou(312206, nil, nil, nil, 3, 2)
-local specWarnReverseCascadeMoveAway = mod:NewSpecialWarningMoveAway(312208, nil, nil, nil, 1, 3)
+local specWarnReverseCascadeMoveAway = mod:NewSpecialWarningMoveAway(312208, nil, nil, nil, 4, 3)
 local yellTemporalCascade            = mod:NewYell(312206, nil, nil, nil, "YELL") --317158
 local yellReverseCascade             = mod:NewYell(312208, nil, nil, nil, "YELL")
 local yellTemporalCascadeFade        = mod:NewShortFadesYell(312206, nil, nil, nil, "YELL")
@@ -93,7 +93,6 @@ end
 local function warnTempTargets(self)
 	warnTemporalCascade:Show(table.concat(TempCascTargets, "<, >"))
 	table.wipe(TempCascTargets)
-	self.vb.TempCascIcon = 8
 end
 
 local function warnerapTargets(self)
@@ -202,7 +201,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			self:SetIcon(args.destName, self.vb.TempCascIcon, 10)
 		end
 		TemporalCascade:Start()
-		warnTemporalCascade:Show(args.destName)
 		TemporalCascadeBuff:Show(args.destName)
 		TimelessWhirlwinds:Start()
 		if args:IsPlayer() then
@@ -228,7 +226,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnReverseCascadeMoveAway:Show()
 			yellReverseCascade:Yell()
-			yellReverseCascadeFade:Countdown(spellId)
+			yellReverseCascadeFade:Countdown(317160)
 		end
 		self:Unschedule(warnReverTargets)
 		self:Schedule(0.3, warnReverTargets, self)
