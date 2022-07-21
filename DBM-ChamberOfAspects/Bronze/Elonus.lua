@@ -12,12 +12,12 @@ mod:SetUsedIcons(1, 2, 3, 4, 5, 6, 7, 8)
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 312214 312211 312210 312204 317156",
 	-- "SPELL_CAST_SUCCESS",
-	"SPELL_AURA_APPLIED 312206 317158 317160 312208 312204 317156 317155 312213 317163 317165",
-	"SPELL_AURA_APPLIED_DOSE 312206 317158 317160 312208 312204 317156 317155 312213 317163 317165",
+	"SPELL_AURA_APPLIED 312206 317158 317160 312208 312204 317156 317155 312213 317163 317165 317161 312209",
+	"SPELL_AURA_APPLIED_DOSE 312206 317158 317160 312208 312204 317156 317155 312213 317163 317165 317161 312209",
 	-- "UNIT_TARGET",
 	"SPELL_DAMAGE",
 	"SPELL_PERIODIC_DAMAGE",
-	"SPELL_AURA_REMOVED 312204 317156 312206 317158 312208 317160 312213 317163",
+	"SPELL_AURA_REMOVED 312204 317156 312206 317158 312208 317160 312213 317163 317161 312209",
 	"UNIT_HEALTH"
 -- "SWING_DAMAGE"
 )
@@ -63,9 +63,6 @@ local ReverseCascadeBuff  = mod:NewBuffFadesTimer(10, 312208, nil, nil, nil, 6, 
 mod:AddSetIconOption("SetIconTempCascIcon", 312206, true, false, { 7, 8 })
 mod:AddSetIconOption("SetIconOnRevCascTargets", 312208, true, false, { 1, 2, 3, 4, 5, 6 })
 mod:AddSetIconOption("SetIconOnErapTargets", 312204, true, false, { 1, 2, 3 })
-mod:AddBoolOption("AnnounceReverCasc", false)
-mod:AddBoolOption("AnnounceErap", false)
-mod:AddBoolOption("AnnounceTempCasc", false)
 mod:AddInfoFrameOption(312208, true)
 -- mod:AddBoolOption("BossHealthFrame", true, "misc")
 mod:AddBoolOption("RangeFrame", true)
@@ -80,14 +77,30 @@ local TimelessWhirlwinds = mod:NewCDTimer(20, 317165, nil, nil, nil, 2) --Вне
 local RevCascTargets = {}
 local TempCascTargets = {}
 local ErapTargets = {}
-local ErapIcons = 3
-local RevCascIcons = 6
-local TempCascIcon = 8
+mod.vb.ErapIcons = 3
+mod.vb.RevCascIcons = 6
+mod.vb.TempCascIcon = 8
 mod.vb.RetCount = 0
 mod.vb.RepCount = 0
 mod.vb.ErapCount = 0
 
+local function warnReverTargets(self)
+	warnReverseCascade:Show(table.concat(RevCascTargets, "<, >"))
+	table.wipe(RevCascTargets)
+	self.vb.RevCascIcons = 6
+end
 
+local function warnTempTargets(self)
+	warnTemporalCascade:Show(table.concat(TempCascTargets, "<, >"))
+	table.wipe(TempCascTargets)
+	self.vb.TempCascIcon = 8
+end
+
+local function warnerapTargets(self)
+	warnPowerWordErase:Show(table.concat(ErapTargets, "<, >"))
+	table.wipe(ErapTargets)
+	self.vb.ErapIcons = 3
+end
 
 local showShieldHealthBar, hideShieldHealthBar
 do
@@ -128,63 +141,24 @@ do
 	end
 end
 
--- local function sort_by_group(v1, v2)
--- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
--- end
-local function SetRevCascIcons(self)
-	table.sort(RevCascTargets, function(v1, v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
-	for _, v in ipairs(RevCascTargets) do
-		if mod.Options.AnnounceReverCasc then
-			if DBM:GetRaidRank() > 0 then
-				SendChatMessage(L.RevCasc:format(RevCascIcons, UnitName(v)), "RAID_WARNING")
-			else
-				SendChatMessage(L.RevCasc:format(RevCascIcons, UnitName(v)), "RAID")
-			end
-		end
-		if self.Options.SetIconOnRevCascTargets then
-			self:SetIcon(UnitName(v), RevCascIcons, 10)
-		end
-		RevCascIcons = RevCascIcons - 1
-	end
-	warnReverseCascade:Show(table.concat(RevCascTargets, "<, >"))
-	table.wipe(RevCascTargets)
-	RevCascIcons = 6
-end
-
-local function SetErapIcons(self)
-	table.sort(ErapTargets, function(v1, v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
-	for _, v in ipairs(ErapTargets) do
-		if mod.Options.AnnounceErap then
-			if DBM:GetRaidRank() > 0 then
-				SendChatMessage(L.Erapc:format(ErapIcons, UnitName(v)), "RAID_WARNING")
-			else
-				SendChatMessage(L.Erapc:format(ErapIcons, UnitName(v)), "RAID")
-			end
-		end
-		if self.Options.SetIconOnErapTargets then
-			self:SetIcon(UnitName(v), ErapIcons)
-		end
-		ErapIcons = ErapIcons - 1
-	end
-	if #ErapTargets >= 3 then
-		warnPowerWordErase:Show(table.concat(ErapTargets, "<, >"))
-		table.wipe(ErapTargets)
-		ErapIcons = 3
-	end
-end
-
 function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 50609 or 50610, "Elonus")
 	mod:SetStage(1)
 	self.vb.RetCount = 0
 	self.vb.RepCount = 0
 	self.vb.ErapCount = 0
+	self.vb.RevCascIcons = 6
+	self.vb.RevCascIcons = 8
 	TemporalCascade:Start()
 	ResonantScream:Start()
 	EraseCount:Start(66, self.vb.ErapCount + 1)
 	if mod:IsDifficulty("normal25") then
+		self.vb.ErapIcons = 3
 		ReplicCount:Start(25, self.vb.RepCount + 1)
 		ReturnCount:Start(30, self.vb.RetCount + 1)
+	end
+	if self.Options.RangeFrame then
+		DBM.RangeCheck:Show(8)
 	end
 	-- if self.Options.BossHealthFrame then
 	-- 	DBM.BossHealth:Show(L.name)
@@ -223,6 +197,10 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
 	if spellId == 312206 or spellId == 317158 then
+		TempCascTargets[#TempCascTargets + 1] = args.destName
+		if self.Options.SetIconTempCascIcon and self.vb.TempCascIcon > 0 then
+			self:SetIcon(args.destName, self.vb.TempCascIcon, 10)
+		end
 		TemporalCascade:Start()
 		warnTemporalCascade:Show(args.destName)
 		TemporalCascadeBuff:Show(args.destName)
@@ -232,19 +210,14 @@ function mod:SPELL_AURA_APPLIED(args)
 			yellTemporalCascade:Yell()
 			yellTemporalCascadeFade:Countdown(spellId)
 		end
-		if mod.Options.AnnounceTempCasc then
-			if DBM:GetRaidRank() > 0 then
-				SendChatMessage(L.TempCasc:format(TempCascIcon, args.destName), "RAID_WARNING")
-			else
-				SendChatMessage(L.TempCasc:format(TempCascIcon, args.destName), "RAID")
-			end
-		end
-		if self.Options.SetIconTempCascIcon then
-			self:SetIcon(args.destName, TempCascIcon, 10)
-		end
-		TempCascIcon = TempCascIcon - 1
-	elseif spellId == 312208 or spellId == 317160 then
+		self.vb.TempCascIcon = self.vb.TempCascIcon - 1
+		self:Unschedule(warnTempTargets)
+		self:Schedule(0.3, warnTempTargets, self)
+	elseif args:IsSpellID(312208, 317160, 317161, 312209) then
 		RevCascTargets[#RevCascTargets + 1] = args.destName
+		if self.Options.SetIconOnRevCascTargets and self.vb.RevCascIcons > 0 then
+			self:SetIcon(args.destName, self.vb.RevCascIcons, 10)
+		end
 		ReverseCascadeBuff:Start()
 		DBM.Nameplate:Show(args.destGUID, 317160)
 
@@ -256,15 +229,18 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnReverseCascadeMoveAway:Show()
 			yellReverseCascade:Yell()
 			yellReverseCascadeFade:Countdown(spellId)
-			if self.Options.RangeFrame then
-				DBM.RangeCheck:Show(8)
-			end
 		end
-		self:Schedule(0.1, SetRevCascIcons, self)
+		self:Unschedule(warnReverTargets)
+		self:Schedule(0.3, warnReverTargets, self)
 	elseif spellId == 312204 or spellId == 317156 then
-		ErapTargets[#ErapTargets + 1] = args.destName
 		if mod:IsDifficulty("normal25") then
-			self:Schedule(0.1, SetErapIcons, self)
+			ErapTargets[#ErapTargets + 1] = args.destName
+			if self.Options.SetIconOnErapTargets and self.vb.ErapIcons > 0 then
+				self:SetIcon(args.destName, self.vb.ErapIcons, 10)
+			end
+			self.vb.ErapIcons = self.vb.ErapIcons - 1
+			self:Unschedule(warnerapTargets)
+			self:Schedule(0.3, warnerapTargets, self)
 		end
 		--specPowerWordErase:Show(args.destName)
 		warnPowerWordErase:Show(args.destName)
@@ -308,26 +284,23 @@ function mod:SPELL_AURA_REMOVED(args)
 			self:SetIcon(args.destName, 0)
 		end
 	elseif spellId == 312206 or spellId == 317158 then
-		if self.Options.TempCascIcon then
+		if self.Options.SetIconTempCascIcon then
 			self:SetIcon(args.destName, 0)
+			self.vb.TempCascIcon = 8
 		end
 		if self.Options.InfoFrame then
 			DBM.InfoFrame:Hide()
 		end
-		TempCascIcon = 8
 		if args:IsPlayer() then
 			yellTemporalCascadeFade:Cancel()
 		end
-	elseif spellId == 312208 or spellId == 317160 then
+	elseif args:IsSpellID(312208, 317160, 317161, 312209) then
 		if self.Options.SetIconOnRevCascTargets then
 			self:SetIcon(args.destName, 0)
 		end
 		DBM.Nameplate:Hide(args.destGUID, 317160)
 		if args:IsPlayer() then
 			yellReverseCascadeFade:Cancel()
-			if self.Options.RangeFrame then
-				DBM.RangeCheck:Hide()
-			end
 		end
 	elseif spellId == 312213 or spellId == 317163 then
 		specWarnReturnInterrupt:Show()

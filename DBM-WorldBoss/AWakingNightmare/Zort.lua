@@ -87,7 +87,7 @@ mod.vb.FlameIcons = 2
 mod.vb.SveazIcons = 7
 local warned_kill1 = false
 local warned_kill2 = false
--- local warned_kill3 = false
+local warned_kill3 = false
 -- local warned_P2 = false
 -- local warned_P3 = false
 local warned_P4 = false
@@ -347,6 +347,7 @@ function mod:UNIT_HEALTH(guid)
 	if self.vb.phase == 3 and not warned_kill3 and (
 		(uid == 50716 and DBM:GetBossHP(50716) <= 1) or (uid == 50715 and DBM:GetBossHP(50715) <= 98)) then
 		warned_kill3 = true
+		warnPhase4:Show()
 		--specwarnHp3:Show()
 	end
 end
