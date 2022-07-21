@@ -81,9 +81,9 @@ local function currentFullDate()
 end
 
 DBM = {
-	Revision = parseCurseDate("20220720220800"),
-	DisplayVersion = "9.2.05", -- the string that is shown as version
-	ReleaseRevision = releaseDate(2022, 7, 20, 22, 08, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	Revision = parseCurseDate("20220721120000"),
+	DisplayVersion = "9.2.06", -- the string that is shown as version
+	ReleaseRevision = releaseDate(2022, 7, 21, 12, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 
 local fakeBWVersion = 7558
@@ -5479,7 +5479,7 @@ do
 				else
 					if self.Options.ShowDefeatMessage then
 						self:AddMsg(L.COMBAT_ENDED_AT_LONG:format(difficultyText .. name, wipeHP, strFromTime(thisTime),
-							totalPulls - totalKills))
+							totalPulls - (totalKills or 1)))
 						local check = self:InGuildParty() and DBM:GetNumGuildPlayersInZone() >= 10
 						if check and not self.Options.DisableGuildStatus then
 							self:Unschedule(delayedGCSync, modId)
@@ -10060,14 +10060,14 @@ do
 								local phaseText = self.mod.vb.phase and " (" .. L.SCENARIO_STAGE:format(self.mod.vb.phase) .. ")" or ""
 								if DBM.Options.BadTimerAlert and bar.timer > 1 then --If greater than 1 seconds off, report this out of debug mode to all users
 									DBM:AddMsg("Timer " ..
-										ttext .. phaseText .. " refreshed before expired. Remaining time is : " ..
-										remaining .. ". Please report this bug")
+										ttext .. phaseText .. CL.RefreshedBefore ..
+										remaining .. CL.PlsREport)
 									fireEvent("DBM_Debug",
 										"Timer " ..
-										ttext .. phaseText .. " refreshed before expired. Remaining time is : " ..
-										remaining .. ". Please report this bug", 2)
+										ttext .. phaseText .. CL.RefreshedBefore ..
+										remaining .. CL.PlsREport, 2)
 								else
-									DBM:Debug("Timer " .. ttext .. phaseText .. " refreshed before expired. Remaining time is : " .. remaining, 2)
+									DBM:Debug("Timer " .. ttext .. phaseText .. CL.RefreshedBefore .. remaining, 2)
 								end
 							end
 						end
@@ -10144,14 +10144,14 @@ do
 							local phaseText = self.mod.vb.phase and " (" .. L.SCENARIO_STAGE:format(self.mod.vb.phase) .. ")" or ""
 							if DBM.Options.BadTimerAlert and bar.timer > 1 then --If greater than 1 seconds off, report this out of debug mode to all users
 								DBM:AddMsg("Timer " ..
-									ttext .. phaseText .. " refreshed before expired. Remaining time is : " .. remaining ..
-									". Please report this bug")
+									ttext .. phaseText .. CL.RefreshedBefore .. remaining ..
+									CL.PlsREport)
 								fireEvent("DBM_Debug",
 									"Timer " ..
-									ttext .. phaseText .. " refreshed before expired. Remaining time is : " .. remaining ..
-									". Please report this bug", 2)
+									ttext .. phaseText .. CL.RefreshedBefore .. remaining ..
+									CL.PlsREport, 2)
 							else
-								DBM:Debug("Timer " .. ttext .. phaseText .. " refreshed before expired. Remaining time is : " .. remaining, 2)
+								DBM:Debug("Timer " .. ttext .. phaseText .. CL.RefreshedBefore .. remaining, 2)
 							end
 						end
 					end
