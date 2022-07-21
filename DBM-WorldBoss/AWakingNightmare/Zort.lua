@@ -184,10 +184,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		self.vb.FlameIcons = self.vb.FlameIcons - 1
 		self:Unschedule(warnFlameTargets)
 		self:Schedule(0.3, warnFlameTargets, self)
-		if self.Options.InfoFrame then
-			DBM.InfoFrame:SetHeader(args.spellName)
-			DBM.InfoFrame:Show(10, "playerdebuffremaining", 307839)
-		end
 		if args:IsPlayer() then
 			specWarnFlame:Show()
 			yellFlame:Yell()
@@ -208,7 +204,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.SetIconOnSveazTarget and self.vb.SveazIcons > 0 then
 			self:SetIcon(args.destName, self.vb.SveazIcons, 10)
 		end
-		if self.Options.InfoFrame then
+		if self.Options.InfoFrame and not DBM.InfoFrame:IsShown() then
 			DBM.InfoFrame:SetHeader(args.spellName)
 			DBM.InfoFrame:Show(15, "playerdebuffremaining", 308620)
 		end
