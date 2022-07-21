@@ -76,3 +76,6 @@ CL.POISON_ICON          = "|TInterface\\" .. EJIconPath .. "\\UI-EJ-Icons.blp:20
 CL.DISEASE_ICON         = "|TInterface\\" .. EJIconPath .. "\\UI-EJ-Icons.blp:20:20:0:0:255:66:70:86:40:58|t" -- NO TRANSLATE
 CL.ENRAGE_ICON          = "|TInterface\\" .. EJIconPath .. "\\UI-EJ-Icons.blp:20:20:0:0:255:66:102:118:40:58|t" -- NO TRANSLATE
 CL.BLEED_ICON           = "|TInterface\\" .. EJIconPath .. "\\UI-EJ-Icons.blp:20:20:0:0:255:66:168:182:40:58|t" -- NO TRANSLATE
+
+CL.RefreshedBefore = " обновлено перед исчезновением. Ожидаемое время : "
+CL.PlsREport = ". Напишите на форум о этом баге"
