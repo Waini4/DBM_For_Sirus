@@ -18,7 +18,7 @@ local warnNextPhaseSoon = mod:NewAnnounce("WarnNextPhaseSoon", 1)
 
 local timerWhirlwind = mod:NewCDTimer(17, 17207)
 local timerThrow     = mod:NewCDTimer(10, 43093)
-local warnThrow      = mod:NewAnnounce("WarnThrow", 4, 43093)
+-- local warnThrow      = mod:NewAnnounce("WarnThrow", 4, 43093)
 
 local timerParalysis = mod:NewCDTimer(20, 43095)
 
@@ -36,8 +36,8 @@ local warnFlamePillar          = mod:NewAnnounce("WarnFlamePillar", 4, 43216)
 local berserkTimer = mod:NewBerserkTimer(600)
 
 local bleedTargets = {}
-local phaseCounter = 1
-local lastPhase = false
+-- local phaseCounter = 1
+-- local lastPhase = false
 local notBleedWarned = true
 mod:AddBoolOption("WarnThrow", true)
 mod:AddBoolOption("WarnJump", true)
