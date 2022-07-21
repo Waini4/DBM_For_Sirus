@@ -6,7 +6,7 @@ mod:SetRevision(("$Revision: 163 $"):sub(12, -3))
 mod:SetCreatureID(23577)
 mod:RegisterCombat("combat", 23577)
 
-mod:RegisterEvents(
+mod:RegisterEventsInCombat(
 	"SPELL_CAST_START",
 	"SPELL_AURA_APPLIED 41254 43303",
 	"CHAT_MSG_MONSTER_YELL"

@@ -6,7 +6,7 @@ mod:SetRevision(("$Revision: 163 $"):sub(12, -3))
 mod:SetCreatureID(23863)
 mod:RegisterCombat("combat", 23863)
 
-mod:RegisterEvents(
+mod:RegisterEventsInCombat(
 	"SPELL_CAST_START",
 	"SPELL_CAST_SUCCESS 43095 43215 43213 43093",
 	"SPELL_AURA_APPLIED 17207 43153",
@@ -61,7 +61,8 @@ local function IsTankZ(uId)
 end
 
 function mod:tPillar()
-	lastPhase = true
+	-- DBM:GetStage("ZulJin") == 2
+	self:SetStage(5)
 end
 
 function mod:tBleed()
@@ -75,8 +76,10 @@ function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 23863, "Zul'jin")
 	timerWhirlwind:Start(6)
 	timerThrow:Start(7)
-	phaseCounter = 1
-	lastPhase = false
+	-- DBM:GetStage("ZulJin") == 2
+	-- phaseCounter = 1
+	self:SetStage(1)
+	-- lastPhase = false
 	notBleedWarned = true
 	table.wipe(bleedTargets)
 	berserkTimer:Start()
@@ -84,6 +87,7 @@ end
 
 function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 23863, "Zul'jin", wipe)
+	-- self:SetStage(1)
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
@@ -123,7 +127,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 end
 
 function mod:UNIT_TARGET(uId)
-	if (lastPhase and self:GetUnitCreatureId(uId) == 23863) then
+	if (DBM:GetStage("ZulJin") == 5 and self:GetUnitCreatureId(uId) == 23863) then
 		timerFlamePillar:Start()
 		if not IsTankZ("targettarget") then
 			warnFlamePillar:Show(UnitName("targettarget"))
@@ -138,22 +142,28 @@ function mod:UNIT_TARGET(uId)
 end
 
 function mod:UNIT_HEALTH(uId)
-	if (self:GetUnitCreatureId(uId) == 23863 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.81 and phaseCounter == 1) then
-		phaseCounter = phaseCounter + 1
-		warnNextPhaseSoon:Show(L.Bear)
-	elseif (self:GetUnitCreatureId(uId) == 23863 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.61 and phaseCounter == 2) then
-		phaseCounter = phaseCounter + 1
-		timerParalysis:Cancel()
-		warnNextPhaseSoon:Show(L.Hawk)
-	elseif (self:GetUnitCreatureId(uId) == 23863 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.41 and phaseCounter == 3) then
-		phaseCounter = phaseCounter + 1
-		warnNextPhaseSoon:Show(L.Lynx)
-	elseif (self:GetUnitCreatureId(uId) == 23863 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.21 and phaseCounter == 4) then
-		phaseCounter = phaseCounter + 1
-		warnNextPhaseSoon:Show(L.Dragon)
-	elseif (self:GetUnitCreatureId(uId) == 23863 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.20 and not lastPhase) then
-		timerJump:Cancel()
-		self:ScheduleMethod(10, "tPillar")
-		timerFlamePillar:Start(18)
+	if self:GetUnitCreatureId(uId) == 23863 then
+		if (DBM:GetBossHP(23863) <= 81 and DBM:GetStage("ZulJin") == 1 ) then
+			self:SetStage(2)
+			-- phaseCounter = phaseCounter + 1
+			warnNextPhaseSoon:Show(L.Bear)
+		elseif (DBM:GetBossHP(23863) <= 61 and DBM:GetStage("ZulJin") == 2) then
+			self:SetStage(3)
+			-- phaseCounter = phaseCounter + 1
+			timerParalysis:Cancel()
+			warnNextPhaseSoon:Show(L.Hawk)
+		elseif (DBM:GetBossHP(23863) <= 41 and DBM:GetStage("ZulJin") == 3) then
+			self:SetStage(4)
+			-- phaseCounter = phaseCounter + 1
+			warnNextPhaseSoon:Show(L.Lynx)
+		elseif (DBM:GetBossHP(23863) <= 21 and DBM:GetStage("ZulJin") == 4) then
+			-- phaseCounter = phaseCounter + 1
+			warnNextPhaseSoon:Show(L.Dragon)
+		elseif (DBM:GetBossHP(23863) <= 20 and DBM:GetStage("ZulJin") ~= 5) then
+			-- self:SetStage(5)
+			timerJump:Cancel()
+			self:ScheduleMethod(10, "tPillar")
+			timerFlamePillar:Start(18)
+		end
 	end
 end
