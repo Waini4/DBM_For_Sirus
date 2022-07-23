@@ -5,53 +5,54 @@ local L
 
 L = DBM:GetModLocalization("Gogonash")
 
-L:SetGeneralLocalization{
+L:SetGeneralLocalization {
 	name = "Гогонаш"
 }
 
-L:SetTimerLocalization{
+L:SetTimerLocalization {
 }
 
-L:SetWarningLocalization{
+L:SetWarningLocalization {
 }
 
-L:SetOptionLocalization{
-	SetIconMarkofFilthTargets  		= "Устанавливать иконки на цели $spell:317544",
-	AnnounceMarkofFilth  			= "Объявлять игроков, на кого установлена $spell:317544, в рейд чат ",
-	BossHealthFrame					= "Показывать здоровье босса"
+L:SetOptionLocalization {
+	SetIconMarkofFilthTargets = "Устанавливать иконки на цели $spell:317544",
+	BossHealthFrame           = "Показывать здоровье босса"
 }
 
-L:SetMiscLocalization{
-	MarkofFilthIcon					= "Метка скверны {rt%d} установлена на: %s"
+L:SetMiscLocalization {
+	MarkofFilthIcon = "Метка скверны {rt%d} установлена на: %s"
 }
 
 
 L = DBM:GetModLocalization("Ctrax")
 
-L:SetGeneralLocalization{
+L:SetGeneralLocalization {
 	name = "Ктракс"
 }
 
-L:SetTimerLocalization{
+L:SetTimerLocalization {
 }
 
-L:SetWarningLocalization{
+L:SetWarningLocalization {
+	Immersion = "Бегите в теневой колодец!"
 }
 
-L:SetOptionLocalization{
-	BossHealthFrame					= "Показывать здоровье босса",
-	PowerPercent					= "Энергия босса"
+L:SetOptionLocalization {
+	BossHealthFrame = "Показывать здоровье босса",
+	PowerPercent    = "Энергия босса",
+	Immersion       = "Спец-предупреждение 'Бегите в теневой колодец' при $spell:317604"
 }
 
-L:SetMiscLocalization{
-	PowerPercent					="Энергия босса"
+L:SetMiscLocalization {
+	PowerPercent = "Энергия босса"
 }
 
 L = DBM:GetModLocalization("MagicEater")
 
-L:SetGeneralLocalization{
+L:SetGeneralLocalization {
 	name = "Пожиратель магии"
 }
 
-L:SetMiscLocalization{
+L:SetMiscLocalization {
 }
