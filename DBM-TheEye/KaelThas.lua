@@ -5,7 +5,7 @@ local CL = DBM_COMMON_L
 mod:SetRevision("20220609123000") -- fxpw check 20220609123000
 
 mod:SetCreatureID(19622)
-mod:RegisterCombat("combat_yell", L.YellPhase1)
+mod:RegisterCombat("combat")
 mod:SetUsedIcons(5, 6, 7, 8)
 
 mod:RegisterEventsInCombat(
