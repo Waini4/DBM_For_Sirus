@@ -20,9 +20,9 @@ mod:RegisterEventsInCombat(
 mod:RegisterEvents(
 	"CHAT_MSG_RAID_BOSS_EMOTE",
 	"CHAT_MSG_MONSTER_YELL",
-	"SPELL_CAST_SUCCESS 36797",
-	"SPELL_AURA_APPLIED_DOSE 36797",
-	"SPELL_AURA_APPLIED 36797"
+	"SPELL_CAST_SUCCESS 36797 ",
+	"SPELL_AURA_APPLIED_DOSE 36797 308797",
+	"SPELL_AURA_APPLIED 36797 308797"
 )
 
 
@@ -63,6 +63,7 @@ local timerGravityCD = mod:NewCDTimer(90, 35941, nil, nil, nil, 4, nil, CL.DEADL
 --об
 local warnAvenger     = mod:NewTargetAnnounce(308743, 4)
 local specAvenger     = mod:NewSpecialWarningYou(308743)
+local specwarnVzriv   = mod:NewSpecialWarningYou(308797, nil, nil, nil, 4, 5)
 local specAvengerNear = mod:NewSpecialWarning("|cff71d5ff|Hspell:308743|hЩит мстителя|h|r около вас - Стоп каст!")
 local warnFurious     = mod:NewStackAnnounce(308732, 2, nil, "Tank|Healer") -- яростный удар
 local warnJustice     = mod:NewStackAnnounce(308741, 2, nil, "Tank|Healer") -- правосудие тьмы
@@ -466,6 +467,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			self:SetIcon(args.destName, 8, 5)
 		end
 		if args:IsPlayer() then
+			specwarnVzriv:Show()
 			if self.Options.SayBoom then
 				SendChatMessage(format("{череп}|cff71d5ff|Hspell:308797|h[Взрыв пустоты]|h|r{череп}НА МНЕ{череп}")
 					, "SAY")
@@ -490,6 +492,8 @@ function mod:SPELL_AURA_APPLIED(args)
 	end
 end
 
+mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
+
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(308750) then
 		if self.Options.SetIconOnBombTargets then
@@ -512,5 +516,3 @@ function mod:RemoveBuffs()
 	CancelUnitBuff("player", (GetSpellInfo(48169))) -- Shadow Protection
 	CancelUnitBuff("player", (GetSpellInfo(48170))) -- Prayer of Shadow Protection
 end
-
-mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
