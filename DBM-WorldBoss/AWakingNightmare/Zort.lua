@@ -373,9 +373,6 @@ function mod:UNIT_HEALTH(guid)
 	-- 		self:SetStage(4)
 	-- 	end
 	-- end
-
-
-	-- if 
 end
 
 function mod:UNIT_DIED(args)
