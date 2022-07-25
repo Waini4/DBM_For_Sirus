@@ -333,35 +333,35 @@ function mod:UNIT_HEALTH(guid)
 	if self:GetUnitCreatureId(guid) == 50702 then -- zort
 		-- if  DBM:GetBossHP(guid) <= 68
 	elseif self:GetUnitCreatureId(guid) == 50714 then -- вторая лик
-		if  DBM:GetBossHP(guid) <= 2 and self:GetStage("Zort") == 2 then
+		if  DBM:GetBossHP(guid) <= 2 and DBM:GetStage("Zort") == 2 then
 			self:NextStage() --stage == 3
 		end
 	elseif self:GetUnitCreatureId(guid) == 50715 then -- первая чудовищная
-		if  DBM:GetBossHP(guid) <= 2 and self:GetStage("Zort") == 1  then
+		if  DBM:GetBossHP(guid) <= 2 and DBM:GetStage("Zort") == 1  then
 			self:NextStage() --stage == 2
-		elseif  DBM:GetBossHP(guid) >= 99 and self:GetStage("Zort") == 3 then
+		elseif  DBM:GetBossHP(guid) >= 99 and DBM:GetStage("Zort") == 3 then
 			self:NextStage() --stage == 4
 		end
 	elseif self:GetUnitCreatureId(guid) == 50716 then -- щупальце плеть
-		if  DBM:GetBossHP(guid) <= 1 and self:GetStage("Zort") == 3  then
+		if  DBM:GetBossHP(guid) <= 1 and DBM:GetStage("Zort") == 3  then
 			self:NextStage() --stage == 4
 		end
-	elseif self:GetStage("Zort") == 4 and self.AllThreeDead == 4 then
+	elseif DBM:GetStage("Zort") == 4 and self.AllThreeDead == 4 then
 		self:NextStage() --stage == 5
 	end
-	-- 	if self:GetStage("Zort") == 1 and   DBM:GetBossHP(guid) <= 68 then
+	-- 	if DBM:GetStage("Zort") == 1 and   DBM:GetBossHP(guid) <= 68 then
 	-- 		self:SetStage(2)
 	-- 		warnPhase2:Show()
 	-- 		-- warned_kill1 = true
 	-- 		--specwarnHp1:Show()
 
-	-- 	elseif self:GetStage("Zort") == 2 and DBM:GetBossHP(guid) <= 43 then
+	-- 	elseif DBM:GetStage("Zort") == 2 and DBM:GetBossHP(guid) <= 43 then
 	-- 		self:SetStage(3)
 	-- 		warnPhase3:Show()
 	-- 		-- warned_kill2 = true
 	-- 		--	specwarnHp2:Show()
 
-	-- 	elseif self:GetStage("Zort") == 3 and not warned_kill3 and (
+	-- 	elseif DBM:GetStage("Zort") == 3 and not warned_kill3 and (
 	-- 		(uid == 50716 and DBM:GetBossHP(50716) <= 1) or (uid == 50715 and DBM:GetBossHP(guid) <= 98)) then
 	-- 		-- warned_kill3 = true
 	-- 		warnPhase4:Show()
