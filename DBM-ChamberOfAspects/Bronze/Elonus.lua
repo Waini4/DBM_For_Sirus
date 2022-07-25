@@ -229,13 +229,14 @@ function mod:SPELL_AURA_APPLIED(args)
 			yellReverseCascade:Yell()
 			yellReverseCascadeFade:Countdown(317160)
 		end
+		self.vb.RevCascIcons = self.vb.RevCascIcons - 1
 		self:Unschedule(warnReverTargets)
 		self:Schedule(0.3, warnReverTargets, self)
 	elseif spellId == 312204 or spellId == 317156 then
 		if mod:IsDifficulty("normal25") then
 			ErapTargets[#ErapTargets + 1] = args.destName
 			if self.Options.SetIconOnErapTargets and self.vb.ErapIcons > 0 then
-				self:SetIcon(args.destName, self.vb.ErapIcons, 10)
+				self:SetIcon(args.destName, self.vb.ErapIcons)
 			end
 			self.vb.ErapIcons = self.vb.ErapIcons - 1
 			self:Unschedule(warnerapTargets)

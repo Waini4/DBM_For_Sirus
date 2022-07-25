@@ -53,11 +53,19 @@ function mod:OnCombatStart(delay)
 	self.vb.SmashCount = 0
 	warned_preP2 = false
 	warned_star = false
-	timerNextCollapsingStar:Start(22 - delay) -- one log review (2022/07/05)
-	timerCDCosmicSmash:Start(35 - delay) -- one log review (2022/07/05)
-	announcePreBigBang:Schedule(61 - delay)
-	timerNextBigBang:Start(71 - delay) -- one log review (2022/07/05)
-	enrageTimer:Start(360 - delay)
+	local text = select(3, GetWorldStateUIInfo(1))
+	local _, _, time = string.find(text, L.PullCheck)
+	if not time then
+		time = 120
+	end
+	time = tonumber(time)
+	if time == 120 then
+		timerCombatStart:Start(26.5 - delay)
+		self:ScheduleMethod(26.5 - delay, "startTimers") -- 26 seconds roleplaying
+	else
+		timerCombatStart:Start(-delay)
+		self:ScheduleMethod(8 - delay, "startTimers") -- 8 seconds roleplaying
+	end
 end
 
 function mod:OnCombatEnd(wipe)
