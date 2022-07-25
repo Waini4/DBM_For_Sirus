@@ -57,7 +57,7 @@ function mod:SPELL_AURA_REMOVED(args)
 			yellDoom:Cancel()
 		end
 		if self.Options.DoomIcon then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	end
 end

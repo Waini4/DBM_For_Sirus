@@ -91,7 +91,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 312732 or spellId == 312731 or spellId == 62717 or spellId == 63477 then		-- Slag Pot
 		if self.Options.SlagPotIcon then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	end
 end

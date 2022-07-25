@@ -74,7 +74,7 @@ end
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args.spellId == 41001 and self.Options.FAIcons then
-		self:SetIcon(args.destName, 0)
+		self:RemoveIcon(args.destName)
 	end
 end
 

@@ -98,7 +98,7 @@ end
 function mod:SPELL_AURA_REMOVED(args)
 	if args.spellId == 45641 then
 		if self.Options.BloomIcon then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	end
 end

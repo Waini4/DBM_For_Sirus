@@ -182,11 +182,11 @@ end
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(74792) then
 		if self.Options.SetIconOnConsumption then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	elseif args:IsSpellID(74562) then
 		if self.Options.SetIconOnConsumption then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	end
 end

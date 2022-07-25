@@ -267,23 +267,23 @@ end
 function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 64465 and self.Options.SetIconOnBeacon then
-		self:SetIcon(args.destName, 0)
+		self:RemoveIcon(args.destName)
 	end
 	if spellId == 312995 and self.Options.SetIconOnBrainLinkTarget then -- Brain Link
-		self:SetIcon(args.destName, 0)
+		self:RemoveIcon(args.destName)
 		if args:IsPlayer() then
 			if self.Options.RangeFrame then
 				DBM.RangeCheck:Hide()
 			end
 		end
 	elseif spellId == 312989 and self.Options.SetIconOnFervorTarget then -- Sara's Fervor
-		self:SetIcon(args.destName, 0)
+		self:RemoveIcon(args.destName)
 	elseif spellId == 63894 or spellId == 64775 then -- Shadowy Barrier removed from Yogg-Saron (start p3)
 		self:SendSync("Phase3") -- Sync this because you don't get it in your combat log if you are in brain room.
 	elseif args:IsSpellID(313001, 313002, 313027, 313028, 64167, 64163) and self:AntiSpam(3, 2) then -- Lunatic Gaze
 		timerNextLunaricGaze:Start()
 	elseif args:IsSpellID(313029, 312993, 63830, 63881) and self.Options.SetIconOnFearTarget then -- Malady of the Mind (Death Coil)
-		self:SetIcon(args.destName, 0)
+		self:RemoveIcon(args.destName)
 	elseif spellId == 64465 then
 		if self.Options.SetIconOnBeacon then
 			self:ScanForMobs(args.destGUID, 2, 0, 1, 0.2, 12, "SetIconOnBeacon")

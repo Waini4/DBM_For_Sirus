@@ -169,7 +169,7 @@ end
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(312758, 312757, 312760, 312407, 312405, 312404, 64290, 64292) then  -- Вопрос дохуя хваток
-		self:SetIcon(args.destName, 0)
+		self:RemoveIcon(args.destName)
     end
 end
 

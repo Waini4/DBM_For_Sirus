@@ -235,12 +235,12 @@ function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(307839) then
 		self.vb.FlameIcons = 2
 		if self.Options.SetIconOnFlameTarget then
-			self:SetSortedIcon(self, "roster", args.destName, 7,8)
+			self:SetSortedIcon("roster", args.destName, 7,8)
 		end
 		DBM.Nameplate:Hide(args.destGUID, 307839)
 	elseif args:IsSpellID(308516, 308517) then
 		if self.Options.SetIconOnSveazTarget then
-			self:SetSortedIcon(self, "roster", args.destName, 6,8)
+			self:SetSortedIcon("roster", args.destName, 6,8)
 		end
 	elseif args:IsSpellID(318956) and not warned_P4 then
 		self:NewPhaseAnnounce(4)
@@ -349,19 +349,19 @@ function mod:UNIT_HEALTH(guid)
 	elseif DBM:GetStage("Zort") == 4 and self.AllThreeDead == 4 then
 		self:NextStage() --stage == 5
 	end
-	-- 	if DBM:GetStage("Zort") == 1 and   DBM:GetBossHP(guid) <= 68 then
+	-- 	if self:GetStage("Zort") == 1 and   DBM:GetBossHP(guid) <= 68 then
 	-- 		self:SetStage(2)
 	-- 		warnPhase2:Show()
 	-- 		-- warned_kill1 = true
 	-- 		--specwarnHp1:Show()
 
-	-- 	elseif DBM:GetStage("Zort") == 2 and DBM:GetBossHP(guid) <= 43 then
+	-- 	elseif self:GetStage("Zort") == 2 and DBM:GetBossHP(guid) <= 43 then
 	-- 		self:SetStage(3)
 	-- 		warnPhase3:Show()
 	-- 		-- warned_kill2 = true
 	-- 		--	specwarnHp2:Show()
 
-	-- 	elseif DBM:GetStage("Zort") == 3 and not warned_kill3 and (
+	-- 	elseif self:GetStage("Zort") == 3 and not warned_kill3 and (
 	-- 		(uid == 50716 and DBM:GetBossHP(50716) <= 1) or (uid == 50715 and DBM:GetBossHP(guid) <= 98)) then
 	-- 		-- warned_kill3 = true
 	-- 		warnPhase4:Show()

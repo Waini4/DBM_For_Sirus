@@ -53,7 +53,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	if args.spellId == 33711 then
 		timerTouch:Stop(args.destName)
 		if self.Options.SetIconOnTouchTarget then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	end
 end

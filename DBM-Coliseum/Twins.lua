@@ -243,12 +243,12 @@ do
 		elseif args:IsSpellID(65950, 67296, 67297, 67298) then	-- Touch of Light
 			timerLightTouch:Stop(args.destName)
 			if self.Options.SetIconOnDebuffTarget then
-				self:SetIcon(args.destName, 0)
+				self:RemoveIcon(args.destName)
 			end
 		elseif args:IsSpellID(66001, 67281, 67282, 67283) then	-- Touch of Darkness
 			timerDarkTouch:Stop(args.destName)
 			if self.Options.SetIconOnDebuffTarget then
-				self:SetIcon(args.destName, 0)
+				self:RemoveIcon(args.destName)
 			end
 		end
 	end

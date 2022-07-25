@@ -135,7 +135,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	-- local spellId = args.spellId
 	if args:IsSpellID(317544) then
 		if self.Options.SetIconMarkofFilthTargets then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	end
 end

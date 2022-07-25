@@ -151,7 +151,7 @@ function mod:SPELL_AURA_REMOVED(args)
 			yellParasiteFades:Cancel()
 		end
 		if self.Options.ParasiteIcon then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	end
 end

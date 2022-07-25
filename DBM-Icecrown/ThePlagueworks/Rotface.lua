@@ -156,7 +156,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		timerMutatedInfection:Cancel(args.destName)
 		warnOozeSpawn:Show()
 		if self.Options.InfectionIcon then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	end
 end

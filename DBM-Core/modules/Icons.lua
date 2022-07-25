@@ -39,6 +39,7 @@ end
 
 --Primary icon methods
 function module:SetIcon(mod, target, icon, timer)
+	-- print(mod, target, icon, timer)
 	if not target then return end--Fix a rare bug where target becomes nil at last second (end combat fires and clears targets)
 	if DBM.Options.DontSetIcons or not private.enableIcons or DBM:GetRaidRank(playerName) == 0 then
 		return
@@ -48,12 +49,15 @@ function module:SetIcon(mod, target, icon, timer)
 		DBM:Debug("|cffff0000SetIcon is being used impropperly. Check icon/target order|r")
 		return--Fail silently instead of spamming icon lua errors if we screw up
 	end
+	-- print(51)
 	if not icon or icon > 8 or icon < 0 then
 		DBM:Debug("|cffff0000SetIcon is being used impropperly. Icon value must be between 0 and 8 (16 if extended)|r")
 		return
 	end
+	-- print(56)
 	local uId = DBM:GetRaidUnitId(target) or UnitExists(target) and target
 	if uId and UnitIsUnit(uId, "player") and DBM:GetNumRealGroupMembers() < 2 then return end--Solo raid, no reason to put icon on yourself.
+	-- print(60)
 	if uId then--target accepts uid, unitname both.
 		uId = uId or target
 		--save previous icon into a table.
@@ -63,6 +67,7 @@ function module:SetIcon(mod, target, icon, timer)
 		end
 		--set icon
 		if oldIcon ~= icon then--Don't set icon if it's already set to what we're setting it to
+			-- print(uId, mod.iconRestore[uId] and icon == 0 and mod.iconRestore[uId] or icon)
 			SetRaidTarget(uId, mod.iconRestore[uId] and icon == 0 and mod.iconRestore[uId] or icon)
 		end
 		--schedule restoring old icon if timer enabled.
@@ -201,6 +206,7 @@ do
 	end
 
 	function module:SetSortedIcon(mod, sortType, delay, target, startIcon, maxIcon, descendingIcon, returnFunc, scanId)
+		-- print(mod, sortType, delay, target, startIcon, maxIcon, descendingIcon, returnFunc, scanId)
 		if type(sortType) ~= "string" then
 			DBM:AddMsg("SetSortedIcon tried to call invalid type, please update your encounter modules for this zone. If error persists, report this issue")
 			return

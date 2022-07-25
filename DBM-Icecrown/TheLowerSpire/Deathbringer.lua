@@ -217,7 +217,7 @@ end
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(72385, 72441, 72442, 72443) and self.Options.BoilingBloodIcons then
-		self:SetIcon(args.destName, 0)
+		self:RemoveIcon(args.destName)
 	end
 end
 

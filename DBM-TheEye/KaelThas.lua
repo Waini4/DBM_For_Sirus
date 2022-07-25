@@ -451,7 +451,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			BombIcons = BombIcons - 1
 			-- if self.Options.SetIconOnStaticTargets then
 				-- function module:SetSortedIcon(mod, sortType, delay, target, startIcon, maxIcon, descendingIcon, returnFunc, scanId)
-				self:SetSortedIcon(self, "roster", args.destName, 7,8)
+				self:SetSortedIcon("roster", args.destName, 7,8)
 			-- end
 		end
 		if #BombTargets >= 2 then
@@ -501,10 +501,10 @@ mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(308750) then
 		if self.Options.SetIconOnBombTargets then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	elseif args:IsSpellID(36797) then
-		self:SetIcon(args.destName, 0)
+		self:RemoveIcon(args.destName)
 	end
 end
 

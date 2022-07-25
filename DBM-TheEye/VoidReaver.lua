@@ -159,7 +159,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		-- self:ScheduleMethod(0.1, "SetSignIcons")
 		if self.Options.SetIconOnSignTargets then
 			-- function module:SetSortedIcon(mod, sortType, delay, target, startIcon, maxIcon, descendingIcon, returnFunc, scanId)
-			self:SetSortedIcon(self, "roster", args.destName, 4,8)
+			self:SetSortedIcon("roster", args.destName, 4 , 8)
 		end
 		timerSignCD:Start()
 	elseif args:IsSpellID(308467) then
@@ -177,7 +177,7 @@ end
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(308471) then
 		if self.Options.SetIconOnSignTargets then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 		DBM.Nameplate:Hide(args.destGUID, 308471)
 	end

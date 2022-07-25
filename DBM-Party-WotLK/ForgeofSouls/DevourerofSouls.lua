@@ -57,7 +57,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	if args.spellId == 69051 and args:IsDestTypePlayer() then	-- Mirrored Soul
 		timerMirroredSoul:Cancel(args.destName)
 		if self.Options.SetIconOnMirroredTarget then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	end
 end

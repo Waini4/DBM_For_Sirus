@@ -84,7 +84,7 @@ end
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(312831, 312478, 65123, 65133) then
 		if self.Options.SetIconOnStormCloud then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	end
 end

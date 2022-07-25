@@ -68,7 +68,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 69065 then						-- Impaled
 		if self.Options.SetIconOnImpale then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	elseif spellId == 69076 then
 		timerWhirlwind:Cancel()

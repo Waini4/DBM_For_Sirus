@@ -369,17 +369,17 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if args:IsSpellID(70447, 72836, 72837, 72838) then
 		if self.Options.OozeAdhesiveIcon then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	elseif args:IsSpellID(70672, 72455, 72832, 72833) then
 		timerGaseousBloat:Cancel(args.destName)
 		if self.Options.GaseousBloatIcon then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	elseif args:IsSpellID(72855, 72856, 70911) then 						-- Unbound Plague
 		timerUnboundPlague:Stop(args.destName)
 		if self.Options.UnboundPlagueIcon then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	elseif spellId == 71615 and self:AntiSpam(5, 2) then 	-- Tear Gas Removal
 		self:NextPhase()

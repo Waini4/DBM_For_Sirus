@@ -89,7 +89,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		warnVanishEnd:Show()
 	elseif spellId == 41485 then
 		if self.Options.PoisonIcon then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	end
 end

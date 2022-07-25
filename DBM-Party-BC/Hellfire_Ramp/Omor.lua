@@ -52,7 +52,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	if args.spellId == 37566 then
 		timerBane:Stop(args.destName)
 		if self.Options.SetIconOnBaneTarget then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 		if args:IsPlayer() and self.Options.RangeFrame then
 			DBM.RangeCheck:Hide()

@@ -68,7 +68,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	if args.spellId == 20475 then
 		timerBomb:Stop(args.destName)
 		if self.Options.SetIconOnBombTarget then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 		if args:IsPlayer() then
 			yellBombFades:Cancel()

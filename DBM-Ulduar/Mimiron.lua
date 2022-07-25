@@ -334,7 +334,7 @@ end
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(63666, 65026, 312347, 312435, 312700, 312788) then -- Napalm Shell
 		if self.Options.SetIconOnNapalm then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	end
 end

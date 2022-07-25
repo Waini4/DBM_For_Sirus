@@ -76,6 +76,6 @@ end
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args.spellId == 39837 and self.Options.SpineIcon then
-		self:SetIcon(args.destName, 0)
+		self:RemoveIcon(args.destName)
 	end
 end

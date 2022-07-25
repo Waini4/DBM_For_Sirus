@@ -125,7 +125,7 @@ mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 function mod:SPELL_AURA_REMOVED(args)
 	if args.spellId == 70451 then
 		timerBloodMirror:Cancel(args.destName)
-		self:SetIcon(args.destName, 0)
+		self:RemoveIcon(args.destName)
 	elseif args.spellId == 70432 then
 		timerBloodSap:Cancel(args.destName)
 	elseif args.spellId == 70645 then

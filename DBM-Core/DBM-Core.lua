@@ -82,7 +82,7 @@ end
 
 DBM = {
 	Revision = parseCurseDate("20220725150000"),
-	DisplayVersion = "9.2.10", -- the string that is shown as version
+	DisplayVersion = "9.2.11", -- the string that is shown as version
 	ReleaseRevision = releaseDate(2022, 7, 21, 23, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 
@@ -2051,6 +2051,7 @@ do
 			if #iconSeter > 0 then
 				tsort(iconSeter, function(a, b) return a > b end)
 				local elected = iconSeter[1]
+				-- print()
 				if playerName == elected:sub(elected:find(" ") + 1) then
 					private.enableIcons = true
 				end

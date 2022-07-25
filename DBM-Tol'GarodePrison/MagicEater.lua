@@ -158,11 +158,11 @@ mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(317662) then --Перегрузка метки Тьмы
 		if self.Options.SetIconOnDarkTargets then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	elseif args:IsSpellID(317666) then --Перегрузка метки Скверны
 		if self.Options.SetIconOnFelTargets then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	end
 end

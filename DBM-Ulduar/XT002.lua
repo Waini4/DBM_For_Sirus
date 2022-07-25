@@ -109,7 +109,7 @@ function mod:SPELL_AURA_REMOVED(args)
 			DBM.RangeCheck:Hide()
 		end
 		if self.Options.SetIconOnLightBombTarget then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 		if args:IsPlayer() then
 			yellLightBombFades:Cancel()
@@ -119,7 +119,7 @@ function mod:SPELL_AURA_REMOVED(args)
 			DBM.RangeCheck:Hide()
 		end
 		if self.Options.SetIconOnGravityBombTarget then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 		if args:IsPlayer() then
 			yellGravityBombFades:Cancel()

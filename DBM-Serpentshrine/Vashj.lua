@@ -238,7 +238,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		-- self:ScheduleMethod(0.1, "StaticAngerIcons")
 		if self.Options.SetIconOnStaticTargets then
 			-- function module:SetSortedIcon(mod, sortType, delay, target, startIcon, maxIcon, descendingIcon, returnFunc, scanId)
-			self:SetSortedIcon(self, "roster", args.destName, 7,8)
+			self:SetSortedIcon("roster", args.destName, 7,8)
 		end
 	end
 end
@@ -258,7 +258,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 310636 or spellId == 310659 then
 		if self.Options.SetIconOnStaticTargets then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	end
 end

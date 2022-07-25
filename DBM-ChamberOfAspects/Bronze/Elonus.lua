@@ -198,8 +198,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	if spellId == 312206 or spellId == 317158 then
 		TempCascTargets[#TempCascTargets + 1] = args.destName
 		if self.Options.SetIconTempCascIcon then
-			-- function module:SetSortedIcon(mod, sortType, delay, target, startIcon, maxIcon, descendingIcon, returnFunc, scanId)
-			self:SetSortedIcon(self, "roster", args.destName, 6,8)
+			self:SetIcon(args.destName, 5)
 		end
 		TemporalCascade:Start()
 		TemporalCascadeBuff:Show(args.destName)
@@ -214,8 +213,10 @@ function mod:SPELL_AURA_APPLIED(args)
 		self:Schedule(0.3, warnTempTargets, self)
 	elseif args:IsSpellID(312208, 317160, 317161, 312209) then
 		RevCascTargets[#RevCascTargets + 1] = args.destName
-		if self.Options.SetIconOnRevCascTargets and self.vb.RevCascIcons > 0 then
-			self:SetIcon(args.destName, self.vb.RevCascIcons, 10)
+		if self.Options.SetIconOnRevCascTargets then
+			-- self:SetIcon(args.destName, self.vb.RevCascIcons, 10)
+			-- function module:SetSortedIcon(mod, sortType, delay, target, startIcon, maxIcon, descendingIcon, returnFunc, scanId)
+				self:SetSortedIcon("roster", 1, args.destName, 6,8)
 		end
 		ReverseCascadeBuff:Start()
 		DBM.Nameplate:Show(args.destGUID, 317160)
@@ -281,11 +282,11 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 312204 or spellId == 317156 then
 		if self.Options.SetIconOnErapTargets then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	elseif spellId == 312206 or spellId == 317158 then
 		if self.Options.SetIconTempCascIcon then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 			self.vb.TempCascIcon = 8
 		end
 		if self.Options.InfoFrame then
@@ -296,7 +297,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 	elseif args:IsSpellID(312208, 317160, 317161, 312209) then
 		if self.Options.SetIconOnRevCascTargets then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 		DBM.Nameplate:Hide(args.destGUID, 317160)
 		if args:IsPlayer() then

@@ -74,7 +74,7 @@ end--]]
 function mod:SPELL_AURA_REMOVED(args)
 	if args.spellId == 20604 and args:IsDestTypePlayer() then
 		if self.Options.SetIconOnMC then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	end
 end

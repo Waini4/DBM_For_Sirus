@@ -201,7 +201,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		timerPhaseCastCD:Start()
 	elseif spellId == 309262 and args:IsPlayer() then --Связь
 		if self.Options.SetIconOnSvazTargets then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	end
 end

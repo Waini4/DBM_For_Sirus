@@ -355,11 +355,11 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 69762 then
 		if self.Options.SetIconOnUnchainedMagic and not self.vb.activeBeacons then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	elseif spellId == 70157 then
 		if self.Options.SetIconOnFrostBeacon then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	elseif spellId == 70126 then
 		self.vb.activeBeacons = false

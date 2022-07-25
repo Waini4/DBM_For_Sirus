@@ -84,7 +84,7 @@ function mod:SPELL_AURA_REMOVED(args)
 			yellAdrenalineFades:Cancel()
 		end
 		if self.Options.SetIconOnDebuffTarget2 then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 		timerAdrenaline:Stop(args.destName)
 	end

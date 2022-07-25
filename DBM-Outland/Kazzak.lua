@@ -64,7 +64,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	if args.spellId == 32960 then
 		timerMark:Cancel(args.destName)
 		if self.Options.SetIconOnMark then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	end
 end

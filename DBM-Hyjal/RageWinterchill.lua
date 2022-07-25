@@ -51,7 +51,7 @@ end
 function mod:SPELL_AURA_REMOVED(args)
 	if args.spellId == 31249 then
 		if self.Options.IceBoltIcon then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	end
 end

@@ -13,8 +13,8 @@ mod:SetUsedIcons(8)
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 316523 316526 312197 312194",
 	"SPELL_CAST_SUCCESS 316519 316520 316523 316526 312199",
-	"SPELL_AURA_APPLIED 312199 316508",
-	"SPELL_AURA_REMOVED"
+	"SPELL_AURA_APPLIED 312199 316508"
+	-- "SPELL_AURA_REMOVED"
 )
 
 local warnRezonansCast    = mod:NewSpellAnnounce(316523, 3)
@@ -80,19 +80,19 @@ function mod:OnCombatEnd(wipe)
 end
 
 function mod:SPELL_CAST_START(args)
-	local spellId = args.spellId
-	if spellId == 316523 then
+	-- local spellId = args.spellId
+	if args:IsSpellID(316523) then
 		warnRezonansCast:Show()
 		RezonansCast:Start()
 		BurningTimeCD:Start()
 		specWarnnBurningTimeSoon:Schedule(43)
-	elseif spellId == 316526 then
+	elseif args:IsSpellID(316526) then
 		warnBurningTimeCast:Show()
 		BurningTimeCast:Start()
 		RezonansCD:Start()
 		specWarnnRezonansSoon:Schedule(38)
-	elseif spellId == 312197 then
-		if self:IsTank() and not DBM:UnitDebuff("player", spellId) then
+	elseif args:IsSpellID(312197) then
+		if self:IsTank() and not DBM:UnitDebuff("player", args.spellID) then
 			specWarnTemporalBeat:Show(args.destName)
 			specWarnTemporalBeat:Play("tauntboss")
 		end
@@ -100,8 +100,8 @@ function mod:SPELL_CAST_START(args)
 		BurningTimeCast:Start()
 		RezonansCDOb:Start()
 		specWarnnRezonansSoon:Schedule(25)
-	elseif spellId == 312194 then
-		if self:IsTank() and not DBM:UnitDebuff("player", spellId) then
+	elseif args:IsSpellID(312194) then
+		if self:IsTank() and not DBM:UnitDebuff("player", args.spellID) then
 			specWarnTemporalBeat:Show(args.destName)
 			specWarnTemporalBeat:Play("tauntboss")
 		end
@@ -113,17 +113,17 @@ function mod:SPELL_CAST_START(args)
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	local spellId = args.spellId
-	if spellId == 312199 then
+	-- local spellId = args.spellId
+	if args:IsSpellID(312199) then
 		IadCD:Start()
-	elseif spellId == 316508 then
+	elseif args:IsSpellID(316508) then
 		local amount = args.amount or 1
 		if amount >= 8 and args:IsTank() then
 			if args:IsPlayer() then
 				specWarnTemporalBeat:Show(amount)
 				specWarnTemporalBeat:Play("stackhigh")
 			else
-				if not UnitIsDeadOrGhost("player") and not DBM:UnitDebuff("player", spellId) then
+				if not UnitIsDeadOrGhost("player") and not DBM:UnitDebuff("player", args.spellId) then
 					specWarnTemporalBeat:Show(args.destName)
 					specWarnTemporalBeat:Play("tauntboss")
 				else
@@ -136,25 +136,23 @@ function mod:SPELL_AURA_APPLIED(args)
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
-	local spellId = args.spellId
-	if spellId == 316519 or spellId == 316520 then
+	if args:IsSpellID(316519,316520) then
 		TemporalArrow:Start()
 		self:ScheduleMethod(0.1, "TemporalBeatTarget")
-	elseif spellId == 316523 then
+	elseif args:IsSpellID(316523) then
 		BurningTimeCD:Start()
 		specWarnnBurningTimeSoon:Schedule(40)
-	elseif spellId == 316526 then
+	elseif args:IsSpellID(16526) then
 		RezonansCD:Start()
 		specWarnnRezonansSoon:Schedule(40)
-	elseif spellId == 312199 then
+	elseif args:IsSpellID(312199) then
 		IadCD:Start()
-
 	end
 end
 
-function mod:SPELL_AURA_REMOVED(args)
-	local spellId = args.spellId
-end
+-- function mod:SPELL_AURA_REMOVED(args)
+-- 	local spellId = args.spellId
+-- end
 
 function mod:TemporalBeatTarget()
 	local target = self:GetBossTarget(50608)
@@ -170,6 +168,7 @@ function mod:OnSync(msg, target)
 		warnTemporalArrow:Show(target)
 		if self.Options.SetIconOnTemporalBeat then
 			self:SetIcon(target, 8, 5)
+			-- print(target, 8, 5)
 		end
 		if target == UnitName("player") then
 			warnTemporalArrow:Show()

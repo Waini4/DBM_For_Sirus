@@ -256,7 +256,7 @@ end
 function mod:SPELL_AURA_REMOVED(args)
 	if args.spellId == 28410 then
 		if self.Options.SetIconOnMC then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 		if (args.destName == UnitName("player") or args:IsPlayer()) and (self.Options.EqUneqWeaponsKT or self.Options.EqUneqWeaponsKT2) and self:IsDps() then
 			DBM:Debug("Equipping scheduled",2)

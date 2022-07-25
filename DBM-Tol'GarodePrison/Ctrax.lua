@@ -168,11 +168,11 @@ end
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(317594) then --Древнее проклятие
 		if self.Options.SetIconOnCurse then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	elseif args:IsSpellID(317565) then --Метка Безликого
 		if self.Options.SetIconOnMark then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	end
 end

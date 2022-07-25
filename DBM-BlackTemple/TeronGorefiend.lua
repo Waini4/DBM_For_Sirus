@@ -70,7 +70,7 @@ end
 function mod:SPELL_AURA_REMOVED(args)
 	if args.spellId == 40243 then
 		if self.Options.CrushIcon then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	elseif args.spellId == 40251 then
 		timerDeath:Stop(args.destName)

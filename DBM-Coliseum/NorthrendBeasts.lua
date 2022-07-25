@@ -268,7 +268,7 @@ end
 function mod:SPELL_AURA_REMOVED(args)
 	if args.spellId == 66869 then
 		if self.Options.SetIconOnBileTarget then
-			self:SetIcon(args.destName, 0)
+			self:RemoveIcon(args.destName)
 		end
 	end
 end
