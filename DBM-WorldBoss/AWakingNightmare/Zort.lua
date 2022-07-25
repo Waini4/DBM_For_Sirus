@@ -2,7 +2,7 @@ local mod = DBM:NewMod("Zort", "DBM-WorldBoss", 2)
 local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20220628193500")
-mod:SetCreatureID(50702)
+mod:SetCreatureID(50702, 50715, 50716, 50714)
 mod:SetUsedIcons(1, 2, 3, 4, 5, 6, 7, 8)
 
 mod:RegisterCombat("combat", 50702)
@@ -85,9 +85,9 @@ local SveazTargets = {}
 local FlameTargets = {}
 mod.vb.FlameIcons = 2
 mod.vb.SveazIcons = 7
-local warned_kill1 = false
-local warned_kill2 = false
-local warned_kill3 = false
+-- local warned_kill1 = false
+-- local warned_kill2 = false
+-- local warned_kill3 = false
 -- local warned_P2 = false
 -- local warned_P3 = false
 local warned_P4 = false
@@ -115,6 +115,7 @@ function mod:OnCombatStart(delay)
 	timerkik:Start(-delay)
 	timerShkval:Start(-delay)
 	--Trees_num = 1
+	self.AllThreeDead = 0
 end
 
 function mod:OnCombatEnd(wipe)
@@ -234,12 +235,12 @@ function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(307839) then
 		self.vb.FlameIcons = 2
 		if self.Options.SetIconOnFlameTarget then
-			self:SetIcon(args.destName, 0)
+			self:SetSortedIcon(self, "roster", args.destName, 7,8)
 		end
 		DBM.Nameplate:Hide(args.destGUID, 307839)
 	elseif args:IsSpellID(308516, 308517) then
 		if self.Options.SetIconOnSveazTarget then
-			self:SetIcon(args.destName, 0)
+			self:SetSortedIcon(self, "roster", args.destName, 6,8)
 		end
 	elseif args:IsSpellID(318956) and not warned_P4 then
 		self:NewPhaseAnnounce(4)
@@ -327,47 +328,79 @@ do
 end]]
 
 function mod:UNIT_HEALTH(guid)
-	local uid = self:GetUnitCreatureId(guid)
-	if self.vb.phase == 1 and not warned_kill1 and uid == 50702 and DBM:GetBossHP(50702) <= 68 then
-		mod:SetStage(2)
-		warnPhase2:Show()
-		warned_kill1 = true
-		--specwarnHp1:Show()
+	-- local uid = self:GetUnitCreatureId(guid)
+
+	if self:GetUnitCreatureId(guid) == 50702 then -- zort
+		-- if  DBM:GetBossHP(guid) <= 68
+	elseif self:GetUnitCreatureId(guid) == 50714 then -- вторая лик
+		if  DBM:GetBossHP(guid) <= 2 and self:GetStage("Zort") == 2 then
+			self:NextStage() --stage == 3
+		end
+	elseif self:GetUnitCreatureId(guid) == 50715 then -- первая чудовищная
+		if  DBM:GetBossHP(guid) <= 2 and self:GetStage("Zort") == 1  then
+			self:NextStage() --stage == 2
+		elseif  DBM:GetBossHP(guid) >= 99 and self:GetStage("Zort") == 3 then
+			self:NextStage() --stage == 4
+		end
+	elseif self:GetUnitCreatureId(guid) == 50716 then -- щупальце плеть
+		if  DBM:GetBossHP(guid) <= 1 and self:GetStage("Zort") == 3  then
+			self:NextStage() --stage == 4
+		end
+	elseif self:GetStage("Zort") == 4 and self.AllThreeDead == 4 then
+		self:NextStage() --stage == 5
 	end
-	if self.vb.phase == 2 and not warned_kill2 and uid == 50702 and DBM:GetBossHP(50702) <= 43 then
-		mod:SetStage(3)
-		warnPhase3:Show()
-		warned_kill2 = true
-		--	specwarnHp2:Show()
-	end
-	if self.vb.phase == 3 and not warned_kill3 and (
-		(uid == 50716 and DBM:GetBossHP(50716) <= 1) or (uid == 50715 and DBM:GetBossHP(50715) <= 98)) then
-		warned_kill3 = true
-		warnPhase4:Show()
-		--specwarnHp3:Show()
-	end
+	-- 	if self:GetStage("Zort") == 1 and   DBM:GetBossHP(guid) <= 68 then
+	-- 		self:SetStage(2)
+	-- 		warnPhase2:Show()
+	-- 		-- warned_kill1 = true
+	-- 		--specwarnHp1:Show()
+
+	-- 	elseif self:GetStage("Zort") == 2 and DBM:GetBossHP(guid) <= 43 then
+	-- 		self:SetStage(3)
+	-- 		warnPhase3:Show()
+	-- 		-- warned_kill2 = true
+	-- 		--	specwarnHp2:Show()
+
+	-- 	elseif self:GetStage("Zort") == 3 and not warned_kill3 and (
+	-- 		(uid == 50716 and DBM:GetBossHP(50716) <= 1) or (uid == 50715 and DBM:GetBossHP(guid) <= 98)) then
+	-- 		-- warned_kill3 = true
+	-- 		warnPhase4:Show()
+	-- 		--specwarnHp3:Show()
+	-- 	end
+	-- elseif self:GetUnitCreatureId(guid) == 50716 then
+	-- 	if DBM:GetBossHP(50716) <= 1 then
+	-- 		warnPhase4:Show()
+	-- 		self:SetStage(4)
+	-- 	end
+	-- end
+
+
+	-- if 
 end
 
 function mod:UNIT_DIED(args)
-	if args.destName == L.Cudo then
-		timerCowardice:Start(10)
-		timerFlame:Start(5)
-		warnPhase2:Show()
-	elseif args.destName == L.Lic then
-		timerCowardice:Cancel()
-		timerPriziv:Start(10)
-		timerSveazi:Start(20)
-		timerAmonstrousblow:Start(24)
-		warnPhase3:Show()
-	elseif args.destName == L.Shup then
-		warnPhase4:Show()
-		timerPriziv:Cancel()
-		timerSveazi:Cancel()
-		timerBreathNightmare:Start()
-		timerInternalbleeding:Start(64)
-		warnInternalbgPre:Schedule(59)
-		timerShkval:Start(60)
+	if self:GetCIDFromGUID(args.destGUID) == 50714 or self:GetCIDFromGUID(args.destGUID) == 50715 or self:GetCIDFromGUID(args.destGUID) == 50716 then
+		self.AllThreeDead = self.AllThreeDead + 1
 	end
+	-- if args.destName == L.Cudo then
+	-- 	timerCowardice:Start(10)
+	-- 	timerFlame:Start(5)
+	-- 	warnPhase2:Show()
+	-- elseif args.destName == L.Lic then
+	-- 	timerCowardice:Cancel()
+	-- 	timerPriziv:Start(10)
+	-- 	timerSveazi:Start(20)
+	-- 	timerAmonstrousblow:Start(24)
+	-- 	warnPhase3:Show()
+	-- elseif args.destName == L.Shup then
+	-- 	warnPhase4:Show()
+	-- 	timerPriziv:Cancel()
+	-- 	timerSveazi:Cancel()
+	-- 	timerBreathNightmare:Start()
+	-- 	timerInternalbleeding:Start(64)
+	-- 	warnInternalbgPre:Schedule(59)
+	-- 	timerShkval:Start(60)
+	-- end
 end
 
 --[[

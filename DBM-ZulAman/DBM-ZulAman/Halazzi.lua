@@ -1,10 +1,10 @@
-local mod	= DBM:NewMod("Halazzi", "DBM-ZulAman")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Halazzi", "DBM-ZulAman")
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision(("$Revision: 163 $"):sub(12, -3))
 
 mod:SetCreatureID(23577)
-mod:RegisterCombat("combat",23577)
+mod:RegisterCombat("combat", 23577)
 
 mod:RegisterEventsInCombat(
 	-- "SPELL_CAST_START",
@@ -14,8 +14,8 @@ mod:RegisterEventsInCombat(
 
 local isDispeller = select(2, UnitClass("player")) == "PRIEST" or select(2, UnitClass("player")) == "PALADIN"
 
-local specWarnFrenzy		= mod:NewSpecialWarningDispel(41254, select(2, UnitClass("player")) == "HUNTER")
-local specWarnDispelShock	= mod:NewSpecialWarningDispel(43303, isDispeller)
+local specWarnFrenzy      = mod:NewSpecialWarningDispel(41254, select(2, UnitClass("player")) == "HUNTER")
+local specWarnDispelShock = mod:NewSpecialWarningDispel(43303, isDispeller)
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 23577, "Halazzi")

@@ -155,8 +155,12 @@ function mod:SPELL_AURA_APPLIED(args)
 			DBM.InfoFrame:Show(8, "playerdebuffremaining", 308471)
 		end
 		SignTargets[#SignTargets + 1] = args.destName
-		self:UnscheduleMethod("SetSignIcons")
-		self:ScheduleMethod(0.1, "SetSignIcons")
+		-- self:UnscheduleMethod("SetSignIcons")
+		-- self:ScheduleMethod(0.1, "SetSignIcons")
+		if self.Options.SetIconOnSignTargets then
+			-- function module:SetSortedIcon(mod, sortType, delay, target, startIcon, maxIcon, descendingIcon, returnFunc, scanId)
+			self:SetSortedIcon(self, "roster", args.destName, 4,8)
+		end
 		timerSignCD:Start()
 	elseif args:IsSpellID(308467) then
 		MagnetTargets[#MagnetTargets + 1] = args.destName

@@ -1,24 +1,24 @@
-local mod	= DBM:NewMod("Janalai", "DBM-ZulAman")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Janalai", "DBM-ZulAman")
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision(("$Revision: 163 $"):sub(12, -3))
 
 mod:SetCreatureID(23578)
-mod:RegisterCombat("combat",23578)
+mod:RegisterCombat("combat", 23578)
 
 mod:RegisterEvents(
 	"SPELL_CAST_START 43140",
 	"CHAT_MSG_MONSTER_YELL"
 )
 
-local timerHatchers			= mod:NewTimer(145, "Hatchers", 26297)
-local timerBombs			= mod:NewTimer(50, "Bombs", 31961)
-local timerExplosion		= mod:NewTimer(11, "Explosion", 66313)
-local timerNextBreath		= mod:NewCDTimer(12, 43140)
+local timerHatchers   = mod:NewTimer(145, "Hatchers", 26297)
+local timerBombs      = mod:NewTimer(50, "Bombs", 31961)
+local timerExplosion  = mod:NewTimer(11, "Explosion", 66313)
+local timerNextBreath = mod:NewCDTimer(12, 43140)
 
 mod:AddBoolOption("Hatchers", true)
 mod:AddBoolOption("Bombs", true)
-mod:AddBoolOption("Explosion",true)
+mod:AddBoolOption("Explosion", true)
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 23578, "Jan'alai")

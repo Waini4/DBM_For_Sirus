@@ -197,8 +197,9 @@ function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
 	if spellId == 312206 or spellId == 317158 then
 		TempCascTargets[#TempCascTargets + 1] = args.destName
-		if self.Options.SetIconTempCascIcon and self.vb.TempCascIcon > 0 then
-			self:SetIcon(args.destName, self.vb.TempCascIcon, 10)
+		if self.Options.SetIconTempCascIcon then
+			-- function module:SetSortedIcon(mod, sortType, delay, target, startIcon, maxIcon, descendingIcon, returnFunc, scanId)
+			self:SetSortedIcon(self, "roster", args.destName, 6,8)
 		end
 		TemporalCascade:Start()
 		TemporalCascadeBuff:Show(args.destName)

@@ -234,8 +234,12 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		timerStaticAnger:Start(args.destName)
 		StaticTargets[#StaticTargets + 1] = args.destName
-		self:UnscheduleMethod("StaticAngerIcons")
-		self:ScheduleMethod(0.1, "StaticAngerIcons")
+		-- self:UnscheduleMethod("StaticAngerIcons")
+		-- self:ScheduleMethod(0.1, "StaticAngerIcons")
+		if self.Options.SetIconOnStaticTargets then
+			-- function module:SetSortedIcon(mod, sortType, delay, target, startIcon, maxIcon, descendingIcon, returnFunc, scanId)
+			self:SetSortedIcon(self, "roster", args.destName, 7,8)
+		end
 	end
 end
 
@@ -297,33 +301,38 @@ function mod:UNIT_DIED(args)
 end
 
 function mod:UNIT_HEALTH(uId)
-	if self.vb.phase == 1 and not warned_preP1 and self:GetUnitCreatureId(uId) == 21212 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.72 then
-		warned_preP1 = true
-		warnPhase2Soon:Show()
-	end
-	if self.vb.phase == 1 and not warned_preP2 and self:GetUnitCreatureId(uId) == 21212 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.70 then
-		warned_preP2 = true
-		self:SetStage(2)
-		warnPhase2:Show()
-	end
-	if mod:IsDifficulty("heroic25") then
-		if self.vb.phase == 2 and not warned_preP3 and self:GetUnitCreatureId(uId) == 21212 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.42 then
-			warned_preP3 = true
-			warnPhase3Soon:Show()
+	if self:GetUnitCreatureId(uId) == 21212 then
+		if self:GetStage("Vashj") == 1 then
+			if  not warned_preP1  and DBM:GetBossHP(uId) <= 72 then
+				warned_preP1 = true
+				warnPhase2Soon:Show()
+			end
+			if  not warned_preP2  and DBM:GetBossHP(uId) <= 70 then
+				warned_preP2 = true
+				self:SetStage(2)
+				warnPhase2:Show()
+			end
 		end
-		if self.vb.phase == 2 and not warned_preP4 and self:GetUnitCreatureId(uId) == 21212 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.40 then
-			warned_preP4 = true
-			self:SetStage(3)
-			warnPhase3:Show()
-			timerElemCD:Cancel()
-		end
-	else
-		if self.vb.phase == 2 and not warned_preP4 and self:GetUnitCreatureId(uId) == 21212 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.50 then
-			warned_preP4 = true
-			self:SetStage(3)
-			warnPhase3:Show()
+		if mod:IsDifficulty("heroic25") then
+			if self:GetStage("Vashj") == 2 and not warned_preP3  and DBM:GetBossHP(uId) <= 42 then
+				warned_preP3 = true
+				warnPhase3Soon:Show()
+			end
+			if self:GetStage("Vashj") == 2 and not warned_preP4  and DBM:GetBossHP(uId) <= 40 then
+				warned_preP4 = true
+				self:SetStage(3)
+				warnPhase3:Show()
+				timerElemCD:Cancel()
+			end
+		else
+			if self:GetStage("Vashj") == 2 and not warned_preP4  and DBM:GetBossHP(uId) <= 50 then
+				warned_preP4 = true
+				self:SetStage(3)
+				warnPhase3:Show()
+			end
 		end
 	end
+
 end
 
 function mod:UNIT_TARGET()

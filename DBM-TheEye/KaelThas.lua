@@ -446,8 +446,12 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 		end
 		if self.Options.SetIconOnBombTargets then
-			self:SetIcon(args.destName, BombIcons)
+			-- self:SetIcon(args.destName, BombIcons)
 			BombIcons = BombIcons - 1
+			-- if self.Options.SetIconOnStaticTargets then
+				-- function module:SetSortedIcon(mod, sortType, delay, target, startIcon, maxIcon, descendingIcon, returnFunc, scanId)
+				self:SetSortedIcon(self, "roster", args.destName, 7,8)
+			-- end
 		end
 		if #BombTargets >= 2 then
 			warnBomb:Show(table.concat(BombTargets, "<, >"))
