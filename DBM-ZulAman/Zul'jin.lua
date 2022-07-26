@@ -161,8 +161,9 @@ function mod:UNIT_HEALTH(uId)
 			warnNextPhaseSoon:Show(L.Dragon)
 		elseif (DBM:GetBossHP(23863) <= 20 and DBM:GetStage("ZulJin") ~= 5) then
 			-- self:SetStage(5)
+			self:SetStage(5)
 			timerJump:Cancel()
-			self:ScheduleMethod(10, "tPillar")
+			-- self:ScheduleMethod(10, "tPillar")
 			timerFlamePillar:Start(18)
 		end
 	end
