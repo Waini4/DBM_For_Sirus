@@ -40,7 +40,7 @@ local EndofTimeBuff = mod:NewBuffActiveTimer(60, 313122, nil, nil, nil, 3, nil, 
 
 mod:AddBoolOption("AnnounceOrb", false)
 --------------------------------------HM--------------------------------
-mod:AddTimerLine(DBM_CORE_L.HEROIC_MODE25 .. " " .. CL.HEROIC_ICON)
+mod:AddTimerLine(DBM_CORE_L.HEROIC_MODE25)
 
 local warnBredHM            = mod:NewStackAnnounce(317252, 5, nil, "Tank")
 local specwarnReflectSpells = mod:NewSpecialWarningCast(317262, "-Healer", nil, nil, 3, 2) -- Отражение заклинаний

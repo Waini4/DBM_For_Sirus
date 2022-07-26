@@ -36,7 +36,7 @@ mod:AddTimerLine(DBM_CORE_L.NORMAL_MODE25)
 local RezonansCDOb    = mod:NewCDTimer(33, 312194, nil, nil, nil, 3, nil, CL.DEADLY_ICON)
 local BurningTimeCDOb = mod:NewCDTimer(33, 312197, nil, nil, nil, 3, nil, CL.DEADLY_ICON)
 
-mod:AddTimerLine(DBM_CORE_L.HEROIC_MODE25 .. " " .. CL.HEROIC_ICON)
+mod:AddTimerLine(DBM_CORE_L.HEROIC_MODE25)
 
 local warnTemporalArrow = mod:NewTargetAnnounce(316519, 4)
 

@@ -52,7 +52,7 @@ local yellReverseCascade             = mod:NewYell(312208, nil, nil, nil, "YELL"
 local yellTemporalCascadeFade        = mod:NewShortFadesYell(312206, nil, nil, nil, "YELL")
 local yellReverseCascadeFade         = mod:NewShortFadesYell(312208, nil, nil, nil, "YELL")
 
-local EraseCount          = mod:NewCDCountTimer(60, 312204, nil, nil, nil, 4, nil, CL.MAGIC_ICON .. "" .. CL.HEALER_ICON) --Слово силы: Стереть
+local EraseCount          = mod:NewCDCountTimer(60, 312204, nil, nil, nil, 4, nil, CL.HEALER_ICON) --Слово силы: Стереть
 local ResonantScream      = mod:NewCDTimer(12, 312210, nil, "SpellCaster", nil, 1, nil, nil, nil, 1) --Резонирующий крик(кик)
 local ReplicCount         = mod:NewCDCountTimer(120, 312211, nil, nil, nil, 2, nil, CL.IMPORTANT_ICON) --Временные линии(копии)
 local ReturnCount         = mod:NewCDCountTimer(120, 312214, nil, nil, nil, 2) --Возврат
