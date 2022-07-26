@@ -14,16 +14,17 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED_DOSE 308732 308741 308750 308756 308797 36797",
 	"UNIT_TARGET",
 	"SPELL_AURA_REMOVED 308750 36797",
+	"CHAT_MSG_MONSTER_YELL",
 	"SPELL_CAST_SUCCESS 37018 36723 308749 308743 36815 36731 308734 36797"
 )
 
-mod:RegisterEvents(
-	"CHAT_MSG_RAID_BOSS_EMOTE",
-	"CHAT_MSG_MONSTER_YELL",
-	"SPELL_CAST_SUCCESS 36797 ",
-	"SPELL_AURA_APPLIED_DOSE 36797 308797",
-	"SPELL_AURA_APPLIED 36797 308797"
-)
+-- mod:RegisterEvents(
+-- 	-- "CHAT_MSG_RAID_BOSS_EMOTE",
+-- 	"CHAT_MSG_MONSTER_YELL",
+-- 	"SPELL_CAST_SUCCESS 37018 36723 308749 308743 36815 36731 308734 36797",
+-- 	"SPELL_AURA_APPLIED 308732 308741 308750 308756	308797 36797",
+-- 	"SPELL_AURA_APPLIED_DOSE 308732 308741 308750 308756 308797 36797"
+-- )
 
 
 
@@ -56,8 +57,7 @@ local timerBarrierCD = mod:NewCDTimer(70, 36815, nil, nil, nil, 3)
 local timerPhoenixCD = mod:NewCDTimer(60, 36723, nil, nil, nil, 1, nil, CL.DAMAGE_ICON)
 local timerMCCD      = mod:NewCDTimer(70, 36797, nil, nil, nil, 3)
 
-local timerGravity   = mod:NewBuffFadesTimer(32.5, 35941, nil, nil, nil, 4, nil,
-	CL.DEADLY_ICON, nil, 2, 5) --- хм
+local timerGravity   = mod:NewBuffFadesTimer(32.5, 35941, nil, nil, nil, 4, nil, CL.DEADLY_ICON, nil, 2, 5) --- хм
 local timerGravityCD = mod:NewCDTimer(90, 35941, nil, nil, nil, 4, nil, CL.DEADLY_ICON, nil, 2, 4) -- обычка
 
 --об
@@ -89,8 +89,7 @@ local timerCataCD     = mod:NewCDTimer(126, 308790, nil, nil, nil, 2)
 local timerCataCast   = mod:NewCastTimer(8, 308790, nil, nil, nil, 2)
 local timerVzrivCD    = mod:NewCDTimer(115, 308797, nil, nil, nil, 3)
 local timerVzrivCast  = mod:NewCastTimer(5, 308797, nil, nil, nil, 3)
-local timerGravityH   = mod:NewCDTimer(63, 35941, "Interface\\Icons\\Spell_Magic_FeatherFall", nil, nil, 6, nil,
-	CL.DEADLY_ICON) -- хм
+local timerGravityH   = mod:NewCDTimer(63, 35941, "Interface\\Icons\\Spell_Magic_FeatherFall", nil, nil, 6, nil, CL.DEADLY_ICON) -- хм
 local timerGravityHCD = mod:NewCDTimer(150, 35941, nil, nil, nil, 6, nil, CL.DEADLY_ICON) -- хм
 local timerAvengerS   = mod:NewCDTimer(22, 308743, nil, nil, nil, 3)
 

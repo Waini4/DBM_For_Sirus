@@ -135,6 +135,7 @@ L:SetWarningLocalization {
 	WarnPhase = "%s",
 	WarnTalaTarget = "Таладред преследует %s",
 	SpecWarnTalaTarget = "Вас преследует Таладред - бегите"
+
 }
 
 L:SetOptionLocalization {
@@ -157,7 +158,8 @@ L:SetOptionLocalization {
 	SetIconOnBombTargets      = DBML.AUTO_ICONS_OPTION_TARGETS:format(308750),
 	Avenger                   = DBML.AUTO_ARROW_OPTION_TEXT:format(308743),
 	YellOnAvenger             = DBML.AUTO_YELL_OPTION_TEXT.shortyell:format(308743),
-	AvengerLatencyCheck       = "Отключить синхр-цию для $spell:308743\n(используйте только в случае возникновения проблем)"
+	AvengerLatencyCheck       = "Отключить синхр-цию для $spell:308743\n(используйте только в случае возникновения проблем)",
+	Keltac 					  = "Отсчет до появления Кель'таса"
 }
 
 L:SetMiscLocalization {
