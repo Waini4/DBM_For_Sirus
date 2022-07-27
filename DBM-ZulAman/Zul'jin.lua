@@ -140,7 +140,7 @@ function mod:UNIT_TARGET(uId)
 		end
 	end
 end
-
+local needAnonse = false
 function mod:UNIT_HEALTH(uId)
 	if self:GetUnitCreatureId(uId) == 23863 then
 		local hp = DBM:GetBossHP(23863)
@@ -163,11 +163,13 @@ function mod:UNIT_HEALTH(uId)
 			warnNextPhaseSoon:Show(L.Dragon)
 			-- self:SetStage(5)
 			self:SetStage(5)
-		elseif (hp <= 20 and hp > 19 and stage == 5) then
+			needAnonse = true
+		elseif (hp <= 20 and hp > 19 and stage == 5 and needAnonse) then
 			-- self:SetStage(5)
 			timerJump:Cancel()
 			-- self:ScheduleMethod(10, "tPillar")
 			timerFlamePillar:Start(18)
+			needAnonse = false
 		end
 	end
 end
