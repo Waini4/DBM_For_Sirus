@@ -212,7 +212,7 @@ do
 			return
 		end
 		if not target then return end
-		if DBM.Options.DontSetIcons or not private.enableIcons or DBM:GetRaidRank(playerName) == 0 then
+		if (DBM.Options.DontSetIcons or not private.enableIcons or DBM:GetRaidRank(playerName) == 0) then
 			return
 		end
 		scanId = scanId or 1

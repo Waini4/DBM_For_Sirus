@@ -1,7 +1,7 @@
 ﻿if GetLocale() ~= "ruRU" then return end
 
 local L
-
+local DBML = DBM_CORE_L
 --Nalorakk
 L = DBM:GetModLocalization("Nalorakk")
 
@@ -46,7 +46,7 @@ L:SetOptionLocalization{
 	RangeFrame				= "Показывать окно проверки дистанции (12 м)",
 	SetIconOnElectricStorm = "Отмечать на ком Электрическая буря",
 	SayOnElectricStorm = "Говорить в чат на ком Электрическая буря",
-	WarnWind = DBM_CORE_AUTO_ANNOUNCE_OPTIONS.spell:format(43621, GetSpellInfo(43621) or "unknown")
+	WarnWind =  DBML.AUTO_ANNOUNCE_OPTIONS.spell:format(38215, GetSpellInfo(38215)),
 }
 
 L:SetMiscLocalization{
@@ -120,7 +120,7 @@ L:SetOptionLocalization{
 	TimerSpecial = "Отсчитывать время между спец-способности",
 	SpecWarnMelee = "Обьявлять опасные способности для милизоны",
 	SpecWarnMove = "Обьявлять опасные способности для рдд",
-	WarnSiphon = DBM_CORE_AUTO_ANNOUNCE_OPTIONS.spell:format(43501, GetSpellInfo(43501) or "unknown")
+	WarnSiphon =  DBML.AUTO_ANNOUNCE_OPTIONS.spell:format(38215, GetSpellInfo(38215)),
 
 }
 
