@@ -159,8 +159,9 @@ function mod:UNIT_HEALTH(uId)
 		elseif (DBM:GetBossHP(23863) <= 21 and DBM:GetStage("ZulJin") == 4) then
 			-- phaseCounter = phaseCounter + 1
 			warnNextPhaseSoon:Show(L.Dragon)
+			-- self:SetStage(5)
 			self:SetStage(5)
-		elseif (DBM:GetBossHP(23863) <= 20 and DBM:GetStage("ZulJin") == 5) then
+		elseif (DBM:GetBossHP(23863) <= 20 and DBM:GetBossHP(23863) > 19 and DBM:GetStage("ZulJin") == 5) then
 			-- self:SetStage(5)
 			timerJump:Cancel()
 			-- self:ScheduleMethod(10, "tPillar")
