@@ -921,7 +921,8 @@ function onUpdate(self, elapsed)
 end
 
 do
-	local rotation, pixelsperyard, prevNumPlayers, range, isInSupportedArea
+	local rotation, pixelsperyard, prevNumPlayers, range, bossMode, isInSupportedArea
+	bossMode = nil
 
 	local function createDot(id)
 		local dot = radarFrame:CreateTexture("DBMRangeCheckRadarDot" .. id, "OVERLAY")
