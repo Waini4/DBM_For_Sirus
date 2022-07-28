@@ -923,7 +923,6 @@ end
 do
 	local rotation, pixelsperyard, prevNumPlayers, range, bossMode, isInSupportedArea
 	bossMode = nil
-
 	local function createDot(id)
 		local dot = radarFrame:CreateTexture("DBMRangeCheckRadarDot" .. id, "OVERLAY")
 		dot:SetTexture([[Interface\AddOns\DBM-Core\textures\blip]])
@@ -1096,7 +1095,6 @@ do
 				end
 
 				local playerTooClose = false -- todo how many player whit you
-
 				if bossMode then
 					if enemyCheckFunc(frame.bossUnit, frame.range) then
 						playerTooClose = true
@@ -1368,6 +1366,21 @@ end
 -- 		end
 -- 	end
 -- end
+
+
+function rangeCheck:ChangeReverse()
+	frame.reverse = not frame.reverse or false
+	radarFrame.reverse = frame.reverse
+end
+
+function rangeCheck:ChangeRange(range)
+	frame.range =  range or 10
+end
+
+function rangeCheck:SetReverse(param)
+	frame.reverse = param or false
+	radarFrame.reverse = param or false
+end
 
 function rangeCheck:Hide()
 	if frame then
