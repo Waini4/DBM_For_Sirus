@@ -81,7 +81,7 @@ local function currentFullDate()
 end
 
 DBM = {
-	Revision = parseCurseDate("20220727222600"),
+	Revision = parseCurseDate("20220728212600"),
 	DisplayVersion = GetAddOnMetadata(_addonname,"Version"), -- the string that is shown as version
 	ReleaseRevision = releaseDate(2022, 7, 27, 22, 26, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
@@ -7111,7 +7111,7 @@ end
 
 function bossModPrototype:GetStage()
 	if not self.vb.phase then
-		error("DDM mod"..id.." dont have stage")
+		error("DDM mod"..self.id.." dont have stage")
 		return
 	end
 	return self.vb.phase

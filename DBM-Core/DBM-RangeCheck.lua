@@ -922,6 +922,7 @@ end
 
 do
 	local rotation, pixelsperyard, prevNumPlayers, range, bossMode, isInSupportedArea
+	bossMode = nil
 	local function createDot(id)
 		local dot = radarFrame:CreateTexture("DBMRangeCheckRadarDot" .. id, "OVERLAY")
 		dot:SetTexture([[Interface\AddOns\DBM-Core\textures\blip]])
