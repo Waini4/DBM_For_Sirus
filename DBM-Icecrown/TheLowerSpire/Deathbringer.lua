@@ -26,7 +26,7 @@ local myRealm = select(3, DBM:GetMyPlayerInfo())
 
 -- General
 local timerCombatStart		= mod:NewCombatTimer(47.3)
-local enrageTimer			= mod:NewBerserkTimer((myRealm == "Lordaeron" or myRealm == "Frostmourne") and 420 or 480)
+local enrageTimer			= mod:NewBerserkTimer(480)
 
 mod:RemoveOption("HealthFrame")
 mod:AddBoolOption("RunePowerFrame", false, "misc")
@@ -235,7 +235,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 			DBM.RangeCheck:Show(12)
 		end
 	elseif msg:find(L.PullHorde, 1, true) then
-		timerCombatStart:Start(99.5)
+		timerCombatStart:Start(79.5)
 		if self.Options.RangeFrame then
 			DBM.RangeCheck:Show(12)
 		end
