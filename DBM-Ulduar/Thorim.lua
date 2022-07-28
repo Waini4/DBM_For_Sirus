@@ -44,7 +44,7 @@ local timerHardmode          = mod:NewTimer(175, "TimerHardmode", 312898)
 local timerChainLightning    = mod:NewNextTimer(12, 312895)
 local timerFBVolley          = mod:NewCDTimer(13, 62604)
 
-mod:AddRangeFrameOption("9")
+mod:AddRangeFrameOption("11")
 mod:AddSetIconOption("SetIconOnRunic", 62527, false, false, { 7 })
 
 local lastcharge = {}
@@ -55,7 +55,7 @@ function mod:OnCombatStart(delay)
 	enrageTimer:Start()
 	timerHardmode:Start()
 	if self.Options.RangeFrame then
-		DBM.RangeCheck:Show(9)
+		DBM.RangeCheck:Show(11)
 	end
 	table.wipe(lastcharge)
 end
