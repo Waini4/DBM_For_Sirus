@@ -302,7 +302,7 @@ end
 
 function mod:UNIT_HEALTH(uId)
 	if self:GetUnitCreatureId(uId) == 21212 then
-		if DBM:GetStage("Vashj") == 1 then
+		if self:GetStage() == 1 then
 			if  not warned_preP1  and DBM:GetBossHP(uId) <= 72 then
 				warned_preP1 = true
 				warnPhase2Soon:Show()
@@ -314,18 +314,18 @@ function mod:UNIT_HEALTH(uId)
 			end
 		end
 		if mod:IsDifficulty("heroic25") then
-			if DBM:GetStage("Vashj") == 2 and not warned_preP3  and DBM:GetBossHP(uId) <= 42 then
+			if self:GetStage() == 2 and not warned_preP3  and DBM:GetBossHP(uId) <= 42 then
 				warned_preP3 = true
 				warnPhase3Soon:Show()
 			end
-			if DBM:GetStage("Vashj") == 2 and not warned_preP4  and DBM:GetBossHP(uId) <= 40 then
+			if self:GetStage() == 2 and not warned_preP4  and DBM:GetBossHP(uId) <= 40 then
 				warned_preP4 = true
 				self:SetStage(3)
 				warnPhase3:Show()
 				timerElemCD:Cancel()
 			end
 		else
-			if DBM:GetStage("Vashj") == 2 and not warned_preP4  and DBM:GetBossHP(uId) <= 50 then
+			if self:GetStage() == 2 and not warned_preP4  and DBM:GetBossHP(uId) <= 50 then
 				warned_preP4 = true
 				self:SetStage(3)
 				warnPhase3:Show()

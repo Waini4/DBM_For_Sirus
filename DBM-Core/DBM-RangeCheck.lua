@@ -922,7 +922,6 @@ end
 
 do
 	local rotation, pixelsperyard, prevNumPlayers, range, bossMode, isInSupportedArea
-	bossMode = nil
 	local function createDot(id)
 		local dot = radarFrame:CreateTexture("DBMRangeCheckRadarDot" .. id, "OVERLAY")
 		dot:SetTexture([[Interface\AddOns\DBM-Core\textures\blip]])
@@ -1369,8 +1368,8 @@ end
 
 
 function rangeCheck:ChangeReverse()
-	frame.reverse = not frame.reverse or false
-	radarFrame.reverse = frame.reverse
+	frame.reverse = not frame.reverse
+	radarFrame.reverse = not frame.reverse
 end
 
 function rangeCheck:ChangeRange(range)

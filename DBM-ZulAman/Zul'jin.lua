@@ -127,7 +127,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 end
 
 function mod:UNIT_TARGET(uId)
-	if (DBM:GetStage("ZulJin") == 5 and self:GetUnitCreatureId(uId) == 23863) then
+	if (self:GetStage() == 5 and self:GetUnitCreatureId(uId) == 23863) then
 		timerFlamePillar:Start()
 		if not IsTankZ("targettarget") then
 			warnFlamePillar:Show(UnitName("targettarget"))
@@ -144,7 +144,7 @@ local needAnonse = false
 function mod:UNIT_HEALTH(uId)
 	if self:GetUnitCreatureId(uId) == 23863 then
 		local hp = DBM:GetBossHP(23863)
-		local stage = DBM:GetStage("ZulJin")
+		local stage = self:GetStage()
 		if (hp <= 81 and stage == 1) then
 			self:SetStage(2)
 			-- phaseCounter = phaseCounter + 1

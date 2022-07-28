@@ -247,7 +247,7 @@ function mod:SWING_DAMAGE(_, sourceName, sourceFlags, destGUID, destName)
 end
 
 function mod:UNIT_HEALTH(uId)
-	if DBM:GetStage("Solarian") and not warned_preP1 and self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 33 then
+	if self:GetStage() and not warned_preP1 and self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 33 then
 		warned_preP1 = true
 		warnPhase2Soon:Show()
 	elseif not warned_preP2 and self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 30 then

@@ -159,7 +159,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 end
 
 function mod:OnSync(event, arg)
-	if event == "Phase2" and DBM:GetStage("Thorim") < 2 and UnitAffectingCombat("player") and select(1,IsInInstance()) and select(2,IsInInstance()) == "raid" then
+	if event == "Phase2" and self:GetStage() < 2 and UnitAffectingCombat("player") and select(1,IsInInstance()) and select(2,IsInInstance()) == "raid" then
 		self:SetStage(2)
 		warnPhase2:Show()
 		enrageTimer:Stop()

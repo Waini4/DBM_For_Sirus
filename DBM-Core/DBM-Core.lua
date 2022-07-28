@@ -6010,6 +6010,8 @@ function DBM:GetStage(modId)
 			end
 		end
 	end
+	error("Cant Have stage from"..modId)
+	return 0
 end
 
 function DBM:HasMapRestrictions()
@@ -7105,6 +7107,14 @@ function bossModPrototype:NextStage()
 		fireEvent("DBM_SetStage", self, self.id, self.vb.phase, self.vb.stageTotality) --Mod, modId, Stage (if available), total number of times SetStage has been called since combat start
 		DBM:Debug("DBM_SetStage: " .. self.vb.phase .. "/" .. self.vb.stageTotality)
 	end
+end
+
+function bossModPrototype:GetStage()
+	if not self.vb.phase then
+		error("DDM mod"..id.." dont have stage")
+		return
+	end
+	return self.vb.phase
 end
 
 --------------
