@@ -96,7 +96,7 @@ local warned_P4 = false
 -- local Trees = {}
 -- local Trees_HP = {}
 -- local Trees_num = 1
-
+mod:SetStage(0)
 local function warnSveazTargets(self)
 	warnSveaz:Show(table.concat(SveazTargets, "<, >"))
 	table.wipe(SveazTargets)

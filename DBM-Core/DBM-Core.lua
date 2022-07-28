@@ -6010,7 +6010,7 @@ function DBM:GetStage(modId)
 			end
 		end
 	end
-	error("Cant Have stage from"..modId)
+	error("Cant have stage from "..modId)
 	return 0
 end
 
