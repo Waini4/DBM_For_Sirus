@@ -80,7 +80,7 @@ mod.vb.phase = 0
 
 local warned_preP1 = false
 -- local LKTank
-mod:SetStage(0)
+-- mod:SetStage(0)
 function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 19514, "Al'ar")
 

@@ -71,7 +71,7 @@ end
 -- end
 
 function mod:OnCombatStart(delay)
-	self.vb.phase = 0
+	self:SetStage(1)
 	self.vb.teleCount = 0
 	self.vb.addsCount = 0
 	self.vb.curseCount = 0

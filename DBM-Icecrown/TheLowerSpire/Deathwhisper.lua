@@ -204,7 +204,7 @@ local function TrySetTarget(self)
 		end
 	end
 end
-mod:SetStage(0)
+-- mod:SetStage(0)
 function mod:OnCombatStart(delay)
 	self:SetStage(1)
 	if self.Options.ShieldHealthFrame then

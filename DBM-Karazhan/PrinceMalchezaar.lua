@@ -43,9 +43,9 @@ mod.vb.PorchIcons = 8
 
 
 mod:AddBoolOption("AnnouncePorch", false)
-mod:SetStage(0)
+-- mod:SetStage(0)
 function mod:OnCombatStart(delay)
-	mod:SetStage(1)
+	self:SetStage(1)
 	DBM:FireCustomEvent("DBM_EncounterStart", 15690, "Prince Malchezaar")
 	if mod:IsDifficulty("normal10") then
 		timerInfernal:Start(14.5-delay)
@@ -64,7 +64,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 			timerInfernal:Start()
 	elseif msg == L.DBM_PRINCE_YELL_P3 then
 			self:SendSync("Phase3")
-			mod:SetStage(3)
+			self:SetStage(3)
 	elseif msg == L.DBM_PRINCE_YELL_P2 then
 			self:SetStage(2)
 			--warnPhase2:Show()
