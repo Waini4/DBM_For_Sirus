@@ -157,7 +157,7 @@ function mod:OnCombatStart()
 		ReturnCount:Start(30, self.vb.RetCount + 1)
 	end
 	if self.Options.RangeFrame then
-		DBM.RangeCheck:Show(8)
+		DBM.RangeCheck:Show(6)
 	end
 	-- if self.Options.BossHealthFrame then
 	-- 	DBM.BossHealth:Show(L.name)
@@ -216,7 +216,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.SetIconOnRevCascTargets then
 			-- self:SetIcon(args.destName, self.vb.RevCascIcons, 10)
 			-- function module:SetSortedIcon(mod, sortType, delay, target, startIcon, maxIcon, descendingIcon, returnFunc, scanId)
-				self:SetSortedIcon("roster", 1, args.destName, 6,8)
+			self:SetSortedIcon("roster", 1, args.destName, 6, 8)
 		end
 		ReverseCascadeBuff:Start()
 		DBM.Nameplate:Show(args.destGUID, 317160)
