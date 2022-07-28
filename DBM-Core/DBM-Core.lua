@@ -7102,7 +7102,7 @@ function bossModPrototype:NextStage()
 	if not self.vb.stageTotality then
 		self.vb.stageTotality = 0
 	end
-	self.vb.stageTotality = self.vb.stageTotality + 1
+	self.vb.stageTotality = self.vb.phase
 	if self.inCombat then --Safety, in event mod manages to run any phase change calls out of combat/during a wipe we'll just safely ignore it
 		fireEvent("DBM_SetStage", self, self.id, self.vb.phase, self.vb.stageTotality) --Mod, modId, Stage (if available), total number of times SetStage has been called since combat start
 		DBM:Debug("DBM_SetStage: " .. self.vb.phase .. "/" .. self.vb.stageTotality)
