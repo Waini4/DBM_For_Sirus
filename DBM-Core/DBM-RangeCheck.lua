@@ -921,7 +921,8 @@ function onUpdate(self, elapsed)
 end
 
 do
-	local rotation, pixelsperyard, prevNumPlayers, range, bossMode, isInSupportedArea
+	local rotation, pixelsperyard, prevNumPlayers, range, isInSupportedArea
+
 	local function createDot(id)
 		local dot = radarFrame:CreateTexture("DBMRangeCheckRadarDot" .. id, "OVERLAY")
 		dot:SetTexture([[Interface\AddOns\DBM-Core\textures\blip]])
@@ -1094,6 +1095,7 @@ do
 				end
 
 				local playerTooClose = false -- todo how many player whit you
+
 				if bossMode then
 					if enemyCheckFunc(frame.bossUnit, frame.range) then
 						playerTooClose = true
