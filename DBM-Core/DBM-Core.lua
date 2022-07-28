@@ -35,7 +35,7 @@
 --    * Noncommercial. You may not use this work for commercial purposes.
 --    * Share Alike. If you alter, transform, or build upon this work, you may distribute the resulting work only under the same or similar license to this one.
 --
-local _, private = ...
+local _addonname, private = ...
 
 local DBMPrefix = "DBMv4"
 private.DBMPrefix = DBMPrefix
@@ -82,7 +82,7 @@ end
 
 DBM = {
 	Revision = parseCurseDate("20220727222600"),
-	DisplayVersion = "9.2.13", -- the string that is shown as version
+	DisplayVersion = GetAddOnMetadata(_addonname,"Version"), -- the string that is shown as version
 	ReleaseRevision = releaseDate(2022, 7, 27, 22, 26, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 

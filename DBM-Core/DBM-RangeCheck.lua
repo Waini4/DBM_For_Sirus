@@ -563,7 +563,7 @@ do
 
 		elseif level == 2 then
 			if menu == "range" then
-				local ranges = { 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 20, 28 }
+				local ranges = { 5, 6, 8, 10, 11, 12, 13, 14, 15, 16, 18, 20, 30, 35, 40}
 
 				for _, r in pairs(ranges) do
 					if initRangeCheck(r) then
@@ -844,7 +844,7 @@ function onUpdate(self, elapsed)
 	local color
 	local j = 0
 	self:ClearLines()
-	self:SetText((self.bossMode and L.RANGERADAR_BOSS_HEADER or L.RANGECHECK_HEADER):format(self.range), 1, 1, 1)
+	self:SetText(( frame.reverse and L.RANGECHECK_RHEADER or L.RANGECHECK_HEADER):format(self.range), 1, 1, 1)
 	if initRangeCheck(self.range) then
 		if self.bossMode then
 			local uId = self.bossUnit
@@ -857,8 +857,18 @@ function onUpdate(self, elapsed)
 			if GetNumRaidMembers() > 0 then
 				for i = 1, GetNumRaidMembers() do
 					local uId = "raid" .. i
-					if not UnitIsUnit(uId, "player") and not UnitIsDeadOrGhost(uId) and self.checkFunc(uId, self.range) and
+					if not frame.reverse and not UnitIsUnit(uId, "player") and not UnitIsDeadOrGhost(uId) and self.checkFunc(uId, self.range) and
 						(not self.filter or self.filter(uId)) then
+						j = j + 1
+						color = RAID_CLASS_COLORS[select(2, UnitClass(uId))] or NORMAL_FONT_COLOR
+						local icon = GetRaidTargetIndex(uId)
+						local text = icon and ("|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_%d:0|t %s"):format(icon, UnitName(uId))
+							or UnitName(uId)
+						self:AddLine(text, color.r, color.g, color.b)
+						if j >= 5 then
+							break
+						end
+					elseif frame.reverse and not UnitIsUnit(uId, "player") and not UnitIsDeadOrGhost(uId) and not self.checkFunc(uId, self.range) and (not self.filter or self.filter(uId)) then
 						j = j + 1
 						color = RAID_CLASS_COLORS[select(2, UnitClass(uId))] or NORMAL_FONT_COLOR
 						local icon = GetRaidTargetIndex(uId)
@@ -873,7 +883,18 @@ function onUpdate(self, elapsed)
 			elseif GetNumPartyMembers() > 0 then
 				for i = 1, GetNumPartyMembers() do
 					local uId = "party" .. i
-					if not UnitIsUnit(uId, "player") and not UnitIsDeadOrGhost(uId) and self.checkFunc(uId, self.range) and
+					if not frame.reverse and  not UnitIsUnit(uId, "player") and not UnitIsDeadOrGhost(uId) and self.checkFunc(uId, self.range) and
+						(not self.filter or self.filter(uId)) then
+						j = j + 1
+						color = RAID_CLASS_COLORS[select(2, UnitClass(uId))] or NORMAL_FONT_COLOR
+						local icon = GetRaidTargetIndex(uId)
+						local text = icon and ("|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_%d:0|t %s"):format(icon, UnitName(uId))
+							or UnitName(uId)
+						self:AddLine(text, color.r, color.g, color.b)
+						if j >= 5 then
+							break
+						end
+					elseif frame.reverse and  not UnitIsUnit(uId, "player") and not UnitIsDeadOrGhost(uId) and not self.checkFunc(uId, self.range) and
 						(not self.filter or self.filter(uId)) then
 						j = j + 1
 						color = RAID_CLASS_COLORS[select(2, UnitClass(uId))] or NORMAL_FONT_COLOR
@@ -967,7 +988,7 @@ do
 				dots[id].icon = nil
 			end
 		end
-		if range < 1.10 * frame.range and not filtered then -- add an  extra 10% in case of inaccuracy
+		if range < 1.01 * frame.range and not filtered then -- add an  extra 10% in case of inaccuracy
 			dots[id].tooClose = true
 		else
 			dots[id].tooClose = false
@@ -975,15 +996,15 @@ do
 	end
 
 	function onUpdateRadar(self, elapsed)
+		-- print(self, elapsed, reverse)
 		if initRangeCheck(frame.range) then --This is basically fixing a bug with map not being on right dungeon level half the time.
 			pixelsperyard = min(radarFrame:GetWidth(), radarFrame:GetHeight()) / (frame.range * 3)
 			radarFrame.circle:SetSize(frame.range * pixelsperyard * 2, frame.range * pixelsperyard * 2)
-
-			if frame.range ~= (range or 0) or bossMode ~= frame.bossMode then
+			-- if frame.range ~= (range or 0) or bossMode ~= frame.bossMode then
 				range = frame.range
-				bossMode = frame.bossMode
-				radarFrame.text:SetText((bossMode and L.RANGERADAR_BOSS_HEADER or L.RANGERADAR_HEADER):format(range))
-			end
+				-- bossMode = frame.bossMode
+				radarFrame.text:SetText(( radarFrame.reverse and L.RANGERADAR_RHEADER or L.RANGERADAR_HEADER):format(range))
+			-- end
 
 			local mapName        = GetMapInfo()
 			local level          = GetCurrentMapDungeonLevel()
@@ -1072,7 +1093,7 @@ do
 					end
 				end
 
-				local playerTooClose = false
+				local playerTooClose = false -- todo how many player whit you
 				if bossMode then
 					if enemyCheckFunc(frame.bossUnit, frame.range) then
 						playerTooClose = true
@@ -1085,12 +1106,22 @@ do
 						end
 					end
 				end
-				if UnitIsDeadOrGhost("player") then
-					radarFrame.circle:SetVertexColor(1, 1, 1)
-				elseif playerTooClose then
-					radarFrame.circle:SetVertexColor(1, 0, 0)
+				if not radarFrame.reverse then
+					if UnitIsDeadOrGhost("player") then
+						radarFrame.circle:SetVertexColor(1, 1, 1)
+					elseif playerTooClose  then
+						radarFrame.circle:SetVertexColor(1, 0, 0)
+					else
+						radarFrame.circle:SetVertexColor(0, 1, 0)
+					end
 				else
-					radarFrame.circle:SetVertexColor(0, 1, 0)
+					if UnitIsDeadOrGhost("player") then
+						radarFrame.circle:SetVertexColor(1, 1, 1)
+					elseif playerTooClose  then
+						radarFrame.circle:SetVertexColor(0, 1, 0)
+					else
+						radarFrame.circle:SetVertexColor(1, 0, 0)
+					end
 				end
 				self:Show()
 			end
@@ -1116,17 +1147,17 @@ end
 -----------------------
 --  Check functions  --
 -----------------------
-checkFuncs[10] = function(uId)
-	return CheckInteractDistance(uId, 3)
-end
+-- checkFuncs[10] = function(uId)
+-- 	return CheckInteractDistance(uId, 3)
+-- end
 
-checkFuncs[11] = function(uId)
-	return CheckInteractDistance(uId, 2)
-end
+-- checkFuncs[11] = function(uId)
+-- 	return CheckInteractDistance(uId, 2)
+-- end
 
-checkFuncs[28] = function(uId)
-	return CheckInteractDistance(uId, 4)
-end
+-- checkFuncs[28] = function(uId)
+-- 	return CheckInteractDistance(uId, 4)
+-- end
 
 
 local getDistanceBetween
@@ -1157,6 +1188,7 @@ do
 		end
 		local dX = (startX - x) * dims[1]
 		local dY = (startY - y) * dims[2]
+		-- print(math.sqrt(dX * dX + dY * dY))
 		return math.sqrt(dX * dX + dY * dY)
 	end
 
@@ -1260,42 +1292,45 @@ function enemyCheckFunc(uId, range)
 	return false
 end
 
-do
-	local bandages = { 21991, 34721, 34722, 53049, 53050, 53051 } -- you should have one of these bandages in your cache
+-- do
+-- 	local bandages = { 21991, 34721, 34722, 53049, 53050, 53051 } -- you should have one of these bandages in your cache
 
-	checkFuncs[15] = function(uId)
-		if UnitIsEnemy("player", uId) then
-			return enemyCheckFunc(uId, 15)
-		else
-			for _, v in ipairs(bandages) do
-				if IsItemInRange(v, uId) == 1 then
-					return true
-				elseif IsItemInRange(v, uId) == 0 then
-					return false
-				end
-			end
-		end
-	end
-end
+-- 	checkFuncs[15] = function(uId)
+-- 		if UnitIsEnemy("player", uId) then
+-- 			return enemyCheckFunc(uId, 15)
+-- 		else
+-- 			for _, v in ipairs(bandages) do
+-- 				if IsItemInRange(v, uId) == 1 then
+-- 					return true
+-- 				elseif IsItemInRange(v, uId) == 0 then
+-- 					return false
+-- 				end
+-- 			end
+-- 		end
+-- 	end
+-- end
 
 ---------------
 --  Methods  --
 ---------------
-function rangeCheck:Show(range, filter, bossUnit)
+function rangeCheck:Show(range, filter, bossUnit, reverse)
+	-- print(range, filter, bossUnit, reverse)
 	SetMapToCurrentZone() --Set map to current zone before checking other stuff, work around annoying bug i hope?
 	if type(range) == "function" then -- the first argument is optional
-		return self:Show(nil, range)
+		return self:Show(nil, range,reverse)
 	end
 	local mapName = GetMapInfo()
 	range = range or 10
 	frame = frame or createFrame()
 	radarFrame = radarFrame or createRadarFrame()
+	radarFrame.reverse = reverse or radarFrame.reverse or false
 	frame.checkFunc = checkFuncs[range] or error(("Range \"%d yd\" is not supported."):format(range), 2)
 	frame.previousRange = frame.range or range
 	frame.previouslyShown = true
 	frame.bossUnit = bossUnit
 	frame.bossMode = bossUnit ~= nil
 	frame.range = range
+	frame.reverse = reverse or frame.reverse or false
 	frame.filter = filter
 	local level = GetCurrentMapDungeonLevel()
 	local usesTerrainMap = DungeonUsesTerrainMap()
@@ -1312,24 +1347,24 @@ function rangeCheck:Show(range, filter, bossUnit)
 	end
 end
 
-function rangeCheck:SetBossRange(range, bossUnit)
-	if DBM.Options.DontShowRangeFrame then return end
-	if not HarmItems[range] then
-		error(("Boss mode range \"%d yd\" is not supported."):format(range), 2)
-	end
-	self:Show(range, nil, bossUnit)
-end
+-- function rangeCheck:SetBossRange(range, bossUnit)
+-- 	if DBM.Options.DontShowRangeFrame then return end
+-- 	if not HarmItems[range] then
+-- 		error(("Boss mode range \"%d yd\" is not supported."):format(range), 2)
+-- 	end
+-- 	self:Show(range, nil, bossUnit)
+-- end
 
-function rangeCheck:DisableBossMode()
-	if frame and frame.bossMode then
-		frame.bossMode = false
-		frame.bossUnit = nil
-		frame.range = frame.previousRange
-		if not frame.previouslyShown then
-			self:Hide()
-		end
-	end
-end
+-- function rangeCheck:DisableBossMode()
+-- 	if frame and frame.bossMode then
+-- 		frame.bossMode = false
+-- 		frame.bossUnit = nil
+-- 		frame.range = frame.previousRange
+-- 		if not frame.previouslyShown then
+-- 			self:Hide()
+-- 		end
+-- 	end
+-- end
 
 function rangeCheck:Hide()
 	if frame then
@@ -1364,7 +1399,9 @@ do
 			if DBM:HasMapRestrictions() then
 				DBM:AddMsg(L.NO_RANGE)
 			end
-			rangeCheck:Show((r and r < 201) and r or 10, nil, true, nil, reverse) --TODO 4 not 6
+			rangeCheck:Show((r and r < 201) and r or 10, nil, nil, reverse)
+			frame.reverse = reverse
+			radarFrame.reverse = reverse
 		end
 	end
 
@@ -1372,19 +1409,21 @@ do
 	SLASH_DBMRANGE2 = "/distance"
 	SLASH_DBMRRANGE1 = "/rrange"
 	SLASH_DBMRRANGE2 = "/rdistance"
-	SLASH_DBMBOSSRANGE1 = "/bossrange"
+	-- SLASH_DBMBOSSRANGE1 = "/bossrange"
 	SlashCmdList["DBMRANGE"] = function(msg)
+		-- print(msg)
+		-- print(tonumber(msg))
 		UpdateRangeFrame(tonumber(msg), false)
 	end
 	SlashCmdList["DBMRRANGE"] = function(msg)
 		UpdateRangeFrame(tonumber(msg), true)
 	end
-	SlashCmdList["DBMBOSSRANGE"] = function(msg)
-		local r = tonumber(msg)
-		if not r then
-			DBM.RangeCheck:DisableBossMode()
-		else
-			DBM.RangeCheck:SetBossRange(r, "target")
-		end
-	end
+	-- SlashCmdList["DBMBOSSRANGE"] = function(msg)
+	-- 	local r = tonumber(msg)
+	-- 	if not r then
+	-- 		DBM.RangeCheck:DisableBossMode()
+	-- 	else
+	-- 		DBM.RangeCheck:SetBossRange(r, "target")
+	-- 	end
+	-- end
 end

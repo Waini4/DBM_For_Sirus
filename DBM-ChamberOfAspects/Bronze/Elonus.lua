@@ -216,7 +216,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.SetIconOnRevCascTargets then
 			-- self:SetIcon(args.destName, self.vb.RevCascIcons, 10)
 			-- function module:SetSortedIcon(mod, sortType, delay, target, startIcon, maxIcon, descendingIcon, returnFunc, scanId)
-			self:SetSortedIcon("roster", 1, args.destName, 6, 8)
+				self:SetSortedIcon("roster", 1, args.destName, 6,8)
 		end
 		ReverseCascadeBuff:Start()
 		DBM.Nameplate:Show(args.destGUID, 317160)

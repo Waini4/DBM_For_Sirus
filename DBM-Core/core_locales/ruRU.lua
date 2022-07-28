@@ -242,7 +242,7 @@ L.PIZZA_ERROR_USAGE    = "Использование: /dbm [broadcast] timer <ti
 --L.MINIMAP_TOOLTIP_HEADER (Same as English locales)
 L.MINIMAP_TOOLTIP_FOOTER = "[Shift+ЛКМ] - переместить значок " .. L.DBM
 
-L.RANGECHECK_HEADER            = "Проверка дистанции (%d м)"
+L.RANGECHECK_HEADER            = "Проверка дистанции (%0.1f м)"
 L.RANGECHECK_HEADERT           = "Проверка дистанции (%dм-%dP)"
 L.RANGECHECK_RHEADER           = "R-Проверка дистанции (%dм)"
 L.RANGECHECK_RHEADERT          = "R-Проверка дистанции (%dм-%dP)"
@@ -260,8 +260,8 @@ L.RANGECHECK_OPTION_FRAMES     = "Фреймы"
 L.RANGECHECK_OPTION_RADAR      = "Показывать радар"
 L.RANGECHECK_OPTION_TEXT       = "Показывать текстовый фрейм"
 L.RANGECHECK_OPTION_BOTH       = "Показывать оба фрейма"
-L.RANGERADAR_HEADER            = "Радар (%d метров)"
-L.RANGERADAR_RHEADER           = "R-Радар:%d Игроков:%d"
+L.RANGERADAR_HEADER            = "Радар (%0.1f метров)"
+L.RANGERADAR_RHEADER           = "R-Радар (%0.1f метров)"
 L.RANGERADAR_BOSS_HEADER       = "Диапазон боссов (%d м)"
 L.RANGECHECK_OPTION_SPEED      = "Скорость обновления (/reload)"
 L.RANGECHECK_OPTION_SLOW       = "Медленная 0.5 сек (наименее CPU интенсивное)"

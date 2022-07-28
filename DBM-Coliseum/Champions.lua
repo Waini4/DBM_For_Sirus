@@ -1,4 +1,4 @@
-local mod	= DBM:NewMod("Champions", "DBM-Coliseum")
+local mod	= DBM:NewMod("Champions", "DBM-Coliseum") --todo fxpw
 local L		= mod:GetLocalizedStrings()
 
 mod:SetRevision("20220518110528")
