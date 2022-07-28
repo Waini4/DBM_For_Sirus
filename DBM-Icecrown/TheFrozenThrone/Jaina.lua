@@ -72,7 +72,7 @@ local iceMarkTargets = {}
 -- function mod:OnCombat()
 -- end
 
-
+-- mod:SetStage(0)
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 3392, "Lady Jaina Proudmoore")
 	self:SetStage(1)

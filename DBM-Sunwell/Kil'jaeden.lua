@@ -132,7 +132,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 		warnShield:Show()
 		specWarnShield:Show()
 	elseif args.spellId == 45892 then
-		self:SetStage(0)
+		self:NextStage()
 		if self.vb.phase == 2 then
 			warnPhase2:Show()
 			timerBlueOrb:Start()

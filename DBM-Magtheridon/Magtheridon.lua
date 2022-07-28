@@ -49,7 +49,7 @@ local shake = 1
 
 local handTargets = {}
 local targetShattered
-
+-- mod:SetStage(0)
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 17257, "Magtheridon")
 	self:SetStage(1)

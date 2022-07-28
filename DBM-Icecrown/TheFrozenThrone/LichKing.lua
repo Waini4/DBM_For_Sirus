@@ -202,7 +202,7 @@ function mod:OldDefileTarget()
 	end
 end
 local function NextPhase(self)
-	self:SetStage(0)
+	self:NextStage()
 	if self.vb.phase == 1 then
 		berserkTimer:Start()
 		warnShamblingSoon:Schedule(15)

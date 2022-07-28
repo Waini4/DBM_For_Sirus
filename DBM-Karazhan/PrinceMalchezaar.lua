@@ -40,11 +40,12 @@ local yellPorchFades			= mod:NewShortFadesYell(305429)
 local flameTargets = {}
 local PorchTargets = {}
 mod.vb.PorchIcons = 8
-mod.vb.phase = 0
+
 
 mod:AddBoolOption("AnnouncePorch", false)
-
+mod:SetStage(0)
 function mod:OnCombatStart(delay)
+	mod:SetStage(1)
 	DBM:FireCustomEvent("DBM_EncounterStart", 15690, "Prince Malchezaar")
 	if mod:IsDifficulty("normal10") then
 		timerInfernal:Start(14.5-delay)
@@ -63,11 +64,11 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 			timerInfernal:Start()
 	elseif msg == L.DBM_PRINCE_YELL_P3 then
 			self:SendSync("Phase3")
-			self.vb.phase = 3
+			mod:SetStage(3)
 	elseif msg == L.DBM_PRINCE_YELL_P2 then
 			self:SetStage(2)
 			--warnPhase2:Show()
-		if  msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2 and self.vb.phase == 3 then
+		if  msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2 and self:GetStage() == 3 then
 			warningInfernal:Show()
 			timerInfernal:Start(17)
 		end

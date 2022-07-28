@@ -144,7 +144,7 @@ local function Mine(self)
 end
 
 local function NextPhase(self)
-	self:SetStage(0)
+	self:NextStage()
 	if self.vb.phase == 1 then
 		if self.Options.HealthFrame then
 			DBM.BossHealth:Clear()
@@ -208,10 +208,10 @@ local function NextPhase(self)
 		end
 	end
 end
-
+-- mod:SetStage(0)
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 33670, "Mimiron")
-	self.vb.phase = 0
+
 	self.vb.hardmode = false
 	enrage:Start(-delay)
 	NextPhase(self)

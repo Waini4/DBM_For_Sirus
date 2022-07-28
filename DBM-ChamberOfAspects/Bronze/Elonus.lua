@@ -139,7 +139,7 @@ do
 		DBM.BossHealth:RemoveBoss(getShieldHP)
 	end
 end
-
+-- mod:SetStage(0)
 function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 50609 or 50610, "Elonus")
 	mod:SetStage(1)

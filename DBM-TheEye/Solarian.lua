@@ -82,7 +82,7 @@ local function Kolzo()
 	warnKol:Show(table.concat(KolTargets, "<, >"))
 	table.wipe(KolTargets)
 end
-
+-- mod:SetStage(0)
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 18805, "High Astromancer Solarian")
 	if mod:IsDifficulty("heroic25") then

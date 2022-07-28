@@ -93,7 +93,7 @@ local function NextWave(self)
 		self:Schedule(timer, NextWave, self)
 	end
 end
-
+-- mod:SetStage(0)
 function mod:OnCombatStart()
 	self:SetStage(1)
 	if self:IsDifficulty("normal25") then

@@ -47,7 +47,7 @@ local timerAchieveWhelps	= mod:NewAchievementTimer(10, 4406)
 mod.vb.warned_preP2 = false
 mod.vb.warned_preP3 = false
 mod.vb.whelpsCount = 0
-
+-- mod:SetStage(0)
 function mod:OnCombatStart(delay)
 	self:SetStage(1)
 	self.vb.whelpsCount = 0

@@ -58,7 +58,7 @@ local function CurseIcons(self)
 	table.wipe(CurseTargets)
 	self.vb.MarkofFilthIcon = 7
 end
-
+-- mod:SetStage(0)
 function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 84002, "Ctrax")
 	self:SetStage(1)

@@ -72,7 +72,7 @@ local function warnfelIcons(self)
 			"< >")
 	end
 end]]
-
+-- mod:SetStage(0)
 function mod:OnCombatStart(delay)
 	self:SetStage(1)
 	timerShockingCD:Start(34 - delay)

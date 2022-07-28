@@ -205,7 +205,7 @@ local function ResetRange(self)
 		DBM.RangeCheck:DisableBossMode()
 	end
 end
-
+-- mod:SetStage(0)
 function mod:OnCombatStart(delay)
 	self:SetStage(1)
 	berserkTimer:Start(-delay)

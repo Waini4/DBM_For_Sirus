@@ -47,7 +47,7 @@ local function TankThrow(self)
 	warnThrowSoon:Schedule(17.6)
 	self:Schedule(20.6, TankThrow, self)
 end
-
+-- mod:SetStage(0)
 function mod:OnCombatStart(delay)
 	self:SetStage(1)
 	currentCharge = nil

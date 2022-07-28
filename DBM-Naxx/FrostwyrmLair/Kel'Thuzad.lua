@@ -142,7 +142,7 @@ local function AnnounceBlastTargets(self)
 		end
 	end
 end
-
+-- mod:SetStage(0)
 local function StartPhase2(self)
 	if self.vb.phase == 1 then
 		self:SetStage(2)

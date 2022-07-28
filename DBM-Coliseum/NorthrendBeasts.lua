@@ -101,7 +101,7 @@ local function updateHealthFrame(phase)
 		DBM.BossHealth:AddBoss(34797, L.Icehowl)
 	end
 end
-
+-- mod:SetStage(0)
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 34796, "The Beasts of Northrend")
 	table.wipe(phases)

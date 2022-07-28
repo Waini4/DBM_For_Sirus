@@ -31,7 +31,7 @@ local timerGravityLapse		= mod:NewBuffActiveTimer(35, 44194, nil, nil, nil, 6)
 local timerGravityLapseCD	= mod:NewNextTimer(13.5, 44194, nil, nil, nil, 6)
 
 mod.vb.interruptable = false
-
+-- mod:SetStage(0)
 function mod:OnCombatStart(delay)
 	self.vb.interruptable = false
 	self:SetStage(1)

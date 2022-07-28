@@ -79,7 +79,7 @@ mod.vb.FearMili = 0
 mod:AddBoolOption("AnnounceFails", false, "announce")
 mod:AddBoolOption("AnnounceFear", false, "announce")
 local FearTargets = {}
-
+-- mod:SetStage(0)
 function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 50612, "Murozond")
 	self.vb.PreHuy = 0

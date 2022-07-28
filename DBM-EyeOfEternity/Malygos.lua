@@ -86,7 +86,7 @@ function mod:StaticFieldTarget()
 		warnStaticField:Show(announcetarget)
 	end
 end
-
+-- mod:SetStage(0)
 function mod:OnCombatStart(delay)
 	tableBuild = false
 	self:SetStage(1)
