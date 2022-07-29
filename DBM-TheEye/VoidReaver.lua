@@ -149,7 +149,9 @@ function mod:SPELL_AURA_APPLIED(args)
 			yellSign:Yell()
 			yellSignFades:Countdown(308471)
 		end
-		DBM.Nameplate:Show(args.destGUID, 308471)
+		if DBM:CanUseNameplateIcons() then
+			DBM.Nameplate:Show(args.destGUID, 308471)
+		end
 		if self.Options.InfoFrame and not DBM.InfoFrame:IsShown() then
 			DBM.InfoFrame:SetHeader(args.spellName)
 			DBM.InfoFrame:Show(8, "playerdebuffremaining", 308471)
@@ -179,7 +181,9 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnSignTargets then
 			self:RemoveIcon(args.destName)
 		end
-		DBM.Nameplate:Hide(args.destGUID, 308471)
+		if DBM:CanUseNameplateIcons() then
+			DBM.Nameplate:Hide(args.destGUID, 308471)
+		end
 	end
 end
 

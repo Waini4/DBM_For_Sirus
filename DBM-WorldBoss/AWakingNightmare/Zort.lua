@@ -181,7 +181,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.SetIconOnFlameTarget and self.vb.FlameIcons > 0 then
 			self:SetIcon(args.destName, self.vb.FlameIcons, 10)
 		end
-		DBM.Nameplate:Show(args.destGUID, 307839)
+		if DBM:CanUseNameplateIcons() then
+			DBM.Nameplate:Show(args.destGUID, 307839)
+		end
 		self.vb.FlameIcons = self.vb.FlameIcons - 1
 		self:Unschedule(warnFlameTargets)
 		self:Schedule(0.3, warnFlameTargets, self)
@@ -237,7 +239,9 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnFlameTarget then
 			self:SetSortedIcon("roster", args.destName, 7,8)
 		end
-		DBM.Nameplate:Hide(args.destGUID, 307839)
+		if DBM:CanUseNameplateIcons() then
+			DBM.Nameplate:Hide(args.destGUID, 307839)
+		end
 	elseif args:IsSpellID(308516, 308517) then
 		if self.Options.SetIconOnSveazTarget then
 			self:SetSortedIcon("roster", args.destName, 6,8)
@@ -346,7 +350,7 @@ function mod:UNIT_HEALTH(guid)
 		if  DBM:GetBossHP(guid) <= 1 and self:GetStage() == 3  then
 			self:NextStage() --stage == 4
 		end
-	elseif self:GetStage() == 4 and self.AllThreeDead == 4 then
+	elseif self:GetUnitCreatureId(guid) == 50702 and self:GetStage() == 4 and self.AllThreeDead == 4 then
 		self:NextStage() --stage == 5
 	end
 	-- 	if self:GetStage("Zort") == 1 and   DBM:GetBossHP(guid) <= 68 then

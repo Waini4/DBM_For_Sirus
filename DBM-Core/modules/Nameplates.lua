@@ -14,9 +14,10 @@ local NP = nil
 
 
 local isElvUILoad = IsAddOnLoaded("ElvUI")
-function DBM:IsElvUIOn()
-	return isElvUILoad and DBM.Options.UseNPForElvUI
+function DBM:CanUseNameplateIcons()
+	return isElvUILoad and DBM.Options.UseNPForElvUI or false
 end
+
 
 if not isElvUILoad then return end
 E = unpack(ElvUI)
@@ -235,7 +236,7 @@ end)
 
 --isGUID: guid or name (bool)
 function nameplateFrame:Show(guid, spellId, duration, desaturate)
-	if not DBM:IsElvUIOn() then return end
+	if not DBM:CanUseNameplateIcons() then return end
 	if DBM.Options.DontShowNameplateIcons then return end
 	-- ignore player nameplate;
 	if E.myguid == guid then return end
@@ -281,7 +282,7 @@ end
 
 
 function nameplateFrame:Hide(guid, spellId, force)
-	if not DBM:IsElvUIOn()  then return end
+	if not DBM:CanUseNameplateIcons()  then return end
 	local name, rank, currentTexture, castTime, minRange, maxRange, spellID = GetSpellInfo(spellId)
 	-- if self:SupportedNPMod() then
 	-- 	DBM:Debug("DBM.Nameplate Found supported NP mod, only sending Hide callbacks", 3)

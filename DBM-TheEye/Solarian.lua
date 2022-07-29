@@ -178,7 +178,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnWrathN:Show(args.destName)
 		timerWrathN:Start(args.destName)
 		---TODO elvui test
-		DBM.Nameplate:Show(args.destGUID, 42783)
+		if DBM:CanUseNameplateIcons() then
+			DBM.Nameplate:Show(args.destGUID, 42783)
+		end
 		self:SetIcon(args.destName, 8, 6)
 		if args:IsPlayer() then
 			specWarnWrathN:Show()
@@ -190,7 +192,9 @@ end
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(42783) then
-		DBM.Nameplate:Hide(args.destGUID, 42783)
+		if DBM:CanUseNameplateIcons() then
+			DBM.Nameplate:Hide(args.destGUID, 42783)
+		end
 	end
 
 end
