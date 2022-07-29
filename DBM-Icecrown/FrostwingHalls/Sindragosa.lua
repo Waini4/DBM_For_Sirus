@@ -387,9 +387,9 @@ function mod:SPELL_CAST_SUCCESS(args)
 		timerBlisteringCold:Start()
 		timerNextBlisteringCold:Start()
 
-		if self.Options.RangeFrame then
-			DBM.RangeCheck:SetBossRange(25, self:GetBossUnitByCreatureId(36853))
-			self:Schedule(5.5, ResetRange, self)
+		if self.Options.RangeFrame then -- todo fxpw
+			-- DBM.RangeCheck:SetBossRange(25, self:GetBossUnitByCreatureId(36853))
+			-- self:Schedule(5.5, ResetRange, self)
 		end
 	end
 end

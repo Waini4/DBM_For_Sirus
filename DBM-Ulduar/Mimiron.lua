@@ -271,8 +271,8 @@ function mod:SPELL_CAST_START(args)
 		timerShockBlast:Start()
 		timerNextShockblast:Start()
 		if self.Options.RangeFrame then
-			DBM.RangeCheck:SetBossRange(15, self:GetBossUnitByCreatureId(33432))
-			self:Schedule(4.5, ResetRange, self)
+			-- DBM.RangeCheck:SetBossRange(15, self:GetBossUnitByCreatureId(33432))
+			-- self:Schedule(4.5, ResetRange, self)
 		end
 	elseif args:IsSpellID(64529, 62997, 312437, 312790) then -- plasma blast
 		timerPlasmaBlastCD:Start()

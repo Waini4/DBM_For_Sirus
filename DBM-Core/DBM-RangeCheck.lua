@@ -1347,7 +1347,7 @@ function rangeCheck:Show(range, filter, bossUnit, reverse)
 		onUpdateRadar(radarFrame, 1)
 	end
 end
-
+-- todo fxpw
 -- function rangeCheck:SetBossRange(range, bossUnit)
 -- 	if DBM.Options.DontShowRangeFrame then return end
 -- 	if not HarmItems[range] then
