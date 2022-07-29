@@ -211,7 +211,7 @@ end
 -- mod:SetStage(0)
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 33670, "Mimiron")
-
+	self:SetStage(0)
 	self.vb.hardmode = false
 	enrage:Start(-delay)
 	NextPhase(self)
