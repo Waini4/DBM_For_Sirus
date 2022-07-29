@@ -219,7 +219,9 @@ function mod:SPELL_AURA_APPLIED(args)
 				self:SetSortedIcon("roster", 1, args.destName, 6,8)
 		end
 		ReverseCascadeBuff:Start()
-		DBM.Nameplate:Show(args.destGUID, 317160)
+		if DBM:CanUseNameplateIcons() then
+			DBM.Nameplate:Show(args.destGUID, 317160)
+		end
 
 		if self.Options.InfoFrame and not DBM.InfoFrame:IsShown() then
 			DBM.InfoFrame:SetHeader(args.spellName)
@@ -299,7 +301,9 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnRevCascTargets then
 			self:RemoveIcon(args.destName)
 		end
-		DBM.Nameplate:Hide(args.destGUID, 317160)
+		if DBM:CanUseNameplateIcons() then
+			DBM.Nameplate:Hide(args.destGUID, 317160)
+		end
 		if args:IsPlayer() then
 			yellReverseCascadeFade:Cancel()
 		end
