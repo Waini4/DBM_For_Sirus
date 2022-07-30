@@ -19,7 +19,7 @@ mod:RegisterEvents(
 ------------------------------10----------------------------------
 local warnLightningofFilth = mod:NewSpellAnnounce(317549, 2)
 local warnMarkofFilth      = mod:NewTargetAnnounce(317544, 2)
-local warnFlesh            = mod:NewStackAnnounce(317542, 3, nil, "Tank|Healer") --Опаленная плоть
+local warnFlesh            = mod:NewStackAnnounce(317542, 3, nil, "Tank") --Опаленная плоть
 
 local specwarnPrimalHorror        = mod:NewSpecialWarningLookAway(317548, nil, nil, nil, 2, 2)
 local specWarnMarkofFilthRun      = mod:NewSpecialWarningRun(317544, nil, nil, nil, 1, 2)
@@ -35,8 +35,8 @@ local MarkofFilthBuff      = mod:NewBuffActiveTimer(5, 317544, nil, nil, nil, 2)
 local timerFleshCD             = mod:NewCDTimer(35, 317542, nil, nil, nil, 5) --Опаленная плоть
 local timerLightningofFilth    = mod:NewCDTimer(15, 317549, nil, nil, nil, 3) -- Молния скверны
 local timerPrimalHorror        = mod:NewCDTimer(30, 317548, nil, nil, nil, 4, nil, CL.IMPORTANT_ICON, nil, 1)
-local timerCrushingBlowCD      = mod:NewCDTimer(30, 317541, nil, nil, nil, 2, nil, CL.DEADLY_ICON)
-local timerStrikingBlow        = mod:NewCDTimer(10, 317543, nil, "Tank|Healer", nil, 5, nil, CL.TANK_ICON)
+local timerCrushingBlowCD      = mod:NewCDTimer(30, 317541, nil, "Tank", nil, 2, nil, CL.DEADLY_ICON)
+local timerStrikingBlow        = mod:NewCDTimer(10, 317543, nil, "Tank", nil, 5, nil, CL.TANK_ICON)
 local timerMarkofFilth         = mod:NewCDTimer(19, 317544, nil, nil, nil, 4, nil, CL.IMPORTANT_ICON)
 local timerEndlessflameofFilth = mod:NewCDTimer(18.5, 317540, nil, nil, nil, 4, nil, CL.MAGIC_ICON)
 
@@ -66,6 +66,8 @@ f:SetScript("OnEvent", function(self)
 			DBM:FireCustomEvent("DBM_EncounterStart", 84000, "Gogonash")
 			self:SetStage(1)
 			self.vb.MarkofFilthIcon = 8
+			timerPrimalHorror:Start(27)
+			timerMarkofFilth:Start(14)
 		end
 	end
 end)
