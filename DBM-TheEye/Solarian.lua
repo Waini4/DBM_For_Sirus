@@ -86,8 +86,8 @@ end
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 18805, "High Astromancer Solarian")
 	if mod:IsDifficulty("heroic25") then
-		timerNextHelp:Start(-delay)
-		timerNextWrathH:Start(-delay)
+		timerNextHelp:Start(40-delay)
+		timerNextWrathH:Start(43-delay)
 		self:SetStage(1)
 	else
 		self.vb.Fear = 0
