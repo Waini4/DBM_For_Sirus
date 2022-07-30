@@ -14,17 +14,17 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED_DOSE 308732 308741 308750 308756 308797 36797",
 	"UNIT_TARGET",
 	"SPELL_AURA_REMOVED 308750 36797",
-	"CHAT_MSG_MONSTER_YELL",
+	--	"CHAT_MSG_MONSTER_YELL",
 	"SPELL_CAST_SUCCESS 37018 36723 308749 308743 36815 36731 308734 36797"
 )
 
--- mod:RegisterEvents(
+mod:RegisterEvents(
 -- 	-- "CHAT_MSG_RAID_BOSS_EMOTE",
--- 	"CHAT_MSG_MONSTER_YELL",
+	"CHAT_MSG_MONSTER_YELL"
 -- 	"SPELL_CAST_SUCCESS 37018 36723 308749 308743 36815 36731 308734 36797",
 -- 	"SPELL_AURA_APPLIED 308732 308741 308750 308756	308797 36797",
 -- 	"SPELL_AURA_APPLIED_DOSE 308732 308741 308750 308756 308797 36797"
--- )
+)
 
 
 
@@ -89,7 +89,8 @@ local timerCataCD     = mod:NewCDTimer(126, 308790, nil, nil, nil, 2)
 local timerCataCast   = mod:NewCastTimer(8, 308790, nil, nil, nil, 2)
 local timerVzrivCD    = mod:NewCDTimer(115, 308797, nil, nil, nil, 3)
 local timerVzrivCast  = mod:NewCastTimer(5, 308797, nil, nil, nil, 3)
-local timerGravityH   = mod:NewCDTimer(63, 35941, "Interface\\Icons\\Spell_Magic_FeatherFall", nil, nil, 6, nil, CL.DEADLY_ICON) -- хм
+local timerGravityH   = mod:NewCDTimer(63, 35941, "Interface\\Icons\\Spell_Magic_FeatherFall", nil, nil, 6, nil,
+	CL.DEADLY_ICON) -- хм
 local timerGravityHCD = mod:NewCDTimer(150, 35941, nil, nil, nil, 6, nil, CL.DEADLY_ICON) -- хм
 local timerAvengerS   = mod:NewCDTimer(22, 308743, nil, nil, nil, 3)
 
@@ -104,7 +105,7 @@ mod:AddBoolOption("AvengerLatencyCheck", false)
 mod:AddBoolOption("Avenger", true)
 mod:AddBoolOption("YellOnAvenger", true)
 
-mod.vb.phase = 0
+mod:SetStage(0)
 local dominateMindTargets = {}
 local dominateMindIcon = 8
 local mincControl = {}
@@ -154,7 +155,7 @@ function mod:CHAT_MSG_MONSTER_EMOTE(msg)
 end
 
 function mod:CHAT_MSG_MONSTER_YELL(msg)
-	if mod:IsDifficulty("heroic25") then
+	if self:IsDifficulty("heroic25") then
 		if msg == L.YellSang then
 			timerTalaTarget:Cancel()
 			warnNextAdd:Show(L.NamesAdds["Lord Sanguinar"])
@@ -449,8 +450,8 @@ function mod:SPELL_AURA_APPLIED(args)
 			-- self:SetIcon(args.destName, BombIcons)
 			BombIcons = BombIcons - 1
 			-- if self.Options.SetIconOnStaticTargets then
-				-- function module:SetSortedIcon(mod, sortType, delay, target, startIcon, maxIcon, descendingIcon, returnFunc, scanId)
-				self:SetSortedIcon("roster", args.destName, 7,8)
+			-- function module:SetSortedIcon(mod, sortType, delay, target, startIcon, maxIcon, descendingIcon, returnFunc, scanId)
+			self:SetSortedIcon("roster", args.destName, 7, 8)
 			-- end
 		end
 		if #BombTargets >= 2 then

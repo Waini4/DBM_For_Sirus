@@ -57,6 +57,19 @@ local function SetMarkIcons(self)
 	self.vb.MarkofFilthIcon = 8
 end
 
+local f = CreateFrame("Frame", nil, UIParent)
+f:RegisterEvent("PLAYER_REGEN_DISABLED")
+f:SetScript("OnEvent", function(self)
+	for i = 1, MAX_RAID_MEMBERS do
+		local pt = UnitName("raid" .. i .. "-target")
+		if pt and pt == "Гогонаш" then
+			DBM:FireCustomEvent("DBM_EncounterStart", 84000, "Gogonash")
+			self:SetStage(1)
+			self.vb.MarkofFilthIcon = 8
+		end
+	end
+end)
+--[[
 function mod:OnCombatStart(delay)
 	if self:IsDifficulty("normal10") then
 		self.vb.MarkofFilthIcon = 8
@@ -71,9 +84,10 @@ function mod:OnCombatStart(delay)
 			DBM.BossHealth:AddBoss(84000, L.name)
 		end
 	end
-end
+end]]
 
 function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 84000, "Gogonash", wipe)
 	timerStrikingBlow:Stop()
 	timerLightningofFilth:Stop()
 	timerMarkofFilth:Stop()

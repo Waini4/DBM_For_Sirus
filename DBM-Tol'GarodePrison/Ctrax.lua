@@ -15,6 +15,7 @@ mod:RegisterEvents(
 	"SPELL_AURA_APPLIED_DOSE 317594 317595 317565",
 	"SPELL_AURA_REMOVED 317594 317565",
 	"SPELL_SUMMON 317567",
+	"CHAT_MSG_RAID_BOSS_EMOTE",
 	"UNIT_HEALTH"
 )
 
@@ -53,28 +54,46 @@ mod.vb.CurseIcon = 7
 mod:AddInfoFrameOption(317579, false)
 mod:AddSetIconOption("SetIconOnMark", 317565, true, true, { 8 })
 mod:AddSetIconOption("SetIconOnCurse", 317594, true, true, { 4, 5, 6, 7 })
+mod:SetStage(0)
 
 local function CurseIcons(self)
 	table.wipe(CurseTargets)
 	self.vb.MarkofFilthIcon = 7
 end
--- mod:SetStage(0)
+
+local f = CreateFrame("Frame", nil, UIParent)
+f:RegisterEvent("PLAYER_REGEN_DISABLED")
+f:SetScript("OnEvent", function(self)
+	for i = 1, MAX_RAID_MEMBERS do
+		local pt = UnitName("raid" .. i .. "-target")
+		if pt and pt == "Поглотитель разума Ктракс" then
+			DBM:FireCustomEvent("DBM_EncounterStart", 84002, "Ctrax")
+			self:SetStage(1)
+			timerEscapingDarkness:Start()
+			self:ScheduleMethod(0.1, "CreatePowerFrame")
+			if self.Options.BossHealthFrame then
+				DBM.BossHealth:Show(L.name)
+				DBM.BossHealth:AddBoss(84002, L.name)
+			end
+		end
+	end
+end)
+--[[
 function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 84002, "Ctrax")
 	self:SetStage(1)
 	timerEscapingDarkness:Start()
-	self:ScheduleMethod(0.5, "CreatePowerFrame")
-	if mod:IsDifficulty("normal10") then
-		if self.Options.BossHealthFrame then
-			DBM.BossHealth:Show(L.name)
-			DBM.BossHealth:AddBoss(84002, L.name)
-		end
+	self:ScheduleMethod(0.1, "CreatePowerFrame")
+	if self.Options.BossHealthFrame then
+		DBM.BossHealth:Show(L.name)
+		DBM.BossHealth:AddBoss(84002, L.name)
 	end
+
 	if self.Options.InfoFrame then
-		DBM.InfoFrame:SetHeader(DBM_CORE_L.INFOFRAME_POWER)
+		DBM.InfoFrame:SetHeader(CL.INFOFRAME_POWER)
 		DBM.InfoFrame:Show(2, "enemypower", 1) --TODO, figure out power type
 	end
-end
+end]]
 
 function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 84002, "Ctrax", wipe)
