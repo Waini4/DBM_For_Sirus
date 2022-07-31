@@ -27,6 +27,6 @@ function mod:SPELL_CAST_SUCCESS(args)
 		timerUppercutCD:Start()
 	elseif args.spellId == 11970 then
 		warningFireNova:Show()
-		timerFireNovaCD:Start() -- не тот id и нужен ли вообще дбм на классику?
+		timerFireNovaCD:Start()
 	end
 end

@@ -23,11 +23,15 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
+	if args.spellId == 3815 then
+		warningPoisonCloud:Show()
+		timerPoisonCloudCD:Start()
+	end
+end
+
+function mod:SPELL_CAST_SUCCESS(args)
 	if args.spellId == 3490 then
 		warningFrenziedRage:Show()
 		timerFrenziedRageCD:Start()
-	elseif args.spellId == 3815 then
-		warningPoisonCloud:Show()
-		timerPoisonCloudCD:Start()
 	end
 end
