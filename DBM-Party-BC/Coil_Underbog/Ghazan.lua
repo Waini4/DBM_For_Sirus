@@ -1,4 +1,4 @@
-local mod	= DBM:NewMod(577, "DBM-Party-BC", 5, 262)
+local mod	= DBM:NewMod("Ghaz'an", "DBM-Party-BC", 5, 262)
 
 mod:SetRevision("20220518110528")
 mod:SetCreatureID(18105)
