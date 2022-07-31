@@ -22,7 +22,7 @@ mod:RegisterEventsInCombat(
 
 local canShadowmeld = select(2, UnitRace("player")) == "NightElf"
 local canVanish = select(2, UnitClass("player")) == "ROGUE"
-local myRealm = select(3, DBM:GetMyPlayerInfo())
+-- local myRealm = select(3, DBM:GetMyPlayerInfo()) -- юзался на вармейне там берса разная на реалмах
 
 -- General
 local timerCombatStart		= mod:NewCombatTimer(47.3)

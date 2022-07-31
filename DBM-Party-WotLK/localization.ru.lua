@@ -652,6 +652,10 @@ L:SetGeneralLocalization({
 	name = "Гнойрон"
 })
 
+L:SetMiscLocalization({
+	IchoronPull	= "Я... сама... ярость!"
+})
+
 -----------------
 --  Lavanthor  --
 -----------------
@@ -677,6 +681,10 @@ L = DBM:GetModLocalization("Xevoss")
 
 L:SetGeneralLocalization({
 	name = "Ксевозз"
+})
+
+L:SetMiscLocalization({
+	XevossPull	= "Снова в деле! Так, подумаем о путях отхода."
 })
 
 -------------------------------
@@ -718,7 +726,9 @@ L:SetOptionLocalization({
 L:SetMiscLocalization({
 	yell1		= "Эй, стражи! Уходим! Славные герои обо всем позаботятся. За мной!",
 	Sealbroken	= "Мы прорвались через тюремные ворота! Дорога в Даларан открыта! Теперь мы наконец прекратим войну Нексуса!",
-	WavePortal	= "Открыто порталов: (%d+)/18"
+	WavePortal	= "Открыто порталов: (%d+)/18",
+	Ichoron		= "Я... сама... ярость!",
+	Xevoss		= "Снова в деле! Так, подумаем о путях отхода."
 })
 
 -----------------------------

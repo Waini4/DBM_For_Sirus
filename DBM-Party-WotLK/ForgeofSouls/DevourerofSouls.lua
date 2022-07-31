@@ -20,10 +20,24 @@ local specwarnMirroredSoul		= mod:NewSpecialWarningReflect(69051, nil, nil, nil,
 local specwarnWailingSouls		= mod:NewSpecialWarningSpell(68899, nil, nil, nil, 2, 2)
 local specwarnPhantomBlast		= mod:NewSpecialWarningInterrupt(68982, "HasInterrupt", nil, nil, 1, 2)
 
+local timerMirroredSoulCD		= mod:NewCDTimer(20, 69051, nil, nil, nil, 2)
 local timerMirroredSoul			= mod:NewTargetTimer(8, 69051, nil, nil, nil, 3)
+local timerUnleashedSoulsCD		= mod:NewCDTimer(18.3, 68939, nil, nil, nil, 2)
 local timerUnleashedSouls		= mod:NewBuffActiveTimer(5, 68939, nil, nil, nil, 2)
 
 mod:AddSetIconOption("SetIconOnMirroredTarget", 69051, false, false, {8})
+
+function mod:OnCombatStart()
+	DBM:FireCustomEvent("DBM_EncounterStart", 36502, "DevourerofSouls")
+	timerMirroredSoulCD:Start(7.8)
+	timerUnleashedSoulsCD:Start(19.8)
+end
+
+
+function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 36502, "DevourerofSouls", wipe)
+end
+
 
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(68982, 70322) and self:CheckInterruptFilter(args.sourceGUID, false, true) then	-- Phantom Blast
@@ -45,11 +59,13 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerMirroredSoul:Start(args.destName)
 		specwarnMirroredSoul:Show(args.sourceName)--if sourcename isn't good use L.name
 		specwarnMirroredSoul:Play("stopattack")
+		timerMirroredSoulCD:Start()
 		if self.Options.SetIconOnMirroredTarget then
 			self:SetIcon(args.destName, 8, 8)
 		end
 	elseif args.spellId == 68939 then							-- Unleashed Souls
 		timerUnleashedSouls:Start()
+		timerUnleashedSoulsCD:Start()
 	end
 end
 
