@@ -11,6 +11,15 @@ local L
   L:SetGeneralLocalization({
 	  name 		= "Треш"
   })
+
+  L:SetTimerLocalization({
+	Dogs = "псы появятся через"
+})
+
+  L:SetMiscLocalization({
+	yellDogs	= "Незваные гости! Задержите их, а я спущу бойцовых псов!"
+})
+
 -----------------------------
 --  Watchkeeper Gargolmar  --
 -----------------------------
@@ -367,6 +376,22 @@ L = DBM:GetModLocalization(543)
 L:SetGeneralLocalization({
 	name 		= "Король воронов Айкисс"
 })
+
+-------------------------
+--  Sethekk Halls  --
+----   Trash     ----
+  -----------------
+L = DBM:GetModLocalization("TrashSethek")
+
+L:SetGeneralLocalization({
+	name 					= "Треш"
+})
+
+L:SetOptionLocalization({
+	WarnControll	=  "Показывать кого подчиняет тотем",
+	TotemIcons 		= "Устанавливать метки на тотем подчинения"
+})
+
 
 ------------------------
 --  Shadow Labyrinth  --

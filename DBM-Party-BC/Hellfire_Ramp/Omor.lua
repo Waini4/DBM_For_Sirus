@@ -10,7 +10,8 @@ mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 37566",
-	"SPELL_AURA_REMOVED 37566"
+	"SPELL_AURA_REMOVED 37566",
+	"SPELL_CAST_START 30637"
 )
 
 local warnBane      = mod:NewTargetNoFilterAnnounce(37566)
@@ -18,10 +19,15 @@ local warnBane      = mod:NewTargetNoFilterAnnounce(37566)
 local specwarnBane  = mod:NewSpecialWarningMoveAway(37566, nil, nil, nil, 1, 2)
 local yellBane		= mod:NewYell(37566)
 
+local timerOrbital	= mod:NewCDTimer(30.2, 30637,nil, nil, nil, 2)
 local timerBane     = mod:NewTargetTimer(15, 37566, nil, nil, nil, 3)
 
-mod:AddSetIconOption("SetIconOnBaneTarget", 37566, true, false, {8})
+mod:AddSetIconOption("SetIconOnBaneTarget", 37566, true, false, {6, 7, 8})
 mod:AddRangeFrameOption(37566, 15)
+
+function mod:OnCombatStart()
+	timerOrbital:Start(24.5)
+end
 
 function mod:OnCombatEnd()
 	if self.Options.RangeFrame then
@@ -33,7 +39,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	if args.spellId == 37566 then
 		timerBane:Start(args.destName)
 		if self.Options.SetIconOnBaneTarget then
-			self:SetIcon(args.destName, 8, 15)
+			self:SetIcon(args.destName, 10)
 		end
 		if args:IsPlayer() then
             specwarnBane:Show()
