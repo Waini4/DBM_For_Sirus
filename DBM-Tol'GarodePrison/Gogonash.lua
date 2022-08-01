@@ -35,7 +35,7 @@ local MarkofFilthBuff      = mod:NewBuffActiveTimer(5, 317544, nil, nil, nil, 2)
 local timerFleshCD             = mod:NewCDTimer(35, 317542, nil, nil, nil, 5) --Опаленная плоть
 local timerLightningofFilth    = mod:NewCDTimer(15, 317549, nil, nil, nil, 3) -- Молния скверны
 local timerPrimalHorror        = mod:NewCDTimer(30, 317548, nil, nil, nil, 4, nil, CL.IMPORTANT_ICON, nil, 1)
-local timerCrushingBlowCD      = mod:NewCDTimer(30, 317541, nil, "Tank", nil, 2, nil, CL.DEADLY_ICON)
+local timerCrushingBlowCD      = mod:NewCDTimer(30, 317541, nil, nil, nil, 2, nil, CL.DEADLY_ICON)
 local timerStrikingBlow        = mod:NewCDTimer(10, 317543, nil, "Tank", nil, 5, nil, CL.TANK_ICON)
 local timerMarkofFilth         = mod:NewCDTimer(19, 317544, nil, nil, nil, 4, nil, CL.IMPORTANT_ICON)
 local timerEndlessflameofFilth = mod:NewCDTimer(18.5, 317540, nil, nil, nil, 4, nil, CL.MAGIC_ICON)
@@ -45,7 +45,7 @@ mod:AddBoolOption("AnnounceMarkofFilth", false)
 mod:AddBoolOption("BossHealthFrame", true, "misc")
 
 local MarkTargets = {}
-mod.vb.MarkofFilthIcon = 8
+local MarkofFilthIcon = 8
 
 
 -- local function sort_by_group(v1, v2)
@@ -54,7 +54,7 @@ mod.vb.MarkofFilthIcon = 8
 local function SetMarkIcons(self)
 	warnMarkofFilth:Show(table.concat(MarkTargets, "<, >"))
 	table.wipe(MarkTargets)
-	self.vb.MarkofFilthIcon = 8
+	MarkofFilthIcon = 8
 end
 
 local f = CreateFrame("Frame", nil, UIParent)
@@ -64,16 +64,14 @@ f:SetScript("OnEvent", function(self)
 		local pt = UnitName("raid" .. i .. "-target")
 		if pt and pt == "Гогонаш" then
 			DBM:FireCustomEvent("DBM_EncounterStart", 84000, "Gogonash")
-			self:SetStage(1)
-			self.vb.MarkofFilthIcon = 8
-			timerPrimalHorror:Start(27)
-			timerMarkofFilth:Start(14)
+			--	self:SetStage(1)
+			MarkofFilthIcon = 8
 		end
 	end
 end)
---[[
-function mod:OnCombatStart(delay)
-	DBM:FireCustomEvent("DBM_EncounterStart", 84000, "Gogonash")
+
+--[[function mod:OnCombatStart(delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 84000, "Argaloth")
 	if self:IsDifficulty("normal10") then
 		self.vb.MarkofFilthIcon = 8
 		timerStrikingBlow:Start(5 - delay)
@@ -127,8 +125,8 @@ function mod:SPELL_AURA_APPLIED(args)
 	-- local spellId = args.spellId
 	if args:IsSpellID(317544) then
 		MarkTargets[#MarkTargets + 1] = args.destName
-		if self.Options.SetIconMarkofFilthTargets and self.vb.MarkofFilthIcon > 0 then
-			self:SetIcon(args.destName, self.vb.MarkofFilthIcon)
+		if self.Options.SetIconMarkofFilthTargets and MarkofFilthIcon > 0 then
+			self:SetIcon(args.destName, MarkofFilthIcon)
 		end
 		MarkofFilthBuff:Start()
 		timerMarkofFilth:Start()
@@ -137,6 +135,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			yellMarkofFilth:Yell()
 			yellMarkofFilthFade:Countdown(317544)
 		end
+		MarkofFilthIcon = MarkofFilthIcon - 1
 		self:Unschedule(SetMarkIcons)
 		self:Schedule(0.1, SetMarkIcons, self)
 	elseif args:IsSpellID(317542) then

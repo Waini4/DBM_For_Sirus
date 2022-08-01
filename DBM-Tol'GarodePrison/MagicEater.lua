@@ -13,8 +13,7 @@ mod:RegisterEvents(
 	"SPELL_AURA_APPLIED 317641 317645 317681 317683 317662 317666 317650 317653",
 	"SPELL_AURA_REMOVED 317662 317666",
 	"SPELL_SUMMON 317685",
-	"UNIT_HEALTH",
-	"CHAT_MSG_RAID_BOSS_EMOTE"
+	"UNIT_HEALTH"
 )
 
 --SPELL_AURA_APPLIED,317664,"Колодец Тьмы",0x20,DEBUFF
@@ -28,9 +27,9 @@ local warnShocking       = mod:NewSpellAnnounce(317673, 3) --Сотрясающ�
 local warnMagic          = mod:NewTargetAnnounce(317675, 1) --Извергающаяся магия
 
 local specWarnFelYou     = mod:NewSpecialWarningYou(317666, nil, nil, nil, 4, 1)
-local specWarnFelMoveTo  = mod:NewSpecialWarningMoveTo(317666, nil, nil, nil, 2, 1)
+local specWarnFelMoveTo  = mod:NewSpecialWarningMoveTo(317666, nil, nil, nil, 3, 1)
 local specWarnDarkYou    = mod:NewSpecialWarningYou(317662, nil, nil, nil, 4, 1)
-local specWarnDarkMoveTo = mod:NewSpecialWarningMoveTo(317662, nil, nil, nil, 2, 1)
+local specWarnDarkMoveTo = mod:NewSpecialWarningMoveTo(317662, nil, nil, nil, 3, 1)
 local specWarnEnveloping = mod:NewSpecialWarningKeepMove(317641, nil, nil, nil, 1, 1) --Окутывающая Тьма
 local specWarnSpilling   = mod:NewSpecialWarningStopMove(317645, nil, nil, nil, 1, 1) --Разливающаяся Скверна
 local specWarnShadow     = mod:NewSpecialWarningCast(317674, nil, nil, nil, 2, 2) --Воющие тени
@@ -48,8 +47,8 @@ local timerShellingCD   = mod:NewCDTimer(83, 317685, nil, nil, nil, 7) --Шкв�
 
 local DarkTargets = {}
 local FelTargets = {}
-mod.vb.DarkIcons = 8
-mod.vb.FelIcons = 8
+local DarkIcons = 8
+local FelIcons = 8
 
 
 mod:AddSetIconOption("SetIconOnDarkTargets", 317662, true, true, { 6, 7, 8 })
@@ -61,20 +60,40 @@ mod:AddRangeFrameOption(8, nil, true)
 local function DarkWarnIcons(self)
 	warnOverloadDark:Show(table.concat(DarkTargets, "<, >"))
 	table.wipe(DarkTargets)
-	self.vb.DarkIcons = 8
+	DarkIcons = 8
 end
 
 local function FelWarnIcons(self)
 	warnOverloadFel:Show(table.concat(FelTargets, "<, >"))
 	table.wipe(FelTargets)
-	self.vb.FelIcons = 8
+	FelIcons = 8
 end
 
 mod:SetStage(0)
 
+local f = CreateFrame("Frame", nil, UIParent)
+f:RegisterEvent("PLAYER_REGEN_DISABLED")
+f:SetScript("OnEvent", function()
+	for i = 1, MAX_RAID_MEMBERS do
+		local pt = UnitName("raid" .. i .. "-target")
+		if pt and pt == "Пожиратель магии" then
+			DBM:FireCustomEvent("DBM_EncounterStart", 84002, "MagicEater")
+			--self:SetStage(1)
+			timerShockingCD:Start(34)
+			timerShadowCD:Start()
+			timerShellingCD:Start(60)
+			timerMagicCD:Start(49)
+			timerDarkCD:Start()
+			DarkIcons = 8
+			FelIcons = 8
+		end
+	end
+end)
+
+--[[
 function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, mob)
 	if strmatch(msg, L.Puk) then
-		DBM:FireCustomEvent("DBM_EncounterStart", 84017, "MagicEater")
+		DBM:FireCustomEvent("DBM_EncounterStart", 84017, "Shadhar")
 		self:SetStage(1)
 		timerShockingCD:Start(34)
 		timerShadowCD:Start()
@@ -84,7 +103,7 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, mob)
 		self.vb.DarkIcons = 8
 		self.vb.FelIcons = 8
 	end
-end
+end]]
 
 --[[
 function mod:OnCombatStart(delay)
@@ -135,8 +154,8 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerMagicCD:Start(args.destName)
 	elseif args:IsSpellID(317662) then --Перегрузка метки Тьмы
 		DarkTargets[#DarkTargets + 1] = args.destName
-		if self.Options.SetIconOnDarkTargets and self.vb.DarkIcons > 0 then
-			self:SetIcon(args.destName, self.vb.DarkIcons)
+		if self.Options.SetIconOnDarkTargets and DarkIcons > 0 then
+			self:SetIcon(args.destName, DarkIcons)
 		end
 		if args:IsPlayer() then
 			specWarnDarkYou:Show()
@@ -145,13 +164,13 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		timerOverloadDark:Start(args.destName)
 		warnOverloadDark:Show(args.destName)
-		self.vb.DarkIcons = self.vb.DarkIcons - 1
+		DarkIcons = DarkIcons - 1
 		self:Unschedule(DarkWarnIcons)
 		self:Schedule(0.1, DarkWarnIcons, self)
 	elseif args:IsSpellID(317666) then --Перегрузка метки Скверны
 		FelTargets[#FelTargets + 1] = args.destName
-		if self.Options.SetIconOnFelTargets and self.vb.FelIcons > 0 then
-			self:SetIcon(args.destName, self.vb.FelIcons)
+		if self.Options.SetIconOnFelTargets and FelIcons > 0 then
+			self:SetIcon(args.destName, FelIcons)
 		end
 		timerOverloadFel:Start(args.destName)
 		if args:IsPlayer() then
@@ -160,7 +179,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnFelMoveTo:Show(args.destName)
 		end
 		warnOverloadFel:Show(args.destName)
-		self.vb.FelIcons = self.vb.FelIcons - 1
+		FelIcons = FelIcons - 1
 		self:Unschedule(FelWarnIcons)
 		self:Schedule(0.1, FelWarnIcons, self)
 	elseif args:IsSpellID(317650) and self:AntiSpam(3) then --Активация: Тьма

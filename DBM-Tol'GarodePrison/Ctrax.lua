@@ -54,11 +54,34 @@ mod.vb.CurseIcon = 7
 mod:AddInfoFrameOption(317579, false)
 mod:AddSetIconOption("SetIconOnMark", 317565, true, true, { 8 })
 mod:AddSetIconOption("SetIconOnCurse", 317594, true, true, { 4, 5, 6, 7 })
-mod:SetStage(0)
 
 local function CurseIcons(self)
 	table.wipe(CurseTargets)
 	self.vb.MarkofFilthIcon = 7
+end
+
+do -- тест!!!!!
+	local last = 100
+	local function getPowerPercent()
+		local guid = UnitGUID("focus")
+		if mod:GetCIDFromGUID(guid) == 84002 then
+			last = math.floor(UnitPower("focus") / UnitPowerMax("focus") * 100)
+			return last
+		end
+		for i = 0, GetNumRaidMembers(), 1 do
+			local unitId = ((i == 0) and "target") or ("raid" .. i .. "target")
+			guid = UnitGUID(unitId)
+			if mod:GetCIDFromGUID(guid) == 84002 then
+				last = math.floor(UnitPower(unitId) / UnitPowerMax(unitId) * 100)
+				return last
+			end
+		end
+		return last
+	end
+
+	function mod:CreatePowerFrame()
+		DBM.BossHealth:AddBoss(getPowerPercent, L.PowerPercent)
+	end
 end
 
 local f = CreateFrame("Frame", nil, UIParent)
@@ -68,9 +91,9 @@ f:SetScript("OnEvent", function(self)
 		local pt = UnitName("raid" .. i .. "-target")
 		if pt and pt == "Поглотитель разума Ктракс" then
 			DBM:FireCustomEvent("DBM_EncounterStart", 84002, "Ctrax")
-			self:SetStage(1)
+			--self:SetStage(1)
 			timerEscapingDarkness:Start()
-			self:ScheduleMethod(0.1, "CreatePowerFrame")
+			self:Schedule(0.1, "CreatePowerFrame")
 			if self.Options.BossHealthFrame then
 				DBM.BossHealth:Show(L.name)
 				DBM.BossHealth:AddBoss(84002, L.name)
@@ -99,30 +122,6 @@ function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 84002, "Ctrax", wipe)
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
-	end
-end
-
-do -- тест!!!!!
-	local last = 100
-	local function getPowerPercent()
-		local guid = UnitGUID("focus")
-		if mod:GetCIDFromGUID(guid) == 84002 then
-			last = math.floor(UnitPower("focus") / UnitPowerMax("focus") * 100)
-			return last
-		end
-		for i = 0, GetNumRaidMembers(), 1 do
-			local unitId = ((i == 0) and "target") or ("raid" .. i .. "target")
-			guid = UnitGUID(unitId)
-			if mod:GetCIDFromGUID(guid) == 84002 then
-				last = math.floor(UnitPower(unitId) / UnitPowerMax(unitId) * 100)
-				return last
-			end
-		end
-		return last
-	end
-
-	function mod:CreatePowerFrame()
-		DBM.BossHealth:AddBoss(getPowerPercent, L.PowerPercent)
 	end
 end
 
