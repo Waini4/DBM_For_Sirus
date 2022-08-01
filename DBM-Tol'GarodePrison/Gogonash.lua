@@ -58,6 +58,7 @@ local function SetMarkIcons(self)
 end
 
 function mod:OnCombatStart(delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 84000, "Gogonash")
 	if self:IsDifficulty("normal10") then
 		self.vb.MarkofFilthIcon = 8
 		timerStrikingBlow:Start(5 - delay)
@@ -74,6 +75,7 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 84000, "Gogonash")
 	timerStrikingBlow:Stop()
 	timerLightningofFilth:Stop()
 	timerMarkofFilth:Stop()

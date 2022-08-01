@@ -74,6 +74,7 @@ local function warnfelIcons(self)
 end]]
 -- mod:SetStage(0)
 function mod:OnCombatStart(delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 84017, "MagicEater")
 	self:SetStage(1)
 	timerShockingCD:Start(34 - delay)
 	timerShadowCD:Start(-delay)
@@ -85,6 +86,7 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 84017, "MagicEater")
 	timerShockingCD:Stop()
 	timerShadowCD:Stop()
 	timerMagicCD:Stop()
