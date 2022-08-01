@@ -28,6 +28,7 @@ localization.ru.lua
 Hellfire_Ramp\Gargolmar.lua
 Hellfire_Ramp\Omor.lua
 Hellfire_Ramp\Vazruden.lua
+Hellfire_Ramp\HRTrash.lua
 
 Hellfire_BloodFurnace\Maker.lua
 Hellfire_BloodFurnace\Broggok.lua
@@ -63,6 +64,7 @@ Auct_Tombs\Yor.lua
 Auct_SethekkHalls\Syth.lua
 Auct_SethekkHalls\Anzu.lua
 Auct_SethekkHalls\Ikiss.lua
+Auct_SethekkHalls\TrashSethek.lua
 
 Auct_ShadowLabyrinth\Hellmaw.lua
 Auct_ShadowLabyrinth\Inciter.lua

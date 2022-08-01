@@ -11,6 +11,15 @@ local L
   L:SetGeneralLocalization({
 	  name 		= "Треш"
   })
+
+  L:SetTimerLocalization({
+	Dogs = "псы появятся через"
+})
+
+  L:SetMiscLocalization({
+	yellDogs	= "Незваные гости! Задержите их, а я спущу бойцовых псов!"
+})
+
 -----------------------------
 --  Watchkeeper Gargolmar  --
 -----------------------------
@@ -21,7 +30,7 @@ L:SetGeneralLocalization({
 })
 
 L:SetWarningLocalization({
-	warnRetirbution			= "Возмездие! прекратите атаковать в ближнем бою",
+	warnRetirbution		= "Возмездие! прекратите атаковать в ближнем бою",
 })
 --------------------------
 --  Omor the Unscarred  --
@@ -56,6 +65,11 @@ L:SetGeneralLocalization({
 	name 		= "Мастер"
 })
 
+L:SetOptionLocalization({
+	RemoveWeaponOnMindControl = "Автоматическое снятие оружия во время контроля"
+})
+
+
 ---------------
 --  Broggok  --
 ---------------
@@ -72,6 +86,10 @@ L = DBM:GetModLocalization("Kelidan")
 
 L:SetGeneralLocalization({
 	name 		= "Кели'дан Разрушитель"
+})
+
+L:SetTimerLocalization({
+	Explosion = "Взрыв через"
 })
 
 ---------------------------
@@ -176,7 +194,7 @@ L:SetGeneralLocalization({
 ---------------
 --  Ghaz'an  --
 ---------------
-L = DBM:GetModLocalization(577)
+L = DBM:GetModLocalization("Ghaz'an")
 
 L:SetGeneralLocalization({
 	name 		= "Газ'ан"
@@ -194,7 +212,7 @@ L:SetGeneralLocalization({
 -------------------------
 --  The Black Stalker  --
 -------------------------
-L = DBM:GetModLocalization(579)
+L = DBM:GetModLocalization("Stalker")
 
 L:SetGeneralLocalization({
 	name 		= "Черная Охотница"
@@ -358,6 +376,22 @@ L = DBM:GetModLocalization(543)
 L:SetGeneralLocalization({
 	name 		= "Король воронов Айкисс"
 })
+
+-------------------------
+--  Sethekk Halls  --
+----   Trash     ----
+  -----------------
+L = DBM:GetModLocalization("TrashSethek")
+
+L:SetGeneralLocalization({
+	name 					= "Треш"
+})
+
+L:SetOptionLocalization({
+	WarnControll	=  "Показывать кого подчиняет тотем",
+	TotemIcons 		= "Устанавливать метки на тотем подчинения"
+})
+
 
 ------------------------
 --  Shadow Labyrinth  --

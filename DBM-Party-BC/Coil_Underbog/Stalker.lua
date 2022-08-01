@@ -1,4 +1,4 @@
-local mod	= DBM:NewMod(579, "DBM-Party-BC", 5, 262)
+local mod	= DBM:NewMod("Stalker", "DBM-Party-BC", 5, 262)
 
 mod:SetRevision("20220518110528")
 mod:SetCreatureID(17882)
@@ -13,8 +13,19 @@ mod:RegisterEventsInCombat(
 
 local warnStaticCharge		= mod:NewTargetAnnounce(31715, 3)
 
+local timerSummon 			= mod:NewCDTimer(58.8, 38755, nil, nil, nil, 1, 2)
 local warnLevitate			= mod:NewTargetNoFilterAnnounce(31704, 2, nil, "RemoveMagic|Healer")
 local specWarnStaticCharge	= mod:NewSpecialWarningMoveAway(31715, nil, nil, nil, 1, 2)
+
+
+function mod:OnCombatStart(delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 17882, "Stalker")
+	timerSummon:Start()	--скорее всего по хп это всё,но не может же он начать сумонить на 7 % хп ?
+end
+
+function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 17882, "Stalker", wipe)
+end
 
 function mod:SPELL_AURA_APPLIED(args)
 	if args.spellId == 31704 then

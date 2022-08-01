@@ -81,9 +81,9 @@ local function currentFullDate()
 end
 
 DBM = {
-	Revision = parseCurseDate("20220730000000"),
-	DisplayVersion = GetAddOnMetadata(_addonname,"Version"), -- the string that is shown as version
-	ReleaseRevision = releaseDate(2022, 7, 30, 00, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	Revision = parseCurseDate("20220731011700"),
+	DisplayVersion = GetAddOnMetadata(_addonname, "Version"), -- the string that is shown as version
+	ReleaseRevision = releaseDate(2022, 7, 31, 01, 17, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 
 local fakeBWVersion = 7558
@@ -6010,7 +6010,7 @@ function DBM:GetStage(modId)
 			end
 		end
 	end
-	error("Cant have stage from "..modId)
+	error("Cant have stage from " .. modId)
 	return 0
 end
 
@@ -7111,7 +7111,7 @@ end
 
 function bossModPrototype:GetStage()
 	if not self.vb.phase then
-		error("DDM mod"..self.id.." dont have stage")
+		error("DDM mod" .. self.id .. " dont have stage")
 		return
 	end
 	return self.vb.phase

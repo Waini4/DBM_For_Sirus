@@ -20,26 +20,37 @@ local timerMindControlCD	= mod:NewCDTimer(34.6, 30923, nil, nil, nil, 2)
 local timerMindControl		= mod:NewTargetTimer(10, 30923, nil, nil, nil, 3)
 
 local MC = 1
-local dominateMindTargets = {}
 
-mod:AddSetIconOption("SetIconOnDominateMind", 30923, true, true, {6})
+mod:AddSetIconOption("SetIconOnDominateMind", 30923, true, true, {5})
 mod:AddBoolOption("RemoveWeaponOnMindControl", true)
 
+function mod:OnCombatStart(delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 17381, "TheMaker")
+	MC = 2
+end
+
+function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 17381, "TheMaker", wipe)
+	MC = 1
+end
+
+
+local MCTimers = {
+	[1] = 34.5,
+	[2] = 25.1,
+	[3] = 30.1,
+	[4] = 30,
+	[5] = 30,
+	[6] = 30
+}
 
 function mod:SPELL_AURA_APPLIED(args)
 	if args.spellId == 30923 then
 		warnMindControl:Show(args.destName)
 		timerMindControl:Start(args.destName)
-		if MC == 1 then	--"Власть-30923-npc:17381 = pull:34.6, 25.1, 30.2", -- [4]
-			timerMindControlCD:Start()
+		if MC >= 2 then
+			timerMindControlCD:Start()(MCTimers[MC])
 			MC = MC + 1
-		elseif MC == 2 then
-			timerMindControlCD:Start(25,1)
-			MC = MC + 1
-		elseif MC == 3 then
-			timerMindControlCD:Start(30,2)
-			MC = MC + 1
-		else timerMindControlCD:Start()
 		end
 		if args:IsPlayer() and self.Options.RemoveWeaponOnMindControl then	-- автоснятие шмоток
 			if self:IsWeaponDependent("player") then
@@ -52,19 +63,20 @@ function mod:SPELL_AURA_APPLIED(args)
 				PutItemInBackpack()
 			end
 		end
-		dominateMindTargets[#dominateMindTargets + 1] = args.destName
 		if self.Options.SetIconOnDominateMind then
-			self:SetIcon(args.destName, dominateMindIcon, 12)
-			dominateMindIcon = dominateMindIcon - 1
+			self:SetIcon(args.destName, 6, 6)
 		end
 	end
 	if args:IsSpellID(30925) then
-		timerBomb:Start()
+		timerBomb:Start()	-- думаю не нужный, ни урона ни опаски. пусть стоит пока что,но таймер не верный там скрипт кривой
 	end
 end
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args.spellId == 30923 then
 		timerMindControl:Stop(args.destName)
+		if self.Options.SetIconOnDominateMind then
+			self:RemoveIcon(args.destName)
+		end
 	end
 end

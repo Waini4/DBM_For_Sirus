@@ -19,11 +19,32 @@ local specwarnSoulstorm		= mod:NewSpecialWarningSpell(68872, nil, nil, nil, 2, 2
 local specwarnCorruptedSoul	= mod:NewSpecialWarningMoveTo(68839, nil, nil, nil, 1, 7)
 
 local timerSoulstormCast	= mod:NewCastTimer(4, 68872, nil, nil, nil, 2)
+local timerFear				= mod:NewCDTimer(10.5, 68950, nil, nil, nil, 2)
 
 mod.vb.warned_preStorm = false
 
+mod:AddSetIconOption("SetIconOnCorrupt", 68839, false, false, {8})
+
+local fear = 1
+local FearTimers = {
+	[2] = 10.4,
+	[3] = 12.3,
+	[4] = 11.4
+}
+
+
 function mod:OnCombatStart()
+	DBM:FireCustomEvent("DBM_EncounterStart", 36497, "Bronjahm")
+	self:SetStage(1)
 	self.vb.warned_preStorm = false
+	fear = 2
+end
+
+
+function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 36497, "Bronjahm", wipe)
+	fear = 1
+
 end
 
 function mod:SPELL_CAST_START(args)
@@ -31,6 +52,12 @@ function mod:SPELL_CAST_START(args)
 		specwarnSoulstorm:Show()
 		specwarnSoulstorm:Play("aesoon")
 		timerSoulstormCast:Start()
+		self:SetStage(2)
+	elseif args.spellId == 68950 then
+		if fear >= 2 then
+			timerFear:Start(FearTimers[fear])
+			fear = fear + 1
+		end
 	end
 end
 
@@ -42,11 +69,14 @@ function mod:SPELL_AURA_APPLIED(args)
 		else
 			warnCorruptSoul:Show(args.destName)
 		end
+		if self.Options.SetIconOnCorrupt then
+			self:SetIcon(args.destName, 8, 8)
+		end
 	end
 end
 
 function mod:UNIT_HEALTH(uId)
-	if not self.vb.warned_preStorm and self:GetUnitCreatureId(uId) == 36497 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.40 then
+	if not self.vb.warned_preStorm and self:GetUnitCreatureId(uId) == 36497 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.45 then
 		self.vb.warned_preStorm = true
 		warnSoulstormSoon:Show()
 	end
