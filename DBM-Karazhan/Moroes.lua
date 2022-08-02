@@ -1,8 +1,8 @@
-local mod	= DBM:NewMod("Moroes", "DBM-Karazhan")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Moroes", "DBM-Karazhan")
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20210502220000") -- fxpw check 202206151120000
-mod:SetCreatureID(15687, 19875, 19874, 19872, 17007, 19876, 19873)--Moroes
+mod:SetCreatureID(15687, 19875, 19874, 19872, 17007, 19876, 19873) --Moroes
 --19875, 19874, 19872, 17007, 19876, 19873--all the adds, for future use
 --mod:RegisterCombat("yell", L.DBM_MOROES_YELL_START)
 mod:RegisterCombat("combat")
@@ -12,43 +12,42 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 305470 305478 305460",
 	-- "SPELL_AURA_REMOVED",
 	"SPELL_CAST_SUCCESS 305460"
-	-- "PLAYER_REGEN_DISABLED_AND_MESSAGE"
+-- "PLAYER_REGEN_DISABLED_AND_MESSAGE"
 )
 
 
 -- local warnPhase2Soon		    = mod:NewPrePhaseAnnounce(2)
-local warnPhase2     	     	= mod:NewPhaseAnnounce(2)
-local warnDanceSoon	         	= mod:NewSoonAnnounce(305472, 3)
-local warnDeathMark             = mod:NewTargetAnnounce(305470, 4)
+local warnPhase2    = mod:NewPhaseAnnounce(2)
+local warnDanceSoon = mod:NewSoonAnnounce(305472, 3)
+local warnDeathMark = mod:NewTargetAnnounce(305470, 4)
 
 
-local specWarnDance             = mod:NewSpecialWarningSoak(305472, nil, nil, nil, 1, 2) -- танец
-local specWarnMark              = mod:NewSpecialWarningRun(305470, nil, nil, nil, 1, 3) -- метка
+local specWarnDance = mod:NewSpecialWarningSoak(305472, nil, nil, nil, 1, 2) -- танец
+local specWarnMark  = mod:NewSpecialWarningRun(305470, nil, nil, nil, 1, 3) -- метка
 
 
-local timerPierceCD             = mod:NewCDTimer(10, 305464, nil, nil, nil, 5, nil, DBM_CORE_TANK_ICON)
-local timerWoundCD              = mod:NewCDTimer(10, 305463, nil, nil, nil, 5, nil, DBM_CORE_TANK_ICON)
-local timerDeathMark            = mod:NewTargetTimer(7, 305470, nil, nil, nil, 5, nil, DBM_CORE_HEALER_ICON) -- метка
-local timerDeathMarkCD			= mod:NewCDTimer(25, 305470, nil, nil, nil, 3, nil, DBM_CORE_HEALER_ICON) -- метка
-local timerPhase2				= mod:NewTimer(180, "Phase2", 40810, nil, nil, 6)
-local timerDanceCD			    = mod:NewCDTimer(20, "Dance", 305472, nil, nil, nil, 7)	-- танец
-local timerSpreeCD				= mod:NewCDTimer(85, "Spree", 305461, nil, nil, 6) -- череда
+local timerPierceCD    = mod:NewCDTimer(10, 305464, nil, nil, nil, 5, nil, DBM_CORE_TANK_ICON)
+local timerWoundCD     = mod:NewCDTimer(10, 305463, nil, nil, nil, 5, nil, DBM_CORE_TANK_ICON)
+local timerDeathMark   = mod:NewTargetTimer(7, 305470, nil, nil, nil, 5, nil, DBM_CORE_HEALER_ICON) -- метка
+local timerDeathMarkCD = mod:NewCDTimer(25, 305470, nil, nil, nil, 3, nil, DBM_CORE_HEALER_ICON) -- метка
+local timerPhase2      = mod:NewTimer(180, "Phase2", 40810, nil, nil, 6)
+local timerDanceCD     = mod:NewCDTimer(20, "Dance", 305472, nil, nil, nil, 7) -- танец
+local timerSpreeCD     = mod:NewCDTimer(85, "Spree", 305461, nil, nil, 6) -- череда
 -- local timerSpreeCDTest			= mod:NewCDTimer(85, 305461, nil, nil, 6) -- череда тестовая
 
 -- local warnSound					= mod:NewSoundAnnounce()
 
-local berserkTimer				= mod:NewBerserkTimer(525)
+local berserkTimer = mod:NewBerserkTimer(525)
 
-mod:AddSetIconOption("MarkIcon", 305470, true, true, {8})
+mod:AddSetIconOption("MarkIcon", 305470, true, true, { 8 })
 
 mod.vb.phase = 0
 mod.vb.ora = true
 mod.vb.phase2 = false
 
 function mod:resetOra()
-    mod.vb.ora = true
+	mod.vb.ora = true
 end
-
 
 function mod:phase2warn()
 	timerDeathMarkCD:Schedule(2)
@@ -61,7 +60,6 @@ function mod:phase2()
 	timerSpreeCD:Start(79)
 	timerDanceCD:Cancel()
 end
-
 
 -- local f = CreateFrame("Frame", nil, UIParent)
 -- f:RegisterEvent("PLAYER_REGEN_DISABLED")
@@ -86,7 +84,7 @@ end
 
 function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 15687, "Moroes")
-	if mod:IsDifficulty("heroic10") then
+	if self:IsDifficulty("heroic10") then
 		self.vb.phase = 1
 		self.vb.phase2 = false
 		timerDanceCD:Start()
@@ -133,20 +131,19 @@ function mod:SPELL_AURA_APPLIED(args)
 			self:SetIcon(args.destName, 8, 7)
 		end
 	elseif args:IsSpellID(305478) then
-        if args:IsPlayer() then
-			local name = {"djeban","sexgay","cigan","hardbass","upkicks"} --танец
-			name  = name[math.random(#name)]
-        end
+		if args:IsPlayer() then
+			local name = { "djeban", "sexgay", "cigan", "hardbass", "upkicks" } --танец
+			name       = name[math.random(#name)]
+		end
 	elseif args:IsSpellID(305460) then
-        if self.vb.ora then
-			local name = {"ora", "muda", "atata"} --танец
-			name  = name[math.random(#name)]
-            self.vb.ora = false
-            self:ScheduleMethod(5, "resetOra")
-        end
-    end
+		if self.vb.ora then
+			local name  = { "ora", "muda", "atata" } --танец
+			name        = name[math.random(#name)]
+			self.vb.ora = false
+			self:ScheduleMethod(5, "resetOra")
+		end
+	end
 end
-
 
 -- local warningVanishSoon		= mod:NewSoonAnnounce(29448, 2)
 -- local warningVanish			= mod:NewSpellAnnounce(29448, 3)

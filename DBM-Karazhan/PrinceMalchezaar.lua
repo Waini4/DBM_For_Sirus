@@ -1,5 +1,5 @@
 local mod = DBM:NewMod("Prince", "DBM-Karazhan")
-local L		= mod:GetLocalizedStrings()
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20210502220000") -- fxpw check 202206151120000
 mod:SetCreatureID(15690)
@@ -13,29 +13,29 @@ mod:RegisterEventsInCombat(
 )
 
 --обычка--
-local warningInfernal			= mod:NewSpellAnnounce(37277, 2)
-local timerInfernal				= mod:NewCDTimer(45, 37277)		-- метеоры
+local warningInfernal = mod:NewSpellAnnounce(37277, 2)
+local timerInfernal   = mod:NewCDTimer(45, 37277) -- метеоры
 
 --хм--
-local warningNovaCast			= mod:NewCastAnnounce(30852, 3)
-local timerNovaCD				= mod:NewCDTimer(12, 305425)
-local timerFlameCD			    = mod:NewCDTimer(30, 305433)
-local specWarnFlame			    = mod:NewSpecialWarningYou(305433)
-local warnFlame                 = mod:NewTargetAnnounce(305433, 3)
-local timerCurseCD			    = mod:NewCDTimer(30, 305435)
+local warningNovaCast = mod:NewCastAnnounce(30852, 3)
+local timerNovaCD     = mod:NewCDTimer(12, 305425)
+local timerFlameCD    = mod:NewCDTimer(30, 305433)
+local specWarnFlame   = mod:NewSpecialWarningYou(305433)
+local warnFlame       = mod:NewTargetAnnounce(305433, 3)
+local timerCurseCD    = mod:NewCDTimer(30, 305435)
 
-local timerIceSpikeCD			= mod:NewCDTimer(10, 305443)
+local timerIceSpikeCD = mod:NewCDTimer(10, 305443)
 
-local timerCallofDeadCD			= mod:NewCDTimer(10, 305447)
-local warnCallofDead            = mod:NewTargetAnnounce(305447, 3)
-local specWarnCallofDead	    = mod:NewSpecialWarningYou(305447)
+local timerCallofDeadCD  = mod:NewCDTimer(10, 305447)
+local warnCallofDead     = mod:NewTargetAnnounce(305447, 3)
+local specWarnCallofDead = mod:NewSpecialWarningYou(305447)
 
-local warnNextPhaseSoon         = mod:NewAnnounce("WarnNextPhaseSoon", 1)
+local warnNextPhaseSoon = mod:NewAnnounce("WarnNextPhaseSoon", 1)
 -- local warnSound						= mod:NewSoundAnnounce()
-mod.vb.phaseCounter = 1
-local warnPorch              	= mod:NewTargetAnnounce(305429, 3)
-local yellPorch					= mod:NewYell(305429, nil, nil, nil, "YELL")
-local yellPorchFades			= mod:NewShortFadesYell(305429)
+mod.vb.phaseCounter     = 1
+local warnPorch         = mod:NewTargetAnnounce(305429, 3)
+local yellPorch         = mod:NewYell(305429, nil, nil, nil, "YELL")
+local yellPorchFades    = mod:NewShortFadesYell(305429)
 
 local flameTargets = {}
 local PorchTargets = {}
@@ -47,9 +47,9 @@ mod:AddBoolOption("AnnouncePorch", false)
 function mod:OnCombatStart(delay)
 	self:SetStage(1)
 	DBM:FireCustomEvent("DBM_EncounterStart", 15690, "Prince Malchezaar")
-	if mod:IsDifficulty("normal10") then
-		timerInfernal:Start(14.5-delay)
-	elseif mod:IsDifficulty("heroic10") then
+	if self:IsDifficulty("normal10") then
+		timerInfernal:Start(14.5 - delay)
+	elseif self:IsDifficulty("heroic10") then
 		self.vb.PorchIcons = 8
 		timerCurseCD:Start(20)
 		timerNovaCD:Start()
@@ -60,15 +60,15 @@ end
 
 function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2 then
-			warningInfernal:Show()
-			timerInfernal:Start()
+		warningInfernal:Show()
+		timerInfernal:Start()
 	elseif msg == L.DBM_PRINCE_YELL_P3 then
-			self:SendSync("Phase3")
-			self:SetStage(3)
+		self:SendSync("Phase3")
+		self:SetStage(3)
 	elseif msg == L.DBM_PRINCE_YELL_P2 then
-			self:SetStage(2)
-			--warnPhase2:Show()
-		if  msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2 and self:GetStage() == 3 then
+		self:SetStage(2)
+		--warnPhase2:Show()
+		if msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2 and self:GetStage() == 3 then
 			warningInfernal:Show()
 			timerInfernal:Start(17)
 		end
@@ -99,7 +99,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(305433) then
 		timerFlameCD:Start(self.vb.phaseCounter < 3 and 30 or 10)
 		flameTargets[#flameTargets + 1] = args.destName
-		if #flameTargets >=2 and self.vb.phaseCounter < 3 then
+		if #flameTargets >= 2 and self.vb.phaseCounter < 3 then
 			warnFlame:Show(table.concat(flameTargets, "<, >"))
 			table.wipe(flameTargets)
 		elseif self.vb.phaseCounter >= 3 then
@@ -121,35 +121,36 @@ function mod:SPELL_AURA_APPLIED(args)
 	end
 end
 
-
-
-
-
 function mod:UNIT_HEALTH(uId)
-	if self.vb.phaseCounter == 1 and self:GetUnitCreatureId(uId) == 15690 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.8 and mod:IsDifficulty("heroic10") then
+	if self.vb.phaseCounter == 1 and self:GetUnitCreatureId(uId) == 15690 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.8
+		and self:IsDifficulty("heroic10") then
 		self.vb.phaseCounter = self.vb.phaseCounter + 1
 		warnNextPhaseSoon:Show("2")
 		timerFlameCD:Start(20)
 		timerCurseCD:Start(20)
-	elseif self.vb.phaseCounter == 2 and self:GetUnitCreatureId(uId) == 15690 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.4 and mod:IsDifficulty("heroic10") then
+	elseif self.vb.phaseCounter == 2 and self:GetUnitCreatureId(uId) == 15690 and
+		UnitHealth(uId) / UnitHealthMax(uId) <= 0.4 and self:IsDifficulty("heroic10") then
 		self.vb.phaseCounter = self.vb.phaseCounter + 1
 		warnNextPhaseSoon:Show(L.FlameWorld)
 		timerCurseCD:Cancel()
 		timerNovaCD:Cancel()
 		timerFlameCD:Start(10)
-	elseif self.vb.phaseCounter == 3 and self:GetUnitCreatureId(uId) == 15690 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.3 and mod:IsDifficulty("heroic10") then
+	elseif self.vb.phaseCounter == 3 and self:GetUnitCreatureId(uId) == 15690 and
+		UnitHealth(uId) / UnitHealthMax(uId) <= 0.3 and self:IsDifficulty("heroic10") then
 		self.vb.phaseCounter = self.vb.phaseCounter + 1
 		warnNextPhaseSoon:Show(L.IceWorld)
 		timerFlameCD:Cancel()
 		timerIceSpikeCD:Start()
 		timerCurseCD:Start(20)
-	elseif self.vb.phaseCounter == 4 and self:GetUnitCreatureId(uId) == 15690 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.2 and mod:IsDifficulty("heroic10") then
+	elseif self.vb.phaseCounter == 4 and self:GetUnitCreatureId(uId) == 15690 and
+		UnitHealth(uId) / UnitHealthMax(uId) <= 0.2 and self:IsDifficulty("heroic10") then
 		self.vb.phaseCounter = self.vb.phaseCounter + 1
 		warnNextPhaseSoon:Show(L.BlackForest)
 		timerCurseCD:Cancel()
 		timerIceSpikeCD:Cancel()
 		timerCallofDeadCD:Start()
-	elseif self.vb.phaseCounter == 5 and self:GetUnitCreatureId(uId) == 15690 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.1 and mod:IsDifficulty("heroic10") then
+	elseif self.vb.phaseCounter == 5 and self:GetUnitCreatureId(uId) == 15690 and
+		UnitHealth(uId) / UnitHealthMax(uId) <= 0.1 and self:IsDifficulty("heroic10") then
 		self.vb.phaseCounter = self.vb.phaseCounter + 1
 		warnNextPhaseSoon:Show(L.LastPhase)
 		timerCallofDeadCD:Cancel()
@@ -157,13 +158,12 @@ function mod:UNIT_HEALTH(uId)
 	end
 end
 
-
 do
 	-- local function sort_by_group(v1, v2)
 	-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
 	-- end
 	function mod:SetPorchIcons()
-		table.sort(PorchTargets, function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
+		table.sort(PorchTargets, function(v1, v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 		for _, v in ipairs(PorchTargets) do
 			if mod.Options.AnnouncePorch then
 				if DBM:GetRaidRank() > 0 then
