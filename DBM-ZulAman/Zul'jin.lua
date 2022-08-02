@@ -140,30 +140,39 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		timerJump:Start(10)
 	end
 end
-
+-- local 
 function mod:UNIT_HEALTH(uId)
-	if DBM:GetStage() == 1 and self:GetUnitCreatureId(uId) == 23863 and
-	UnitHealth(uId) / UnitHealthMax(uId) <= 0.82 then
-		warnNextPhaseSoon:Show(L.Bear)
-	end
-	if DBM:GetStage() == 2 and self:GetUnitCreatureId(uId) == 23863 and
-	UnitHealth(uId) / UnitHealthMax(uId) <= 0.62 then
-		timerParalyzeCD:Cancel()
-		warnNextPhaseSoon:Show(L.Hawk)
-	end
-	if DBM:GetStage() == 3 and self:GetUnitCreatureId(uId) == 23863 and
-	UnitHealth(uId) / UnitHealthMax(uId) <= 0.42 then
-		warnNextPhaseSoon:Show(L.Lynx)
-	end
-	if DBM:GetStage() == 4 and self:GetUnitCreatureId(uId) == 23863 and
-	UnitHealth(uId) / UnitHealthMax(uId) <= 0.22 then
-		warnNextPhaseSoon:Show(L.Dragon)
-	end
-	if DBM:GetStage() == 5 and self:GetUnitCreatureId(uId) == 23863  and
-	UnitHealth(uId) / UnitHealthMax(uId) <= 0.20 and not lastPhase then
-		timerJump:Cancel()
-		self:ScheduleMethod(10, "tPillar")
-		timerFlamePillar:Start(18)
+	if self:GetUnitCreatureId(uId) == 23863 then
+		local hp = DBM:GetBossHP(uId)
+		local stage = self:GetStage()
+		if (hp <= 81 and stage == 1) then
+			self:SetStage(2)
+			-- phaseCounter = phaseCounter + 1
+			warnNextPhaseSoon:Show(L.Bear)
+		elseif (hp <= 61 and stage == 2) then
+			self:SetStage(3)
+			-- phaseCounter = phaseCounter + 1
+			-- timerParalysis:Cancel()
+			warnNextPhaseSoon:Show(L.Hawk)
+		elseif (hp <= 41 and stage == 3) then
+			self:SetStage(4)
+			-- phaseCounter = phaseCounter + 1
+			warnNextPhaseSoon:Show(L.Lynx)
+		elseif (hp <= 20 and stage == 4) then
+			-- phaseCounter = phaseCounter + 1
+			warnNextPhaseSoon:Show(L.Dragon)
+			-- self:SetStage(5)
+			self:SetStage(5)
+			timerJump:Cancel()
+			-- needAnonse = true
+			timerFlamePillar:Start(18)
+		-- elseif (hp <= 20 and hp > 19 and stage == 5 and needAnonse) then
+			-- self:SetStage(5)
+			-- timerJump:Cancel()
+			-- self:ScheduleMethod(10, "tPillar")
+
+			-- needAnonse = false
+		end
 	end
 end
 --Надеюсь я верно понял
