@@ -57,9 +57,10 @@ mod:AddSetIconOption("SetIconOnCurse", 317594, true, true, { 4, 5, 6, 7 })
 
 local function CurseIcons(self)
 	table.wipe(CurseTargets)
-	self.vb.MarkofFilthIcon = 7
+	self.vb.CurseIcon = 7
 end
 
+--[[
 do -- тест!!!!!
 	local last = 100
 	local function getPowerPercent()
@@ -82,7 +83,7 @@ do -- тест!!!!!
 	function mod:CreatePowerFrame()
 		DBM.BossHealth:AddBoss(getPowerPercent, L.PowerPercent)
 	end
-end
+end]]
 
 local f = CreateFrame("Frame", nil, UIParent)
 f:RegisterEvent("PLAYER_REGEN_DISABLED")
@@ -93,7 +94,7 @@ f:SetScript("OnEvent", function(self)
 			DBM:FireCustomEvent("DBM_EncounterStart", 84002, "Ctrax")
 			--self:SetStage(1)
 			timerEscapingDarkness:Start()
-			self:Schedule(0.1, "CreatePowerFrame")
+			--self:Schedule(0.1, "CreatePowerFrame")
 			if self.Options.BossHealthFrame then
 				DBM.BossHealth:Show(L.name)
 				DBM.BossHealth:AddBoss(84002, L.name)
@@ -162,7 +163,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		self.vb.CurseIcon = self.vb.CurseIcon - 1
 		self:Unschedule(CurseIcons)
-		self:Schedule(0.5, CurseIcons, self)
+		self:Schedule(0.1, CurseIcons, self)
 	elseif args:IsSpellID(317595) and self:AntiSpam(3) then --Теневой Колодец
 		if args:IsPlayer() then
 			specWarnWell:Show()
