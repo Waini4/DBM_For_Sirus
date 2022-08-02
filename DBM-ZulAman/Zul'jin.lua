@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("ZulJin", "DBM-ZulAman")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20220802205228")
+mod:SetRevision("20220803000728")
 mod:SetCreatureID(23863)
 
 mod:SetZone()
@@ -16,10 +16,10 @@ mod:RegisterEvents(
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 43093 43150 43213",
 	"SPELL_CAST_SUCCESS 43095 43215 43213 43093",
-	"CHAT_MSG_MONSTER_YELL",	--так и не понял нужно ли добавлять их в комбатЕвент
+	-- "CHAT_MSG_MONSTER_YELL",	--так и не понял нужно ли добавлять их в комбатЕвент
 	"SPELL_CAST_SUCCESS",
-	"SPELL_AURA_APPLIED",
-	"UNIT_HEALTH"	--так и не понял нужно ли добавлять их в комбатЕвент
+	"SPELL_AURA_APPLIED"
+	-- "UNIT_HEALTH"	--так и не понял нужно ли добавлять их в комбатЕвент
 )
 -- общее
 local berserkTimer				= mod:NewBerserkTimer(600)
@@ -142,27 +142,47 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 end
 
 function mod:UNIT_HEALTH(uId)
-	if self.GetStage == 1 and self:GetUnitCreatureId(uId) == 23863 and
+	if DBM:GetStage() == 1 and self:GetUnitCreatureId(uId) == 23863 and
 	UnitHealth(uId) / UnitHealthMax(uId) <= 0.82 then
 		warnNextPhaseSoon:Show(L.Bear)
 	end
-	if self.GetStage == 2 and self:GetUnitCreatureId(uId) == 23863 and
+	if DBM:GetStage() == 2 and self:GetUnitCreatureId(uId) == 23863 and
 	UnitHealth(uId) / UnitHealthMax(uId) <= 0.62 then
 		timerParalyzeCD:Cancel()
 		warnNextPhaseSoon:Show(L.Hawk)
 	end
-	if self.GetStage == 3 and self:GetUnitCreatureId(uId) == 23863 and
+	if DBM:GetStage() == 3 and self:GetUnitCreatureId(uId) == 23863 and
 	UnitHealth(uId) / UnitHealthMax(uId) <= 0.42 then
 		warnNextPhaseSoon:Show(L.Lynx)
 	end
-	if self.GetStage == 4 and self:GetUnitCreatureId(uId) == 23863 and
+	if DBM:GetStage() == 4 and self:GetUnitCreatureId(uId) == 23863 and
 	UnitHealth(uId) / UnitHealthMax(uId) <= 0.22 then
 		warnNextPhaseSoon:Show(L.Dragon)
 	end
-	if self.GetStage == 5 and self:GetUnitCreatureId(uId) == 23863  and
+	if DBM:GetStage() == 5 and self:GetUnitCreatureId(uId) == 23863  and
 	UnitHealth(uId) / UnitHealthMax(uId) <= 0.20 and not lastPhase then
 		timerJump:Cancel()
 		self:ScheduleMethod(10, "tPillar")
 		timerFlamePillar:Start(18)
 	end
 end
+--Надеюсь я верно понял
+
+-- function DBM:GetStage(modId)
+-- 	if modId then
+-- 		local mod = self:GetModByName(modId)
+-- 		if mod and mod.inCombat then
+-- 			return mod.vb.phase or 0, mod.vb.stageTotality or 0
+-- 		end
+-- 	else
+-- 		if #inCombat > 0 then --At least one boss is engaged
+-- 			local mod = inCombat[1] --Get first mod in table
+-- 			if mod then
+-- 				return mod.vb.phase or 0, mod.vb.stageTotality or 0
+-- 			end
+-- 		end
+-- 	end
+-- 	error("Cant have stage from " .. modId)
+-- 	return 0
+-- end
+
