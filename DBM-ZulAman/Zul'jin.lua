@@ -47,14 +47,14 @@ mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(5))
 local timerFlameWhirl			= mod:NewCDTimer(12, 43213)
 local timerFlamePillar			= mod:NewCDTimer(10, 43216)
 
-local lastPhase = false
+-- local lastPhase = false
 local notBleedWarned = true
 local bleedTargets = {}
 
 mod:AddSetIconOption("ThrowIcon", 43093, true, 0, {7})
 
 function mod:tPillar()
-	lastPhase = true
+	-- lastPhase = true
 end
 
 function mod:tBleed()
@@ -70,7 +70,7 @@ function mod:OnCombatStart(delay)
 	timerWhirlwind:Start(6)
 	timerThrow:Start(7)
 	notBleedWarned = true
-	lastPhase = false
+	-- lastPhase = false
 	table.wipe(bleedTargets)
 	berserkTimer:Start(-delay)
 end
@@ -78,7 +78,7 @@ end
 function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 23863, "Zul'jin", wipe)
 	notBleedWarned = true
-	lastPhase = false
+	-- lastPhase = false
 end
 
 function mod:SPELL_AURA_APPLIED(args)
@@ -140,7 +140,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		timerJump:Start(10)
 	end
 end
--- local 
+
 function mod:UNIT_HEALTH(uId)
 	if self:GetUnitCreatureId(uId) == 23863 then
 		local hp = DBM:GetBossHP(uId)
@@ -177,7 +177,7 @@ function mod:UNIT_HEALTH(uId)
 end
 --Надеюсь я верно понял
 
--- function DBM:GetStage(modId)
+-- function DBM:GetStage(modId) -- modid == name in 1 line
 -- 	if modId then
 -- 		local mod = self:GetModByName(modId)
 -- 		if mod and mod.inCombat then
