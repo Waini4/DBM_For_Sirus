@@ -1,47 +1,67 @@
 local mod	= DBM:NewMod("Janalai", "DBM-ZulAman")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 163 $"):sub(12, -3))
-
+mod:SetRevision("20220518110528")
 mod:SetCreatureID(23578)
-mod:RegisterCombat("combat",23578)
 
-mod:RegisterEvents(
+mod:SetZone()
+mod:SetUsedIcons(1)
+
+mod:RegisterCombat("combat")
+
+mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 43140",
 	"CHAT_MSG_MONSTER_YELL"
 )
 
-local timerHatchers			= mod:NewTimer(145, "Hatchers", 26297)
-local timerBombs			= mod:NewTimer(50, "Bombs", 31961)
-local timerExplosion		= mod:NewTimer(11, "Explosion", 66313)
-local timerNextBreath		= mod:NewCDTimer(12, 43140)
+local warnFlame			= mod:NewTargetNoFilterAnnounce(43140, 3)
+local warnAddsSoon		= mod:NewSoonAnnounce(43962, 3)
 
-mod:AddBoolOption("Hatchers", true)
-mod:AddBoolOption("Bombs", true)
-mod:AddBoolOption("Explosion",true)
+local specWarnAdds		= mod:NewSpecialWarningSpell(43962, "dps", nil, nil, 1, 2)
+local specWarnBomb		= mod:NewSpecialWarningDodge(42630, nil, nil, nil, 2, 2)
+local specWarnBreath	= mod:NewSpecialWarningYou(43140, nil, nil, nil, 1, 2)
+local yellFlamebreath	= mod:NewYell(43140)
 
-function mod:OnCombatStart(delay)
-	DBM:FireCustomEvent("DBM_EncounterStart", 23578, "Jan'alai")
-	timerHatchers:Start(15)
-	timerBombs:Start(40)
-	timerNextBreath:Start()
+local timerBomb			= mod:NewCastTimer(12, 42630, nil, nil, nil, 3)--Cast bar?
+local timerAdds			= mod:NewNextTimer(92, 43962, nil, nil, nil, 1, nil, DBM_COMMON_L.DAMAGE_ICON)
+
+local berserkTimer		= mod:NewBerserkTimer(600)
+
+mod:AddSetIconOption("FlameIcon", 43140, true, false, {1})
+
+function mod:FlameTarget(targetname)
+	if not targetname then return end
+	if targetname == UnitName("player") then
+		specWarnBreath:Show()
+		specWarnBreath:Play("targetyou")
+		yellFlamebreath:Yell()
+	else
+		warnFlame:Show(targetname)
+	end
+	if self.Options.FlameIcon then
+		self:SetIcon(targetname, 1, 1)
+	end
 end
 
-function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 23578, "Jan'alai", wipe)
+function mod:OnCombatStart(delay)
+	timerAdds:Start(10)
+	berserkTimer:Start(-delay)
 end
 
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(43140) then
-		timerNextBreath:Start()
+		self:BossTargetScanner(args.sourceGUID, "FlameTarget", 0.1, 8)
 	end
 end
 
 function mod:CHAT_MSG_MONSTER_YELL(msg)
-	if msg == L.YellBombs then
-		timerExplosion:Start()
-		timerBombs:Start()
-	elseif msg == L.YellHatcher then
-		timerHatchers:Start()
+	if msg == L.YellAdds or msg:find(L.YellAdds) then
+		specWarnAdds:Show()
+		warnAddsSoon:Schedule(82)
+		timerAdds:Start()
+	elseif msg == L.YellBomb or msg:find(L.YellBomb) then
+		specWarnBomb:Show()
+		specWarnBomb:Play("watchstep")
+		timerBomb:Start()
 	end
 end

@@ -1,63 +1,79 @@
 local mod	= DBM:NewMod("Akilzon", "DBM-ZulAman")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 163 $"):sub(12, -3))
-
+mod:SetRevision("20220802205228")
 mod:SetCreatureID(23574)
-mod:SetUsedIcons(8)
-mod:RegisterCombat("combat",23574)
+
+mod:SetZone()
+mod:SetUsedIcons(1)
+
+mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS 43621",
-	"SPELL_CAST_START 43622",
 	"SPELL_AURA_APPLIED 43648 44008",
 	"SPELL_AURA_REMOVED 43648"
 )
 
-local timerNextStorm		= mod:NewCDTimer(60, 43648)
-local timerNextDisrupt		= mod:NewCDTimer(11, 43622)
-local warnWind				= mod:NewAnnounce("WarnWind", 4, 43621)
--- local timerDisrupt			= mod:NewTargetTimer(20, 44008)
-local specWarnDisrupt		= mod:NewSpecialWarningYou(44008)
-local berserkTimer			= mod:NewBerserkTimer(480)
+local warnStorm						= mod:NewTargetNoFilterAnnounce(43648, 4)
+local warnStormSoon					= mod:NewSoonAnnounce(43648, 5, 3)
+local warnWind						= mod:NewAnnounce("WarnWind", 4, 43621)
 
-mod:AddBoolOption("SetIconOnElectricStorm", true)
-mod:AddBoolOption("SayOnElectricStorm", true)
-mod:AddBoolOption("WarnWind", true)
-mod:AddBoolOption("RangeFrame",true)
+local SpecWarnDisrupt				= mod:NewSpecialWarningRun(43622, nil, nil, nil, 1, 2)
+local specWarnStorm					= mod:NewSpecialWarningSpell(43648, nil, nil, nil, 2, 2)
 
-local disruptCounter = 0
+local timerNextDisrupt				= mod:NewCDTimer(11, 43622)
+local timerStorm					= mod:NewCastTimer(8, 43648, nil, nil, nil, 2, nil, DBM_COMMON_L.HEALER_ICON)
+local timerStormCD					= mod:NewCDTimer(55, 43648, nil, nil, nil, 3)
+
+local SayOnElectricStorm			= mod:NewYellMe(43622)
+local berserkTimer					= mod:NewBerserkTimer(480)
+
+mod:AddRangeFrameOption("12")
+
+mod:AddBoolOption("WarnWind", true)--old option
+
+mod:AddSetIconOption("SetIconOnElectricStorm", 43648, true, false, {1})
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 23574, "Akil'zon")
-	timerNextStorm:Start()
-	timerNextDisrupt:Start()
-	berserkTimer:Start()
+	warnStormSoon:Schedule(43)
+	timerStormCD:Start(48)
+	berserkTimer:Start(-delay)
 	if self.Options.RangeFrame then
-		DBM.RangeCheck:Show(12)
+		DBM.RangeCheck:Show()
 	end
-	disruptCounter = 0
 end
 
-function mod:OnCombatEnd(wipe)
+function mod:OnCombatEnd()
 	DBM:FireCustomEvent("DBM_EncounterEnd", 23574, "Akil'zon", wipe)
+	if self.Options.RangeFrame then
+		DBM.RangeCheck:Hide()
+	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(43648) then
-		timerNextStorm:Start()
+		warnStorm:Show(args.destName)
+		specWarnStorm:Show()
+		specWarnStorm:Play("specialsoon")
+		timerStorm:Start()
+		warnStormSoon:Schedule(50)
+		timerStormCD:Start()
+		if self.Options.RangeFrame then
+			DBM.RangeCheck:Hide()
+			self:Schedule(10, function()
+				DBM.RangeCheck:Show()
+			end)
+		end
 		if self.Options.SetIconOnElectricStorm then
 			self:SetIcon(args.destName, 8)
 		end
-		if self.Options.SayOnElectricStorm and args:IsPlayer() then
-			SendChatMessage(L.SayStorm, "SAY")
-		end
-		disruptCounter = 0
+		SayOnElectricStorm:Yell()
 	elseif args:IsSpellID(44008) then
 		if args:IsPlayer() then
-			specWarnDisrupt:Show()
+			SpecWarnDisrupt:Show()
 		end
-		--timerDisrupt:Start(args.destName)
 	end
 end
 
@@ -68,16 +84,8 @@ function mod:SPELL_AURA_REMOVED(args)
 	end
 end
 
-function mod:SPELL_CAST_START(args)
-	if args:IsSpellID(43622) and disruptCounter ~= 3 then
-		timerNextDisrupt:Start()
-		disruptCounter = disruptCounter + 1
-	end
-end
-
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(43621) then
 		warnWind:Show(args.destName)
 	end
 end
-

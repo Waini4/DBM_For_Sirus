@@ -1,68 +1,60 @@
-local mod = DBM:NewMod("ZulJin", "DBM-ZulAman")
-local L   = mod:GetLocalizedStrings()
+local mod	= DBM:NewMod("ZulJin", "DBM-ZulAman")
+local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 163 $"):sub(12, -3))
-
+mod:SetRevision("20220802205228")
 mod:SetCreatureID(23863)
-mod:RegisterCombat("combat", 23863)
 
-mod:RegisterEventsInCombat(
-	"SPELL_CAST_START",
-	"SPELL_CAST_SUCCESS 43095 43215 43213 43093",
-	"SPELL_AURA_APPLIED 17207 43153",
-	"UNIT_HEALTH",
-	"UNIT_TARGET"
+mod:SetZone()
+
+mod:RegisterCombat("combat")
+
+mod:RegisterEvents(
+	"CHAT_MSG_MONSTER_YELL",
+	"UNIT_HEALTH"
 )
 
-local warnNextPhaseSoon = mod:NewAnnounce("WarnNextPhaseSoon", 1)
+mod:RegisterEventsInCombat(
+	"SPELL_AURA_APPLIED 43093 43150 43213",
+	"SPELL_CAST_SUCCESS 43095 43215 43213 43093",
+	"CHAT_MSG_MONSTER_YELL",	--так и не понял нужно ли добавлять их в комбатЕвент
+	"SPELL_CAST_SUCCESS",
+	"SPELL_AURA_APPLIED",
+	"UNIT_HEALTH"	--так и не понял нужно ли добавлять их в комбатЕвент
+)
+-- общее
+local berserkTimer				= mod:NewBerserkTimer(600)
 
-local timerWhirlwind = mod:NewCDTimer(17, 17207)
-local timerThrow     = mod:NewCDTimer(10, 43093)
--- local warnThrow      = mod:NewAnnounce("WarnThrow", 4, 43093)
+local warnPhase					= mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2)
 
-local timerParalysis = mod:NewCDTimer(20, 43095)
+mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(1))
+local timerWhirlwind			= mod:NewCDTimer(17, 17207)
+local timerThrow				= mod:NewCDTimer(10, 43093)
 
-local timerJump = mod:NewCDTimer(20, 43153)
-local warnJump  = mod:NewAnnounce("WarnJump", 4, 43153)
+local warnThrow					= mod:NewTargetNoFilterAnnounce(43093, 3, nil, "Tank|Healer")
 
-local timerBreath      = mod:NewCDTimer(10, 43215)
-local timerFlameWhirl  = mod:NewCDTimer(12, 43213)
-local timerFlamePillar = mod:NewCDTimer(10, 43216)
+mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(2))
+local timerParalyzeCD			= mod:NewCDTimer(20, 43095, nil, nil, nil, 3, nil, DBM_COMMON_L.MAGIC_ICON)
 
-local specWarnFlamePillar      = mod:NewSpecialWarningRun(43216)
-local specWarnFlamePillarMelee = mod:NewSpecialWarningRun(43216, "Melee")
-local warnFlamePillar          = mod:NewAnnounce("WarnFlamePillar", 4, 43216)
+local warnParalyze				= mod:NewSpellAnnounce(43095, 4)
+local warnParalyzeSoon			= mod:NewPreWarnAnnounce(43095, 5, 3)
 
-local berserkTimer = mod:NewBerserkTimer(600)
+mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(4))
+local timerJump					= mod:NewCDTimer(20, 43153)
+local timerBreath				= mod:NewCDTimer(10, 43215)
+local warnJump					= mod:NewAnnounce("WarnJump", 4, 43153)
 
-local bleedTargets = {}
--- local phaseCounter = 1
--- local lastPhase = false
+mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(5))
+local timerFlameWhirl			= mod:NewCDTimer(12, 43213)
+local timerFlamePillar			= mod:NewCDTimer(10, 43216)
+
+local lastPhase = false
 local notBleedWarned = true
-mod:AddBoolOption("WarnThrow", true)
-mod:AddBoolOption("WarnJump", true)
-mod:AddBoolOption("WarnNextPhaseSoon", true)
-mod:AddBoolOption("WarnFlamePillar", true)
+local bleedTargets = {}
 
-local function IsMeleeZ(uId)
-	return select(2, UnitClass(uId)) == "ROGUE"
-		or select(2, UnitClass(uId)) == "WARRIOR"
-		or select(2, UnitClass(uId)) == "DEATHKNIGHT"
-		or (select(2, UnitClass(uId)) == "PALADIN" and select(3, GetTalentTabInfo(3)) >= 51)
-		or (select(2, UnitClass(uId)) == "SHAMAN" and select(3, GetTalentTabInfo(2)) >= 31)
-		or (select(2, UnitClass(uId)) == "DRUID" and select(3, GetTalentTabInfo(2)) >= 51)
-end
-
-local function IsTankZ(uId)
-	return (select(2, UnitClass(uId)) == "WARRIOR" and select(3, GetTalentTabInfo(3)) >= 13)
-		or (select(2, UnitClass(uId)) == "DEATHKNIGHT" and UnitAura(uId, L.FrostPresence))
-		or (select(2, UnitClass(uId)) == "PALADIN" and select(3, GetTalentTabInfo(2)) >= 51)
-		or (select(2, UnitClass(uId)) == "DRUID" and UnitAura(uId, L.DriudBearForm))
-end
+mod:AddSetIconOption("ThrowIcon", 43093, true, 0, {7})
 
 function mod:tPillar()
-	-- DBM:GetStage("ZulJin") == 2
-	self:SetStage(5)
+	lastPhase = true
 end
 
 function mod:tBleed()
@@ -74,36 +66,28 @@ end
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 23863, "Zul'jin")
+	self:SetStage(1)
 	timerWhirlwind:Start(6)
 	timerThrow:Start(7)
-	-- DBM:GetStage("ZulJin") == 2
-	-- phaseCounter = 1
-	self:SetStage(1)
-	-- lastPhase = false
 	notBleedWarned = true
+	lastPhase = false
 	table.wipe(bleedTargets)
-	berserkTimer:Start()
+	berserkTimer:Start(-delay)
 end
 
 function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 23863, "Zul'jin", wipe)
-	-- self:SetStage(1)
-end
-
-function mod:SPELL_CAST_SUCCESS(args)
-	if args:IsSpellID(43095) then
-		timerParalysis:Show()
-	elseif args:IsSpellID(43215) then
-		timerBreath:Start()
-	elseif args:IsSpellID(43213) then
-		timerFlameWhirl:Start()
-	elseif args:IsSpellID(43093) then
-		timerThrow:Start()
-	end
+	notBleedWarned = true
+	lastPhase = false
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(17207) then
+	if args:IsSpellID(43093) then
+		warnThrow:Show(args.destName)
+		if self.Options.ThrowIcon then
+			self:SetIcon(args.destName, 7)
+		end
+	elseif args:IsSpellID(17207) then
 		timerWhirlwind:Start()
 	elseif args:IsSpellID(43153) then
 		if DBM:GetRaidUnitId(args.destName) then
@@ -116,60 +100,72 @@ function mod:SPELL_AURA_APPLIED(args)
 	end
 end
 
+function mod:SPELL_CAST_SUCCESS(args)
+	if args:IsSpellID(43095) then
+		timerParalyzeCD:Start()
+		warnParalyze:Show()
+	elseif args:IsSpellID(43215) then
+		timerBreath:Start()
+	elseif args:IsSpellID(43213) then
+		timerFlameWhirl:Start()
+	elseif args:IsSpellID(43093) then
+		timerThrow:Start()
+	end
+end
+
 function mod:CHAT_MSG_MONSTER_YELL(msg)
-	if msg == L.YellBearZul then
+	if msg == L.YellPhase2 or msg:find(L.YellPhase2) then
+		warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(2))
+		warnPhase:Play("ptwo")
+		self:SetStage(2)
+	elseif msg == L.YellPhase3 or msg:find(L.YellPhase3) then
+		warnParalyzeSoon:Cancel()
+		timerParalyzeCD:Cancel()
+		warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(3))
+		warnPhase:Play("pthree")
+		self:SetStage(3)
+	elseif msg == L.YellPhase4 or msg:find(L.YellPhase4) then
+		warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(4))
+		warnPhase:Play("pfour")
+		self:SetStage(4)
+	elseif msg == L.YellPhase5 or msg:find(L.YellPhase5) then
+		warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(5))
+		warnPhase:Play("pfive")
+		self:SetStage(5)
+	elseif msg == L.YellBearZul then
 		timerWhirlwind:Cancel()
 		timerThrow:Cancel()
-		timerParalysis:Start()
+		timerParalyzeCD:Start()
 	elseif msg == L.YellLynx then
 		timerJump:Start(10)
 	end
 end
 
-function mod:UNIT_TARGET(uId)
-	if (self:GetStage() == 5 and self:GetUnitCreatureId(uId) == 23863) then
-		timerFlamePillar:Start()
-		if not IsTankZ("targettarget") then
-			warnFlamePillar:Show(UnitName("targettarget"))
-		end
-		if UnitName("player") == UnitName("targettarget") and not IsTankZ("player") then
-			specWarnFlamePillar:Show()
-		end
-		if IsMeleeZ("player") and IsMeleeZ("targettarget") and not IsTankZ("targettarget") then
-			specWarnFlamePillarMelee:Show()
-		end
-	end
-end
-local needAnonse = false
 function mod:UNIT_HEALTH(uId)
-	if self:GetUnitCreatureId(uId) == 23863 then
-		local hp = DBM:GetBossHP(23863)
-		local stage = self:GetStage()
-		if (hp <= 81 and stage == 1) then
-			self:SetStage(2)
-			-- phaseCounter = phaseCounter + 1
-			warnNextPhaseSoon:Show(L.Bear)
-		elseif (hp <= 61 and stage == 2) then
-			self:SetStage(3)
-			-- phaseCounter = phaseCounter + 1
-			timerParalysis:Cancel()
-			warnNextPhaseSoon:Show(L.Hawk)
-		elseif (hp <= 41 and stage == 3) then
-			self:SetStage(4)
-			-- phaseCounter = phaseCounter + 1
-			warnNextPhaseSoon:Show(L.Lynx)
-		elseif (hp <= 21 and stage == 4) then
-			-- phaseCounter = phaseCounter + 1
-			warnNextPhaseSoon:Show(L.Dragon)
-			-- self:SetStage(5)
-			self:SetStage(5)
-			needAnonse = true
-		elseif (hp <= 20 and hp > 19 and stage == 5 and needAnonse) then
-			-- self:SetStage(5)
-			timerJump:Cancel()
-			-- self:ScheduleMethod(10, "tPillar")
-			timerFlamePillar:Start(18)
-			needAnonse = false
-		end
+	if self.GetStage == 1 and self:GetUnitCreatureId(uId) == 23863 and
+	UnitHealth(uId) / UnitHealthMax(uId) <= 0.82 then
+		warnNextPhaseSoon:Show(L.Bear)
+	end
+	if self.GetStage == 2 and self:GetUnitCreatureId(uId) == 23863 and
+	UnitHealth(uId) / UnitHealthMax(uId) <= 0.62 then
+		phaseCounter = phaseCounter + 1
+		timerParalysis:Cancel()
+		warnNextPhaseSoon:Show(L.Hawk)
+	end
+	if self.GetStage == 3 and self:GetUnitCreatureId(uId) == 23863 and
+	UnitHealth(uId) / UnitHealthMax(uId) <= 0.42 then
+		phaseCounter = phaseCounter + 1
+		warnNextPhaseSoon:Show(L.Lynx)
+	end
+	if self.GetStage == 4 and self:GetUnitCreatureId(uId) == 23863 and
+	UnitHealth(uId) / UnitHealthMax(uId) <= 0.22 then
+		phaseCounter = phaseCounter + 1
+		warnNextPhaseSoon:Show(L.Dragon)
+	end
+	if self.GetStage == 5 and self:GetUnitCreatureId(uId) == 23863  and
+	UnitHealth(uId) / UnitHealthMax(uId) <= 0.20 and not lastPhase then
+		timerJump:Cancel()
+		self:ScheduleMethod(10, "tPillar")
+		timerFlamePillar:Start(18)
 	end
 end

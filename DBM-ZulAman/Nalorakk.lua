@@ -1,45 +1,53 @@
-local mod = DBM:NewMod("Nalorakk", "DBM-ZulAman")
-local L   = mod:GetLocalizedStrings()
+local mod	= DBM:NewMod("Nalorakk", "DBM-ZulAman")
+local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 163 $"):sub(12, -3))
-
+mod:SetRevision("20220518110528")
 mod:SetCreatureID(23576)
-mod:RegisterCombat("combat", 23576)
+
+mod:SetZone()
+
+mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
-	"SPELL_AURA_APPLIED 42389",
+	"SPELL_AURA_APPLIED 42398",
 	"CHAT_MSG_MONSTER_YELL"
 )
 
-local timerNextBearForm  = mod:NewTimer(30, "BearForm", 9634)
-local timerNextTrollForm = mod:NewTimer(23.5, "TrollForm", 26297)
-local timerNextSilence   = mod:NewCDTimer(9, 42398)
-local timerMangle        = mod:NewTargetTimer(60, 42389)
-local berserkTimer       = mod:NewBerserkTimer(420)
+local warnBear			= mod:NewAnnounce("WarnBear", 4, 39414)
+local warnBearSoon		= mod:NewAnnounce("WarnBearSoon", 3, 39414)
+local warnNormal		= mod:NewAnnounce("WarnNormal", 4, 39414)
+local warnNormalSoon	= mod:NewAnnounce("WarnNormalSoon", 3, 39414)
+local warnSilence		= mod:NewSpellAnnounce(42398, 3)
 
-mod:AddBoolOption("BearForm", true)
-mod:AddBoolOption("TrollForm", true)
+local timerBear			= mod:NewTimer(45, "TimerBear", 39414, nil, nil, 6)
+local timerNormal		= mod:NewTimer(30, "TimerNormal", 39414, nil, nil, 6)
+
+local berserkTimer		= mod:NewBerserkTimer(600)
 
 function mod:OnCombatStart(delay)
-	DBM:FireCustomEvent("DBM_EncounterStart", 23576, "Nalorakk")
-	timerNextBearForm:Start(42)
-	berserkTimer:Start()
-end
-
-function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 23576, "Nalorakk", wipe)
+	timerBear:Start()
+	warnBearSoon:Schedule(40)
+	berserkTimer:Start(-delay)
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(42389) then
-		timerMangle:Start(args.destName)
+	if args:IsSpellID(42398) and self:AntiSpam(4, 1) then
+		warnSilence:Show()
 	end
 end
 
 function mod:CHAT_MSG_MONSTER_YELL(msg)
-	if msg == L.YellBear then
-		timerNextSilence:Start()
-		timerNextTrollForm:Start()
-		timerNextBearForm:Schedule(23.5)
+	if msg == L.YellBear or msg:find(L.YellBear) then
+		timerBear:Cancel()
+		warnBearSoon:Cancel()
+		warnBear:Show()
+		timerNormal:Start()
+		warnNormalSoon:Schedule(25)
+	elseif msg == L.YellNormal or msg:find(L.YellNormal) then
+		timerNormal:Cancel()
+		warnNormalSoon:Cancel()
+		warnNormal:Show()
+		timerBear:Start()
+		warnBearSoon:Schedule(40)
 	end
 end
