@@ -1,5 +1,5 @@
-local mod	= DBM:NewMod("Aran", "DBM-Karazhan")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Aran", "DBM-Karazhan")
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20210502220000") -- fxpw check 202206151120000
 mod:SetCreatureID(16524)
@@ -15,36 +15,36 @@ mod:RegisterEventsInCombat(
 	"UNIT_DIED"
 )
 
-local warningFlameCast		= mod:NewCastAnnounce(30004, 4)
-local warningArcaneCast		= mod:NewCastAnnounce(29973, 4)
-local warningBlizzard		= mod:NewSpellAnnounce(29969, 3)
-local warningElementals		= mod:NewSpellAnnounce(37053, 3)
-local warningChains			= mod:NewTargetAnnounce(29991, 2)
+local warningFlameCast  = mod:NewCastAnnounce(30004, 4)
+local warningArcaneCast = mod:NewCastAnnounce(29973, 4)
+local warningBlizzard   = mod:NewSpellAnnounce(29969, 3)
+local warningElementals = mod:NewSpellAnnounce(37053, 3)
+local warningChains     = mod:NewTargetAnnounce(29991, 2)
 -- local warningFlameTargets	= mod:NewTargetAnnounce(29946, 4)
 -- local warnSound						= mod:NewSoundAnnounce()
 
-local specWarnDontMove		= mod:NewSpecialWarning("DBM_ARAN_DO_NOT_MOVE")
-local specWarnArcane		= mod:NewSpecialWarningRun(29973)
-local specWarnBlizzard		= mod:NewSpecialWarningMove(29951)
+local specWarnDontMove = mod:NewSpecialWarning("DBM_ARAN_DO_NOT_MOVE")
+local specWarnArcane   = mod:NewSpecialWarningRun(29973)
+local specWarnBlizzard = mod:NewSpecialWarningMove(29951)
 
-local timerSpecial			= mod:NewTimer(30, "timerSpecial", "Interface\\Icons\\INV_Enchant_EssenceMagicLarge")
-local timerFlameCast		= mod:NewCastTimer(5, 30004)
-local timerArcaneExplosion	= mod:NewCastTimer(10, 29973)
-local timerBlizzadCast		= mod:NewCastTimer(3.7, 29969)
-local timerFlame			= mod:NewBuffActiveTimer(20.5, 29946)
-local timerBlizzad			= mod:NewBuffActiveTimer(40, 29951)
-local timerElementals		= mod:NewBuffActiveTimer(90, 37053)
-local timerChains			= mod:NewTargetTimer(10, 29991)
+local timerSpecial         = mod:NewTimer(30, "timerSpecial", "Interface\\Icons\\INV_Enchant_EssenceMagicLarge")
+local timerFlameCast       = mod:NewCastTimer(5, 30004)
+local timerArcaneExplosion = mod:NewCastTimer(10, 29973)
+local timerBlizzadCast     = mod:NewCastTimer(3.7, 29969)
+local timerFlame           = mod:NewBuffActiveTimer(20.5, 29946)
+local timerBlizzad         = mod:NewBuffActiveTimer(40, 29951)
+local timerElementals      = mod:NewBuffActiveTimer(90, 37053)
+local timerChains          = mod:NewTargetTimer(10, 29991)
 
-local timerSpecialHeroic	= mod:NewTimer(43, "TimerSpecialHeroic", "Interface\\Icons\\INV_Enchant_EssenceMagicLarge")
-local specWarnWinter		= mod:NewSpecialWarningRun(305329)
-local specWarnFreeze		= mod:NewSpecialWarning("SpecWarnFreeze")
-local timerFreeze			= mod:NewTargetTimer(30, 305328)
-local warnFreeze            = mod:NewAnnounce("WarnFreeze", 4, 305328)
+local timerSpecialHeroic = mod:NewTimer(43, "TimerSpecialHeroic", "Interface\\Icons\\INV_Enchant_EssenceMagicLarge")
+local specWarnWinter     = mod:NewSpecialWarningRun(305329)
+local specWarnFreeze     = mod:NewSpecialWarning("SpecWarnFreeze")
+local timerFreeze        = mod:NewTargetTimer(30, 305328)
+local warnFreeze         = mod:NewAnnounce("WarnFreeze", 4, 305328)
 
-local berserkTimer			= mod:NewBerserkTimer(900)
+local berserkTimer = mod:NewBerserkTimer(900)
 
-mod:AddSetIconOption("ElementalIcons", 29962, true, true, {6, 7, 8})
+mod:AddSetIconOption("ElementalIcons", 29962, true, true, { 6, 7, 8 })
 
 local beastIcon = {}
 local WreathTargets = {}
@@ -53,9 +53,9 @@ mod.vb.famCounter = 1
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 16524, "Shade of Aran")
-	if mod:IsDifficulty("normal10") then
+	if self:IsDifficulty("normal10") then
 		berserkTimer:Start(-delay)
-	elseif mod:IsDifficulty("heroic10") then
+	elseif self:IsDifficulty("heroic10") then
 		timerSpecialHeroic:Start()
 		self.vb.famCounter = 1
 	end
@@ -78,7 +78,7 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(29969) then
 		warningBlizzard:Show()
 		timerBlizzadCast:Show()
-		timerBlizzad:Schedule(3.7)                 --may need tweaking
+		timerBlizzad:Schedule(3.7) --may need tweaking
 		timerSpecial:Start()
 	elseif args:IsSpellID(305338) then
 		specWarnDontMove:Show()
@@ -93,7 +93,7 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(305331) then
 		-- local name = {"tobecon","dramatic"}
 		-- name  = name[math.random(#name)]
-        -- warnSound:Play(name)
+		-- warnSound:Play(name)
 	end
 end
 
@@ -151,7 +151,7 @@ do
 	mod:RegisterOnUpdateHandler(function(self)
 		if self.Options.ElementalIcons and (DBM:GetRaidRank() > 0 and not iconsSet == 4) then
 			for i = 1, GetNumRaidMembers() do
-				local uId = "raid"..i.."target"
+				local uId = "raid" .. i .. "target"
 				local guid = UnitGUID(uId)
 				if beastIcon[guid] then
 					SetRaidTarget(uId, elementalIcon[guid])

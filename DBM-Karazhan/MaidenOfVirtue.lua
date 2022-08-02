@@ -1,5 +1,5 @@
-local mod	= DBM:NewMod("Maiden", "DBM-Karazhan")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Maiden", "DBM-Karazhan")
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20210502220000") -- fxpw check 202206151120000
 mod:SetCreatureID(16457)
@@ -9,7 +9,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 305286",
 	"SPELL_AURA_APPLIED 305271 305285",
 	"SPELL_AURA_REMOVED 305285"
-	-- "SPELL_INTERRUPT"
+-- "SPELL_INTERRUPT"
 )
 
 -- local warningRepentanceSoon	= mod:NewSoonAnnounce(29511, 2)
@@ -60,24 +60,24 @@ mod:RegisterEventsInCombat(
 -- end
 
 
-local timerRepentanceCD		= mod:NewCDTimer(68, 305277, nil, nil, nil, 2)
-local timerGroundCD		    = mod:NewCDTimer(20, 305271, nil, nil, nil, 3)
+local timerRepentanceCD = mod:NewCDTimer(68, 305277, nil, nil, nil, 2)
+local timerGroundCD     = mod:NewCDTimer(20, 305271, nil, nil, nil, 3)
 
-local specWarnGround	    = mod:NewSpecialWarningYou(305271, nil, nil, nil, 3, 2)
+local specWarnGround = mod:NewSpecialWarningYou(305271, nil, nil, nil, 3, 2)
 
 -- local warnSound						= mod:NewSoundAnnounce()
 
 mod.vb.ground = true
 
-mod:AddSetIconOption("GroundIcon", 305271, true, true, {8})
+mod:AddSetIconOption("GroundIcon", 305271, true, true, { 8 })
 mod:AddBoolOption("HealthFrame", true)
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 16457, "Maiden of Virtue")
-	if mod:IsDifficulty("normal10") then
-	elseif mod:IsDifficulty("heroic10") then
-		timerRepentanceCD:Start(58-delay)
-		timerGroundCD:Start(20-delay)
+	if self:IsDifficulty("normal10") then
+	elseif self:IsDifficulty("heroic10") then
+		timerRepentanceCD:Start(58 - delay)
+		timerGroundCD:Start(20 - delay)
 	end
 	if self.Options.HealthFrame then
 		DBM.BossHealth:Show(L.name)
@@ -89,7 +89,6 @@ function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 16457, "Maiden of Virtue", wipe)
 	DBM.BossHealth:Clear()
 end
-
 
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(305286) then
@@ -111,20 +110,22 @@ do
 	local function getShieldHP()
 		return math.max(1, math.floor(absorbRemaining / maxAbsorb * 100))
 	end
+
 	frame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-	frame:SetScript("OnEvent", function(self, event, timestamp, subEvent, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, ...)
-		if shieldedMob == destGUID then
-			local absorbed
-			if subEvent == "SWING_MISSED" then
-				absorbed = select( 2, ... )
-			elseif subEvent == "RANGE_MISSED" or subEvent == "SPELL_MISSED" or subEvent == "SPELL_PERIODIC_MISSED" then
-				absorbed = select( 5, ... )
+	frame:SetScript("OnEvent",
+		function(self, event, timestamp, subEvent, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, ...)
+			if shieldedMob == destGUID then
+				local absorbed
+				if subEvent == "SWING_MISSED" then
+					absorbed = select(2, ...)
+				elseif subEvent == "RANGE_MISSED" or subEvent == "SPELL_MISSED" or subEvent == "SPELL_PERIODIC_MISSED" then
+					absorbed = select(5, ...)
+				end
+				if absorbed then
+					absorbRemaining = absorbRemaining - absorbed
+				end
 			end
-			if absorbed then
-				absorbRemaining = absorbRemaining - absorbed
-			end
-		end
-	end)
+		end)
 
 	function showShieldHealthBar(self, mob, shieldName, absorb)
 		shieldedMob = mob
@@ -147,7 +148,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			self.vb.ground = false
 		end
 		if args:IsPlayer() then
-	        specWarnGround:Show()
+			specWarnGround:Show()
 		end
 		if self.Options.GroundIcon then
 			self:SetIcon(args.destName, 8, 5)
