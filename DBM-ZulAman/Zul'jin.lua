@@ -25,7 +25,7 @@ mod:RegisterEventsInCombat(
 local berserkTimer				= mod:NewBerserkTimer(600)
 
 local warnPhase					= mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2)
-
+local warnNextPhaseSoon			= mod:NewPrePhaseAnnounce(2, nil, nil, nil, nil, nil, 2)
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(1))
 local timerWhirlwind			= mod:NewCDTimer(17, 17207)
 local timerThrow				= mod:NewCDTimer(10, 43093)
@@ -148,18 +148,15 @@ function mod:UNIT_HEALTH(uId)
 	end
 	if self.GetStage == 2 and self:GetUnitCreatureId(uId) == 23863 and
 	UnitHealth(uId) / UnitHealthMax(uId) <= 0.62 then
-		phaseCounter = phaseCounter + 1
-		timerParalysis:Cancel()
+		timerParalyzeCD:Cancel()
 		warnNextPhaseSoon:Show(L.Hawk)
 	end
 	if self.GetStage == 3 and self:GetUnitCreatureId(uId) == 23863 and
 	UnitHealth(uId) / UnitHealthMax(uId) <= 0.42 then
-		phaseCounter = phaseCounter + 1
 		warnNextPhaseSoon:Show(L.Lynx)
 	end
 	if self.GetStage == 4 and self:GetUnitCreatureId(uId) == 23863 and
 	UnitHealth(uId) / UnitHealthMax(uId) <= 0.22 then
-		phaseCounter = phaseCounter + 1
 		warnNextPhaseSoon:Show(L.Dragon)
 	end
 	if self.GetStage == 5 and self:GetUnitCreatureId(uId) == 23863  and
