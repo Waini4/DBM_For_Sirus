@@ -47,14 +47,14 @@ mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(5))
 local timerFlameWhirl			= mod:NewCDTimer(12, 43213)
 local timerFlamePillar			= mod:NewCDTimer(10, 43216)
 
-local lastPhase = false
+-- local lastPhase = false
 local notBleedWarned = true
 local bleedTargets = {}
 
 mod:AddSetIconOption("ThrowIcon", 43093, true, 0, {7})
 
 function mod:tPillar()
-	lastPhase = true
+	-- lastPhase = true
 end
 
 function mod:tBleed()
@@ -70,7 +70,7 @@ function mod:OnCombatStart(delay)
 	timerWhirlwind:Start(6)
 	timerThrow:Start(7)
 	notBleedWarned = true
-	lastPhase = false
+	-- lastPhase = false
 	table.wipe(bleedTargets)
 	berserkTimer:Start(-delay)
 end
@@ -78,7 +78,7 @@ end
 function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 23863, "Zul'jin", wipe)
 	notBleedWarned = true
-	lastPhase = false
+	-- lastPhase = false
 end
 
 function mod:SPELL_AURA_APPLIED(args)
@@ -142,33 +142,42 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 end
 
 function mod:UNIT_HEALTH(uId)
-	if DBM:GetStage() == 1 and self:GetUnitCreatureId(uId) == 23863 and
-	UnitHealth(uId) / UnitHealthMax(uId) <= 0.82 then
-		warnNextPhaseSoon:Show(L.Bear)
-	end
-	if DBM:GetStage() == 2 and self:GetUnitCreatureId(uId) == 23863 and
-	UnitHealth(uId) / UnitHealthMax(uId) <= 0.62 then
-		timerParalyzeCD:Cancel()
-		warnNextPhaseSoon:Show(L.Hawk)
-	end
-	if DBM:GetStage() == 3 and self:GetUnitCreatureId(uId) == 23863 and
-	UnitHealth(uId) / UnitHealthMax(uId) <= 0.42 then
-		warnNextPhaseSoon:Show(L.Lynx)
-	end
-	if DBM:GetStage() == 4 and self:GetUnitCreatureId(uId) == 23863 and
-	UnitHealth(uId) / UnitHealthMax(uId) <= 0.22 then
-		warnNextPhaseSoon:Show(L.Dragon)
-	end
-	if DBM:GetStage() == 5 and self:GetUnitCreatureId(uId) == 23863  and
-	UnitHealth(uId) / UnitHealthMax(uId) <= 0.20 and not lastPhase then
-		timerJump:Cancel()
-		self:ScheduleMethod(10, "tPillar")
-		timerFlamePillar:Start(18)
+	if self:GetUnitCreatureId(uId) == 23863 then
+		local hp = DBM:GetBossHP(uId)
+		local stage = self:GetStage()
+		if (hp <= 81 and stage == 1) then
+			self:SetStage(2)
+			-- phaseCounter = phaseCounter + 1
+			warnNextPhaseSoon:Show(L.Bear)
+		elseif (hp <= 61 and stage == 2) then
+			self:SetStage(3)
+			-- phaseCounter = phaseCounter + 1
+			-- timerParalysis:Cancel()
+			warnNextPhaseSoon:Show(L.Hawk)
+		elseif (hp <= 41 and stage == 3) then
+			self:SetStage(4)
+			-- phaseCounter = phaseCounter + 1
+			warnNextPhaseSoon:Show(L.Lynx)
+		elseif (hp <= 20 and stage == 4) then
+			-- phaseCounter = phaseCounter + 1
+			warnNextPhaseSoon:Show(L.Dragon)
+			-- self:SetStage(5)
+			self:SetStage(5)
+			timerJump:Cancel()
+			-- needAnonse = true
+			timerFlamePillar:Start(18)
+		-- elseif (hp <= 20 and hp > 19 and stage == 5 and needAnonse) then
+			-- self:SetStage(5)
+			-- timerJump:Cancel()
+			-- self:ScheduleMethod(10, "tPillar")
+
+			-- needAnonse = false
+		end
 	end
 end
 --Надеюсь я верно понял
 
--- function DBM:GetStage(modId)
+-- function DBM:GetStage(modId) -- modid == name in 1 line
 -- 	if modId then
 -- 		local mod = self:GetModByName(modId)
 -- 		if mod and mod.inCombat then
