@@ -5,7 +5,7 @@ mod:SetRevision("20210502220000") -- fxpw check 202206151120000
 mod:SetCreatureID(15690)
 mod:RegisterCombat("combat", 15690)
 
-mod:RegisterEventsInCombat(
+mod:RegisterEvents(
 	"SPELL_CAST_START 305425 305443 305447",
 	"SPELL_AURA_APPLIED 305433 305435 305429",
 	"UNIT_HEALTH",
@@ -32,7 +32,7 @@ local specWarnCallofDead = mod:NewSpecialWarningYou(305447)
 
 local warnNextPhaseSoon = mod:NewAnnounce("WarnNextPhaseSoon", 1)
 -- local warnSound						= mod:NewSoundAnnounce()
-mod.vb.phaseCounter     = 1
+--mod.vb.phaseCounter     = 1
 local warnPorch         = mod:NewTargetAnnounce(305429, 3)
 local yellPorch         = mod:NewYell(305429, nil, nil, nil, "YELL")
 local yellPorchFades    = mod:NewShortFadesYell(305429)
@@ -47,13 +47,12 @@ mod:AddBoolOption("AnnouncePorch", false)
 function mod:OnCombatStart(delay)
 	self:SetStage(1)
 	DBM:FireCustomEvent("DBM_EncounterStart", 15690, "Prince Malchezaar")
-	if self:IsDifficulty("normal10") then
+	if self:IsDifficulty("normal") then
 		timerInfernal:Start(14.5 - delay)
-	elseif self:IsDifficulty("heroic10") then
+	elseif self:IsDifficulty("heroic") then
 		self.vb.PorchIcons = 8
 		timerCurseCD:Start(20)
 		timerNovaCD:Start()
-		self.vb.phaseCounter = 1
 		table.wipe(flameTargets)
 	end
 end
@@ -97,12 +96,12 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
 	if args:IsSpellID(305433) then
-		timerFlameCD:Start(self.vb.phaseCounter < 3 and 30 or 10)
+		timerFlameCD:Start(self:GetStage() < 3 and 30 or 10)
 		flameTargets[#flameTargets + 1] = args.destName
-		if #flameTargets >= 2 and self.vb.phaseCounter < 3 then
+		if #flameTargets >= 2 and self:GetStage() < 3 then
 			warnFlame:Show(table.concat(flameTargets, "<, >"))
 			table.wipe(flameTargets)
-		elseif self.vb.phaseCounter >= 3 then
+		elseif self:GetStage() >= 3 then
 			warnFlame:Show(args.destName)
 			table.wipe(flameTargets)
 		end
@@ -110,7 +109,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnFlame:Show()
 		end
 	elseif args:IsSpellID(305435) then
-		timerCurseCD:Start(self.vb.phaseCounter == 2 and 30 or 20)
+		timerCurseCD:Start(self:GetStage() == 2 and 30 or 20)
 	elseif args:IsSpellID(305429) then
 		PorchTargets[#PorchTargets + 1] = args.destName
 		self:ScheduleMethod(0.1, "SetPorchIcons")
@@ -122,39 +121,37 @@ function mod:SPELL_AURA_APPLIED(args)
 end
 
 function mod:UNIT_HEALTH(uId)
-	if self.vb.phaseCounter == 1 and self:GetUnitCreatureId(uId) == 15690 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.8
-		and self:IsDifficulty("heroic10") then
-		self.vb.phaseCounter = self.vb.phaseCounter + 1
-		warnNextPhaseSoon:Show("2")
-		timerFlameCD:Start(20)
-		timerCurseCD:Start(20)
-	elseif self.vb.phaseCounter == 2 and self:GetUnitCreatureId(uId) == 15690 and
-		UnitHealth(uId) / UnitHealthMax(uId) <= 0.4 and self:IsDifficulty("heroic10") then
-		self.vb.phaseCounter = self.vb.phaseCounter + 1
-		warnNextPhaseSoon:Show(L.FlameWorld)
-		timerCurseCD:Cancel()
-		timerNovaCD:Cancel()
-		timerFlameCD:Start(10)
-	elseif self.vb.phaseCounter == 3 and self:GetUnitCreatureId(uId) == 15690 and
-		UnitHealth(uId) / UnitHealthMax(uId) <= 0.3 and self:IsDifficulty("heroic10") then
-		self.vb.phaseCounter = self.vb.phaseCounter + 1
-		warnNextPhaseSoon:Show(L.IceWorld)
-		timerFlameCD:Cancel()
-		timerIceSpikeCD:Start()
-		timerCurseCD:Start(20)
-	elseif self.vb.phaseCounter == 4 and self:GetUnitCreatureId(uId) == 15690 and
-		UnitHealth(uId) / UnitHealthMax(uId) <= 0.2 and self:IsDifficulty("heroic10") then
-		self.vb.phaseCounter = self.vb.phaseCounter + 1
-		warnNextPhaseSoon:Show(L.BlackForest)
-		timerCurseCD:Cancel()
-		timerIceSpikeCD:Cancel()
-		timerCallofDeadCD:Start()
-	elseif self.vb.phaseCounter == 5 and self:GetUnitCreatureId(uId) == 15690 and
-		UnitHealth(uId) / UnitHealthMax(uId) <= 0.1 and self:IsDifficulty("heroic10") then
-		self.vb.phaseCounter = self.vb.phaseCounter + 1
-		warnNextPhaseSoon:Show(L.LastPhase)
-		timerCallofDeadCD:Cancel()
-		timerFlameCD:Start()
+	if self:GetUnitCreatureId(uId) == 15690 and self:IsDifficulty("heroic") then
+		local hp = DBM:GetBossHP(uId)
+		local stage = self:GetStage()
+		if (stage == 1 and hp <= 80) then
+			self:SetStage(2)
+			warnNextPhaseSoon:Show("2")
+			timerFlameCD:Start(20)
+			timerCurseCD:Start(20)
+		elseif (stage == 2 and hp <= 40) then
+			self:SetStage(3)
+			warnNextPhaseSoon:Show(L.FlameWorld)
+			timerCurseCD:Cancel()
+			timerNovaCD:Cancel()
+			timerFlameCD:Start(10)
+		elseif (stage == 3 and hp <= 30) then
+			self:SetStage(4)
+			warnNextPhaseSoon:Show(L.IceWorld)
+			timerFlameCD:Cancel()
+			timerIceSpikeCD:Start()
+			timerCurseCD:Start(20)
+		elseif (stage == 4 and hp <= 20) then
+			self:SetStage(5)
+			warnNextPhaseSoon:Show(L.BlackForest)
+			timerCurseCD:Cancel()
+			timerIceSpikeCD:Cancel()
+			timerCallofDeadCD:Start()
+		elseif (stage == 5 and hp <= 10) then
+			warnNextPhaseSoon:Show(L.LastPhase)
+			timerCallofDeadCD:Cancel()
+			timerFlameCD:Start()
+		end
 	end
 end
 

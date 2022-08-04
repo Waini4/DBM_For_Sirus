@@ -7,7 +7,7 @@ mod:SetCreatureID(34438, 34436, 34437, 15691)
 --mod:RegisterCombat("yell", L.DBM_CURA_YELL_PULL)
 mod:RegisterCombat("combat", 34437, 15691)
 
-mod:RegisterEventsInCombat(
+mod:RegisterEvents(
 	"SPELL_AURA_APPLIED 305309 305305",
 	"SPELL_AURA_REMOVED 305313 305309",
 	"SPELL_CAST_START 305296 305312",
@@ -80,10 +80,10 @@ mod.vb.isinCombat = false
 
 
 function mod:OnCombatStart()
-	if self:IsDifficulty("normal10") then
+	if self:IsDifficulty("normal") then
 		DBM:FireCustomEvent("DBM_EncounterStart", 15691, "The Curator")
 		timerEvo:Start()
-	elseif self:IsDifficulty("heroic10") then
+	elseif self:IsDifficulty("heroic") then
 		DBM:FireCustomEvent("DBM_EncounterStart", 34437, "The Curator")
 		for i = 1, 3 do
 			if UnitAura("boss" .. i, "Деактивация", nil, "HARMFUL") == nil then

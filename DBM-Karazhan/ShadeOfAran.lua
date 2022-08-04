@@ -53,9 +53,9 @@ mod.vb.famCounter = 1
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 16524, "Shade of Aran")
-	if self:IsDifficulty("normal10") then
+	if self:IsDifficulty("normal") then
 		berserkTimer:Start(-delay)
-	elseif self:IsDifficulty("heroic10") then
+	elseif self:IsDifficulty("heroic") then
 		timerSpecialHeroic:Start()
 		self.vb.famCounter = 1
 	end

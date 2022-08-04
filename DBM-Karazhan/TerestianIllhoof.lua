@@ -99,9 +99,9 @@ end
 
 function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 15688, "Terestian Illhoof")
-	if self:IsDifficulty("normal10") then
+	if self:IsDifficulty("normal") then
 		timerSacrifice:Start(28)
-	elseif self:IsDifficulty("heroic10") then
+	elseif self:IsDifficulty("heroic") then
 		self.vb.tolik = true
 		timerHandCD:Start()
 		timerMarkCD:Start()

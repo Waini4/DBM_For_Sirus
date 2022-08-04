@@ -5,7 +5,7 @@ mod:SetRevision("20210502220000") -- fxpw check 202206151120000
 mod:SetCreatureID(16457)
 mod:RegisterCombat("combat")
 
-mod:RegisterEventsInCombat(
+mod:RegisterEvents(
 	"SPELL_CAST_START 305286",
 	"SPELL_AURA_APPLIED 305271 305285",
 	"SPELL_AURA_REMOVED 305285"
@@ -74,8 +74,8 @@ mod:AddBoolOption("HealthFrame", true)
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 16457, "Maiden of Virtue")
-	if self:IsDifficulty("normal10") then
-	elseif self:IsDifficulty("heroic10") then
+	if self:IsDifficulty("normal") then
+	elseif self:IsDifficulty("heroic") then
 		timerRepentanceCD:Start(58 - delay)
 		timerGroundCD:Start(20 - delay)
 	end
