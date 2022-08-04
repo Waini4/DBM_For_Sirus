@@ -18,8 +18,8 @@ mod:RegisterEvents(
 	"SPELL_AURA_REMOVED 307839 308516 308517 318956",
 	"SPELL_INTERRUPT 307829",
 	"SPELL_CAST_FAILED",
-	"UNIT_HEALTH",
-	"UNIT_DIED",
+	--"UNIT_HEALTH",
+	--"UNIT_DIED",
 	"SWING_DAMAGE"
 )
 
@@ -171,8 +171,9 @@ function mod:SPELL_CAST_SUCCESS(args)
 end
 
 function mod:SPELL_AURA_APPLIED(args)
+	local amount = args.amount or 1
 	if args:IsSpellID(307815) then
-		if args:IsPlayer() and (args.amount or 1) >= 2 then
+		if args:IsPlayer() then
 			specWarnTraitor:Show(args.amount)
 			specWarnTraitor:Play("stackhigh")
 		end
@@ -181,9 +182,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.SetIconOnFlameTarget and self.vb.FlameIcons > 0 then
 			self:SetIcon(args.destName, self.vb.FlameIcons, 10)
 		end
-		if DBM:CanUseNameplateIcons() then
-			DBM.Nameplate:Show(args.destGUID, 307839)
-		end
+		--if DBM:CanUseNameplateIcons() then
+		DBM.Nameplate:Show(args.destGUID, 307839)
+		--end
 		self.vb.FlameIcons = self.vb.FlameIcons - 1
 		self:Unschedule(warnFlameTargets)
 		self:Schedule(0.3, warnFlameTargets, self)
@@ -227,7 +228,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif args:IsSpellID(307833) then
 		timerInternalbleeding:Start()
-		warnInternalbleeding:Show(args.destName, args.amount or 1)
+		warnInternalbleeding:Show(args.destName, amount)
 	end
 end
 
@@ -237,14 +238,14 @@ function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(307839) then
 		self.vb.FlameIcons = 2
 		if self.Options.SetIconOnFlameTarget then
-			self:SetSortedIcon("roster", args.destName, 7,8)
+			self:SetSortedIcon("roster", args.destName, 7, 8)
 		end
-		if DBM:CanUseNameplateIcons() then
-			DBM.Nameplate:Hide(args.destGUID, 307839)
-		end
+		--if DBM:CanUseNameplateIcons() then
+		DBM.Nameplate:Hide(args.destGUID, 307839)
+		--end
 	elseif args:IsSpellID(308516, 308517) then
 		if self.Options.SetIconOnSveazTarget then
-			self:SetSortedIcon("roster", args.destName, 6,8)
+			self:SetSortedIcon("roster", args.destName, 6, 8)
 		end
 	elseif args:IsSpellID(318956) and not warned_P4 then
 		self:NewPhaseAnnounce(4)
@@ -271,84 +272,38 @@ function mod:SPELL_INTERRUPT(args)
 	end
 end
 
---[[
-local function Chepi()
-	local start, duration = GetSpellCooldown(308520);
-	if (start > 1 and duration > 1) then
-		timerCDChep:Update(0, start + duration - GetTime())
-	else
-		SendChatMessage("Цепь готова", "RAID");
-	end
-end]]
-
---[[
-do
-	local function sort_by_group(v1, v2)
-		return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
-	end
-
-	function mod:SetFlameIcons()
-		table.sort(FlameTargets, sort_by_group)
-		for _, v in ipairs(FlameTargets) do
-			if mod.Options.AnnounceFlame then
-				if DBM:GetRaidRank() > 0 and self:AntiSpam(3) then
-					SendChatMessage(L.Flame:format(FlameIcons, UnitName(v)), "RAID_WARNING")
-				else
-					SendChatMessage(L.Flame:format(FlameIcons, UnitName(v)), "RAID")
-				end
-			end
-			if self.Options.SetIconOnFlameTarget then
-				self:SetIcon(UnitName(v), FlameIcons, 15)
-			end
-			FlameIcons = FlameIcons - 1
-		end
-		warnFlame:Show(table.concat(FlameTargets, "<, >"))
-		table.wipe(FlameTargets)
-	end
-
-	function mod:SetSveazIcons()
-		if DBM:GetRaidRank() >= 0 then
-			table.sort(SveazTargets, sort_by_group)
-			for _, v in ipairs(SveazTargets) do
-				if mod.Options.AnnounceSveaz then
-					if DBM:GetRaidRank() > 0 then
-						SendChatMessage(L.Sveaz:format(SveazIcons, UnitName(v)), "RAID_WARNING")
-					else
-						SendChatMessage(L.Sveaz:format(SveazIcons, UnitName(v)), "RAID")
-					end
-				end
-				if self.Options.SetIconOnSveazTarget and SveazIcons > 0 then
-					self:SetIcon(UnitName(v), SveazIcons, 10)
-				end
-				SveazIcons = SveazIcons - 1
-			end
-		end
-		if #SveazTargets >= 3 then
-			warnSveaz:Show(table.concat(SveazTargets, "<, >"))
-			table.wipe(SveazTargets)
-			SveazIcons = 7
-		end
-	end
-end]]
-
-function mod:UNIT_HEALTH(guid)
+--[[function mod:UNIT_HEALTH(guid)
 	-- local uid = self:GetUnitCreatureId(guid)
-
 	if self:GetUnitCreatureId(guid) == 50702 then -- zort
 		-- if  DBM:GetBossHP(guid) <= 68
 	elseif self:GetUnitCreatureId(guid) == 50714 then -- вторая лик
-		if  DBM:GetBossHP(guid) <= 2 and self:GetStage() == 2 then
-			self:NextStage() --stage == 3
+		if DBM:GetBossHP(guid) <= 2 and self:GetStage() == 2 then
+			self:SetStage(2) --stage == 3
+			timerCowardice:Cancel()
+			timerPriziv:Start(10)
+			timerSveazi:Start(20)
+			timerAmonstrousblow:Start(24)
+			warnPhase3:Show()
 		end
 	elseif self:GetUnitCreatureId(guid) == 50715 then -- первая чудовищная
-		if  DBM:GetBossHP(guid) <= 2 and self:GetStage() == 1  then
-			self:NextStage() --stage == 2
-		elseif  DBM:GetBossHP(guid) >= 99 and self:GetStage() == 3 then
-			self:NextStage() --stage == 4
+		if DBM:GetBossHP(guid) <= 2 and self:GetStage() == 1 then
+			self:SetStage(3) --stage == 2
+			timerCowardice:Start(10)
+			timerFlame:Start(5)
+			warnPhase2:Show()
+		elseif DBM:GetBossHP(guid) >= 99 and self:GetStage() == 3 then
+			self:SetStage(4) --stage == 4
 		end
 	elseif self:GetUnitCreatureId(guid) == 50716 then -- щупальце плеть
-		if  DBM:GetBossHP(guid) <= 1 and self:GetStage() == 3  then
-			self:NextStage() --stage == 4
+		if DBM:GetBossHP(guid) <= 1 and self:GetStage() == 3 then
+			self:SetStage(5) --stage == 4
+			warnPhase4:Show()
+			timerPriziv:Cancel()
+			timerSveazi:Cancel()
+			timerBreathNightmare:Start()
+			timerInternalbleeding:Start(64)
+			warnInternalbgPre:Schedule(59)
+			timerShkval:Start(60)
 		end
 	elseif self:GetUnitCreatureId(guid) == 50702 and self:GetStage() == 4 and self.AllThreeDead == 4 then
 		self:NextStage() --stage == 5
@@ -377,10 +332,11 @@ function mod:UNIT_HEALTH(guid)
 	-- 		self:SetStage(4)
 	-- 	end
 	-- end
-end
+end]]
 
-function mod:UNIT_DIED(args)
-	if self:GetCIDFromGUID(args.destGUID) == 50714 or self:GetCIDFromGUID(args.destGUID) == 50715 or self:GetCIDFromGUID(args.destGUID) == 50716 then
+--[[function mod:UNIT_DIED(args)
+	if self:GetCIDFromGUID(args.destGUID) == 50714 or self:GetCIDFromGUID(args.destGUID) == 50715 or
+		self:GetCIDFromGUID(args.destGUID) == 50716 then
 		self.AllThreeDead = self.AllThreeDead + 1
 	end
 	-- if args.destName == L.Cudo then
@@ -402,43 +358,4 @@ function mod:UNIT_DIED(args)
 	-- 	warnInternalbgPre:Schedule(59)
 	-- 	timerShkval:Start(60)
 	-- end
-end
-
---[[
-mod:RegisterOnUpdateHandler(function(self)
-	if not self:IsInCombat() then return end
-	for uId in DBM:GetGroupMembers() do
-		local target = uId .. "target"
-
-		if self:GetUnitCreatureId(target) == 50707 then
-			local targetGUID = UnitGUID(target)
-
-			if not Trees[targetGUID] then
-				if targetGUID then
-					Trees[targetGUID] = L.Tree .. " №" .. Trees_num
-					do
-						local last = 100
-						local function getTreesPercent()
-							local trackingGUID = targetGUID
-							for uId2 in DBM:GetGroupMembers() do
-								local unitId = uId2 .. "target"
-								if trackingGUID == UnitGUID(unitId) and mod:GetCIDFromGUID(trackingGUID) == 50707 then
-									last = math.floor(UnitHealth(unitId) / UnitHealthMax(unitId) * 100)
-									if trackingGUID then
-										Trees_HP[trackingGUID] = last
-										return last
-									end
-								end
-							end
-							return Trees_HP[trackingGUID]
-						end
-
-						DBM.BossHealth:AddBoss(getTreesPercent, Trees[targetGUID])
-					end
-					Trees_num = Trees_num + 1
-				end
-			end
-		end
-	end
-end, 0.1)
-]]
+end]]

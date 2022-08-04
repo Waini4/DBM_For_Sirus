@@ -5,26 +5,26 @@ local CL = DBM_COMMON_L
 mod:SetRevision("20220609123000") -- fxpw check 20220609123000
 
 mod:SetCreatureID(19622)
-mod:RegisterCombat("combat")
+mod:RegisterCombat("yell", L.YellPhase1)
 mod:SetUsedIcons(5, 6, 7, 8)
 
-mod:RegisterEventsInCombat(
+mod:RegisterEvents(
 	"SPELL_CAST_START 35941 40636 37036 308742 308732 308790",
 	"SPELL_AURA_APPLIED 308732 308741 308750 308756	308797 36797",
 	"SPELL_AURA_APPLIED_DOSE 308732 308741 308750 308756 308797 36797",
 	"UNIT_TARGET",
 	"SPELL_AURA_REMOVED 308750 36797",
-	--	"CHAT_MSG_MONSTER_YELL",
+	"CHAT_MSG_MONSTER_YELL",
 	"SPELL_CAST_SUCCESS 37018 36723 308749 308743 36815 36731 308734 36797"
 )
 
-mod:RegisterEvents(
+--[[mod:RegisterEvents(
 -- 	-- "CHAT_MSG_RAID_BOSS_EMOTE",
 	"CHAT_MSG_MONSTER_YELL"
 -- 	"SPELL_CAST_SUCCESS 37018 36723 308749 308743 36815 36731 308734 36797",
 -- 	"SPELL_AURA_APPLIED 308732 308741 308750 308756	308797 36797",
 -- 	"SPELL_AURA_APPLIED_DOSE 308732 308741 308750 308756 308797 36797"
-)
+)]]
 
 
 
@@ -133,7 +133,7 @@ function mod:OnCombatStart()
 	timerNextAdd:Start(L.NamesAdds["Thaladred"])
 	table.wipe(dominateMindTargets)
 	table.wipe(mincControl)
-	if mod:IsDifficulty("heroic25") then
+	if self:IsDifficulty("heroic25") then
 		timerAxeCD:Start(52)
 	end
 end
@@ -276,7 +276,7 @@ end
 
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(35941) then
-		if mod:IsDifficulty("heroic25") then
+		if self:IsDifficulty("heroic25") then
 			timerGravityH:Start()
 			timerGravityHCD:Start()
 		else

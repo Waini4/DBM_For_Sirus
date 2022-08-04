@@ -95,10 +95,6 @@ f:SetScript("OnEvent", function(self)
 			--self:SetStage(1)
 			timerEscapingDarkness:Start()
 			--self:Schedule(0.1, "CreatePowerFrame")
-			if self.Options.BossHealthFrame then
-				DBM.BossHealth:Show(L.name)
-				DBM.BossHealth:AddBoss(84002, L.name)
-			end
 		end
 	end
 end)
