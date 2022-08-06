@@ -182,9 +182,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.SetIconOnFlameTarget and self.vb.FlameIcons > 0 then
 			self:SetIcon(args.destName, self.vb.FlameIcons, 10)
 		end
-		--if DBM:CanUseNameplateIcons() then
-		DBM.Nameplate:Show(args.destGUID, 307839)
-		--end
+		if DBM:CanUseNameplateIcons() then
+			DBM.Nameplate:Show(args.destGUID, 307839)
+		end
 		self.vb.FlameIcons = self.vb.FlameIcons - 1
 		self:Unschedule(warnFlameTargets)
 		self:Schedule(0.3, warnFlameTargets, self)
@@ -240,9 +240,9 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnFlameTarget then
 			self:SetSortedIcon("roster", args.destName, 7, 8)
 		end
-		--if DBM:CanUseNameplateIcons() then
-		DBM.Nameplate:Hide(args.destGUID, 307839)
-		--end
+		if DBM:CanUseNameplateIcons() then
+			DBM.Nameplate:Hide(args.destGUID, 307839)
+		end
 	elseif args:IsSpellID(308516, 308517) then
 		if self.Options.SetIconOnSveazTarget then
 			self:SetSortedIcon("roster", args.destName, 6, 8)
