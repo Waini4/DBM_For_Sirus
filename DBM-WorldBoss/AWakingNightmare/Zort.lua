@@ -12,36 +12,35 @@ mod:RegisterEvents(
 	"SPELL_CAST_SUCCESS 308520 307834 318956",
 	"SPELL_AURA_APPLIED 307815 307839 307842 308512 308517 308620 308515 307834 307833",
 	"SPELL_AURA_APPLIED_DOSE 307815 307839 307842 308512 308517 308620 308515 307834 307833",
-	"UNIT_TARGET",
-	"SPELL_DAMAGE",
-	"SPELL_PERIODIC_DAMAGE",
+	-- "UNIT_TARGET",
+	-- "SPELL_DAMAGE",
+	-- "SPELL_PERIODIC_DAMAGE",
 	"SPELL_AURA_REMOVED 307839 308516 308517 318956",
-	"SPELL_INTERRUPT 307829",
-	"SPELL_CAST_FAILED",
-	--"UNIT_HEALTH",
-	--"UNIT_DIED",
-	"SWING_DAMAGE"
+	"SPELL_INTERRUPT 307829"
+	-- "SPELL_CAST_FAILED"
+	-- "UNIT_HEALTH",
+	-- "UNIT_DIED",
+	-- "SWING_DAMAGE"
 )
 
 mod:AddTimerLine(L.name)
-local warnPhase2Soon          = mod:NewPrePhaseAnnounce(2)
-local warnPhase2              = mod:NewPhaseAnnounce(2)
-local warnPhase3Soon          = mod:NewPrePhaseAnnounce(3)
-local warnPhase3              = mod:NewPhaseAnnounce(3)
-local warnPhase4              = mod:NewPhaseAnnounce(4)
+-- local warnPhase2Soon          = mod:NewPrePhaseAnnounce(2)
+-- local warnPhase2              = mod:NewPhaseAnnounce(2)
+-- local warnPhase3Soon          = mod:NewPrePhaseAnnounce(3)
+-- local warnPhase3              = mod:NewPhaseAnnounce(3)
+-- local warnPhase4              = mod:NewPhaseAnnounce(4)
 --local warnPech							= mod:NewTargetAnnounce(307814, 2)
 local warnFlame               = mod:NewTargetAnnounce(307839, 2)
 local warnSveaz               = mod:NewTargetAnnounce(308620, 3)
 --local warnkik							= mod:NewCastAnnounce(307829, 2)
 --local warnShkval						= mod:NewCastAnnounce(307821, 3)
-local warnTraitor             = mod:NewCountAnnounce(307814, 2, nil, false)
+-- local warnTraitor             = mod:NewCountAnnounce(307814, 2, nil, false)
 local warnInternalbleeding    = mod:NewStackAnnounce(307833, 2, nil, "Tank|Healer")
 local warnInternalbgPre       = mod:NewPreWarnAnnounce(307833, 5, nil, nil, "Tank|Healer")
 local specWarnBreathNightmare = mod:NewSpecialWarningDispel(308512, "RemoveDisease", nil, nil, 1, 6)
 
 local specWarnRazrsveaz       = mod:NewSpecialWarning("KnopSv", 3)
-local specCowardice           = mod:NewSpecialWarning("|cff71d5ff|Hspell:307834|hПечать: Трусость|h|r Бей босcа - Держи радиус 6 метров!"
-	, 3)
+local specCowardice           = mod:NewSpecialWarning("|cff71d5ff|Hspell:307834|hПечать: Трусость|h|r Бей босcа - Держи радиус 6 метров!", 3)
 -- local specwarnHp1             = mod:NewSpecialWarning("Hp1", 3)
 -- local specwarnHp2             = mod:NewSpecialWarning("Hp2", 3)
 -- local specwarnHp3             = mod:NewSpecialWarning("Hp3", 3)
@@ -61,7 +60,7 @@ local timerSveazi           = mod:NewCDTimer(28, 308620, nil, nil, nil, 2)
 local timerkik              = mod:NewCDTimer(15, 307829, nil, nil, nil, 3)
 local timerShkval           = mod:NewCDTimer(20, 307821, nil, nil, nil, 3)
 local timerCowardice        = mod:NewCDTimer(33, 307834)
-local timerFlame            = mod:NewCDTimer(15, 307839)
+-- local timerFlame            = mod:NewCDTimer(15, 307839)
 local timerBreathNightmare  = mod:NewCDTimer(15, 308512)
 local timerAmonstrousblow   = mod:NewCDTimer(15, 307845)
 local timerCDChep           = mod:NewCDTimer(6, 308520)
@@ -109,8 +108,10 @@ local function warnFlameTargets(self)
 end
 
 function mod:OnCombatStart(delay)
+	-- print(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 50702, "Zort")
-	mod:SetStage(1)
+	-- self:SetStage(1)
+	-- print(self:GetStage())
 	self.vb.SveazIcons = 7
 	timerkik:Start(-delay)
 	timerShkval:Start(-delay)
@@ -272,90 +273,3 @@ function mod:SPELL_INTERRUPT(args)
 	end
 end
 
---[[function mod:UNIT_HEALTH(guid)
-	-- local uid = self:GetUnitCreatureId(guid)
-	if self:GetUnitCreatureId(guid) == 50702 then -- zort
-		-- if  DBM:GetBossHP(guid) <= 68
-	elseif self:GetUnitCreatureId(guid) == 50714 then -- вторая лик
-		if DBM:GetBossHP(guid) <= 2 and self:GetStage() == 2 then
-			self:SetStage(2) --stage == 3
-			timerCowardice:Cancel()
-			timerPriziv:Start(10)
-			timerSveazi:Start(20)
-			timerAmonstrousblow:Start(24)
-			warnPhase3:Show()
-		end
-	elseif self:GetUnitCreatureId(guid) == 50715 then -- первая чудовищная
-		if DBM:GetBossHP(guid) <= 2 and self:GetStage() == 1 then
-			self:SetStage(3) --stage == 2
-			timerCowardice:Start(10)
-			timerFlame:Start(5)
-			warnPhase2:Show()
-		elseif DBM:GetBossHP(guid) >= 99 and self:GetStage() == 3 then
-			self:SetStage(4) --stage == 4
-		end
-	elseif self:GetUnitCreatureId(guid) == 50716 then -- щупальце плеть
-		if DBM:GetBossHP(guid) <= 1 and self:GetStage() == 3 then
-			self:SetStage(5) --stage == 4
-			warnPhase4:Show()
-			timerPriziv:Cancel()
-			timerSveazi:Cancel()
-			timerBreathNightmare:Start()
-			timerInternalbleeding:Start(64)
-			warnInternalbgPre:Schedule(59)
-			timerShkval:Start(60)
-		end
-	elseif self:GetUnitCreatureId(guid) == 50702 and self:GetStage() == 4 and self.AllThreeDead == 4 then
-		self:NextStage() --stage == 5
-	end
-	-- 	if self:GetStage("Zort") == 1 and   DBM:GetBossHP(guid) <= 68 then
-	-- 		self:SetStage(2)
-	-- 		warnPhase2:Show()
-	-- 		-- warned_kill1 = true
-	-- 		--specwarnHp1:Show()
-
-	-- 	elseif self:GetStage("Zort") == 2 and DBM:GetBossHP(guid) <= 43 then
-	-- 		self:SetStage(3)
-	-- 		warnPhase3:Show()
-	-- 		-- warned_kill2 = true
-	-- 		--	specwarnHp2:Show()
-
-	-- 	elseif self:GetStage("Zort") == 3 and not warned_kill3 and (
-	-- 		(uid == 50716 and DBM:GetBossHP(50716) <= 1) or (uid == 50715 and DBM:GetBossHP(guid) <= 98)) then
-	-- 		-- warned_kill3 = true
-	-- 		warnPhase4:Show()
-	-- 		--specwarnHp3:Show()
-	-- 	end
-	-- elseif self:GetUnitCreatureId(guid) == 50716 then
-	-- 	if DBM:GetBossHP(50716) <= 1 then
-	-- 		warnPhase4:Show()
-	-- 		self:SetStage(4)
-	-- 	end
-	-- end
-end]]
-
---[[function mod:UNIT_DIED(args)
-	if self:GetCIDFromGUID(args.destGUID) == 50714 or self:GetCIDFromGUID(args.destGUID) == 50715 or
-		self:GetCIDFromGUID(args.destGUID) == 50716 then
-		self.AllThreeDead = self.AllThreeDead + 1
-	end
-	-- if args.destName == L.Cudo then
-	-- 	timerCowardice:Start(10)
-	-- 	timerFlame:Start(5)
-	-- 	warnPhase2:Show()
-	-- elseif args.destName == L.Lic then
-	-- 	timerCowardice:Cancel()
-	-- 	timerPriziv:Start(10)
-	-- 	timerSveazi:Start(20)
-	-- 	timerAmonstrousblow:Start(24)
-	-- 	warnPhase3:Show()
-	-- elseif args.destName == L.Shup then
-	-- 	warnPhase4:Show()
-	-- 	timerPriziv:Cancel()
-	-- 	timerSveazi:Cancel()
-	-- 	timerBreathNightmare:Start()
-	-- 	timerInternalbleeding:Start(64)
-	-- 	warnInternalbgPre:Schedule(59)
-	-- 	timerShkval:Start(60)
-	-- end
-end]]
