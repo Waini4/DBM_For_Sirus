@@ -47,11 +47,11 @@ mod:AddBoolOption("AnnouncePorch", false)
 function mod:OnCombatStart(delay)
 	self:SetStage(1)
 	DBM:FireCustomEvent("DBM_EncounterStart", 15690, "Prince Malchezaar")
-	if self:IsDifficulty("normal") then
+	if self:IsDifficulty("normal10") then
 		timerInfernal:Start(14.5 - delay)
-	elseif self:IsDifficulty("heroic") then
+	elseif self:IsDifficulty("heroic10") then
 		self.vb.PorchIcons = 8
-		timerCurseCD:Start(20)
+		timerCurseCD:Start(20-delay)
 		timerNovaCD:Start()
 		table.wipe(flameTargets)
 	end
