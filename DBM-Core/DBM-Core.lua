@@ -81,9 +81,9 @@ local function currentFullDate()
 end
 
 DBM = {
-	Revision = parseCurseDate("20220807004900"),
+	Revision = parseCurseDate("20220807220000"),
 	DisplayVersion = GetAddOnMetadata(_addonname, "Version"), -- the string that is shown as version
-	ReleaseRevision = releaseDate(2022, 8, 07, 00, 49, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	ReleaseRevision = releaseDate(2022, 08, 07, 22, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 
 local fakeBWVersion = 7558
@@ -5528,8 +5528,8 @@ do
 				local thisTime = GetTime() - (mod.combatInfo.pull or 0)
 				local lastTime = mod.stats[statVarTable[savedDifficulty] .. "LastTime"]
 				local bestTime = mod.stats[statVarTable[savedDifficulty] .. "BestTime"]
-				if not mod.stats[statVarTable[savedDifficulty] .. "Kills"] or mod.stats[statVarTable[savedDifficulty] .. "Kills"] < 0 then mod
-						.stats[statVarTable[savedDifficulty] .. "Kills"] = 0
+				if not mod.stats[statVarTable[savedDifficulty] .. "Kills"] or mod.stats[statVarTable[savedDifficulty] .. "Kills"] < 0 then
+					mod.stats[statVarTable[savedDifficulty] .. "Kills"] = 0
 				end
 				--Fix logical error i've seen where for some reason we have more kills then pulls for boss as seen by - stats for wipe messages.
 				mod.stats[statVarTable[savedDifficulty] .. "Kills"] = mod.stats[statVarTable[savedDifficulty] .. "Kills"] + 1
