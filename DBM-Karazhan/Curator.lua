@@ -58,7 +58,7 @@ mod:RegisterEvents(
 -- end
 
 --обычка--
-local timerEvo = mod:NewNextTimer(112, 30254) -- Прилив сил
+local timerEvo = mod:NewNextTimer(101, 30254) -- Прилив сил
 
 -- героик --
 local warnUnstableTar = mod:NewAnnounce("WarnUnstableTar", 3, 305309)
@@ -80,10 +80,10 @@ mod.vb.isinCombat = false
 
 
 function mod:OnCombatStart()
-	if self:IsDifficulty("normal") then
+	if self:IsDifficulty("normal10") then
 		DBM:FireCustomEvent("DBM_EncounterStart", 15691, "The Curator")
 		timerEvo:Start()
-	elseif self:IsDifficulty("heroic") then
+	elseif self:IsDifficulty("heroic10") then
 		DBM:FireCustomEvent("DBM_EncounterStart", 34437, "The Curator")
 		for i = 1, 3 do
 			if UnitAura("boss" .. i, "Деактивация", nil, "HARMFUL") == nil then
@@ -114,11 +114,11 @@ end
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(305313) then
-		if self.vb.isinCombat then
+		-- if self.vb.isinCombat then
 			-- local name = {"tobecon","dramatic"}
 			-- name  = name[math.random(#name)]
 			-- warnSound:Play(name)
-		end
+		-- end
 		for i = 1, 3 do
 			if UnitAura("boss" .. i, "Деактивация", nil, "HARMFUL") == nil then
 				if i == 3 then
