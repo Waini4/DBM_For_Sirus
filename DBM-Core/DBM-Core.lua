@@ -838,7 +838,11 @@ do
 			if not registeredSpellIds[event] then
 				registeredSpellIds[event] = {}
 			end
-			registeredSpellIds[event][spellId] = (registeredSpellIds[event][spellId] or 0) + 1
+			if spellId and event then
+				registeredSpellIds[event][spellId] = (registeredSpellIds[event][spellId] or 0) + 1
+			else
+				error("DBM CORE 844 event or spellid is nil ->"..spellId "  ->" ..event)
+			end
 		end
 
 		function unregisterSpellId(event, spellId)
