@@ -47,6 +47,7 @@ mod:AddBoolOption("AnnouncePorch", false)
 function mod:OnCombatStart(delay)
 	self:SendSync("Phase1")
 	self:SetStage(1)
+	warnNextPhaseSoon:Show("1")
 	DBM:FireCustomEvent("DBM_EncounterStart", 15690, "Prince Malchezaar")
 	if self:IsDifficulty("normal10") then
 		timerInfernal:Start()
