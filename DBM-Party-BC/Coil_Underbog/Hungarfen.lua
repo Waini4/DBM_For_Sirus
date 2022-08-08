@@ -11,10 +11,11 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS 31673"
 )
 
-local warnFoulSpores  = mod:NewSpellAnnounce(31673, 2)
+local warnFoulSpores  = mod:NewSpecialWarningRun(31697, nil, nil, 2, 4, 2)
 
 function mod:SPELL_CAST_SUCCESS(args)
 	if args.spellId == 31673 then
 		warnFoulSpores:Show()
+		warnFoulSpores:Play("runout")
 	end
 end
