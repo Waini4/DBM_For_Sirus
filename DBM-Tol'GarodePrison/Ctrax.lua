@@ -89,7 +89,7 @@ local f = CreateFrame("Frame", nil, UIParent)
 f:RegisterEvent("PLAYER_REGEN_DISABLED")
 f:SetScript("OnEvent", function(self)
 	for i = 1, MAX_RAID_MEMBERS do
-		local pt = UnitName("raid" .. i .. "-target")
+		local pt = UnitName("raid" .. i .. "target")
 		if pt and pt == "Поглотитель разума Ктракс" then
 			DBM:FireCustomEvent("DBM_EncounterStart", 84002, "Ctrax")
 			--self:SetStage(1)
