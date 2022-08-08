@@ -840,8 +840,8 @@ do
 			end
 			if spellId and event then
 				registeredSpellIds[event][spellId] = (registeredSpellIds[event][spellId] or 0) + 1
-			else
-				error("DBM CORE 844 event or spellid is nil ->"..spellId "  ->" ..event)
+			-- else
+				-- error("DBM CORE 844 event or spellid is nil ->"..spellId "  ->" ..event)
 			end
 		end
 
@@ -5157,7 +5157,7 @@ do
 			mod.inCombat = true
 			encounterInProgress = true
 			mod.blockSyncs = nil
-			mod.combatInfo.pull = GetTime() - (delay or 0)
+			mod.combatInfo.pull = (GetTime() - (delay or 0)) or 0
 			bossuIdFound = event == "IEEU"
 			if (self.Options.AlwaysShowHealthFrame or mod.Options.HealthFrame) and mod.Options.Enabled then
 				self.BossHealth:Show(mod.localization.general.name)
@@ -6407,8 +6407,7 @@ do
 end
 
 function DBM:SendCombatInfo(mod, target)
-	return SendAddonMessage("DBMv4-CombatInfo", ("%s\t%s"):format(mod.id, GetTime() - mod.combatInfo.pull), "WHISPER",
-		target)
+	return SendAddonMessage("DBMv4-CombatInfo", ("%s\t%s"):format(mod.id, GetTime() - mod.combatInfo.pull), "WHISPER", target)
 end
 
 function DBM:SendTimerInfo(mod, target)
