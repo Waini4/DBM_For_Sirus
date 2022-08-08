@@ -45,6 +45,7 @@ mod.vb.PorchIcons = 8
 mod:AddBoolOption("AnnouncePorch", false)
 -- mod:SetStage(0)
 function mod:OnCombatStart(delay)
+	self:SendSync("Phase1")
 	self:SetStage(1)
 	DBM:FireCustomEvent("DBM_EncounterStart", 15690, "Prince Malchezaar")
 	if self:IsDifficulty("normal10") then
@@ -64,10 +65,15 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 	elseif msg == L.DBM_PRINCE_YELL_P3 then
 		self:SendSync("Phase3")
 		self:SetStage(3)
+		warnNextPhaseSoon:Show("3")
 	elseif msg == L.DBM_PRINCE_YELL_P2 then
+		self:SendSync("Phase2")
 		self:SetStage(2)
+		warnNextPhaseSoon:Show("2")
 		--warnPhase2:Show()
-		if msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2 and self:GetStage() == 3 then
+	end
+	if self:GetStage() == 3 then
+		if msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2 then
 			warningInfernal:Show()
 			timerInfernal:Start(17)
 		end
@@ -121,7 +127,7 @@ function mod:SPELL_AURA_APPLIED(args)
 end
 
 function mod:UNIT_HEALTH(uId)
-	if self:GetUnitCreatureId(uId) == 15690 and self:IsDifficulty("heroic") then
+	if self:GetUnitCreatureId(uId) == 15690 and self:IsDifficulty("heroic10") then
 		local hp = DBM:GetBossHP(uId)
 		local stage = self:GetStage()
 		if (stage == 1 and hp <= 80) then
