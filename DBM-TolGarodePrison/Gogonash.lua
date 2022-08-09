@@ -1,5 +1,5 @@
-local mod = DBM:NewMod("Gogonash", "DBM-Tol'GarodePrison")
-local L   = mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Gogonash", "DBM-TolGarodePrison")
+-- local L   = mod:GetLocalizedStrings()
 local CL  = DBM_COMMON_L
 
 mod:SetRevision("20220312000000") -- fxpw check 20220609123000

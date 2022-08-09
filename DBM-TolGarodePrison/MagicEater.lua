@@ -1,6 +1,6 @@
-local mod = DBM:NewMod("MagicEater", "DBM-Tol'GarodePrison")
-local L   = mod:GetLocalizedStrings()
-local CL  = DBM_COMMON_L
+local mod = DBM:NewMod("MagicEater", "DBM-TolGarodePrison")
+-- local L   = mod:GetLocalizedStrings()
+-- local CL  = DBM_COMMON_L
 
 mod:SetRevision("20210501000000") -- fxpw check 20220609123000
 mod:SetCreatureID(84017)

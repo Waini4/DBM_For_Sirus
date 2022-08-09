@@ -1,5 +1,5 @@
-local mod = DBM:NewMod("Ctrax", "DBM-Tol'GarodePrison")
-local L   = mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Ctrax", "DBM-TolGarodePrison")
+-- local L   = mod:GetLocalizedStrings()
 
 local CL = DBM_COMMON_L
 
