@@ -145,20 +145,20 @@ function mod:UNIT_HEALTH(uId)
 	if self:GetUnitCreatureId(uId) == 23863 then
 		local hp = DBM:GetBossHP(uId)
 		local stage = self:GetStage()
-		if (hp <= 81 and stage == 1) then
+		if (stage == 1 and hp <= 81) then
 			self:SetStage(2)
 			-- phaseCounter = phaseCounter + 1
 			warnNextPhaseSoon:Show(L.Bear)
-		elseif (hp <= 61 and stage == 2) then
+		elseif (stage == 2 and hp <= 61) then
 			self:SetStage(3)
 			-- phaseCounter = phaseCounter + 1
 			-- timerParalysis:Cancel()
 			warnNextPhaseSoon:Show(L.Hawk)
-		elseif (hp <= 41 and stage == 3) then
+		elseif (stage == 3 and hp <= 41) then
 			self:SetStage(4)
 			-- phaseCounter = phaseCounter + 1
 			warnNextPhaseSoon:Show(L.Lynx)
-		elseif (hp <= 20 and stage == 4) then
+		elseif (stage == 4 and hp <= 20) then
 			-- phaseCounter = phaseCounter + 1
 			warnNextPhaseSoon:Show(L.Dragon)
 			-- self:SetStage(5)

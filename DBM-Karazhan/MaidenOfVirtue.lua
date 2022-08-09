@@ -74,8 +74,8 @@ mod:AddBoolOption("HealthFrame", true)
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 16457, "Maiden of Virtue")
-	if self:IsDifficulty("normal") then
-	elseif self:IsDifficulty("heroic") then
+	if self:IsDifficulty("normal10") then
+	elseif self:IsDifficulty("heroic10") then
 		timerRepentanceCD:Start(58 - delay)
 		timerGroundCD:Start(20 - delay)
 	end

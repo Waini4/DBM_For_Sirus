@@ -98,9 +98,7 @@ mod:AddBoolOption("AnnouncePyromancerIcons", true)
 
 function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 17225, "Nightbane")
-	if mod:IsDifficulty("normal") then
-
-	elseif mod:IsDifficulty("heroic") and self.vb.isStart then
+	if mod:IsDifficulty("heroic10") and self.vb.isStart then
 		timerGrievingFireCD:Start()
 		timerConflCD:Start()
 		timerPyroCD:Start()

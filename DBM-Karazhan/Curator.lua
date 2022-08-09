@@ -2,10 +2,10 @@ local mod = DBM:NewMod("Curator", "DBM-Karazhan")
 local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20210502220000") -- fxpw check 202206151120000
-mod:SetCreatureID(34438, 34436, 34437, 15691)
+mod:SetCreatureID(99973, 99972, 99974, 15691)
 --mod:SetCreatureID(15691)
 --mod:RegisterCombat("yell", L.DBM_CURA_YELL_PULL)
-mod:RegisterCombat("combat", 34437, 15691)
+mod:RegisterCombat("combat", 99974, 15691)
 
 mod:RegisterEvents(
 	"SPELL_AURA_APPLIED 305309 305305",
@@ -84,7 +84,7 @@ function mod:OnCombatStart()
 		DBM:FireCustomEvent("DBM_EncounterStart", 15691, "The Curator")
 		timerEvo:Start()
 	elseif self:IsDifficulty("heroic10") then
-		DBM:FireCustomEvent("DBM_EncounterStart", 34437, "The Curator")
+		DBM:FireCustomEvent("DBM_EncounterStart", 99974, "The Curator")
 		for i = 1, 3 do
 			if UnitAura("boss" .. i, "Деактивация", nil, "HARMFUL") == nil then
 				if i == 3 then
@@ -103,12 +103,16 @@ end
 
 function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.DBM_CURA_YELL_OOM then
-		timerEvo:Start(112)
+		timerEvo:Start(101)
 	end
 end
 
 function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 34437, "The Curator", wipe)
+	if self:IsDifficulty("normal10") then
+		DBM:FireCustomEvent("DBM_EncounterEnd", 15691, "The Curator", wipe)
+	elseif self:IsDifficulty("heroic10") then
+		DBM:FireCustomEvent("DBM_EncounterEnd", 99974, "The Curator", wipe)
+	end
 	self.vb.isinCombat = false
 end
 
