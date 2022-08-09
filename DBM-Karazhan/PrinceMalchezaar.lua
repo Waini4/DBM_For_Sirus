@@ -72,11 +72,9 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		self:SetStage(2)
 		warnNextPhaseSoon:Show("2")
 		--warnPhase2:Show()
-	elseif self:GetStage() == 3 then
-		if msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2 then
+	elseif self:GetStage() == 3 and (msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2) then
 			warningInfernal:Show()
 			timerInfernal:Start(17)
-		end
 	end
 end
 
