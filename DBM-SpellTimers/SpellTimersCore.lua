@@ -962,7 +962,7 @@ function barPrototypeST:ApplyStyle()
 		end
 	else
 		local barStartRed, barStartGreen, barStartBlue
-		if self.colorType then
+		if self.colorType and self.colorType >= 1 then
 			local colorCount = self.colorType
 			if colorCount == 1 then --Add
 				barStartRed, barStartGreen, barStartBlue = barOptions.StartColorAR, barOptions.StartColorAG, barOptions.StartColorAB
