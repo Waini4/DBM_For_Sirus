@@ -52,7 +52,7 @@ L:SetWarningLocalization{
 L:SetOptionLocalization{
 	SetIconOnElectricStorm = "Отмечать на ком Электрическая буря",
 	SayOnElectricStorm = "Говорить в чат на ком Электрическая буря",
-	WarnWind = L.AUTO_ANNOUNCE_OPTIONS.spell:format(43621, GetSpellInfo(43621) or "unknown")
+	WarnWind = L.AUTO_ANNOUNCE_OPTIONS.spell:format(43621)
 }
 
 L:SetMiscLocalization{
