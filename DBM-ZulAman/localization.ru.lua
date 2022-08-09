@@ -1,6 +1,6 @@
 if GetLocale() ~= "ruRU" then return end
 local L
-
+local DBML = DBM_CORE_L
 ---------------
 --  Nalorakk --
 ---------------
@@ -52,7 +52,7 @@ L:SetWarningLocalization{
 L:SetOptionLocalization{
 	SetIconOnElectricStorm = "Отмечать на ком Электрическая буря",
 	SayOnElectricStorm = "Говорить в чат на ком Электрическая буря",
-	WarnWind = L.AUTO_ANNOUNCE_OPTIONS.spell:format(43621)
+	WarnWind = DBML.AUTO_ANNOUNCE_OPTIONS.spell:format(43621)
 }
 
 L:SetMiscLocalization{
