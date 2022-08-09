@@ -6,7 +6,7 @@ mod:SetCreatureID(16524)
 mod:RegisterCombat("combat")
 mod:SetUsedIcons(1, 2, 3, 4, 5, 6, 7, 8)
 
-mod:RegisterEventsInCombat(
+mod:RegisterEvents(
 	"SPELL_CAST_START 30004	29973 29969 305338 305329 305326 305331",
 	"SPELL_AURA_APPLIED 29991 29946	305328",
 	"SPELL_AURA_REMOVED 29991 305328",

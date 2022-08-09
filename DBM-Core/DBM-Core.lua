@@ -840,8 +840,8 @@ do
 			end
 			if spellId and event then
 				registeredSpellIds[event][spellId] = (registeredSpellIds[event][spellId] or 0) + 1
-			-- else
-				-- error("DBM CORE 844 event or spellid is nil ->"..spellId "  ->" ..event)
+			else
+				print("DBM CORE 844 event or spellid is nil ->"..spellId and "s " or "nil" .."  ->" ..event and "e " or "nil")
 			end
 		end
 
