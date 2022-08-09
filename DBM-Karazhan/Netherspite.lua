@@ -44,11 +44,11 @@ mod.vb.breatheCount = 0
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 15689, "Netherspite")
-	if mod:IsDifficulty("normal") then
+	if mod:IsDifficulty("normal10") then
 		berserkTimer:Start(-delay)
 		timerPortalPhase:Start(62 - delay)
 		warningBanishSoon:Schedule(57 - delay)
-	elseif mod:IsDifficulty("heroic") then
+	elseif mod:IsDifficulty("heroic10") then
 		timerGates:Start()
 		timerGhostPhase:Start()
 	end

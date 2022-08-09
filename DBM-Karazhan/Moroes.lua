@@ -85,7 +85,7 @@ end
 
 function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 15687, "Moroes")
-	if self:IsDifficulty("heroic") then
+	if self:IsDifficulty("heroic10") then
 		self.vb.phase = 1
 		self.vb.phase2 = false
 		timerDanceCD:Start()

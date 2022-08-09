@@ -88,7 +88,7 @@ function mod:OnCombatStart(delay)
 				DBM:FireCustomEvent("DBM_EncounterStart", 100507, "Attumen the Huntsman")
 				self:SetStage(1)
 				mod.vb.phaseCounter = true
-				if self:IsDifficulty("heroic") then
+				if self:IsDifficulty("heroic10") then
 					timerInvCD:Start(20 - delay)
 				end
 			end
