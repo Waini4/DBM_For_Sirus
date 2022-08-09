@@ -45,7 +45,7 @@ mod.vb.PorchIcons = 8
 mod:AddBoolOption("AnnouncePorch", false)
 -- mod:SetStage(0)
 function mod:OnCombatStart(delay)
-	self:SendSync("Phase1")
+	-- self:SendSync("Phase1")
 	self:SetStage(1)
 	warnNextPhaseSoon:Show("1")
 	DBM:FireCustomEvent("DBM_EncounterStart", 15690, "Prince Malchezaar")
@@ -155,6 +155,14 @@ function mod:UNIT_HEALTH(uId)
 			warnNextPhaseSoon:Show(L.LastPhase)
 			timerCallofDeadCD:Cancel()
 			timerFlameCD:Start()
+		end
+	elseif self:GetUnitCreatureId(uId) == 15690 and self:IsDifficulty("normal10") then
+		local hp = DBM:GetBossHP(uId)
+		local stage = self:GetStage()
+		if (stage == 1 and hp <= 60) then
+			self:SetStage(2)
+		elseif (stage == 2 and hp <= 30) then
+			self:SetStage(3)
 		end
 	end
 end
