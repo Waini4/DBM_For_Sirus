@@ -32,7 +32,7 @@ local specWarnCallofDead = mod:NewSpecialWarningYou(305447)
 
 local warnNextPhaseSoon = mod:NewAnnounce("WarnNextPhaseSoon", 1)
 -- local warnSound						= mod:NewSoundAnnounce()
---mod.vb.phaseCounter     = 1
+-- mod.vb.phaseCounter     = 1
 local warnPorch         = mod:NewTargetAnnounce(305429, 3)
 local yellPorch         = mod:NewYell(305429, nil, nil, nil, "YELL")
 local yellPorchFades    = mod:NewShortFadesYell(305429)
@@ -156,14 +156,14 @@ function mod:UNIT_HEALTH(uId)
 			timerCallofDeadCD:Cancel()
 			timerFlameCD:Start()
 		end
-	elseif self:GetUnitCreatureId(uId) == 15690 and self:IsDifficulty("normal10") then
-		local hp = DBM:GetBossHP(uId)
-		local stage = self:GetStage()
-		if (stage == 1 and hp <= 60) then
-			self:SetStage(2)
-		elseif (stage == 2 and hp <= 30) then
-			self:SetStage(3)
-		end
+	-- elseif self:GetUnitCreatureId(uId) == 15690 and self:IsDifficulty("normal10") then
+	-- 	local hp = DBM:GetBossHP(uId)
+	-- 	local stage = self:GetStage()
+	-- 	if (stage == 1 and hp <= 60) then
+	-- 		self:SetStage(2)
+	-- 	elseif (stage == 2 and hp <= 30) then
+	-- 		self:SetStage(3)
+	-- 	end
 	end
 end
 
