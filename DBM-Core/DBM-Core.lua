@@ -81,9 +81,9 @@ local function currentFullDate()
 end
 
 DBM = {
-	Revision = parseCurseDate("20220809121000"),
+	Revision = parseCurseDate("20220810154400"),
 	DisplayVersion = GetAddOnMetadata(_addonname, "Version"), -- the string that is shown as version
-	ReleaseRevision = releaseDate(2022, 08, 09, 12, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	ReleaseRevision = releaseDate(2022, 08, 10, 15, 44, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 
 local fakeBWVersion = 7558
@@ -119,15 +119,9 @@ end
 DBM_CharSavedRevision = 2
 
 --Hard code STANDARD_TEXT_FONT since skinning mods like to taint it (or worse, set it to nil, wtf?)
-local standardFont
-if LOCALE_koKR then
-	standardFont = "Fonts\\2002.TTF"
-elseif LOCALE_zhCN then
-	standardFont = "Fonts\\ARKai_T.ttf"
-elseif LOCALE_zhTW then
-	standardFont = "Fonts\\blei00d.TTF"
-elseif LOCALE_ruRU then
-	standardFont = "Fonts\\FRIZQT___CYR.TTF"
+local standardFont = STANDARD_TEXT_FONT
+if LOCALE_ruRU then
+	standardFont = "Fonts\\ARIALN.TTF"
 else
 	standardFont = "Fonts\\FRIZQT__.TTF"
 end
@@ -841,7 +835,7 @@ do
 			if spellId and event then
 				registeredSpellIds[event][spellId] = (registeredSpellIds[event][spellId] or 0) + 1
 			else
-				print("DBM CORE 844 event or spellid is nil ->"..spellId and "s " or "nil" .."  ->" ..event and "e " or "nil")
+				print("DBM CORE 844 event or spellid is nil ->" .. spellId and "s " or "nil" .. "  ->" .. event and "e " or "nil")
 			end
 		end
 
@@ -1978,7 +1972,7 @@ do
 					raidGuids[UnitGUID(id) or ""] = name
 				end
 			end
-			private.enableIcons = false
+			--private.enableIcons = false
 			twipe(iconSeter)
 			for i, v in pairs(raid) do
 				if not v.updated then
@@ -2036,7 +2030,7 @@ do
 				raid[name].updated = true
 				raidGuids[UnitGUID(id) or ""] = name
 			end
-			private.enableIcons = false
+			--private.enableIcons = false
 			twipe(iconSeter)
 			for k, v in pairs(raid) do
 				if not v.updated then
@@ -2895,21 +2889,6 @@ do
 		self:UpdateSpecialWarningOptions()
 		self.Options.CoreSavedRevision = self.Revision
 		--Fix fonts if they are nil or set to any of standard font values
-		if not self.Options.WarningFont or
-			(
-			self.Options.WarningFont == "Fonts\\2002.TTF" or self.Options.WarningFont == "Fonts\\ARKai_T.ttf" or
-				self.Options.WarningFont == "Fonts\\blei00d.TTF" or self.Options.WarningFont == "Fonts\\FRIZQT___CYR.TTF" or
-				self.Options.WarningFont == "Fonts\\FRIZQT__.TTF") then
-			self.Options.WarningFont = "standardFont"
-		end
-		if not self.Options.SpecialWarningFont or
-			(
-			self.Options.SpecialWarningFont == "Fonts\\2002.TTF" or self.Options.SpecialWarningFont == "Fonts\\ARKai_T.ttf" or
-				self.Options.SpecialWarningFont == "Fonts\\blei00d.TTF" or
-				self.Options.SpecialWarningFont == "Fonts\\FRIZQT___CYR.TTF" or
-				self.Options.SpecialWarningFont == "Fonts\\FRIZQT__.TTF") then
-			self.Options.SpecialWarningFont = "standardFont"
-		end
 		--Migrate interupt always filter to new interrupt disable option
 		if self.Options.FilterInterrupt2 == "Always" then
 			self.Options.FilterInterrupt2 = "TandFandBossCooldown"
@@ -5392,8 +5371,8 @@ do
 				if combat then
 					for _, v in ipairs(combat) do
 						if v.mod.Options.Enabled and not v.mod.disableHealthCombat
-						and v.type:find("combat") and (v.multiMobPullDetection and checkEntry(v.multiMobPullDetection, cId)
-						or v.mob == cId) and not (#inCombat > 0 and v.noMultiBoss) then
+							and v.type:find("combat") and (v.multiMobPullDetection and checkEntry(v.multiMobPullDetection, cId)
+								or v.mob == cId) and not (#inCombat > 0 and v.noMultiBoss) then
 							if v.mod.noFriendlyEngagement and UnitIsFriend("player", uId) then return end
 							-- Delay set, > 97% = 0.5 (consider as normal pulling), max dealy limited to 20s.
 							self:StartCombat(v.mod, health > 97 and 0.5 or mmin(GetTime() - lastCombatStarted, 20), "UNIT_HEALTH", nil, health)
@@ -6410,7 +6389,8 @@ do
 end
 
 function DBM:SendCombatInfo(mod, target)
-	return SendAddonMessage("DBMv4-CombatInfo", ("%s\t%s"):format(mod.id, GetTime() - mod.combatInfo.pull), "WHISPER", target)
+	return SendAddonMessage("DBMv4-CombatInfo", ("%s\t%s"):format(mod.id, GetTime() - mod.combatInfo.pull), "WHISPER",
+		target)
 end
 
 function DBM:SendTimerInfo(mod, target)
@@ -10179,7 +10159,7 @@ do
 				colorId = self.mod.Options[self.option .. "TColor"]
 			elseif self.colorType and type(self.colorType) == "string" then --No option for specific timer, but another bool option given that tells us where to look for TColor
 				colorId = self.mod.Options[self.colorType .. "TColor"]
-			else--No option, or secondary option, set colorId to hardcoded color type
+			else --No option, or secondary option, set colorId to hardcoded color type
 				colorId = self.colorType
 			end
 			local countVoice, countVoiceMax = 0, self.countdownMax or 4
