@@ -8,18 +8,18 @@ mod:SetZone()
 
 mod:RegisterCombat("combat")
 
-mod:RegisterEvents(
-	"CHAT_MSG_MONSTER_YELL",
-	"UNIT_HEALTH"
-)
+-- mod:RegisterEvents(
+-- 	"CHAT_MSG_MONSTER_YELL",
+-- 	"UNIT_HEALTH"
+-- )
 
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 43093 43150 43213",
 	"SPELL_CAST_SUCCESS 43095 43215 43213 43093",
-	-- "CHAT_MSG_MONSTER_YELL",	--так и не понял нужно ли добавлять их в комбатЕвент
-	"SPELL_CAST_SUCCESS",
-	"SPELL_AURA_APPLIED"
-	-- "UNIT_HEALTH"	--так и не понял нужно ли добавлять их в комбатЕвент
+	"CHAT_MSG_MONSTER_YELL",
+	"SPELL_CAST_SUCCESS 43095 43215 43213 43093",
+	"SPELL_AURA_APPLIED 43093 17207 43153",
+	"UNIT_HEALTH"
 )
 -- общее
 local berserkTimer				= mod:NewBerserkTimer(600)
