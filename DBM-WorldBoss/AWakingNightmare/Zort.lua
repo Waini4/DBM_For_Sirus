@@ -281,7 +281,7 @@ function mod:UNIT_HEALTH()
 	elseif stage and UnitAffectingCombat("player") then
 		if stage == 1 then
 			local hp = DBM:GetBossHPByUnitID("boss3") -- чудовищная
-			if hp <= 10 then
+			if hp <= 1 then
 				self:NextStage() -- stage == 2
 			end
 		elseif stage == 2 then
