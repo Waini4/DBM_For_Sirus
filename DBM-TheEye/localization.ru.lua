@@ -5,15 +5,15 @@ local L
 --Alar
 L = DBM:GetModLocalization("Alar")
 
-L:SetGeneralLocalization {
+L:SetGeneralLocalization({
 	name = "Ал'ар"
-}
+})
 
-L:SetTimerLocalization {
+L:SetTimerLocalization({
 	TimerNextPlat = "След. платформа"
-}
+})
 
-L:SetWarningLocalization {
+L:SetWarningLocalization({
 	WarnPlatSoon = "Скоро следующая платформа",
 	SpecWarnFeatherNear = "Падающее перо феникса около вас - остерегайтесь",
 	WarnSupernova = "Супернова >%d<",
@@ -22,9 +22,9 @@ L:SetWarningLocalization {
 	WarnFlamefal0 = "Перья полетели, БЕГИТЕ!!!",
 
 	WarnFireSign = "Знак огня"
-}
+})
 
-L:SetOptionLocalization {
+L:SetOptionLocalization({
 	TimerNextPlat = "Отсчет времени до перелета на следующую платформу",
 	TwilightCutterCast = "Предупреждать заранее о $spell:308631",
 	WarnPlatSoon = "Предупреждение о перелете на следующую платформу",
@@ -38,21 +38,21 @@ L:SetOptionLocalization {
 	WarnSupernova = "Предупреждение о ваших стаках $spell:308636",
 	WarnFlamefal0 = "Предупреждение, что перья полетели!!!",
 	WarnFireSign = "Объявить в рейд о касте знака огня"
-}
+})
 
 
-L:SetMiscLocalization {
+L:SetMiscLocalization({
 	YellFeather = "Перо падает на меня!",
-}
+})
 
 --Solarian
 L = DBM:GetModLocalization("Solarian")
 
-L:SetGeneralLocalization {
+L:SetGeneralLocalization({
 	name = "Верховный звездочет Солариан"
-}
+})
 
-L:SetTimerLocalization {
+L:SetTimerLocalization({
 	TimerNextRing = "Ослепление",
 	TimerNextStar = "Звездное пламя",
 	TimerNextHelp = "Вызов послушников",
@@ -60,13 +60,13 @@ L:SetTimerLocalization {
 	TimerNextHeal = "Высшее исцеление",
 	TimerAdds = "Вызов послушников",
 	TimerPriests = "Вызов жрецов"
-}
+})
 
-L:SetWarningLocalization {
+L:SetWarningLocalization({
 	WarnAddsSoon = "Скоро вызов послушников"
-}
+})
 
-L:SetOptionLocalization {
+L:SetOptionLocalization({
 	WarnAddsSoon   = "Предупреждение о скором вызове послушников",
 	TimerNextRing  = "Отсчет времени до следующего $spell:308563 ",
 	TimerNextStar  = "Отсчет времени до следующего $spell:308565 ",
@@ -76,9 +76,9 @@ L:SetOptionLocalization {
 	TimerAdds      = "Отсчет времени до следующих послушников",
 	TimerPriests   = "Отсчет времени до следующих жрецов",
 	Zrec           = "Показывать стрелку на Жреца"
-}
+})
 
-L:SetMiscLocalization {
+L:SetMiscLocalization({
 	YellPull = "Тал ану-мен но син-дорай!",
 	YellAdds = "Вы безнадежно слабы!",
 	YellPriests = "Я навсегда избавлю вас от мании величия!",
@@ -87,40 +87,40 @@ L:SetMiscLocalization {
 	Provid = "Провидец из зала Солориана",
 	BeaconIconSet = "{Череп}{Череп}{rt%d}Гнев на:{Череп}{Череп}{Череп}%s{Череп}{Череп}{Череп}",
 
-}
+})
 
 --VoidReaver
 L = DBM:GetModLocalization("VoidReaver")
 
-L:SetGeneralLocalization {
+L:SetGeneralLocalization({
 	name = "Страж Бездны"
-}
+})
 
-L:SetWarningLocalization {
+L:SetWarningLocalization({
 	Phase1 = "ВНИМАНИЕ!!! ФАЗА пониженного УРОНА!!!",
 	Phase2 = "ВНИМАНИЕ!!! ФАЗА ПОВЫШЕННОГО УРОНА!!!"
-}
+})
 
-L:SetOptionLocalization {
+L:SetOptionLocalization({
 	Phase1               = "Предупреждать о фазе с пониженным уроном",
 	Phase2               = "Предупреждать о фазе с повышенным уроном",
 	SetIconOnSignTargets = "Устанавливать иконки на цели $spell:308471",
 	AnnounceSign         = "Объявлять игроков, на кого установлен $spell:308471, в рейд чат"
-}
+})
 
-L:SetMiscLocalization {
+L:SetMiscLocalization({
 	YellPull = "Внимание! Вы подлежите уничтожению!",
 	SignIcon = "Чародейский знак {rt%d} установлен на: %s"
-}
+})
 
 --KaelThas
 L = DBM:GetModLocalization("KaelThas")
 
-L:SetGeneralLocalization {
+L:SetGeneralLocalization({
 	name = "Кель'тас Солнечный Скиталец"
-}
+})
 
-L:SetTimerLocalization {
+L:SetTimerLocalization({
 	TimerNextAdd = "%s",
 	TimerPhase3 = "Фаза 3",
 	TimerPhase4 = "Фаза 4",
@@ -128,17 +128,17 @@ L:SetTimerLocalization {
 	TimerGravity = "Падение",
 	Keltac = "Отсчет появления келя"
 
-}
+})
 
-L:SetWarningLocalization {
+L:SetWarningLocalization({
 	WarnNextAdd = "%s на подходе",
 	WarnPhase = "%s",
 	WarnTalaTarget = "Таладред преследует %s",
 	SpecWarnTalaTarget = "Вас преследует Таладред - бегите"
 
-}
+})
 
-L:SetOptionLocalization {
+L:SetOptionLocalization({
 	WarnNextAdd               = "Объявление о скорой активации следующего помощника",
 	TimerNextAdd              = "Отсчет времени до следующего помощника",
 	WarnPhase                 = "Анонс перехода на след. фазу",
@@ -159,11 +159,11 @@ L:SetOptionLocalization {
 	Avenger                   = DBML.AUTO_ARROW_OPTION_TEXT:format(308743),
 	YellOnAvenger             = DBML.AUTO_YELL_OPTION_TEXT.shortyell:format(308743),
 	AvengerLatencyCheck       = "Отключить синхр-цию для $spell:308743\n(используйте только в случае возникновения проблем)",
-	Keltac 					  = "Отсчет до появления Кель'таса"
-}
+	Keltac                    = "Отсчет до появления Кель'таса"
+})
 
-L:SetMiscLocalization {
-	YellPhase1  = "Энергия. Сила. Мои люди без них не могут... Эта зависимость возникла после уничтожения Солнечного Колодца. Добро пожаловать... в будущее. Мне очень жаль, но вы не сможете ничего изменить. Теперь меня никто не остановит! Селама ашаль-аноре!",
+L:SetMiscLocalization({
+	YellPhase1  = "Мне очень жаль, но вы не сможете ничего изменить. Теперь меня никто не остановит! Селама ашаль-аноре!",
 	YellSang    = "Вы справились с моими лучшими советниками... Но перед мощью Кровавого Молота не устоит никто. Узрите лорда Сангвинара!",
 	YellCaper   = "Каперниан проследит, чтобы вы не задержались здесь надолго.",
 	YellTelon   = "Неплохо, теперь вы можете потягаться с моим главным инженером Телоникусом.",
@@ -183,12 +183,12 @@ L:SetMiscLocalization {
 	Kel         = "Кель'тас Солнечный Скиталец",
 	Vzriv       = "Взрыв {rt%d} установлен на %s",
 	YellAvenger = "{череп}|cff71d5ff|Hspell:308743|h[Щит мстителя]|h|r{череп}ЛЕТИТ В МЕНЯ!{череп}"
-}
+})
 
 
 --Trash
 L = DBM:GetModLocalization("Trash")
 
-L:SetGeneralLocalization {
+L:SetGeneralLocalization({
 	name = "Трэш мобы"
-}
+})

@@ -1,43 +1,43 @@
-local mod	= DBM:NewMod("Netherspite", "DBM-Karazhan")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Netherspite", "DBM-Karazhan")
+local L   = mod:GetLocalizedStrings()
 
-mod:SetRevision("20210502220000")  -- fxpw check 202206151120000
+mod:SetRevision("20210502220000") -- fxpw check 202206151120000
 mod:SetCreatureID(15689)
 mod:RegisterCombat("combat")
 
-mod:RegisterEventsInCombat(
-	"SPELL_CAST_START 38523	305407",
+mod:RegisterEvents(
+	"SPELL_CAST_START 38523 305407",
 	"SPELL_AURA_APPLIED 305402 305403 305404 305408 305409",
 	"SPELL_CAST_SUCCESS 37014 37063",
 	"SPELL_PERIODIC_DAMAGE 30533",
 	"CHAT_MSG_RAID_BOSS_EMOTE"
 )
 
-local warningPortalSoon		= mod:NewAnnounce("DBM_NS_WARN_PORTAL_SOON", 2, "Interface\\Icons\\Spell_Arcane_PortalIronForge")
-local warningBanishSoon		= mod:NewAnnounce("DBM_NS_WARN_BANISH_SOON", 2, "Interface\\Icons\\Spell_Shadow_Cripple")
-local warningPortal			= mod:NewAnnounce("warningPortal", 3, "Interface\\Icons\\Spell_Arcane_PortalIronForge")
-local warningBanish			= mod:NewAnnounce("warningBanish", 3, "Interface\\Icons\\Spell_Shadow_Cripple")
-local warningBreathCast		= mod:NewCastAnnounce(38523, 2)
-local warningVoid			= mod:NewSpellAnnounce(37063, 3)
+local warningPortalSoon = mod:NewAnnounce("DBM_NS_WARN_PORTAL_SOON", 2, "Interface\\Icons\\Spell_Arcane_PortalIronForge")
+local warningBanishSoon = mod:NewAnnounce("DBM_NS_WARN_BANISH_SOON", 2, "Interface\\Icons\\Spell_Shadow_Cripple")
+local warningPortal     = mod:NewAnnounce("warningPortal", 3, "Interface\\Icons\\Spell_Arcane_PortalIronForge")
+local warningBanish     = mod:NewAnnounce("warningBanish", 3, "Interface\\Icons\\Spell_Shadow_Cripple")
+local warningBreathCast = mod:NewCastAnnounce(38523, 2)
+local warningVoid       = mod:NewSpellAnnounce(37063, 3)
 
-local specWarnVoid			= mod:NewSpecialWarningMove(30533)
+local specWarnVoid = mod:NewSpecialWarningMove(30533)
 
-local timerPortalPhase		= mod:NewTimer(61.5, "timerPortalPhase", "Interface\\Icons\\Spell_Arcane_PortalIronForge")
-local timerBanishPhase		= mod:NewTimer(31, "timerBanishPhase", "Interface\\Icons\\Spell_Shadow_Cripple")
-local timerBreathCast		= mod:NewCastTimer(2.5, 38523)
+local timerPortalPhase = mod:NewTimer(61.5, "timerPortalPhase", "Interface\\Icons\\Spell_Arcane_PortalIronForge")
+local timerBanishPhase = mod:NewTimer(31, "timerBanishPhase", "Interface\\Icons\\Spell_Shadow_Cripple")
+local timerBreathCast  = mod:NewCastTimer(2.5, 38523)
 
-local timerGates            = mod:NewTimer(13, "TimerGates" ,305400)
-local timerGhostPhase       = mod:NewTimer(75, "TimerGhostPhase" ,305408)
-local timerRepentance       = mod:NewTimer(30, "TimerRepentance" ,305408)
-local timerPortals          = mod:NewTimer(15, "TimerPortals" , 33404)
-local timerNormalPhase      = mod:NewTimer(60, "TimerNormalPhase" ,23684)
-local specWarnGates			= mod:NewSpecialWarningYou(305403)
-local warnGates			    = mod:NewTargetAnnounce(305403, 3)
-local timerBreatheCD        = mod:NewCDTimer(13, 305407)
+local timerGates       = mod:NewTimer(13, "TimerGates", 305400)
+local timerGhostPhase  = mod:NewTimer(75, "TimerGhostPhase", 305408)
+local timerRepentance  = mod:NewTimer(30, "TimerRepentance", 305408)
+local timerPortals     = mod:NewTimer(15, "TimerPortals", 33404)
+local timerNormalPhase = mod:NewTimer(60, "TimerNormalPhase", 23684)
+local specWarnGates    = mod:NewSpecialWarningYou(305403)
+local warnGates        = mod:NewTargetAnnounce(305403, 3)
+local timerBreatheCD   = mod:NewCDTimer(13, 305407)
 
 -- local warnSound						= mod:NewSoundAnnounce()
 
-local berserkTimer			= mod:NewBerserkTimer(540)
+local berserkTimer = mod:NewBerserkTimer(540)
 
 local gatesTargets = {}
 mod.vb.breatheCount = 0
@@ -46,8 +46,8 @@ function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 15689, "Netherspite")
 	if mod:IsDifficulty("normal10") then
 		berserkTimer:Start(-delay)
-		timerPortalPhase:Start(62-delay)
-		warningBanishSoon:Schedule(57-delay)
+		timerPortalPhase:Start(62 - delay)
+		warningBanishSoon:Schedule(57 - delay)
 	elseif mod:IsDifficulty("heroic10") then
 		timerGates:Start()
 		timerGhostPhase:Start()
@@ -107,6 +107,7 @@ function mod:SPELL_PERIODIC_DAMAGE(args)
 		lastVoid = GetTime()
 	end
 end
+
 -- end
 
 function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg)

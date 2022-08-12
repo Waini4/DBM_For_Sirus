@@ -81,9 +81,9 @@ local function currentFullDate()
 end
 
 DBM = {
-	Revision = parseCurseDate("20220802185400"),
+	Revision = parseCurseDate("20220810154400"),
 	DisplayVersion = GetAddOnMetadata(_addonname, "Version"), -- the string that is shown as version
-	ReleaseRevision = releaseDate(2022, 8, 02, 18, 54, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	ReleaseRevision = releaseDate(2022, 08, 10, 15, 44, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 
 local fakeBWVersion = 7558
@@ -119,15 +119,9 @@ end
 DBM_CharSavedRevision = 2
 
 --Hard code STANDARD_TEXT_FONT since skinning mods like to taint it (or worse, set it to nil, wtf?)
-local standardFont
-if LOCALE_koKR then
-	standardFont = "Fonts\\2002.TTF"
-elseif LOCALE_zhCN then
-	standardFont = "Fonts\\ARKai_T.ttf"
-elseif LOCALE_zhTW then
-	standardFont = "Fonts\\blei00d.TTF"
-elseif LOCALE_ruRU then
-	standardFont = "Fonts\\FRIZQT___CYR.TTF"
+local standardFont = STANDARD_TEXT_FONT
+if LOCALE_ruRU then
+	standardFont = "Fonts\\ARIALN.TTF"
 else
 	standardFont = "Fonts\\FRIZQT__.TTF"
 end
@@ -838,7 +832,11 @@ do
 			if not registeredSpellIds[event] then
 				registeredSpellIds[event] = {}
 			end
-			registeredSpellIds[event][spellId] = (registeredSpellIds[event][spellId] or 0) + 1
+			if spellId and event then
+				registeredSpellIds[event][spellId] = (registeredSpellIds[event][spellId] or 0) + 1
+			else
+				print("DBM CORE 844 event or spellid is nil ->" .. spellId and "s " or "nil" .. "  ->" .. event and "e " or "nil")
+			end
 		end
 
 		function unregisterSpellId(event, spellId)
@@ -1974,7 +1972,7 @@ do
 					raidGuids[UnitGUID(id) or ""] = name
 				end
 			end
-			private.enableIcons = false
+			--private.enableIcons = false
 			twipe(iconSeter)
 			for i, v in pairs(raid) do
 				if not v.updated then
@@ -2032,7 +2030,7 @@ do
 				raid[name].updated = true
 				raidGuids[UnitGUID(id) or ""] = name
 			end
-			private.enableIcons = false
+			--private.enableIcons = false
 			twipe(iconSeter)
 			for k, v in pairs(raid) do
 				if not v.updated then
@@ -2891,21 +2889,6 @@ do
 		self:UpdateSpecialWarningOptions()
 		self.Options.CoreSavedRevision = self.Revision
 		--Fix fonts if they are nil or set to any of standard font values
-		if not self.Options.WarningFont or
-			(
-			self.Options.WarningFont == "Fonts\\2002.TTF" or self.Options.WarningFont == "Fonts\\ARKai_T.ttf" or
-				self.Options.WarningFont == "Fonts\\blei00d.TTF" or self.Options.WarningFont == "Fonts\\FRIZQT___CYR.TTF" or
-				self.Options.WarningFont == "Fonts\\FRIZQT__.TTF") then
-			self.Options.WarningFont = "standardFont"
-		end
-		if not self.Options.SpecialWarningFont or
-			(
-			self.Options.SpecialWarningFont == "Fonts\\2002.TTF" or self.Options.SpecialWarningFont == "Fonts\\ARKai_T.ttf" or
-				self.Options.SpecialWarningFont == "Fonts\\blei00d.TTF" or
-				self.Options.SpecialWarningFont == "Fonts\\FRIZQT___CYR.TTF" or
-				self.Options.SpecialWarningFont == "Fonts\\FRIZQT__.TTF") then
-			self.Options.SpecialWarningFont = "standardFont"
-		end
 		--Migrate interupt always filter to new interrupt disable option
 		if self.Options.FilterInterrupt2 == "Always" then
 			self.Options.FilterInterrupt2 = "TandFandBossCooldown"
@@ -3081,15 +3064,15 @@ do
 		if _G["BigWigs"] or modAdvertisementShown then return end --If they are running two boss mods at once, lets assume they are only using DBM for a specific feature (such as brawlers) and not nag
 		local timeWalking = savedDifficulty == "timewalker"
 		if oldDungeons[LastInstanceMapID] and (timeWalking or playerLevel < 50) and not GetAddOnInfo("DBM-Party-BC") then
-			AddMsg(self, L.MOD_AVAILABLE:format("DBM Old Dungeon mods"))
-			modAdvertisementShown = true
+			AddMsg(self, L.MOD_AVAILABLE:format("DBM Dungeon mods"))
+			-- modAdvertisementShown = true
 		elseif (classicZones[LastInstanceMapID] or bcZones[LastInstanceMapID]) and (timeWalking or playerLevel < 31) and
 			not GetAddOnInfo("DBM-BlackTemple") then
 			AddMsg(self, L.MOD_AVAILABLE:format("DBM BC/Vanilla mods"))
-			modAdvertisementShown = true
+			-- modAdvertisementShown = true
 		elseif wrathZones[LastInstanceMapID] and (timeWalking or playerLevel < 31) and not GetAddOnInfo("DBM-Ulduar") then
 			AddMsg(self, L.MOD_AVAILABLE:format("DBM Wrath of the Lich King mods"))
-			modAdvertisementShown = true
+			-- modAdvertisementShown = true
 		end
 		local _, instanceType = GetInstanceInfo()
 		if (pvpZones[LastInstanceMapID] or instanceType == "arena") and not GetAddOnInfo("DBM-PvP") then
@@ -4752,7 +4735,7 @@ do
 		local combat = combatInfo[LastInstanceMapID] or combatInfo[LastInstanceZoneName]
 		if dbmIsEnabled and combat then
 			for _, v in ipairs(combat) do
-				if v.type:find("combat") and not v.noRegenDetection then
+				if v.type:find("combat") and not v.noRegenDetection and not (#inCombat > 0 and v.noMultiBoss) then
 					if v.multiMobPullDetection then
 						for _, mob in ipairs(v.multiMobPullDetection) do
 							if checkForPull(mob, v) then
@@ -4816,7 +4799,7 @@ do
 		if dbmIsEnabled and combat then
 			self:Debug("INSTANCE_ENCOUNTER_ENGAGE_UNIT event fired for zoneId" .. LastInstanceMapID, 3)
 			for _, v in ipairs(combat) do
-				if not v.noIEEUDetection then
+				if not v.noIEEUDetection and not (#inCombat > 0 and v.noMultiBoss) then
 					if v.type:find("combat") and isBossEngaged(v.multiMobPullDetection or v.mob) then
 						self:StartCombat(v.mod, 0, "IEEU")
 					end
@@ -5153,7 +5136,7 @@ do
 			mod.inCombat = true
 			encounterInProgress = true
 			mod.blockSyncs = nil
-			mod.combatInfo.pull = GetTime() - (delay or 0)
+			mod.combatInfo.pull = (GetTime() - (delay or 0)) or 0
 			bossuIdFound = event == "IEEU"
 			if (self.Options.AlwaysShowHealthFrame or mod.Options.HealthFrame) and mod.Options.Enabled then
 				self.BossHealth:Show(mod.localization.general.name)
@@ -5209,11 +5192,12 @@ do
 			end
 			if self.Options.HideObjectivesFrame and GetNumTrackedAchievements() == 0 then -- doesn't need InCombatLockdown() check since it's not a protected function
 				if WatchFrame:IsVisible() then
-					WatchFrame_Collapse(WatchFrame)
-					self:Schedule(0.05,
-						function() -- repeating the function with a delay because of a bug in the game where the WatchFrame only gets pushed to the side and doesn't collapse.
-							WatchFrame_Collapse(WatchFrame)
-						end)
+					-- WatchFrame_Collapse(WatchFrame)
+					-- self:Schedule(0.05,
+					-- 	function() -- repeating the function with a delay because of a bug in the game where the WatchFrame only gets pushed to the side and doesn't collapse.
+					-- 		WatchFrame_Collapse(WatchFrame)
+					-- 	end)
+					WatchFrame:Hide()
 					watchFrameRestore = true
 				end
 			end
@@ -5386,8 +5370,9 @@ do
 				local combat = combatInfo[LastInstanceMapID] or combatInfo[LastInstanceZoneName]
 				if combat then
 					for _, v in ipairs(combat) do
-						if v.mod.Options.Enabled and not v.mod.disableHealthCombat and v.type:find("combat") and
-							(v.multiMobPullDetection and checkEntry(v.multiMobPullDetection, cId) or v.mob == cId) then
+						if v.mod.Options.Enabled and not v.mod.disableHealthCombat
+							and v.type:find("combat") and (v.multiMobPullDetection and checkEntry(v.multiMobPullDetection, cId)
+								or v.mob == cId) and not (#inCombat > 0 and v.noMultiBoss) then
 							if v.mod.noFriendlyEngagement and UnitIsFriend("player", uId) then return end
 							-- Delay set, > 97% = 0.5 (consider as normal pulling), max dealy limited to 20s.
 							self:StartCombat(v.mod, health > 97 and 0.5 or mmin(GetTime() - lastCombatStarted, 20), "UNIT_HEALTH", nil, health)
@@ -5524,8 +5509,8 @@ do
 				local thisTime = GetTime() - (mod.combatInfo.pull or 0)
 				local lastTime = mod.stats[statVarTable[savedDifficulty] .. "LastTime"]
 				local bestTime = mod.stats[statVarTable[savedDifficulty] .. "BestTime"]
-				if not mod.stats[statVarTable[savedDifficulty] .. "Kills"] or mod.stats[statVarTable[savedDifficulty] .. "Kills"] < 0 then mod
-						.stats[statVarTable[savedDifficulty] .. "Kills"] = 0
+				if not mod.stats[statVarTable[savedDifficulty] .. "Kills"] or mod.stats[statVarTable[savedDifficulty] .. "Kills"] < 0 then
+					mod.stats[statVarTable[savedDifficulty] .. "Kills"] = 0
 				end
 				--Fix logical error i've seen where for some reason we have more kills then pulls for boss as seen by - stats for wipe messages.
 				mod.stats[statVarTable[savedDifficulty] .. "Kills"] = mod.stats[statVarTable[savedDifficulty] .. "Kills"] + 1
@@ -5616,7 +5601,8 @@ do
 				self.Arrow:Hide(true)
 				-- doesn't need InCombatLockdown() check since it's not a protected function
 				if watchFrameRestore then
-					WatchFrame_Expand(WatchFrame)
+					-- WatchFrame_Expand(WatchFrame)
+					WatchFrame:Show()
 					watchFrameRestore = false
 				end
 				if tooltipsHidden then
@@ -10168,16 +10154,19 @@ do
 					end
 				end
 			end
-			local colorId = 0
+			local colorId
 			if self.option then
 				colorId = self.mod.Options[self.option .. "TColor"]
 			elseif self.colorType and type(self.colorType) == "string" then --No option for specific timer, but another bool option given that tells us where to look for TColor
-				colorId = self.mod.Options[self.colorType .. "TColor"] or 0
+				colorId = self.mod.Options[self.colorType .. "TColor"]
+			else --No option, or secondary option, set colorId to hardcoded color type
+				colorId = self.colorType
 			end
 			local countVoice, countVoiceMax = 0, self.countdownMax or 4
 			if self.option then
 				countVoice = self.mod.Options[self.option .. "CVoice"]
 				if not self.fade and (type(countVoice) == "string" or countVoice > 0) then --Started without faded and has count voice assigned
+					DBM:Unschedule(playCountSound, id) -- Prevents count sound if timer is started again before timer expires
 					playCountdown(id, timer, countVoice, countVoiceMax) --timerId, timer, voice, count
 				end
 			end
@@ -11361,6 +11350,9 @@ function bossModPrototype:RegisterCombat(cType, ...)
 	if self.noRegenDetection then
 		info.noRegenDetection = self.noRegenDetection
 	end
+	if self.noMultiBoss then
+		info.noMultiBoss = self.noMultiBoss
+	end
 	if self.WBEsync then
 		info.WBEsync = self.WBEsync
 	end
@@ -11452,6 +11444,13 @@ function bossModPrototype:DisableRegenDetection()
 	self.noRegenDetection = true
 	if self.combatInfo then
 		self.combatInfo.noRegenDetection = true
+	end
+end
+
+function bossModPrototype:DisableMultiBossPulls()
+	self.noMultiBoss = true
+	if self.combatInfo then
+		self.combatInfo.noMultiBoss = true
 	end
 end
 

@@ -8,18 +8,18 @@ mod:SetZone()
 
 mod:RegisterCombat("combat")
 
-mod:RegisterEvents(
-	"CHAT_MSG_MONSTER_YELL",
-	"UNIT_HEALTH"
-)
+-- mod:RegisterEvents(
+-- 	"CHAT_MSG_MONSTER_YELL",
+-- 	"UNIT_HEALTH"
+-- )
 
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 43093 43150 43213",
 	"SPELL_CAST_SUCCESS 43095 43215 43213 43093",
-	-- "CHAT_MSG_MONSTER_YELL",	--так и не понял нужно ли добавлять их в комбатЕвент
-	"SPELL_CAST_SUCCESS",
-	"SPELL_AURA_APPLIED"
-	-- "UNIT_HEALTH"	--так и не понял нужно ли добавлять их в комбатЕвент
+	"CHAT_MSG_MONSTER_YELL",
+	"SPELL_CAST_SUCCESS 43095 43215 43213 43093",
+	"SPELL_AURA_APPLIED 43093 17207 43153",
+	"UNIT_HEALTH"
 )
 -- общее
 local berserkTimer				= mod:NewBerserkTimer(600)
@@ -145,20 +145,20 @@ function mod:UNIT_HEALTH(uId)
 	if self:GetUnitCreatureId(uId) == 23863 then
 		local hp = DBM:GetBossHP(uId)
 		local stage = self:GetStage()
-		if (hp <= 81 and stage == 1) then
+		if (stage == 1 and hp <= 81) then
 			self:SetStage(2)
 			-- phaseCounter = phaseCounter + 1
 			warnNextPhaseSoon:Show(L.Bear)
-		elseif (hp <= 61 and stage == 2) then
+		elseif (stage == 2 and hp <= 61) then
 			self:SetStage(3)
 			-- phaseCounter = phaseCounter + 1
 			-- timerParalysis:Cancel()
 			warnNextPhaseSoon:Show(L.Hawk)
-		elseif (hp <= 41 and stage == 3) then
+		elseif (stage == 3 and hp <= 41) then
 			self:SetStage(4)
 			-- phaseCounter = phaseCounter + 1
 			warnNextPhaseSoon:Show(L.Lynx)
-		elseif (hp <= 20 and stage == 4) then
+		elseif (stage == 4 and hp <= 20) then
 			-- phaseCounter = phaseCounter + 1
 			warnNextPhaseSoon:Show(L.Dragon)
 			-- self:SetStage(5)

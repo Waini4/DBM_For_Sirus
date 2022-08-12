@@ -1,5 +1,6 @@
 local mod = DBM:NewMod("Moroes", "DBM-Karazhan")
 local L   = mod:GetLocalizedStrings()
+local CL  = DBM_COMMON_L
 
 mod:SetRevision("20210502220000") -- fxpw check 202206151120000
 mod:SetCreatureID(15687, 19875, 19874, 19872, 17007, 19876, 19873) --Moroes
@@ -7,7 +8,7 @@ mod:SetCreatureID(15687, 19875, 19874, 19872, 17007, 19876, 19873) --Moroes
 --mod:RegisterCombat("yell", L.DBM_MOROES_YELL_START)
 mod:RegisterCombat("combat")
 
-mod:RegisterEventsInCombat(
+mod:RegisterEvents(
 	"SPELL_CAST_START 305464 305463 305472",
 	"SPELL_AURA_APPLIED 305470 305478 305460",
 	-- "SPELL_AURA_REMOVED",
@@ -26,10 +27,10 @@ local specWarnDance = mod:NewSpecialWarningSoak(305472, nil, nil, nil, 1, 2) -- 
 local specWarnMark  = mod:NewSpecialWarningRun(305470, nil, nil, nil, 1, 3) -- метка
 
 
-local timerPierceCD    = mod:NewCDTimer(10, 305464, nil, nil, nil, 5, nil, DBM_CORE_TANK_ICON)
-local timerWoundCD     = mod:NewCDTimer(10, 305463, nil, nil, nil, 5, nil, DBM_CORE_TANK_ICON)
-local timerDeathMark   = mod:NewTargetTimer(7, 305470, nil, nil, nil, 5, nil, DBM_CORE_HEALER_ICON) -- метка
-local timerDeathMarkCD = mod:NewCDTimer(25, 305470, nil, nil, nil, 3, nil, DBM_CORE_HEALER_ICON) -- метка
+local timerPierceCD    = mod:NewCDTimer(10, 305464, nil, nil, nil, 5, nil, CL.TANK_ICON)
+local timerWoundCD     = mod:NewCDTimer(10, 305463, nil, nil, nil, 5, nil, CL.TANK_ICON)
+local timerDeathMark   = mod:NewTargetTimer(7, 305470, nil, nil, nil, 5, nil, CL.HEALER_ICON) -- метка
+local timerDeathMarkCD = mod:NewCDTimer(25, 305470, nil, nil, nil, 3, nil, CL.HEALER_ICON) -- метка
 local timerPhase2      = mod:NewTimer(180, "Phase2", 40810, nil, nil, 6)
 local timerDanceCD     = mod:NewCDTimer(20, "Dance", 305472, nil, nil, nil, 7) -- танец
 local timerSpreeCD     = mod:NewCDTimer(85, "Spree", 305461, nil, nil, 6) -- череда

@@ -5,16 +5,17 @@ mod:SetRevision("20210502220000") -- fxpw check 202206151120000
 mod:SetCreatureID(15550, 34972, 34972, 100507)
 mod:RegisterCombat("combat")
 
-mod:RegisterEvents(
+--[[mod:RegisterEvents(
 	"PLAYER_REGEN_DISABLED"
-)
-mod:RegisterEventsInCombat(
+)]]
+mod:RegisterEvents(
 	"SPELL_AURA_APPLIED 43127 29833 305265 305253 305253",
 	"SPELL_AURA_REMOVED 305265",
 	"CHAT_MSG_MONSTER_YELL",
 	"SPELL_CAST_START 305258 305263 305251 305259",
 	"UNIT_HEALTH",
 	-- "UNIT_DIED",
+	"PLAYER_REGEN_DISABLED",
 	"SPELL_CAST_SUCCESS 305253"
 )
 

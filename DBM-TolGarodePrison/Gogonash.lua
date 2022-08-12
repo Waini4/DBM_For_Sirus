@@ -1,5 +1,5 @@
-local mod = DBM:NewMod("Gogonash", "DBM-Tol'GarodePrison")
-local L   = mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Gogonash", "DBM-TolGarodePrison")
+-- local L   = mod:GetLocalizedStrings()
 local CL  = DBM_COMMON_L
 
 mod:SetRevision("20220312000000") -- fxpw check 20220609123000
@@ -61,7 +61,7 @@ local f = CreateFrame("Frame", nil, UIParent)
 f:RegisterEvent("PLAYER_REGEN_DISABLED")
 f:SetScript("OnEvent", function(self)
 	for i = 1, MAX_RAID_MEMBERS do
-		local pt = UnitName("raid" .. i .. "-target")
+		local pt = UnitName("raid" .. i .. "target")
 		if pt and pt == "Гогонаш" then
 			DBM:FireCustomEvent("DBM_EncounterStart", 84000, "Gogonash")
 			--	self:SetStage(1)

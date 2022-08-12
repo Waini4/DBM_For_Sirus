@@ -1,5 +1,6 @@
-local mod	= DBM:NewMod("Nightbane", "DBM-Karazhan")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Nightbane", "DBM-Karazhan")
+local L   = mod:GetLocalizedStrings()
+local CL  = DBM_COMMON_L
 
 mod:SetRevision("20210502220000") -- fxpw check 202206151120000
 mod:SetCreatureID(17225)
@@ -7,13 +8,13 @@ mod:SetCreatureID(17225)
 mod:RegisterCombat("combat", 17225)
 mod:SetUsedIcons(6, 7, 8)
 
-mod:RegisterEventsInCombat(
+mod:RegisterEvents(
 	"SPELL_CAST_START 305375 305377 305386",
 	"SPELL_CAST_SUCCESS 305380",
 	"SPELL_AURA_APPLIED 305382 305388",
 	"SPELL_AURA_REMOVED 305388",
 	"CHAT_MSG_MONSTER_EMOTE"
-	-- "UNIT_HEALTH"
+-- "UNIT_HEALTH"
 )
 
 -- local warningBone			= mod:NewSpellAnnounce(37098, 3)
@@ -73,33 +74,31 @@ mod:RegisterEventsInCombat(
 -- 	end
 -- end
 
-local warnPyromancer			= mod:NewTargetAnnounce(305382, 3)
+local warnPyromancer = mod:NewTargetAnnounce(305382, 3)
 -- local warnSound						= mod:NewSoundAnnounce()
 
-local specWarnPyromancer	    = mod:NewSpecialWarningYou(305382, nil, nil, nil, 1, 3)
+local specWarnPyromancer = mod:NewSpecialWarningYou(305382, nil, nil, nil, 1, 3)
 
-local timerGrievingFireCD		= mod:NewCDTimer(13, 305375, nil, nil, nil, 2)
-local timerPyroCD	          	= mod:NewCDTimer(90, 305380, nil, nil, nil,3)
-local timerConflCD			    = mod:NewCDTimer(30, 305377, nil, nil, nil, 3, nil, DBM_CORE_TANK_ICON)
-local timerNightbane		    = mod:NewTimer(34, "timerNightbane", "Interface\\Icons\\Ability_Mount_Undeadhorse", nil, nil, 6)
+local timerGrievingFireCD = mod:NewCDTimer(13, 305375, nil, nil, nil, 2)
+local timerPyroCD         = mod:NewCDTimer(90, 305380, nil, nil, nil, 3)
+local timerConflCD        = mod:NewCDTimer(30, 305377, nil, nil, nil, 3, nil, CL.TANK_ICON)
+local timerNightbane      = mod:NewTimer(34, "timerNightbane", "Interface\\Icons\\Ability_Mount_Undeadhorse", nil, nil, 6)
 
 
-local pyromancerTargets		= {}
-mod.vb.alivePyromancers      = 0
-mod.vb.groundPhase = 0
-mod.vb.conflCount = 0
-mod.vb.isPyroFirst = true
-mod.vb.isStart = true
+local pyromancerTargets = {}
+mod.vb.alivePyromancers = 0
+mod.vb.groundPhase      = 0
+mod.vb.conflCount       = 0
+mod.vb.isPyroFirst      = true
+mod.vb.isStart          = true
 
 mod:AddBoolOption("RemoveWeaponOnMindControl", true)
-mod:AddSetIconOption("SetIconOnPyromancer",305382, true, true, {6, 7, 8})
+mod:AddSetIconOption("SetIconOnPyromancer", 305382, true, true, { 6, 7, 8 })
 mod:AddBoolOption("AnnouncePyromancerIcons", true)
 
 function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 17225, "Nightbane")
-	if mod:IsDifficulty("normal10") then
-
-	elseif mod:IsDifficulty("heroic10") and self.vb.isStart then
+	if mod:IsDifficulty("heroic10") and self.vb.isStart then
 		timerGrievingFireCD:Start()
 		timerConflCD:Start()
 		timerPyroCD:Start()
@@ -123,14 +122,15 @@ function mod:SPELL_CAST_START(args)
 		-- local name = {"orgasm", "AAAAA", "AAAA_lew"} --танец
 		-- name  = name[math.random(#name)]
 		-- warnSound:Play(name)
-		if self.vb.conflCount <=1 then
+		if self.vb.conflCount <= 1 then
 			timerConflCD:Start()
 			self.vb.conflCount = self.vb.conflCount + 1
 		else
 			self.vb.conflCount = 0
 		end
 	elseif args:IsSpellID(305386) then
-		if UnitAura("player", L.Pyromancer, nil, "HARMFUL") or UnitAura("player", L.Hypothermia, nil, "HARMFUL") and self.Options.RemoveWeaponOnMindControl then
+		if UnitAura("player", L.Pyromancer, nil, "HARMFUL") or
+			UnitAura("player", L.Hypothermia, nil, "HARMFUL") and self.Options.RemoveWeaponOnMindControl then
 			if self:IsWeaponDependent("player") then
 				PickupInventoryItem(16)
 				PutItemInBackpack()
@@ -152,8 +152,8 @@ end
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(305380) then
 		timerPyroCD:Start()
--- 	elseif args:IsSpellID(37098) then
--- 		warningBone:Show()
+		-- 	elseif args:IsSpellID(37098) then
+		-- 		warningBone:Show()
 	end
 end
 
@@ -166,7 +166,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if #pyromancerTargets >= 3 and self.vb.isPyroFirst then
 			warnPyromancer:Show(table.concat(pyromancerTargets, "<, >"))
 			if self.Options.SetIconOnPyromancer then
-				table.sort(pyromancerTargets, function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
+				table.sort(pyromancerTargets, function(v1, v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 				local pyroIcons = 8
 				for _, v in ipairs(pyromancerTargets) do
 					if self.Options.AnnouncePyromancerIcons then
@@ -193,9 +193,10 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 	end
 end
- function mod:CHAT_MSG_MONSTER_EMOTE(msg)
+
+function mod:CHAT_MSG_MONSTER_EMOTE(msg)
 	if msg == L.DBM_NB_EMOTE_PULL then
 		timerNightbane:Start()
 		self.vb.isStart = true
 	end
- end
+end
