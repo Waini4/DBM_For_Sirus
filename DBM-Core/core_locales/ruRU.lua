@@ -187,8 +187,9 @@ L.VOICE_DISABLED            = "У Вас установлен по крайне�
 L.VOICE_COUNT_MISSING       = "Голос отсчёта %d использует голосовой пакет, который не был найден. Он был сброшен на настройки по умолчанию: %s."
 L.BIG_WIGS                  = "BigWigs"
 
-L.UPDATEREMINDER_HEADER         = "Ваша версия " ..
-	L.DEADLY_BOSS_MODS .. " устарела.\n Версия %s (r%s) доступна для загрузки здесь: https://github.com/Waini4/DBM_For_Sirus"
+L.UPDATEREMINDER_HEADER = "Ваша версия " ..
+	L.DEADLY_BOSS_MODS ..
+	" устарела.\n Версия %s (r%s) доступна для загрузки здесь: https://github.com/Waini4/DBM_For_Sirus"
 
 L.UPDATEREMINDER_FOOTER         = "Нажмите " ..
 	(IsMacClient() and "Cmd-C" or "Ctrl-C") .. ", чтобы скопировать ссылку загрузки в буфер обмена."
@@ -260,8 +261,8 @@ L.RANGECHECK_OPTION_FRAMES     = "Фреймы"
 L.RANGECHECK_OPTION_RADAR      = "Показывать радар"
 L.RANGECHECK_OPTION_TEXT       = "Показывать текстовый фрейм"
 L.RANGECHECK_OPTION_BOTH       = "Показывать оба фрейма"
-L.RANGERADAR_HEADER            = "Радар (%0.1f метров)"
-L.RANGERADAR_RHEADER           = "R-Радар (%0.1f метров)"
+L.RANGERADAR_HEADER            = "Радар (%0.1f м)"
+L.RANGERADAR_RHEADER           = "R-Радар (%0.1f м)"
 L.RANGERADAR_BOSS_HEADER       = "Диапазон боссов (%d м)"
 L.RANGECHECK_OPTION_SPEED      = "Скорость обновления (/reload)"
 L.RANGECHECK_OPTION_SLOW       = "Медленная 0.5 сек (наименее CPU интенсивное)"

@@ -1,5 +1,5 @@
-﻿local mod	= DBM:NewMod("RomuloAndJulianne", "DBM-Karazhan")
-local L		= mod:GetLocalizedStrings()
+﻿local mod = DBM:NewMod("RomuloAndJulianne", "DBM-Karazhan")
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20210502220000") -- fxpw check 202206151120000
 mod:SetCreatureID(17534, 17533)
@@ -7,9 +7,9 @@ mod:SetCreatureID(17534, 17533)
 mod:RegisterCombat("combat", 17534, 17533)
 --mod:RegisterCombat("yell", L.RJ_Pull)
 --mod:RegisterKill("yell", L.Bogus)--there isn't actually a yell, but we use this to prevent mod from ending combat early using UNIT_DIED after they both die once.
-mod:SetWipeTime(25)--guesswork
+mod:SetWipeTime(25) --guesswork
 
-mod:RegisterEventsInCombat(
+mod:RegisterEvents(
 	"SPELL_CAST_START 30878",
 	"SPELL_AURA_APPLIED 30822 30830 30841 30887",
 	"SPELL_AURA_APPLIED_DOSE 30822 30830 30841 30887",
@@ -18,17 +18,17 @@ mod:RegisterEventsInCombat(
 	"UNIT_DIED"
 )
 
-local warnPhase2		= mod:NewPhaseAnnounce(2)
-local warnPhase3		= mod:NewPhaseAnnounce(3)
-local warningHeal		= mod:NewCastAnnounce(30878, 4)
-local warningDaring		= mod:NewTargetAnnounce(30841, 3)
-local warningDevotion	= mod:NewTargetAnnounce(30887, 3)
-local warningPosion		= mod:NewAnnounce("warningPosion", 2, 30830, "Tank|Healer")
+local warnPhase2      = mod:NewPhaseAnnounce(2)
+local warnPhase3      = mod:NewPhaseAnnounce(3)
+local warningHeal     = mod:NewCastAnnounce(30878, 4)
+local warningDaring   = mod:NewTargetAnnounce(30841, 3)
+local warningDevotion = mod:NewTargetAnnounce(30887, 3)
+local warningPosion   = mod:NewAnnounce("warningPosion", 2, 30830, "Tank|Healer")
 
-local timerHeal			= mod:NewCastTimer(2.5, 30878)
-local timerDaring		= mod:NewTargetTimer(8, 30841)
-local timerDevotion		= mod:NewTargetTimer(10, 30887)
-local timerCombatStart	= mod:NewTimer(55, "TimerCombatStart", 2457)
+local timerHeal        = mod:NewCastTimer(2.5, 30878)
+local timerDaring      = mod:NewTargetTimer(8, 30841)
+local timerDevotion    = mod:NewTargetTimer(10, 30887)
+local timerCombatStart = mod:NewTimer(55, "TimerCombatStart", 2457)
 
 mod:AddBoolOption("HealthFrame", true)
 
@@ -37,7 +37,7 @@ mod.vb.JulianneDied = 0
 mod.vb.RomuloDied = 0
 mod.vb.phase = 0
 
-local function updateHealthFrame(phase)--WIP
+local function updateHealthFrame(phase) --WIP
 	if phases[phase] then
 		return
 	end
@@ -47,7 +47,7 @@ local function updateHealthFrame(phase)--WIP
 	if phase == 1 then
 		DBM.BossHealth:Clear()
 		DBM.BossHealth:AddBoss(17534, L.Julianne)
-	elseif phase == 2 then--UNIT_DIED event triggers not tested yet
+	elseif phase == 2 then --UNIT_DIED event triggers not tested yet
 		DBM.BossHealth:AddBoss(17533, L.Romulo)
 		warnPhase2:Show()
 	elseif phase == 3 then
@@ -105,11 +105,10 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 	end
 end
 
-
 function mod:UNIT_DIED(args)
 	local cid = self:GetCIDFromGUID(args.destGUID)
 	if cid == 17534 then
-		if self.vb.phase == 3 then--Only want to remove from boss health frame first time they die, and kill only in phase 3.
+		if self.vb.phase == 3 then --Only want to remove from boss health frame first time they die, and kill only in phase 3.
 			self.vb.JulianneDied = GetTime()
 			if (GetTime() - self.vb.RomuloDied) < 10 then
 				mod:EndCombat()
@@ -119,7 +118,7 @@ function mod:UNIT_DIED(args)
 			updateHealthFrame(2)
 		end
 	elseif cid == 17533 then
-		if self.vb.phase == 3 then--Only want to remove from boss health frame first time they die, and kill only in phase 3.
+		if self.vb.phase == 3 then --Only want to remove from boss health frame first time they die, and kill only in phase 3.
 			self.vb.RomuloDied = GetTime()
 			if (GetTime() - self.vb.JulianneDied) < 10 then
 				mod:EndCombat()

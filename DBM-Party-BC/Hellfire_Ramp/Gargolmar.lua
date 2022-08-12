@@ -30,16 +30,6 @@ function mod:SPELL_AURA_APPLIED_DOSE(args)
 	end
 end
 
-function mod:SPELL_AURA_APPLIED_DOSE(args)
-	if args:IsSpellID(36814) then
-		local amount = args.amount or 1
-		if amount >= 4 then
-			specWarnMarkOnPlayer:Show(args.spellName, amount)
-			specWarnMarkOnPlayer:Play("stackhigh")
-		end
-	end
-end
-
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(34645) then
 		timerChargeCD:Start()
@@ -48,16 +38,3 @@ function mod:SPELL_CAST_SUCCESS(args)
 		warnRetirbution:Show()
 	end
 end
-
--- Message: Interface\AddOns\DBM-Core\DBM-Core.lua:841: table index is nil
--- Time: 08/03/22 21:33:52
--- Count: 1
--- Stack: [C]: ?
--- Interface\AddOns\DBM-Core\DBM-Core.lua:841: in function <Interface\AddOns\DBM-Core\DBM-Core.lua:829>
--- Interface\AddOns\DBM-Core\DBM-Core.lua:866: in function <Interface\AddOns\DBM-Core\DBM-Core.lua:860>
--- Interface\AddOns\DBM-Core\DBM-Core.lua:929: in function `RegisterEvents'
--- Interface\AddOns\DBM-Core\DBM-Core.lua:5137: in function `StartCombat'
--- Interface\AddOns\DBM-Core\DBM-Core.lua:4725: in function `func'
--- Interface\AddOns\DBM-Core\modules\Scheduler.lua:171: in function <Interface\AddOns\DBM-Core\modules\Scheduler.lua:162>
-
--- Locals: 

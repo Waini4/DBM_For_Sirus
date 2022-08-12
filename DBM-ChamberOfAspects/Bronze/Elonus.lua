@@ -67,7 +67,7 @@ mod:AddInfoFrameOption(312208, true)
 -- mod:AddBoolOption("BossHealthFrame", true, "misc")
 mod:AddBoolOption("RangeFrame", true)
 
-mod:AddTimerLine(DBM_CORE_L.HEROIC_MODE25 .. " " .. CL.HEROIC_ICON)
+mod:AddTimerLine(DBM_CORE_L.HEROIC_MODE25)
 
 local specWarnTimelessWhirlwindsGTFO = mod:NewSpecialWarningGTFO(317165, nil, nil, nil, 1, 2)
 
@@ -147,7 +147,6 @@ function mod:OnCombatStart()
 	self.vb.RepCount = 0
 	self.vb.ErapCount = 0
 	self.vb.RevCascIcons = 6
-	self.vb.RevCascIcons = 8
 	TemporalCascade:Start()
 	ResonantScream:Start()
 	EraseCount:Start(66, self.vb.ErapCount + 1)
@@ -210,13 +209,13 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		self.vb.TempCascIcon = self.vb.TempCascIcon - 1
 		self:Unschedule(warnTempTargets)
-		self:Schedule(0.3, warnTempTargets, self)
+		self:Schedule(0.1, warnTempTargets, self)
 	elseif args:IsSpellID(312208, 317160, 317161, 312209) then
 		RevCascTargets[#RevCascTargets + 1] = args.destName
 		if self.Options.SetIconOnRevCascTargets then
 			-- self:SetIcon(args.destName, self.vb.RevCascIcons, 10)
 			-- function module:SetSortedIcon(mod, sortType, delay, target, startIcon, maxIcon, descendingIcon, returnFunc, scanId)
-				self:SetSortedIcon("roster", 1, args.destName, 6,8)
+			self:SetIcon(args.destName, self.vb.RevCascIcons)
 		end
 		ReverseCascadeBuff:Start()
 		if DBM:CanUseNameplateIcons() then
@@ -234,7 +233,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		self.vb.RevCascIcons = self.vb.RevCascIcons - 1
 		self:Unschedule(warnReverTargets)
-		self:Schedule(0.3, warnReverTargets, self)
+		self:Schedule(0.1, warnReverTargets, self)
 	elseif spellId == 312204 or spellId == 317156 then
 		if mod:IsDifficulty("normal25") then
 			ErapTargets[#ErapTargets + 1] = args.destName

@@ -259,11 +259,11 @@ L:SetOptionLocalization{
 }
 
 L:SetMiscLocalization{
-	DBM_PRINCE_YELL_PULL	= "Безумие привело вас сюда, ко мне. Я стану вашей погибелью!",
-	DBM_PRINCE_YELL_P2		= "Простофили! Время – это пламя, в котором вы сгорите!",
-	DBM_PRINCE_YELL_P3		= "Как ты можешь надеяться выстоять против такой ошеломляющей мощи?",
-	DBM_PRINCE_YELL_INF1	= "Все миры, все измерения открыты мне!",
-	DBM_PRINCE_YELL_INF2	= "Вас ждет не один Малчезаар, но и легионы, которыми я командую!",
+	DBM_PRINCE_YELL_PULL    = "Безумие привело вас сюда, я стану вашей погибелью.",
+    DBM_PRINCE_YELL_P2      = "Глупцы! Время – это огонь, сжигающий вас!",
+    DBM_PRINCE_YELL_P3      = "Как вы осмелились бросить вызов столь колоссальной мощи?",
+    DBM_PRINCE_YELL_INF1    = "Мне открыты все реальности, все измерения!",
+    DBM_PRINCE_YELL_INF2    = "Вы противостоите не только Мальчезаару, но и всем подвластным мне легионам!",
 	FlameWorld              = "Огненные просторы",
 	IceWorld                = "Ледяная пустошь",
 	BlackForest             = "Черный лес",
@@ -385,4 +385,11 @@ L = DBM:GetModLocalization("Rokad")
 
 L:SetGeneralLocalization{
 	name = "Рокад Опустошитель"
+}
+
+--Chess
+L = DBM:GetModLocalization("Chess")
+
+L:SetGeneralLocalization{
+    name = "Шахматы"
 }

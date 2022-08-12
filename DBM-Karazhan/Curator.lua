@@ -2,12 +2,12 @@ local mod = DBM:NewMod("Curator", "DBM-Karazhan")
 local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20210502220000") -- fxpw check 202206151120000
-mod:SetCreatureID(34438, 34436, 34437, 15691)
+mod:SetCreatureID(99973, 99972, 99974, 15691)
 --mod:SetCreatureID(15691)
 --mod:RegisterCombat("yell", L.DBM_CURA_YELL_PULL)
-mod:RegisterCombat("combat", 34437, 15691)
+mod:RegisterCombat("combat", 99974, 15691)
 
-mod:RegisterEventsInCombat(
+mod:RegisterEvents(
 	"SPELL_AURA_APPLIED 305309 305305",
 	"SPELL_AURA_REMOVED 305313 305309",
 	"SPELL_CAST_START 305296 305312",
@@ -58,7 +58,7 @@ mod:RegisterEventsInCombat(
 -- end
 
 --обычка--
-local timerEvo = mod:NewNextTimer(112, 30254) -- Прилив сил
+local timerEvo = mod:NewNextTimer(101, 30254) -- Прилив сил
 
 -- героик --
 local warnUnstableTar = mod:NewAnnounce("WarnUnstableTar", 3, 305309)
@@ -84,7 +84,7 @@ function mod:OnCombatStart()
 		DBM:FireCustomEvent("DBM_EncounterStart", 15691, "The Curator")
 		timerEvo:Start()
 	elseif self:IsDifficulty("heroic10") then
-		DBM:FireCustomEvent("DBM_EncounterStart", 34437, "The Curator")
+		DBM:FireCustomEvent("DBM_EncounterStart", 99974, "The Curator")
 		for i = 1, 3 do
 			if UnitAura("boss" .. i, "Деактивация", nil, "HARMFUL") == nil then
 				if i == 3 then
@@ -103,22 +103,26 @@ end
 
 function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.DBM_CURA_YELL_OOM then
-		timerEvo:Start(112)
+		timerEvo:Start(101)
 	end
 end
 
 function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 34437, "The Curator", wipe)
+	if self:IsDifficulty("normal10") then
+		DBM:FireCustomEvent("DBM_EncounterEnd", 15691, "The Curator", wipe)
+	elseif self:IsDifficulty("heroic10") then
+		DBM:FireCustomEvent("DBM_EncounterEnd", 99974, "The Curator", wipe)
+	end
 	self.vb.isinCombat = false
 end
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(305313) then
-		if self.vb.isinCombat then
+		-- if self.vb.isinCombat then
 			-- local name = {"tobecon","dramatic"}
 			-- name  = name[math.random(#name)]
 			-- warnSound:Play(name)
-		end
+		-- end
 		for i = 1, 3 do
 			if UnitAura("boss" .. i, "Деактивация", nil, "HARMFUL") == nil then
 				if i == 3 then

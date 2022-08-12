@@ -212,7 +212,7 @@ L:SetGeneralLocalization({
 -------------------------
 --  The Black Stalker  --
 -------------------------
-L = DBM:GetModLocalization("Stalker")
+L = DBM:GetModLocalization("The Black Stalker")
 
 L:SetGeneralLocalization({
 	name 		= "Черная Охотница"
