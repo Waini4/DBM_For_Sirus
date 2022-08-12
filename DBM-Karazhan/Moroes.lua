@@ -8,7 +8,7 @@ mod:SetCreatureID(15687, 19875, 19874, 19872, 17007, 19876, 19873) --Moroes
 --mod:RegisterCombat("yell", L.DBM_MOROES_YELL_START)
 mod:RegisterCombat("combat")
 
-mod:RegisterEvents(
+mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 305464 305463 305472",
 	"SPELL_AURA_APPLIED 305470 305478 305460",
 	-- "SPELL_AURA_REMOVED",

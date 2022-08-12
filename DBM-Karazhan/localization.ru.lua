@@ -215,22 +215,24 @@ L:SetTimerLocalization{
 	TimerRepentance     = "Возмездие",
 	TimerPortals        = "Появление порталов",
 	TimerNormalPhase    = "Обычная фаза",
-	timerVoid			= "Лужа"
+	TimerNextVoid		= "Портал бездны"
 }
 
 L:SetOptionLocalization{
-	DBM_NS_WARN_PORTAL_SOON	= "Показать предупреждение о приближении Portal phase",
-	DBM_NS_WARN_BANISH_SOON	= "Показать предупреждение о приближении Banish phase",
-	warningPortal			= "Показать предупреждение для Portal phase",
-	warningBanish			= "Показать предупреждение для Banish phase",
-	timerPortalPhase		= "Показать таймер длительности Portal Phase",
-	timerBanishPhase		= "Показать таймер длительности Banish Phase",
-	SpecWarnKickNow				= "Спец-предупреждение, когда вы должы прервать заклинание",
-	TimerGates          = "Зеленые лучи",
-	TimerGhostPhase     = "Призрачная фаза",
-	TimerRepentance     = "Возмездие",
-	TimerPortals        = "Появление порталов",
-	TimerNormalPhase    = "Обычная фаза"
+	DBM_NS_WARN_PORTAL_SOON	= "Показать предупреждение о приближении Фазы порталов",
+	DBM_NS_WARN_BANISH_SOON	= "Показать предупреждение о приближении Призрачной фазы",
+	warningPortal			= "Показать предупреждение для Фазы порталов",
+	warningBanish			= "Показать предупреждение для Призрачной фазы",
+	timerPortalPhase		= "Таймер длительности Фазы порталов",
+	timerBanishPhase		= "Таймер длительности Призрачной фазы",
+	SpecWarnKickNow			= "Спец-предупреждение, когда вы должы прервать заклинание",
+	TimerNextVoid			= "Отсчёт времени до $spell:30533",
+	TimerGates          	= "Зеленые лучи",
+	TimerGhostPhase     	= "Призрачная фаза",
+	TimerRepentance     	= "Возмездие",
+	TimerPortals        	= "Появление порталов",
+	TimerNormalPhase    	= "Обычная фаза",
+	specWarnVoid			= "Спец-предупреждение для $spell:28865"
 }
 
 L:SetMiscLocalization{
@@ -247,7 +249,7 @@ L:SetGeneralLocalization{
 }
 
 L:SetWarningLocalization{
-	WarnNextPhaseSoon = "Фаза %s"
+	WarnNextPhase = "Фаза %s"
 }
 
 L:SetTimerLocalization{

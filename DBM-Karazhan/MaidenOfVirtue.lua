@@ -5,7 +5,7 @@ mod:SetRevision("20210502220000") -- fxpw check 202206151120000
 mod:SetCreatureID(16457)
 mod:RegisterCombat("combat")
 
-mod:RegisterEvents(
+mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 305286",
 	"SPELL_AURA_APPLIED 305271 305285",
 	"SPELL_AURA_REMOVED 305285"
