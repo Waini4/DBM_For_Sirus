@@ -135,7 +135,7 @@ function mod:SPELL_CAST_START(args)
 		timerZemlaCast:Start()
 		timerZemlaCD:Start()
 		specWarnZemla:Show()
-		DBM.RangeCheck:Show(8)
+		DBM.RangeCheck:Show(6)
 	elseif spellId == 310151 then -- Землетрясение
 		specWarnKrik:Show()
 		warnKrik:Show()

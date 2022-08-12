@@ -1,3 +1,4 @@
+
 local mod   = DBM:NewMod("Solarian", "DBM-TheEye", 1)
 local L     = mod:GetLocalizedStrings()
 local bband = bit.band
@@ -81,14 +82,13 @@ local function Kolzo()
 	warnKol:Show(table.concat(KolTargets, "<, >"))
 	table.wipe(KolTargets)
 end
-
 -- mod:SetStage(0)
 function mod:OnCombatStart(delay)
 	self:SetStage(1)
 	DBM:FireCustomEvent("DBM_EncounterStart", 18805, "High Astromancer Solarian")
 	if mod:IsDifficulty("heroic25") then
-		timerNextHelp:Start(40 - delay)
-		timerNextWrathH:Start(43 - delay)
+		timerNextHelp:Start(40-delay)
+		timerNextWrathH:Start(43-delay)
 		self:SetStage(1)
 	else
 		self.vb.Fear = 0
@@ -140,7 +140,7 @@ function mod:SPELL_CAST_START(args)
 		warnRing:Show()
 		timerRing:Start()
 	elseif spellId == 308558 then -- послушники
-		timerNextHelp:Start(80)
+		timerNextHelp:Schedule(80)
 		specWarnHelp:Show(args.sourceName)
 		priestsH = true
 		provid   = true
@@ -237,9 +237,9 @@ end
 function mod:SWING_DAMAGE(_, sourceName, sourceFlags, destGUID, destName)
 	if self:GetCIDFromGUID(destGUID) == 3410 and bit.band(sourceFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 then
 		if sourceName ~= UnitName("player") then
-			for i = 1, 25 do
-				local unit = "raid" .. i .. "target"
-				if not UnitExists("raid" .. i) then break end
+			for i = 1,25 do
+				local unit = "raid"..i.."target"
+				if not UnitExists("raid"..i) then break end
 				if UnitGUID(unit) == destGUID then
 					if self.Options.Zrec then
 						DBM.Arrow:ShowRunTo(unit, 0, 0)

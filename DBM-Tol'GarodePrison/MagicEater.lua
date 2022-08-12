@@ -1,6 +1,6 @@
-local mod = DBM:NewMod("MagicEater", "DBM-TolGarodePrison")
--- local L   = mod:GetLocalizedStrings()
--- local CL  = DBM_COMMON_L
+local mod = DBM:NewMod("MagicEater", "DBM-Tol'GarodePrison")
+local L   = mod:GetLocalizedStrings()
+local CL  = DBM_COMMON_L
 
 mod:SetRevision("20210501000000") -- fxpw check 20220609123000
 mod:SetCreatureID(84017)
@@ -75,7 +75,7 @@ local f = CreateFrame("Frame", nil, UIParent)
 f:RegisterEvent("PLAYER_REGEN_DISABLED")
 f:SetScript("OnEvent", function()
 	for i = 1, MAX_RAID_MEMBERS do
-		local pt = UnitName("raid" .. i .. "target")
+		local pt = UnitName("raid" .. i .. "-target")
 		if pt and pt == "Пожиратель магии" then
 			DBM:FireCustomEvent("DBM_EncounterStart", 84002, "MagicEater")
 			--self:SetStage(1)

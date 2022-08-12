@@ -1,6 +1,6 @@
 if GetLocale() ~= "ruRU" then return end
 local L
-local DBML = DBM_CORE_L
+
 ---------------
 --  Nalorakk --
 ---------------
@@ -14,9 +14,7 @@ L:SetWarningLocalization({
 	WarnBear		= "Форма медведя",
 	WarnBearSoon	= "Форма медведя через 5 секунд",
 	WarnNormal		= "Обычная форма",
-	WarnNormalSoon	= "Обычная форма через 5 секунд",
-	BearForm = "Форма медведя",
-	TrollForm = "Форма тролля"
+	WarnNormalSoon	= "Обычная форма через 5 секунд"
 })
 
 L:SetTimerLocalization({
@@ -30,14 +28,11 @@ L:SetOptionLocalization({
 	WarnNormal		= "Show warning for Normal form",--Translate
 	WarnNormalSoon	= "Show pre-warning for Normal form",--Translate
 	TimerBear		= "Show timer for Bear form",--Translate
-	TimerNormal		= "Show timer for Normal form",--Translate
-	BearForm = "Отсчет времени до следующей формы медведя",
-	TrollForm = "Отсчет времени до следующей формы тролля"
+	TimerNormal		= "Show timer for Normal form"--Translate
 })
 
 L:SetMiscLocalization({
-	YellBear		= "Хотели разбудить во мне зверя? Вам это удалось.",
-	YellTroll		= "С дороги!",
+	YellBear 	= "Если вызвать чудовище, то мало не покажется, точно говорю!",
 	YellNormal	= "Пропустите Налоракка!"
 })
 
@@ -57,7 +52,7 @@ L:SetWarningLocalization{
 L:SetOptionLocalization{
 	SetIconOnElectricStorm = "Отмечать на ком Электрическая буря",
 	SayOnElectricStorm = "Говорить в чат на ком Электрическая буря",
-	WarnWind = DBML.AUTO_ANNOUNCE_OPTIONS.spell:format(43621)
+	WarnWind = L.AUTO_ANNOUNCE_OPTIONS.spell:format(43621, GetSpellInfo(43621) or "unknown")
 }
 
 L:SetMiscLocalization{
@@ -70,22 +65,12 @@ L:SetMiscLocalization{
 L = DBM:GetModLocalization("Janalai")
 
 L:SetGeneralLocalization({
-	name = "Джан'алай"
+	name = "Джан'алаи"
 })
-L:SetTimerLocalization{
-	Hatchers = "Смотрители кладки",
-	Bombs = "Бомбы",
-	Explosion = "Взрыв!"
-}
 
-L:SetOptionLocalization{
-	Hatchers = "Отсчет времени до прихода смотрителей",
-	Bombs = "Отсчет времени до начала установки бомб",
-	Explosion = "Отсчет времени до взрыва"
-}
 L:SetMiscLocalization({
 	YellBomb	= "Сгиньте в огне!",
-	YellAdds	= "Где мои Наседки? Пора за яйца приниматься!",
+	YellAdds	= "Где мои Наседки? Пора за яйца приниматься!"
 })
 
 --------------
@@ -103,8 +88,8 @@ L:SetWarningLocalization({
 })
 
 L:SetOptionLocalization({
-	WarnSpirit	= "Показывать предупреждение для призрачной фазы",
-	WarnNormal	= "Показывать предупреждение для обычной фазы"
+	WarnSpirit	= "Show warning for Spirit phase",--Translate
+	WarnNormal	= "Show warning for Normal phase"--Translate
 })
 
 L:SetMiscLocalization({
@@ -118,29 +103,13 @@ L:SetMiscLocalization({
 L = DBM:GetModLocalization("Malacrass")
 
 L:SetGeneralLocalization({
-	name = "Малакрасс"
+	name = "Повелитель проклятий Малакрасс"
 })
 
 L:SetMiscLocalization({
 	YellPull	= "На вас падет тень..."
 })
-L:SetTimerLocalization{
-	TimerSpecial = "Спец. способность %s"
-}
 
-L:SetWarningLocalization{
-	WarnSiphon = "Малакрасс крадет способности у %s ",
-	SpecWarnMelee = "%s отойдите!",
-	SpecWarnMove = "%s отойдите!"
-}
-
-L:SetOptionLocalization{
-	TimerSpecial = "Отсчитывать время между спец-способности",
-	SpecWarnMelee = "Обьявлять опасные способности для мдд",
-	SpecWarnMove = "Обьявлять опасные способности для рдд",
-	WarnSiphon = DBML.AUTO_ANNOUNCE_OPTIONS.spell:format(43501, GetSpellInfo(43501))
-
-}
 --------------
 --  Zul'jin --
 --------------

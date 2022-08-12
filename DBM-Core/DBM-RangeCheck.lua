@@ -563,7 +563,7 @@ do
 
 		elseif level == 2 then
 			if menu == "range" then
-				local ranges = { 5, 6, 8, 10, 11, 12, 13, 14, 15, 16, 18, 20, 30, 35, 40 }
+				local ranges = { 5, 6, 8, 10, 11, 12, 13, 14, 15, 16, 18, 20, 30, 35, 40}
 
 				for _, r in pairs(ranges) do
 					if initRangeCheck(r) then
@@ -844,7 +844,7 @@ function onUpdate(self, elapsed)
 	local color
 	local j = 0
 	self:ClearLines()
-	self:SetText((frame.reverse and L.RANGECHECK_RHEADER or L.RANGECHECK_HEADER):format(self.range), 1, 1, 1)
+	self:SetText(( frame.reverse and L.RANGECHECK_RHEADER or L.RANGECHECK_HEADER):format(self.range), 1, 1, 1)
 	if initRangeCheck(self.range) then
 		if self.bossMode then
 			local uId = self.bossUnit
@@ -857,8 +857,7 @@ function onUpdate(self, elapsed)
 			if GetNumRaidMembers() > 0 then
 				for i = 1, GetNumRaidMembers() do
 					local uId = "raid" .. i
-					if not frame.reverse and not UnitIsUnit(uId, "player") and not UnitIsDeadOrGhost(uId) and
-						self.checkFunc(uId, self.range) and
+					if not frame.reverse and not UnitIsUnit(uId, "player") and not UnitIsDeadOrGhost(uId) and self.checkFunc(uId, self.range) and
 						(not self.filter or self.filter(uId)) then
 						j = j + 1
 						color = RAID_CLASS_COLORS[select(2, UnitClass(uId))] or NORMAL_FONT_COLOR
@@ -869,8 +868,7 @@ function onUpdate(self, elapsed)
 						if j >= 5 then
 							break
 						end
-					elseif frame.reverse and not UnitIsUnit(uId, "player") and not UnitIsDeadOrGhost(uId) and
-						not self.checkFunc(uId, self.range) and (not self.filter or self.filter(uId)) then
+					elseif frame.reverse and not UnitIsUnit(uId, "player") and not UnitIsDeadOrGhost(uId) and not self.checkFunc(uId, self.range) and (not self.filter or self.filter(uId)) then
 						j = j + 1
 						color = RAID_CLASS_COLORS[select(2, UnitClass(uId))] or NORMAL_FONT_COLOR
 						local icon = GetRaidTargetIndex(uId)
@@ -885,8 +883,7 @@ function onUpdate(self, elapsed)
 			elseif GetNumPartyMembers() > 0 then
 				for i = 1, GetNumPartyMembers() do
 					local uId = "party" .. i
-					if not frame.reverse and not UnitIsUnit(uId, "player") and not UnitIsDeadOrGhost(uId) and
-						self.checkFunc(uId, self.range) and
+					if not frame.reverse and  not UnitIsUnit(uId, "player") and not UnitIsDeadOrGhost(uId) and self.checkFunc(uId, self.range) and
 						(not self.filter or self.filter(uId)) then
 						j = j + 1
 						color = RAID_CLASS_COLORS[select(2, UnitClass(uId))] or NORMAL_FONT_COLOR
@@ -897,8 +894,7 @@ function onUpdate(self, elapsed)
 						if j >= 5 then
 							break
 						end
-					elseif frame.reverse and not UnitIsUnit(uId, "player") and not UnitIsDeadOrGhost(uId) and
-						not self.checkFunc(uId, self.range) and
+					elseif frame.reverse and  not UnitIsUnit(uId, "player") and not UnitIsDeadOrGhost(uId) and not self.checkFunc(uId, self.range) and
 						(not self.filter or self.filter(uId)) then
 						j = j + 1
 						color = RAID_CLASS_COLORS[select(2, UnitClass(uId))] or NORMAL_FONT_COLOR
@@ -993,7 +989,7 @@ do
 				dots[id].icon = nil
 			end
 		end
-		if range < 1.5 + frame.range and not filtered then -- add an  extra 10% in case of inaccuracy
+		if range < 1.01 * frame.range and not filtered then -- add an  extra 10% in case of inaccuracy
 			dots[id].tooClose = true
 		else
 			dots[id].tooClose = false
@@ -1006,9 +1002,9 @@ do
 			pixelsperyard = min(radarFrame:GetWidth(), radarFrame:GetHeight()) / (frame.range * 3)
 			radarFrame.circle:SetSize(frame.range * pixelsperyard * 2, frame.range * pixelsperyard * 2)
 			-- if frame.range ~= (range or 0) or bossMode ~= frame.bossMode then
-			range = frame.range
-			-- bossMode = frame.bossMode
-			radarFrame.text:SetText((radarFrame.reverse and L.RANGERADAR_RHEADER or L.RANGERADAR_HEADER):format(range))
+				range = frame.range
+				-- bossMode = frame.bossMode
+				radarFrame.text:SetText(( radarFrame.reverse and L.RANGERADAR_RHEADER or L.RANGERADAR_HEADER):format(range))
 			-- end
 
 			local mapName        = GetMapInfo()
@@ -1114,7 +1110,7 @@ do
 				if not radarFrame.reverse then
 					if UnitIsDeadOrGhost("player") then
 						radarFrame.circle:SetVertexColor(1, 1, 1)
-					elseif playerTooClose then
+					elseif playerTooClose  then
 						radarFrame.circle:SetVertexColor(1, 0, 0)
 					else
 						radarFrame.circle:SetVertexColor(0, 1, 0)
@@ -1122,7 +1118,7 @@ do
 				else
 					if UnitIsDeadOrGhost("player") then
 						radarFrame.circle:SetVertexColor(1, 1, 1)
-					elseif playerTooClose then
+					elseif playerTooClose  then
 						radarFrame.circle:SetVertexColor(0, 1, 0)
 					else
 						radarFrame.circle:SetVertexColor(1, 0, 0)
@@ -1193,7 +1189,7 @@ do
 		end
 		local dX = (startX - x) * dims[1]
 		local dY = (startY - y) * dims[2]
-		--print(math.sqrt(dX * dX + dY * dY))
+		-- print(math.sqrt(dX * dX + dY * dY))
 		return math.sqrt(dX * dX + dY * dY)
 	end
 
@@ -1322,7 +1318,7 @@ function rangeCheck:Show(range, filter, bossUnit, reverse)
 	-- print(range, filter, bossUnit, reverse)
 	SetMapToCurrentZone() --Set map to current zone before checking other stuff, work around annoying bug i hope?
 	if type(range) == "function" then -- the first argument is optional
-		return self:Show(nil, range, reverse)
+		return self:Show(nil, range,reverse)
 	end
 	local mapName = GetMapInfo()
 	range = range or 10
@@ -1351,7 +1347,6 @@ function rangeCheck:Show(range, filter, bossUnit, reverse)
 		onUpdateRadar(radarFrame, 1)
 	end
 end
-
 -- todo fxpw
 -- function rangeCheck:SetBossRange(range, bossUnit)
 -- 	if DBM.Options.DontShowRangeFrame then return end
@@ -1379,7 +1374,7 @@ function rangeCheck:ChangeReverse()
 end
 
 function rangeCheck:ChangeRange(range)
-	frame.range = range or 10
+	frame.range =  range or 10
 end
 
 function rangeCheck:SetReverse(param)

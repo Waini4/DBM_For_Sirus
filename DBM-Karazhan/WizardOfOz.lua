@@ -1,27 +1,26 @@
-local mod = DBM:NewMod("Oz", "DBM-Karazhan")
-local L   = mod:GetLocalizedStrings()
+local mod	= DBM:NewMod("Oz", "DBM-Karazhan")
+local L		= mod:GetLocalizedStrings()
 
 mod:SetRevision("20210502220000") -- fxpw check 202206151120000
 mod:SetCreatureID(18168)
 mod:RegisterCombat("yell", L.DBM_OZ_YELL_DOROTHEE)
 mod:SetMinCombatTime(25)
 
-mod:RegisterEvents(
+mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 31014",
 	"CHAT_MSG_MONSTER_YELL"
 )
 
-local WarnRoar     = mod:NewAnnounce("DBM_OZ_WARN_ROAR", 2, nil, nil, false)
-local WarnStrawman = mod:NewAnnounce("DBM_OZ_WARN_STRAWMAN", 2, nil, nil, false)
-local WarnTinhead  = mod:NewAnnounce("DBM_OZ_WARN_TINHEAD", 2, nil, nil, false)
-local WarnTido     = mod:NewAnnounce("DBM_OZ_WARN_TITO", 2, nil, nil, false)
-local WarnCrone    = mod:NewAnnounce("DBM_OZ_WARN_CRONE", 2, nil, nil, false)
+local WarnRoar		= mod:NewAnnounce("DBM_OZ_WARN_ROAR", 2, nil, nil, false)
+local WarnStrawman	= mod:NewAnnounce("DBM_OZ_WARN_STRAWMAN", 2, nil, nil, false)
+local WarnTinhead	= mod:NewAnnounce("DBM_OZ_WARN_TINHEAD", 2, nil, nil, false)
+local WarnTido		= mod:NewAnnounce("DBM_OZ_WARN_TITO", 2, nil, nil, false)
+local WarnCrone		= mod:NewAnnounce("DBM_OZ_WARN_CRONE", 2, nil, nil, false)
 
-local timerRoar     = mod:NewTimer(14.5, "DBM_OZ_WARN_ROAR", "Interface\\Icons\\Ability_Druid_ChallangingRoar", nil,
-	false)
-local timerStrawman = mod:NewTimer(24, "DBM_OZ_WARN_STRAWMAN", "Interface\\Icons\\INV_Helmet_34", nil, false)
-local timerTinhead  = mod:NewTimer(33, "DBM_OZ_WARN_TINHEAD", "Interface\\Icons\\INV_Helmet_02", nil, false)
-local timerTito     = mod:NewTimer(47.5, "DBM_OZ_WARN_TITO", "Interface\\Icons\\Ability_Mount_WhiteDireWolf", nil, false)
+local timerRoar		= mod:NewTimer(14.5, "DBM_OZ_WARN_ROAR", "Interface\\Icons\\Ability_Druid_ChallangingRoar", nil, false)
+local timerStrawman	= mod:NewTimer(24, "DBM_OZ_WARN_STRAWMAN", "Interface\\Icons\\INV_Helmet_34", nil, false)
+local timerTinhead	= mod:NewTimer(33, "DBM_OZ_WARN_TINHEAD", "Interface\\Icons\\INV_Helmet_02", nil, false)
+local timerTito		= mod:NewTimer(47.5, "DBM_OZ_WARN_TITO", "Interface\\Icons\\Ability_Mount_WhiteDireWolf", nil, false)
 
 mod:AddBoolOption("AnnounceBosses", true, "announce")
 mod:AddBoolOption("ShowBossTimers", true, "timer")

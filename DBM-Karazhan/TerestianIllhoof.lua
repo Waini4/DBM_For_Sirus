@@ -12,9 +12,11 @@ mod:SetBossHealthInfo(
 mod:RegisterCombat("combat")
 --17229--imp, for future use
 
-mod:RegisterEvents(
-	"SPELL_AURA_APPLIED 305351 30115 305367 305360",
+mod:RegisterEventsInCombat(
+	"SPELL_AURA_APPLIED 305351 30115 305367	305360",
 	"SPELL_CAST_START 305345"
+-- "SPELL_CAST_SUCCESS", -- TODO wtf
+-- "SPELL_CAST_FAILED"
 )
 
 -- local warningWeakened	= mod:NewTargetAnnounce(30065, 2)

@@ -24,9 +24,9 @@ local timerStaktimer = mod:NewBuffActiveTimer(30, 317273, nil, "Healer|Tank", ni
 
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(1))
 local warnseti       = mod:NewCastAnnounce(317274, 2)
--- local warnPhase1     = mod:NewPhaseAnnounce(1, 2)
--- local warnPhase2Soon = mod:NewPrePhaseAnnounce(2, 2)
--- local warnPhase2     = mod:NewPhaseAnnounce(2, 2)
+local warnPhase1     = mod:NewPhaseAnnounce(1, 2)
+local warnPhase2Soon = mod:NewPrePhaseAnnounce(2, 2)
+local warnPhase2     = mod:NewPhaseAnnounce(2, 2)
 local warnzemlea     = mod:NewCastAnnounce(317624, 1.5)
 
 local timerShpili = mod:NewCDTimer(60, 317267, nil, nil, nil, 3)

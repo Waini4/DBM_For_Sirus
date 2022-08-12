@@ -6,26 +6,25 @@ mod:SetRevision("20220609123000") -- fxpw check 20220609123000
 
 mod:SetCreatureID(19622)
 mod:RegisterCombat("combat")
---mod:RegisterCombat("yell", L.YellPhase1)
 mod:SetUsedIcons(5, 6, 7, 8)
 
-mod:RegisterEvents(
+mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 35941 40636 37036 308742 308732 308790",
-	"SPELL_AURA_APPLIED 36797 308732 308741 308750 308756 308797",
-	"SPELL_AURA_APPLIED_DOSE 36797 308732 308741 308750 308756 308797",
+	"SPELL_AURA_APPLIED 308732 308741 308750 308756	308797 36797",
+	"SPELL_AURA_APPLIED_DOSE 308732 308741 308750 308756 308797 36797",
 	"UNIT_TARGET",
 	"SPELL_AURA_REMOVED 308750 36797",
-	"CHAT_MSG_MONSTER_YELL",
-	"SPELL_CAST_SUCCESS 36797 37018 36723 308749 308743 36815 36731 308734"
+	--	"CHAT_MSG_MONSTER_YELL",
+	"SPELL_CAST_SUCCESS 37018 36723 308749 308743 36815 36731 308734 36797"
 )
 
---[[mod:RegisterEvents(
+mod:RegisterEvents(
 -- 	-- "CHAT_MSG_RAID_BOSS_EMOTE",
 	"CHAT_MSG_MONSTER_YELL"
 -- 	"SPELL_CAST_SUCCESS 37018 36723 308749 308743 36815 36731 308734 36797",
 -- 	"SPELL_AURA_APPLIED 308732 308741 308750 308756	308797 36797",
 -- 	"SPELL_AURA_APPLIED_DOSE 308732 308741 308750 308756 308797 36797"
-)]]
+)
 
 
 
@@ -72,7 +71,6 @@ local warnIsc         = mod:NewStackAnnounce(308756, 2, nil, "Tank|Healer") -- �
 local warnShadow      = mod:NewSpellAnnounce(308742, 2) -- освященеи тенью (лужа)
 local warnBomb        = mod:NewTargetAnnounce(308750, 2) -- бомба
 local warnVzriv       = mod:NewTargetAnnounce(308797, 2) -- лужа
-local yellvzriv       = mod:NewYell(308797)
 
 local specWarnBomb = mod:NewSpecialWarningClose(308750)
 local specWarnCata = mod:NewSpecialWarningRun(308790)
@@ -157,8 +155,8 @@ function mod:CHAT_MSG_MONSTER_EMOTE(msg)
 end
 
 function mod:CHAT_MSG_MONSTER_YELL(msg)
-	if mod:IsDifficulty("heroic25") then
-		if msg == L.YellSang or msg:find(L.YellSang) then
+	if self:IsDifficulty("heroic25") then
+		if msg == L.YellSang then
 			timerTalaTarget:Cancel()
 			warnNextAdd:Show(L.NamesAdds["Lord Sanguinar"])
 			timerNextAdd:Start(12.5, L.NamesAdds["Lord Sanguinar"])
@@ -166,7 +164,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 			timerFurious:Cancel()
 			timerAxeCD:Cancel()
 			timerAvengerS:Start(34.5)
-		elseif msg == L.YellCaper or msg:find(L.YellCaper) then
+		elseif msg == L.YellCaper then
 			timerRoarCD:Cancel()
 			timerAvengerS:Cancel()
 			timerShadowCD:Cancel()
@@ -178,7 +176,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 			if self.Options.RangeFrame then
 				DBM.RangeCheck:Show(10)
 			end
-		elseif msg == L.YellTelon or msg:find(L.YellTelon) then
+		elseif msg == L.YellTelon then
 			if self.Options.RangeFrame then
 				DBM.RangeCheck:Hide()
 			end
@@ -187,7 +185,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 			timerConflagrateCD:Cancel()
 			warnNextAdd:Show(L.NamesAdds["Telonicus"])
 			timerNextAdd:Start(8.4, L.NamesAdds["Telonicus"])
-		elseif msg == L.YellPhase3 or msg:find(L.YellPhase3) then
+		elseif msg == L.YellPhase3 then
 			self:SetStage(3)
 			warnPhase:Show(L.WarnPhase3)
 			timerPhase4:Start(210)
@@ -197,14 +195,14 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 			if self.Options.RangeFrame then
 				DBM.RangeCheck:Show(10)
 			end
-		elseif msg == L.YellPhase4 or msg:find(L.YellPhase4) then
+		elseif msg == L.YellPhase4 then
 			self:SetStage(4)
 			warnPhase:Show(L.WarnPhase4)
 			timerPhase4:Cancel()
 			if self.Options.RangeFrame then
 				DBM.RangeCheck:Hide()
 			end
-		elseif msg == L.YellPhase5 or msg:find(L.YellPhase5) then
+		elseif msg == L.YellPhase5 then
 			self:SetStage(5)
 			warnPhase:Show(L.WarnPhase5)
 			timerKeltacCD:Start()
@@ -213,17 +211,17 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 			timerGravityHCD:Start(122)
 		end
 	else
-		if msg == L.YellSang or msg:find(L.YellSang) then
+		if msg == L.YellSang then
 			timerTalaTarget:Cancel()
 			warnNextAdd:Show(L.NamesAdds["Lord Sanguinar"])
 			timerNextAdd:Start(12.5, L.NamesAdds["Lord Sanguinar"])
 			timerRoarCD:Start(33)
-		elseif msg == L.YellCaper or msg:find(L.YellCaper) then
+		elseif msg == L.YellCaper then
 			timerRoarCD:Cancel()
 			warnNextAdd:Show(L.NamesAdds["Capernian"])
 			timerNextAdd:Start(7, L.NamesAdds["Capernian"])
 			DBM.RangeCheck:Show(10)
-		elseif msg == L.YellTelon or msg:find(L.YellTelon) then
+		elseif msg == L.YellTelon then
 			DBM.RangeCheck:Hide()
 			warnConflagrateSoon:Cancel()
 			timerConflagrateCD:Cancel()
@@ -231,13 +229,13 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 			timerNextAdd:Start(8.4, L.NamesAdds["Telonicus"])
 			warnBombSoon:Schedule(13)
 			timerBombCD:Start(18)
-		elseif msg == L.YellPhase2 or msg:find(L.YellPhase2) then
+		elseif msg == L.YellPhase2 then
 			self:SetStage(2)
 			warnBombSoon:Cancel()
 			timerBombCD:Cancel()
 			warnPhase:Show(L.WarnPhase2)
 			timerPhase3:Start()
-		elseif msg == L.YellPhase3 or msg:find(L.YellPhase3) then
+		elseif msg == L.YellPhase3 then
 			self:SetStage(3)
 			warnPhase:Show(L.WarnPhase3)
 			timerPhase4:Start()
@@ -245,7 +243,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 			warnBombSoon:Schedule(10)
 			timerBombCD:Start(15)
 			DBM.RangeCheck:Show(10)
-		elseif msg == L.YellPhase4 or msg:find(L.YellPhase4) then
+		elseif msg == L.YellPhase4 then
 			self:SetStage(4)
 			if self.Options.RemoveShadowResistanceBuffs and mod:IsDifficulty("normal25", "normal10") then
 				mod:ScheduleMethod(0.1, "RemoveBuffs")
@@ -264,7 +262,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 			warnBarrierSoon:Schedule(55)
 			warnPhoenixSoon:Schedule(45)
 			warnMCSoon:Schedule(35)
-		elseif msg == L.YellPhase5 or msg:find(L.YellPhase5) then
+		elseif msg == L.YellPhase5 then
 			self:SetStage(5)
 			warnPhase:Show(L.WarnPhase5)
 			timerMCCD:Cancel()
@@ -474,7 +472,10 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		if args:IsPlayer() then
 			specwarnVzriv:Show()
-			yellvzriv:Yell()
+			if self.Options.SayBoom then
+				SendChatMessage(format("{череп}|cff71d5ff|Hspell:308797|h[Взрыв пустоты]|h|r{череп}НА МНЕ{череп}")
+					, "SAY")
+			end
 		end
 	elseif args:IsSpellID(36797) then
 		timerMCCD:Start()

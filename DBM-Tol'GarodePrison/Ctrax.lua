@@ -1,5 +1,5 @@
-local mod = DBM:NewMod("Ctrax", "DBM-TolGarodePrison")
--- local L   = mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Ctrax", "DBM-Tol'GarodePrison")
+local L   = mod:GetLocalizedStrings()
 
 local CL = DBM_COMMON_L
 
@@ -89,12 +89,16 @@ local f = CreateFrame("Frame", nil, UIParent)
 f:RegisterEvent("PLAYER_REGEN_DISABLED")
 f:SetScript("OnEvent", function(self)
 	for i = 1, MAX_RAID_MEMBERS do
-		local pt = UnitName("raid" .. i .. "target")
+		local pt = UnitName("raid" .. i .. "-target")
 		if pt and pt == "Поглотитель разума Ктракс" then
 			DBM:FireCustomEvent("DBM_EncounterStart", 84002, "Ctrax")
 			--self:SetStage(1)
 			timerEscapingDarkness:Start()
 			--self:Schedule(0.1, "CreatePowerFrame")
+			if self.Options.BossHealthFrame then
+				DBM.BossHealth:Show(L.name)
+				DBM.BossHealth:AddBoss(84002, L.name)
+			end
 		end
 	end
 end)

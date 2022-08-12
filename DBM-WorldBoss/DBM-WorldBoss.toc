@@ -19,5 +19,5 @@
 ## X-DBM-Mod-LoadCID: 70010
 
 localization.ru.lua
-TolGarodeNorigorn\Norigorn.lua
+Tol'GarodeNorigorn\Norigorn.lua
 AWakingNightmare\Zort.lua

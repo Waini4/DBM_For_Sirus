@@ -25,7 +25,7 @@ local canVanish = select(2, UnitClass("player")) == "ROGUE"
 local myRealm = select(3, DBM:GetMyPlayerInfo())
 
 -- General
-local timerCombatStart		= mod:NewCombatTimer(42.3)
+local timerCombatStart		= mod:NewCombatTimer(47.3)
 local enrageTimer			= mod:NewBerserkTimer(480)
 
 mod:RemoveOption("HealthFrame")
