@@ -114,15 +114,16 @@ end
 
 -- end
 
+local tick = 0
 function mod:SPELL_SUMMON(args)
-	if args:IsSpellID(37063) then
-		timerNextVoid:Start()
-		local amount = args.amount
-		if amount >= 3 then
-			timerNextVoid:Cancel()
-			amount = 0
-		end
-	end
+    if args:IsSpellID(37063) then
+        timerNextVoid:Start()
+        tick = tick + 1
+        if tick >= 3 then
+            timerNextVoid:Cancel()
+            tick = 0
+        end
+    end
 end
 
 function mod:SPELL_DAMAGE(_, _, _, destGUID, _, _, spellId)
