@@ -6,7 +6,7 @@ mod:SetCreatureID(18168)
 mod:RegisterCombat("yell", L.DBM_OZ_YELL_DOROTHEE)
 mod:SetMinCombatTime(25)
 
-mod:RegisterEvents(
+mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 31014",
 	"CHAT_MSG_MONSTER_YELL"
 )
