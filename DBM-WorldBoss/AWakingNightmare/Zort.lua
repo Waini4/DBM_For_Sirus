@@ -2,7 +2,7 @@ local mod = DBM:NewMod("Zort", "DBM-WorldBoss", 2)
 local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20220628193500")
-mod:SetCreatureID(50702, 50715, 50716, 50714)
+mod:SetCreatureID(50702)
 mod:SetUsedIcons(1, 2, 3, 4, 5, 6, 7, 8)
 
 mod:RegisterCombat("combat", 50702)
@@ -18,11 +18,13 @@ mod:RegisterEvents(
 	"SPELL_AURA_REMOVED 307839 308516 308517 318956",
 	"SPELL_INTERRUPT 307829"
 	-- "SPELL_CAST_FAILED"
-	-- "UNIT_HEALTH",
+	-- "UNIT_HEALTH"
 	-- "UNIT_DIED",
 	-- "SWING_DAMAGE"
 )
-
+mod:RegisterEventsInCombat(
+	"UNIT_HEALTH"
+)
 mod:AddTimerLine(L.name)
 -- local warnPhase2Soon          = mod:NewPrePhaseAnnounce(2)
 -- local warnPhase2              = mod:NewPhaseAnnounce(2)
@@ -110,7 +112,7 @@ end
 function mod:OnCombatStart(delay)
 	-- print(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 50702, "Zort")
-	-- self:SetStage(1)
+	self:SetStage(1)
 	-- print(self:GetStage())
 	self.vb.SveazIcons = 7
 	timerkik:Start(-delay)
@@ -272,4 +274,74 @@ function mod:SPELL_INTERRUPT(args)
 		specWarnReturnInterrupt:Show()
 	end
 end
+function mod:UNIT_HEALTH()
+	local stage = mod:GetStage()
+	if stage == nil then
+		mod:SetStage(1)
+	elseif stage and UnitAffectingCombat("player") then
+		if stage == 1 then
+			local hp = DBM:GetBossHPByUnitID("boss3") -- чудовищная
+			if hp <= 1 then
+				self:NextStage() -- stage == 2
+			end
+		elseif stage == 2 then
+			local hp = DBM:GetBossHPByUnitID("boss2") -- лик
+			if hp <= 1 then
+				self:NextStage() -- stage == 3
+			end
+		elseif stage == 3 then
+			local hp = DBM:GetBossHPByUnitID("boss4") -- щупальце плеть
+			if hp <= 1 then
+				self:NextStage() -- stage == 4
+			end
+		elseif stage == 4 then
+			if DBM:GetBossHPByUnitID("boss2") < 1 and DBM:GetBossHPByUnitID("boss3") < 1 and DBM:GetBossHPByUnitID("boss4") < 1 then
+				self:NextStage() -- stage == 5
+			end
+		end
+		-- local hpz = DBM:GetBossHPByUnitID("boss1")
 
+		-- if hp then
+		-- 	if hp <= 67 and stage == 1 then
+		-- 		mod:SetStage(2)
+		-- 	elseif  hp <= 38 and stage == 2 then
+		-- 		mod:SetStage(3)
+		-- 	elseif  hp <= 50 and stage == 3 then
+		-- 		mod:SetStage(4)
+		-- 	elseif  hp <= 26 and stage == 4 then
+		-- 		mod:SetStage(5)
+		-- 	end
+		-- end
+	end
+end
+
+-- if self:GetUnitCreatureId(guid) == 50702 then -- zort
+-- 	-- if  DBM:GetBossHP(guid) <= 68
+-- elseif self:GetUnitCreatureId(guid) == 50714 then -- вторая лик
+-- 	if  DBM:GetBossHP(guid) <= 2 and self:GetStage() == 2 then
+-- 		self:NextStage() --stage == 3
+-- 	end
+-- elseif self:GetUnitCreatureId(guid) == 50715 then -- первая чудовищная
+-- 	if  DBM:GetBossHP(guid) <= 2 and self:GetStage() == 1  then
+-- 		self:NextStage() --stage == 2
+-- 	elseif  DBM:GetBossHP(guid) >= 99 and self:GetStage() == 3 then
+-- 		self:NextStage() --stage == 4
+-- 	end
+-- elseif self:GetUnitCreatureId(guid) == 50716 then -- щупальце плеть
+-- 	if  DBM:GetBossHP(guid) <= 1 and self:GetStage() == 3  then
+-- 		self:NextStage() --stage == 4
+-- 	end
+-- elseif self:GetStage() == 4 and self.AllThreeDead == 4 then
+-- 	self:NextStage() --stage == 5
+-- end
+-- local test = true
+-- if test then
+-- 	local f = CreateFrame("Frame");
+-- 	f.elapsed = 0;
+-- 	f:SetScript("OnUpdate", function(self,elapsed)
+-- 		self.elapsed = self.elapsed + elapsed;
+-- 		if self.elapsed < 5 then return end
+-- 		self.elapsed = 0
+
+-- 	end)
+-- end
