@@ -834,7 +834,7 @@ L:SetGeneralLocalization({
 -------------------------
 --  Devourer of Souls  --
 -------------------------
-L = DBM:GetModLocalization("DevourerofSouls")
+L = DBM:GetModLocalization("Devourer of Souls")
 
 L:SetGeneralLocalization({
 	name = "Devourer of Souls"
