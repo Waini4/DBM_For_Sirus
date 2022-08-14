@@ -7097,8 +7097,8 @@ end
 
 function bossModPrototype:GetStage()
 	if not self.vb.phase then
-		error("DDM mod" .. self.id .. " dont have stage")
-		return
+		-- error("DBM mod" .. self.id .. " dont have stage")
+		return nil
 	end
 	return self.vb.phase
 end
