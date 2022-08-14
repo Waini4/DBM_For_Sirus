@@ -7,7 +7,7 @@ mod:SetCreatureID(99973, 99972, 99974, 15691)
 --mod:RegisterCombat("yell", L.DBM_CURA_YELL_PULL)
 mod:RegisterCombat("combat", 99974, 15691)
 
-mod:RegisterEventsInCombat(
+mod:RegisterEvents(
 	"SPELL_AURA_APPLIED 305309 305305",
 	"SPELL_AURA_REMOVED 305313 305309",
 	"SPELL_CAST_START 305296 305312",

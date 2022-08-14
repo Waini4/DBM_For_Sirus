@@ -5,7 +5,7 @@ mod:SetRevision("20210502220000")
 mod:SetCreatureID(10055, 100552, 100555)
 mod:RegisterCombat("yell", L.YellZluker)
 
-mod:RegisterEventsInCombat(
+mod:RegisterEvents(
 	"SPELL_CAST_START 305535",
 	"CHAT_MSG_MONSTER_YELL"
 )

@@ -8,7 +8,7 @@ mod:RegisterCombat("combat")
 --[[mod:RegisterEvents(
 	"PLAYER_REGEN_DISABLED"
 )]]
-mod:RegisterEventsInCombat(
+mod:RegisterEvents(
 	"SPELL_AURA_APPLIED 43127 29833 305265 305253 305253",
 	"SPELL_AURA_REMOVED 305265",
 	"CHAT_MSG_MONSTER_YELL",

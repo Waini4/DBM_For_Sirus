@@ -6,7 +6,7 @@ mod:SetCreatureID(16524)
 mod:RegisterCombat("combat")
 mod:SetUsedIcons(1, 2, 3, 4, 5, 6, 7, 8)
 
-mod:RegisterEventsInCombat(
+mod:RegisterEvents(
 	"SPELL_CAST_START 30004 29973 305338 305329 305326 305331",
 	"SPELL_AURA_APPLIED 29991 29946 305328",
 	"SPELL_AURA_REMOVED 29991 305328",
@@ -50,10 +50,10 @@ local WreathTargets = {}
 mod.vb.famCounter = 1
 
 
-function mod:OnCombatStart()
+function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 16524, "Shade of Aran")
 	if self:IsDifficulty("normal10") then
-		berserkTimer:Start()
+		berserkTimer:Start(-delay)
 	elseif self:IsDifficulty("heroic10") then
 		timerSpecialHeroic:Start()
 		self.vb.famCounter = 1
