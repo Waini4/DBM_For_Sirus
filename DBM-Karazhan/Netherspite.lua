@@ -24,8 +24,8 @@ local warningVoid       = mod:NewSpellAnnounce(37063, 3)
 
 local specWarnVoid 		= mod:NewSpecialWarningMove(30533, nil, nil, 2, 4, 2)
 
-local timerPortalPhase 	= mod:NewTimer(61.5, "timerPortalPhase", "Interface\\Icons\\Spell_Arcane_PortalIronForge")
-local timerBanishPhase 	= mod:NewTimer(31, "timerBanishPhase", "Interface\\Icons\\Spell_Shadow_Cripple")
+local timerPortalPhase 	= mod:NewTimer(60, "timerPortalPhase", "Interface\\Icons\\Spell_Arcane_PortalIronForge")
+local timerBanishPhase 	= mod:NewTimer(30, "timerBanishPhase", "Interface\\Icons\\Spell_Shadow_Cripple")
 local timerBreathCast  	= mod:NewCastTimer(2.5, 38523)
 
 local timerGates       	= mod:NewTimer(13, "TimerGates", 305400)
@@ -47,12 +47,12 @@ mod.vb.breatheCount = 0
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 15689, "Netherspite")
-	if mod:IsDifficulty("normal10") then
+	if self:IsDifficulty("normal10") then
 		timerNextVoid:Start()
 		berserkTimer:Start()
-		timerPortalPhase:Start(62-delay)
-		warningBanishSoon:Schedule(57-delay)
-	elseif mod:IsDifficulty("heroic10") then
+		timerPortalPhase:Start(60-delay)
+		warningBanishSoon:Schedule(55-delay)
+	elseif self:IsDifficulty("heroic10") then
 		timerGates:Start()
 		timerGhostPhase:Start()
 	end

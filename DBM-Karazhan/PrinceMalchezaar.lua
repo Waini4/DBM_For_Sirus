@@ -5,7 +5,7 @@ mod:SetRevision("20210502220000") -- fxpw check 202206151120000
 mod:SetCreatureID(15690)
 mod:RegisterCombat("combat", 15690)
 
-mod:RegisterEventsInCombat(
+mod:RegisterEvents(
 	"SPELL_CAST_START 305425 305443 305447",
 	"SPELL_AURA_APPLIED 305433 305435 305429",
 	"UNIT_HEALTH",
@@ -30,7 +30,7 @@ local timerCallofDeadCD  = mod:NewCDTimer(10, 305447)
 local warnCallofDead     = mod:NewTargetAnnounce(305447, 3)
 local specWarnCallofDead = mod:NewSpecialWarningYou(305447)
 
-local warnNextPhaseSoon	= mod:NewAnnounce("WarnNextPhaseSoon", 1)
+local warnNextPhaseSoon	= mod:NewAnnounce("WarnNextPhase", 1)
 -- local warnSound						= mod:NewSoundAnnounce()
 -- mod.vb.phaseCounter     = 1
 local warnPorch         = mod:NewTargetAnnounce(305429, 3)
@@ -39,8 +39,8 @@ local yellPorchFades    = mod:NewShortFadesYell(305429)
 
 local flameTargets = {}
 local PorchTargets = {}
+local inferno = 1
 mod.vb.PorchIcons = 8
-mod.vb.phase = 0
 
 mod:AddBoolOption("AnnouncePorch", false)
 -- mod:SetStage(0)
@@ -58,15 +58,17 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:CHAT_MSG_MONSTER_YELL(msg)
-	if msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2 then
+	if (inferno == 1 and msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2) then
 		warningInfernal:Show()
 		timerInfernal:Start()
 	elseif msg == L.DBM_PRINCE_YELL_P3 then
 		warnNextPhaseSoon:Show("3")
-		self.vb.phase = 3
+		inferno = 3
+		timerInfernal:Cancel()
+		timerInfernal:Start(17)
 	elseif msg == L.DBM_PRINCE_YELL_P2 then
 		warnNextPhaseSoon:Show("2")
-	elseif self.vb.phase == 3 and (msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2) then
+	elseif (inferno == 3 and msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2) then
 		warningInfernal:Show()
 		timerInfernal:Start(17)
 	end
@@ -74,6 +76,7 @@ end
 
 function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 15690, "Prince Malchezaar", wipe)
+	inferno = 1
 end
 
 function mod:SPELL_CAST_START(args)

@@ -249,7 +249,7 @@ L:SetGeneralLocalization{
 }
 
 L:SetWarningLocalization{
-	WarnNextPhaseSoon = "Фаза %s"
+	WarnNextPhase = "Фаза %s"
 }
 
 L:SetTimerLocalization{
