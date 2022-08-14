@@ -8,8 +8,11 @@ mod:RegisterCombat("combat", 15690)
 mod:RegisterEvents(
 	"SPELL_CAST_START 305425 305443 305447",
 	"SPELL_AURA_APPLIED 305433 305435 305429",
-	"UNIT_HEALTH",
+	
 	"CHAT_MSG_MONSTER_YELL"
+)
+mod:RegisterEventsInCombat(
+	"UNIT_HEALTH"
 )
 
 --обычка--
@@ -59,7 +62,12 @@ function mod:OnCombatStart(delay)
 	end
 end
 
+function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 15690, "Prince Malchezaar", wipe)
+end
+
 function mod:CHAT_MSG_MONSTER_YELL(msg)
+	
 	if msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2 then
 		warningInfernal:Show()
 		timerInfernal:Start()
@@ -78,9 +86,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 	end
 end
 
-function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 15690, "Prince Malchezaar", wipe)
-end
+
 
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(305425) then
@@ -125,45 +131,53 @@ function mod:SPELL_AURA_APPLIED(args)
 end
 
 function mod:UNIT_HEALTH(uId)
-	if self:GetUnitCreatureId(uId) == 15690 and self:IsDifficulty("heroic10") then
-		local hp = DBM:GetBossHP(uId)
+	if self:GetUnitCreatureId(uId) == 15690 then
+		local hp = DBM:GetBossHPByUnitID(uId)
 		local stage = self:GetStage()
-		if (stage == 1 and hp <= 80) then
-			self:SetStage(2)
-			warnNextPhaseSoon:Show("2")
-			timerFlameCD:Start(20)
-			timerCurseCD:Start(20)
-		elseif (stage == 2 and hp <= 40) then
-			self:SetStage(3)
-			warnNextPhaseSoon:Show(L.FlameWorld)
-			timerCurseCD:Cancel()
-			timerNovaCD:Cancel()
-			timerFlameCD:Start(10)
-		elseif (stage == 3 and hp <= 30) then
-			self:SetStage(4)
-			warnNextPhaseSoon:Show(L.IceWorld)
-			timerFlameCD:Cancel()
-			timerIceSpikeCD:Start()
-			timerCurseCD:Start(20)
-		elseif (stage == 4 and hp <= 20) then
-			self:SetStage(5)
-			warnNextPhaseSoon:Show(L.BlackForest)
-			timerCurseCD:Cancel()
-			timerIceSpikeCD:Cancel()
-			timerCallofDeadCD:Start()
-		elseif (stage == 5 and hp <= 10) then
-			warnNextPhaseSoon:Show(L.LastPhase)
-			timerCallofDeadCD:Cancel()
-			timerFlameCD:Start()
+		if stage then
+			if  self:IsDifficulty("heroic10") then
+				if hp then
+					if (stage == 1 and hp <= 80) then
+						self:SetStage(2)
+						warnNextPhaseSoon:Show("2")
+						timerFlameCD:Start(20)
+						timerCurseCD:Start(20)
+					elseif (stage == 2 and hp <= 40) then
+						self:SetStage(3)
+						warnNextPhaseSoon:Show(L.FlameWorld)
+						timerCurseCD:Cancel()
+						timerNovaCD:Cancel()
+						timerFlameCD:Start(10)
+					elseif (stage == 3 and hp <= 30) then
+						self:SetStage(4)
+						warnNextPhaseSoon:Show(L.IceWorld)
+						timerFlameCD:Cancel()
+						timerIceSpikeCD:Start()
+						timerCurseCD:Start(20)
+					elseif (stage == 4 and hp <= 20) then
+						self:SetStage(5)
+						warnNextPhaseSoon:Show(L.BlackForest)
+						timerCurseCD:Cancel()
+						timerIceSpikeCD:Cancel()
+						timerCallofDeadCD:Start()
+					elseif (stage == 5 and hp <= 10) then
+						warnNextPhaseSoon:Show(L.LastPhase)
+						timerCallofDeadCD:Cancel()
+						timerFlameCD:Start()
+					end
+				end
+			elseif self:IsDifficulty("normal10") then
+				if hp then
+					if (stage == 1 and hp <= 60) then
+						self:SetStage(2)
+					elseif (stage == 2 and hp <= 30) then
+						self:SetStage(3)
+					end
+				end
+			end
+		else
+			self:SetStage(1)
 		end
-	-- elseif self:GetUnitCreatureId(uId) == 15690 and self:IsDifficulty("normal10") then
-	-- 	local hp = DBM:GetBossHP(uId)
-	-- 	local stage = self:GetStage()
-	-- 	if (stage == 1 and hp <= 60) then
-	-- 		self:SetStage(2)
-	-- 	elseif (stage == 2 and hp <= 30) then
-	-- 		self:SetStage(3)
-	-- 	end
 	end
 end
 
