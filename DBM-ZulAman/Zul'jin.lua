@@ -143,36 +143,36 @@ end
 
 function mod:UNIT_HEALTH(uId)
 	if self:GetUnitCreatureId(uId) == 23863 then
-		local hp = DBM:GetBossHP(uId)
+		local hp = DBM:GetBossHPByUnitID(uId)
 		local stage = self:GetStage()
-		if (stage == 1 and hp <= 81) then
-			self:SetStage(2)
-			-- phaseCounter = phaseCounter + 1
-			warnNextPhaseSoon:Show(L.Bear)
-		elseif (stage == 2 and hp <= 61) then
-			self:SetStage(3)
-			-- phaseCounter = phaseCounter + 1
-			-- timerParalysis:Cancel()
-			warnNextPhaseSoon:Show(L.Hawk)
-		elseif (stage == 3 and hp <= 41) then
-			self:SetStage(4)
-			-- phaseCounter = phaseCounter + 1
-			warnNextPhaseSoon:Show(L.Lynx)
-		elseif (stage == 4 and hp <= 20) then
-			-- phaseCounter = phaseCounter + 1
-			warnNextPhaseSoon:Show(L.Dragon)
-			-- self:SetStage(5)
-			self:SetStage(5)
-			timerJump:Cancel()
-			-- needAnonse = true
-			timerFlamePillar:Start(18)
-		-- elseif (hp <= 20 and hp > 19 and stage == 5 and needAnonse) then
-			-- self:SetStage(5)
-			-- timerJump:Cancel()
-			-- self:ScheduleMethod(10, "tPillar")
+		if stage and hp then
+			if (stage == 1 and hp <= 81) then
+				self:SetStage(2)
+				-- phaseCounter = phaseCounter + 1
+				warnNextPhaseSoon:Show(L.Bear)
+			elseif (stage == 2 and hp <= 61) then
+				self:SetStage(3)
+				-- phaseCounter = phaseCounter + 1
+				-- timerParalysis:Cancel()
+				warnNextPhaseSoon:Show(L.Hawk)
+			elseif (stage == 3 and hp <= 41) then
+				self:SetStage(4)
+				-- phaseCounter = phaseCounter + 1
+				warnNextPhaseSoon:Show(L.Lynx)
+			elseif (stage == 4 and hp <= 20) then
+				-- phaseCounter = phaseCounter + 1
+				warnNextPhaseSoon:Show(L.Dragon)
+				-- self:SetStage(5)
+				self:SetStage(5)
+				timerJump:Cancel()
+				-- needAnonse = true
+				timerFlamePillar:Start(18)
 
-			-- needAnonse = false
+			end
+		elseif stage == nil then
+			self:SetStage(1)
 		end
+
 	end
 end
 --Надеюсь я верно понял
