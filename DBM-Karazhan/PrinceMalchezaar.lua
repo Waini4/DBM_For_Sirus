@@ -30,7 +30,7 @@ local timerCallofDeadCD  = mod:NewCDTimer(10, 305447)
 local warnCallofDead     = mod:NewTargetAnnounce(305447, 3)
 local specWarnCallofDead = mod:NewSpecialWarningYou(305447)
 
-local warnNextPhaseSoon = mod:NewAnnounce("WarnNextPhaseSoon", 1)
+local warnNextPhaseSoon	= mod:NewAnnounce("WarnNextPhase", 1)
 -- local warnSound						= mod:NewSoundAnnounce()
 -- mod.vb.phaseCounter     = 1
 local warnPorch         = mod:NewTargetAnnounce(305429, 3)
@@ -39,15 +39,13 @@ local yellPorchFades    = mod:NewShortFadesYell(305429)
 
 local flameTargets = {}
 local PorchTargets = {}
+local inferno = 1
 mod.vb.PorchIcons = 8
-
 
 mod:AddBoolOption("AnnouncePorch", false)
 -- mod:SetStage(0)
 function mod:OnCombatStart(delay)
-	-- self:SendSync("Phase1")
 	self:SetStage(1)
-	warnNextPhaseSoon:Show("1")
 	DBM:FireCustomEvent("DBM_EncounterStart", 15690, "Prince Malchezaar")
 	if self:IsDifficulty("normal10") then
 		timerInfernal:Start()
@@ -60,26 +58,25 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:CHAT_MSG_MONSTER_YELL(msg)
-	if msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2 then
+	if (inferno == 1 and msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2) then
 		warningInfernal:Show()
 		timerInfernal:Start()
 	elseif msg == L.DBM_PRINCE_YELL_P3 then
-		self:SendSync("Phase3")
-		self:SetStage(3)
 		warnNextPhaseSoon:Show("3")
+		inferno = 3
+		timerInfernal:Cancel()
+		timerInfernal:Start(17)
 	elseif msg == L.DBM_PRINCE_YELL_P2 then
-		self:SendSync("Phase2")
-		self:SetStage(2)
 		warnNextPhaseSoon:Show("2")
-		--warnPhase2:Show()
-	elseif self:GetStage() == 3 and (msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2) then
-			warningInfernal:Show()
-			timerInfernal:Start(17)
+	elseif (inferno == 3 and msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2) then
+		warningInfernal:Show()
+		timerInfernal:Start(17)
 	end
 end
 
 function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 15690, "Prince Malchezaar", wipe)
+	inferno = 1
 end
 
 function mod:SPELL_CAST_START(args)
