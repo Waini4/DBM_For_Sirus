@@ -130,6 +130,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	end
 end
 
+
 function mod:UNIT_HEALTH(uId)
 	if self:GetUnitCreatureId(uId) == 15690 then
 		local hp = DBM:GetBossHPByUnitID(uId)
