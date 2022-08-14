@@ -8,7 +8,6 @@ mod:RegisterCombat("combat", 15690)
 mod:RegisterEvents(
 	"SPELL_CAST_START 305425 305443 305447",
 	"SPELL_AURA_APPLIED 305433 305435 305429",
-	
 	"CHAT_MSG_MONSTER_YELL"
 )
 mod:RegisterEventsInCombat(
@@ -67,7 +66,6 @@ function mod:OnCombatEnd(wipe)
 end
 
 function mod:CHAT_MSG_MONSTER_YELL(msg)
-	
 	if msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2 then
 		warningInfernal:Show()
 		timerInfernal:Start()
