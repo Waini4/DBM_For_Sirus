@@ -16,7 +16,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_SUMMON 71426",
 	"SWING_DAMAGE",
 	"CHAT_MSG_MONSTER_YELL",
-	"UNIT_TARGET_UNFILTERED"
+	"UNIT_TARGET"
 )
 
 
@@ -33,6 +33,7 @@ mod:AddBoolOption("RemoveDruidBuff", false, "misc")
 mod:AddTimerLine(DBM_COMMON_L.ADDS)
 local warnAddsSoon					= mod:NewAnnounce("WarnAddsSoon", 2)
 local warnReanimating				= mod:NewAnnounce("WarnReanimating", 3)
+local warnDeathDecay				= mod:NewSpellAnnounce(72108, 2)
 local warnDarkTransformation		= mod:NewSpellAnnounce(70900, 4)
 local warnDarkEmpowerment			= mod:NewSpellAnnounce(70901, 4)
 
@@ -79,7 +80,8 @@ mod.vb.dominateMindIcon = 6
 local deformedFanatic
 local empoweredAdherent
 local shieldName = DBM:GetSpellInfo(70842)
-
+local lastDD = 0
+local bband = bit.band
 local isHunter = select(2, UnitClass("player")) == "HUNTER"
 
 local RaidWarningFrame = RaidWarningFrame
@@ -152,6 +154,7 @@ function mod:RemoveBuffs() -- Spell is removed based on name so no longer need S
 	CancelUnitBuff("player", (GetSpellInfo(48469)))		-- Mark of the Wild
 	CancelUnitBuff("player", (GetSpellInfo(48470)))		-- Gift of the Wild
 	CancelUnitBuff("player", (GetSpellInfo(69381)))		-- Drums of the Wild
+	CancelUnitBuff("player", (GetSpellInfo(48170)))		-- Prayer of Shadow Protection
 end
 
 local function showDominateMindWarning(self)
@@ -190,7 +193,8 @@ end
 
 local function TrySetTarget(self)
 	if DBM:GetRaidRank() >= 1 then
-		for uId in DBM:GetGroupMembers() do
+		for i = 1, GetNumRaidMembers() do
+			local uId = "raid"..i
 			if UnitGUID(uId.."target") == deformedFanatic and self.Options.SetIconOnDeformedFanatic then
 				deformedFanatic = nil
 				self:SetIcon(uId.."target", 8)
@@ -298,6 +302,10 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnDeathDecay:Show()
 			specWarnDeathDecay:Play("watchfeet")
 		end
+		if (GetTime() - lastDD > 5) then
+			warnDeathDecay:Show()
+			lastDD = GetTime()
+		end
 	elseif spellId == 71237 and args:IsPlayer() then
 		specWarnCurseTorpor:Show()
 		specWarnCurseTorpor:Play("targetyou")
@@ -382,10 +390,14 @@ function mod:SPELL_CAST_SUCCESS(args)
 		end
 	end
 end
-
+local extraSpellIds = {
+	[71420]= true,
+	[72007]= true,
+	[72501]= true,
+	[72502]= true
+}
 function mod:SPELL_INTERRUPT(args)
-	local extraSpellId = args.extraSpellId
-	if type(extraSpellId) == "number" and (extraSpellId == 71420 or extraSpellId == 72007 or extraSpellId == 72501 or extraSpellId == 72502) then
+	if type(args.extraSpellId) == "number" and extraSpellIds[args.extraSpellId] then
 		timerFrostboltCast:Cancel()
 	end
 end
@@ -398,14 +410,19 @@ function mod:SPELL_SUMMON(args)
 	end
 end
 
-function mod:SWING_DAMAGE(sourceGUID, _, _, destGUID)
-	if destGUID == UnitGUID("player") and self:GetCIDFromGUID(sourceGUID) == 38222 then
+function mod:SWING_DAMAGE(sourceGUID, _, _, _,_,destFrag)
+	if (bband(destFrag, COMBATLOG_OBJECT_AFFILIATION_MINE) ~= 0 and bband(destFrag, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0) and self:GetCIDFromGUID(sourceGUID) == 38222 then
 		specWarnVengefulShade:Show()
 		specWarnVengefulShade:Play("targetyou")
 	end
 end
 
-function mod:UNIT_TARGET_UNFILTERED()
+-- function mod:UNIT_TARGET_UNFILTERED()
+-- 	if empoweredAdherent or deformedFanatic then
+-- 		TrySetTarget(self)
+-- 	end
+-- end
+function mod:UNIT_TARGET()
 	if empoweredAdherent or deformedFanatic then
 		TrySetTarget(self)
 	end
