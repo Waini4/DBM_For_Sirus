@@ -28,6 +28,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 308548 308544 308563 42783",
 	"SPELL_AURA_APPLIED_DOSE 308548 308544 308563 42783",
 	"SWING_DAMAGE",
+	"UNIT_HEALTH",
 	"UNIT_DEAD"
 )
 --------------------------нормал--------------------------
