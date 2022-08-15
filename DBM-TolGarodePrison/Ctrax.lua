@@ -11,9 +11,9 @@ mod:SetUsedIcons(4, 5, 6, 7, 8)
 mod:RegisterEvents(
 	"SPELL_CAST_START 317579 317596 317571 317604",
 	-- "SPELL_CAST_SUCCESS",
-	"SPELL_AURA_APPLIED 317594 317595 317565",
+	"SPELL_AURA_APPLIED 317593 317594 317737 317738 317595 317565",
 	"SPELL_AURA_APPLIED_DOSE 317594 317595 317565",
-	"SPELL_AURA_REMOVED 317594 317565",
+	"SPELL_AURA_REMOVED 317593 317594 317737 317738 317565",
 	"SPELL_SUMMON 317567",
 	"CHAT_MSG_RAID_BOSS_EMOTE",
 	"UNIT_HEALTH"
@@ -144,7 +144,7 @@ end
 
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
-	if args:IsSpellID(317594) then
+	if args:IsSpellID(317593, 317594, 317737, 317738) then
 		CurseTargets[#CurseTargets + 1] = args.destName
 		if self.Options.SetIconOnCurse and self.vb.CurseIcon > 0 then
 			self:SetIcon(args.destName, self.vb.CurseIcon)
@@ -181,7 +181,7 @@ function mod:SPELL_SUMMON(args)
 end
 
 function mod:SPELL_AURA_REMOVED(args)
-	if args:IsSpellID(317594) then --Древнее проклятие
+	if args:IsSpellID(317593, 317594, 317737, 317738) then --Древнее проклятие
 		if self.Options.SetIconOnCurse then
 			self:RemoveIcon(args.destName)
 		end
