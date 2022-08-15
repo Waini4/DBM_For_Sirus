@@ -5935,12 +5935,12 @@ function DBM:GetCurrentInstanceDifficulty()
 		else -- Non-dynamic raids
 			if difficulty == 1 then
 				-- check for Timewalking instance (workaround using GetRaidDifficulty since on Warmane all the usual APIs fail and return "normal" difficulty)
-				local raidDifficulty = GetRaidDifficulty()
-				if raidDifficulty ~= difficulty and (raidDifficulty == 2 or raidDifficulty == 4) then -- extra checks due to lack of tests and no access to a timewalking server
-					return "timewalker", difficultyName .. " - ", raidDifficulty, maxPlayers
-				else
-					return maxPlayers and "normal" .. maxPlayers or "normal10", difficultyName .. " - ", difficulty, maxPlayers
-				end
+				-- local raidDifficulty = GetRaidDifficulty()
+				-- if raidDifficulty ~= difficulty and (raidDifficulty == 2 or raidDifficulty == 4) then -- extra checks due to lack of tests and no access to a timewalking server
+					-- return "timewalker", difficultyName .. " - ", raidDifficulty, maxPlayers
+				-- else
+				return "normal10", difficultyName .. " - ", difficulty, maxPlayers
+				-- end
 			elseif difficulty == 2 then
 				return "normal25", difficultyName .. " - ", difficulty, maxPlayers
 			elseif difficulty == 3 then
@@ -7127,7 +7127,7 @@ end
 -----------------------
 
 function bossModPrototype:IsDifficulty(...)
-	local diff = savedDifficulty or DBM:GetCurrentInstanceDifficulty()
+	local diff = DBM:GetCurrentInstanceDifficulty()
 	for i = 1, select("#", ...) do
 		if diff == select(i, ...) then
 			return true
