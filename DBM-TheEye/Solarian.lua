@@ -45,7 +45,7 @@ local timerNextWrathN = mod:NewCDTimer(21, 42783, nil, "RemoveEnrage", nil, 5, n
 --------------------------героик--------------------------
 
 local warnRing       = mod:NewSoonAnnounce(308563, 3) -- ослепляющее кольцо
-local warnPhase2Soon = mod:NewPrePhaseAnnounce(2)
+-- local warnPhase2Soon = mod:NewPrePhaseAnnounce(2)
 local warnPhase2     = mod:NewPhaseAnnounce(2)
 local warnKol        = mod:NewTargetAnnounce(308563, 2) -- Кольцо
 local warnFlashVoid  = mod:NewSoonAnnounce(308585, 3)
@@ -70,7 +70,7 @@ local priestsH = true
 local provid = true
 local KolTargets = {}
 local warned_preP1 = false
-local warned_preP2 = false
+-- local warned_preP2 = false
 
 mod:AddBoolOption("Zrec", true)
 -- mod:AddBoolOption("RangeFrame", true)
@@ -254,17 +254,18 @@ function mod:SWING_DAMAGE(_, sourceName, sourceFlags, destGUID, destName)
 end
 
 function mod:UNIT_HEALTH(uId)
-	if self:GetStage() and not warned_preP1 and self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 33 then
-		warned_preP1 = true
-		warnPhase2Soon:Show()
-	elseif not warned_preP2 and self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 30 then
-		warned_preP2 = true
-		warnPhase2:Show()
-		timerAdds:Cancel()
-	elseif self:GetUnitCreatureId(uId) == 18805 then
+	-- if self:GetStage() and not warned_preP1 and self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHPByUnitID(uId) <= 33 and self:IsDifficulty("normal25") then
+	-- 	warned_preP1 = true
+	-- 	warnPhase2Soon:Show()
+	-- elseif not warned_preP2 and self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHPByUnitID(uId) <= 30 and self:IsDifficulty("normal25") then
+	-- 	warned_preP2 = true
+	-- 	warnPhase2:Show()
+	-- 	timerAdds:Cancel()
+	if self:GetUnitCreatureId(uId) == 18805 then
 		if self:GetStage() and self:GetStage() == 1 then
 			if  DBM:GetBossHPByUnitID(uId) <= 40 and self:IsDifficulty("heroic25") then
 				self:SetStage(2)
+				timerAdds:Cancel()
 			elseif DBM:GetBossHPByUnitID(uId) <= 20 and self:IsDifficulty("normal25") then
 				self:SetStage(2)
 			end
