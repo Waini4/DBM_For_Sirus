@@ -7153,11 +7153,11 @@ function bossModPrototype:IsEasy()
 	return diff == "normal" or diff == "heroic5" or diff == "normal5"
 end
 
---Dungeons: mythic, mythic+. Raids: heroic, mythic
-function bossModPrototype:IsHard()
-	local diff = savedDifficulty or DBM:GetCurrentInstanceDifficulty()
-	return diff == "mythic" or diff == "heroic"
-end
+-- --Dungeons: mythic, mythic+. Raids: heroic, mythic
+-- function bossModPrototype:IsHard()
+-- 	local diff = savedDifficulty or DBM:GetCurrentInstanceDifficulty()
+-- 	return diff == "mythic" or diff == "heroic"
+-- end
 
 --Pretty much ANYTHING that has a normal mode
 function bossModPrototype:IsNormal()
@@ -9529,7 +9529,7 @@ do
 			if (name == "changemt" or name == "tauntboss") and DBM.Options.FilterTankSpec and not self.mod:IsTank() and not always then return end
 			--Mute VP if SW sound is set to None in the boss mod.
 			if soundId == "None" then return end
-			local path = customPath or "Interface\\AddOns\\DBM-VP" .. voice .. "\\" .. name .. ".ogg"
+			local path =customPath or ("Interface\\AddOns\\DBM-VP" .. voice .. "\\" .. name .. ".ogg") -- не уверен что так но пусть
 			DBM:PlaySoundFile(path)
 		end
 	end
@@ -9551,8 +9551,7 @@ do
 		return DBMScheduler:Unschedule(self.Play, self.mod, self, ...)
 	end
 
-	function bossModPrototype:NewSpecialWarning(text, optionDefault, optionName, optionVersion, runSound, hasVoice,
-	                                            difficulty, texture, spellID)
+	function bossModPrototype:NewSpecialWarning(text, optionDefault, optionName, optionVersion, runSound, hasVoice, difficulty, texture, spellID)
 		if not text then
 			error("NewSpecialWarning: you must provide special warning text", 2)
 			return
@@ -10882,8 +10881,7 @@ do
 	function bossModPrototype:NewCombatTimer(timer, _, barText, barIcon) -- timer, text, barText, barIcon
 		timer = timer or 10
 		--NewTimer(timer, name, texture, optionDefault, optionName, colorType, inlineIcon, keep, countdown, countdownMax, r, g, b)
-		local bar = self:NewTimer(timer, barText or L.GENERIC_TIMER_COMBAT,
-			barIcon or "Interface\\Icons\\Ability_Warrior_OffensiveStance", nil, "timer_combat", nil, nil, nil, 1, 5)
+		local bar = self:NewTimer(timer, barText or L.GENERIC_TIMER_COMBAT, barIcon or "Interface\\Icons\\Ability_Warrior_OffensiveStance", nil, "timer_combat", nil, nil, nil, 1, 5)
 		local obj = setmetatable(
 			{
 				bar = bar,

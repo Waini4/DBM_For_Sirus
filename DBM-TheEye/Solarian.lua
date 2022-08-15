@@ -66,6 +66,8 @@ local timerWrathH     = mod:NewTargetTimer(6, 308548, nil, "RemoveEnrage", nil, 
 local timerNextWrathH = mod:NewCDTimer(43, 308548, nil, "RemoveEnrage", nil, 1, nil, CL.ENRAGE_ICON)
 local timerFlashVoid  = mod:NewCDTimer(75, 308585, nil, nil, nil, 6, nil, CL.HEROIC_ICON)
 
+mod:AddNamePlateOption("Nameplate1", 42783, true)
+
 local priestsN = true
 local priestsH = true
 local provid = true
@@ -182,7 +184,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnWrathN:Show(args.destName)
 		timerWrathN:Start(args.destName)
 		---TODO elvui test
-		if DBM:CanUseNameplateIcons() then
+		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
 			DBM.Nameplate:Show(args.destGUID, 42783)
 		end
 		self:SetIcon(args.destName, 8, 6)
@@ -196,7 +198,7 @@ end
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(42783) then
-		if DBM:CanUseNameplateIcons() then
+		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
 			DBM.Nameplate:Hide(args.destGUID, 42783)
 		end
 	end

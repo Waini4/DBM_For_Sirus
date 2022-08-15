@@ -57,7 +57,7 @@ mod:AddSetIconOption("SetIconOnSignTargets", 308471, true, true, {3, 4, 5, 6, 7,
 mod:AddBoolOption("AnnounceSign", false)
 mod:AddBoolOption("RangeFrame", true)
 mod:AddInfoFrameOption(308471, true)
-
+mod:AddNamePlateOption("Nameplate1", 308471, true)
 local beaconIconTargets	= {}
 local MagnetTargets = {}
 local SignTargets = {}
@@ -149,7 +149,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			yellSign:Yell()
 			yellSignFades:Countdown(308471)
 		end
-		if DBM:CanUseNameplateIcons() then
+		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
 			DBM.Nameplate:Show(args.destGUID, 308471)
 		end
 		if self.Options.InfoFrame and not DBM.InfoFrame:IsShown() then
@@ -181,7 +181,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnSignTargets then
 			self:RemoveIcon(args.destName)
 		end
-		if DBM:CanUseNameplateIcons() then
+		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
 			DBM.Nameplate:Hide(args.destGUID, 308471)
 		end
 	end

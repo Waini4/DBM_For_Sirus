@@ -66,7 +66,7 @@ mod:AddSetIconOption("SetIconOnErapTargets", 312204, true, false, { 1, 2, 3 })
 mod:AddInfoFrameOption(312208, true)
 -- mod:AddBoolOption("BossHealthFrame", true, "misc")
 mod:AddBoolOption("RangeFrame", true)
-
+mod:AddNamePlateOption("Nameplate1", 317160, true)
 mod:AddTimerLine(DBM_CORE_L.HEROIC_MODE25)
 
 local specWarnTimelessWhirlwindsGTFO = mod:NewSpecialWarningGTFO(317165, nil, nil, nil, 1, 2)
@@ -218,7 +218,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			self:SetIcon(args.destName, self.vb.RevCascIcons)
 		end
 		ReverseCascadeBuff:Start()
-		if DBM:CanUseNameplateIcons() then
+		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
 			DBM.Nameplate:Show(args.destGUID, 317160)
 		end
 
@@ -300,7 +300,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnRevCascTargets then
 			self:RemoveIcon(args.destName)
 		end
-		if DBM:CanUseNameplateIcons() then
+		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
 			DBM.Nameplate:Hide(args.destGUID, 317160)
 		end
 		if args:IsPlayer() then
