@@ -86,7 +86,7 @@ end
 function mod:OnCombatStart(delay)
 	self:SetStage(1)
 	DBM:FireCustomEvent("DBM_EncounterStart", 18805, "High Astromancer Solarian")
-	if mod:IsDifficulty("heroic25") then
+	if self:IsDifficulty("heroic25") then
 		timerNextHelp:Start(40 - delay)
 		timerNextWrathH:Start(43 - delay)
 		self:SetStage(1)
@@ -261,11 +261,9 @@ function mod:UNIT_HEALTH(uId)
 		warned_preP2 = true
 		warnPhase2:Show()
 		timerAdds:Cancel()
-	elseif self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 40 and
-		self:GetCurrentInstanceDifficulty() == "heroic25" then -- TODO: 2 фаза для хма, может багаться получается?
+	elseif self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 40 and self:IsDifficulty("heroic25") and self:GetStage() and self:GetStage() == 1 then -- TODO: 2 фаза для хма, может багаться получается?
 		self:SetStage(2)
-	elseif self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 20 and
-		self:GetCurrentInstanceDifficulty() == "normal25" then
+	elseif self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 20 and self:IsDifficulty("normal25") and self:GetStage() and self:GetStage() == 1 then
 		self:SetStage(2)
 	end
 end
