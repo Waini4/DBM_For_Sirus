@@ -90,7 +90,7 @@ function mod:OnCombatStart(delay)
 	if self:IsDifficulty("heroic25") then
 		timerNextHelp:Start(40 - delay)
 		timerNextWrathH:Start(43 - delay)
-		self:SetStage(1)
+		-- self:SetStage(1)
 	else
 		self.vb.Fear = 0
 		timerAdds:Start()
