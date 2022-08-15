@@ -38,7 +38,7 @@ local warnAddsSoon = mod:NewAnnounce("WarnAddsSoon", 3, 55342)
 local specWarnWrathN = mod:NewSpecialWarningRun(42783, nil, nil, nil, 1, 2)
 
 local timerAdds       = mod:NewTimer(60, "TimerAdds", 55342, "RemoveEnrage", nil, 5, nil, CL.ENRAGE_ICON)
-local timerPriestsN   = mod:NewTimer(14, "TimerPriests", 47788)
+local timerPriestsN   = mod:NewTimer(14, "TimerPriests", 47788, "SpellCaster", 5, nil, CL.HEALER_ICON)
 local timerWrathN     = mod:NewTargetTimer(6, 42783, nil, "RemoveEnrage", nil, 5, nil, CL.ENRAGE_ICON, nil, 1, 5)
 local timerNextWrathN = mod:NewCDTimer(21, 42783, nil, "RemoveEnrage", nil, 5, nil, CL.ENRAGE_ICON)
 
