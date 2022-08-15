@@ -819,7 +819,7 @@ function barPrototype:Update(elapsed)
 	local ExpandUpwards = isEnlarged and barOptions.ExpandUpwardsLarge or not isEnlarged and barOptions.ExpandUpwards
 	if barOptions.DynamicColor and not self.color then
 		local r, g, b
-		if colorCount and (tonumber(colorCount) >= 1) then
+		if colorCount and colorCount ~= "" and(tonumber(colorCount) >= 1) then
 			local colorVar = colorVariables[colorCount]
 			if barOptions.NoBarFade then
 				r = isEnlarged and barOptions["EndColor"..colorVar.."R"] or barOptions["StartColor"..colorVar.."R"]
@@ -993,7 +993,7 @@ function barPrototype:ApplyStyle()
 		end
 	else
 		local barStartRed, barStartGreen, barStartBlue
-		if self.colorType and (tonumber(self.colorType) >= 1) then
+		if self.colorType and self.colorType ~= "" and (tonumber(self.colorType) >= 1) then
 			local colorCount = self.colorType
 			if colorCount == 1 then--Add
 				barStartRed, barStartGreen, barStartBlue = barOptions.StartColorAR, barOptions.StartColorAG, barOptions.StartColorAB
