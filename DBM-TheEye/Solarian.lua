@@ -261,11 +261,22 @@ function mod:UNIT_HEALTH(uId)
 		warned_preP2 = true
 		warnPhase2:Show()
 		timerAdds:Cancel()
-	elseif self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 40 and self:IsDifficulty("heroic25") and self:GetStage() and self:GetStage() == 1 then -- TODO: 2 фаза для хма, может багаться получается?
-		self:SetStage(2)
-	elseif self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 20 and self:IsDifficulty("normal25") and self:GetStage() and self:GetStage() == 1 then
-		self:SetStage(2)
+	elseif self:GetUnitCreatureId(uId) == 18805 then
+		if self:GetStage() and self:GetStage() == 1 then
+			if  DBM:GetBossHPByUnitID(uId) <= 40 and self:IsDifficulty("heroic25") then
+				self:SetStage(2)
+			elseif DBM:GetBossHPByUnitID(uId) <= 20 and self:IsDifficulty("normal25") then
+				self:SetStage(2)
+			end
+		elseif self:GetStage() == nil then
+			self:SetStage(1)
+		end
 	end
+	-- elseif self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 40 and self:IsDifficulty("heroic25") and self:GetStage() and self:GetStage() == 1 then -- TODO: 2 фаза для хма, может багаться получается?
+	-- 	self:SetStage(2)
+	-- elseif self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 20 and self:IsDifficulty("normal25") and self:GetStage() and self:GetStage() == 1 then
+	-- 	self:SetStage(2)
 end
+
 
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
