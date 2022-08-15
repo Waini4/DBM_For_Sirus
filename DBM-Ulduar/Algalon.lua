@@ -29,12 +29,10 @@ local announceBlackHole   = mod:NewSpellAnnounce(313039, 2)
 local announceCosmicSmash = mod:NewAnnounce("WarningCosmicSmash", 3, 313036)
 local announcePhasePunch  = mod:NewAnnounce("WarningPhasePunch", 4, 313039, "Tank")
 
-local specwarnStarLow     = mod:NewSpecialWarning("warnStarLow", "Tank", nil, nil, 1, 2)
-local specWarnPhasePunch  = mod:NewSpecialWarningStack(313033, nil, 4, nil, nil, 1, 6)
-local specWarnBigBang     = mod:NewSpecialWarningDefensive(313034, "Tank", nil, nil, 3, 2)
-local specWarnCosmicSmash = mod:NewSpecialWarningCount(313036, nil, nil, nil, 2, 2)
-
-local timerCombatStart        = mod:NewTimer(8, "TimerCombatStart", 2457)
+local specwarnStarLow         = mod:NewSpecialWarning("warnStarLow", "Tank", nil, nil, 1, 2)
+local specWarnPhasePunch      = mod:NewSpecialWarningStack(313033, nil, 4, nil, nil, 1, 6)
+local specWarnBigBang         = mod:NewSpecialWarningDefensive(313034, "Tank", nil, nil, 3, 2)
+local specWarnCosmicSmash     = mod:NewSpecialWarningCount(313036, nil, nil, nil, 2, 2)
 local enrageTimer             = mod:NewBerserkTimer(360)
 local timerNextBigBang        = mod:NewNextTimer(90.5, 313034, nil, nil, nil, 2)
 local timerBigBangCast        = mod:NewCastTimer(8, 313034)
@@ -53,31 +51,15 @@ function mod:OnCombatStart(delay)
 	self.vb.SmashCount = 0
 	warned_preP2 = false
 	warned_star = false
-	local text = select(3, GetWorldStateUIInfo(1))
-	local _, _, time = string.find(text, L.PullCheck)
-	if not time then
-		time = 120
-	end
-	time = tonumber(time)
-	if time == 120 then
-		timerCombatStart:Start(26.5 - delay)
-		self:ScheduleMethod(26.5 - delay, "startTimers") -- 26 seconds roleplaying
-	else
-		timerCombatStart:Start(-delay)
-		self:ScheduleMethod(8 - delay, "startTimers") -- 8 seconds roleplaying
-	end
-end
-
-function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 32871, "Algalon", wipe)
-end
-
-function mod:startTimers()
 	enrageTimer:Start()
 	timerNextBigBang:Start()
 	announcePreBigBang:Schedule(80)
 	timerCDCosmicSmash:Start(nil, self.vb.SmashCount + 1)
 	timerNextCollapsingStar:Start()
+end
+
+function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 32871, "Algalon", wipe)
 end
 
 function mod:SPELL_CAST_START(args)
@@ -149,7 +131,7 @@ function mod:UNIT_HEALTH(uId)
 	if not warned_preP2 and self:GetUnitCreatureId(uId) == 32871 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.23 then
 		warned_preP2 = true
 		warnPhase2Soon:Show()
-	elseif not warned_star and self:GetUnitCreatureId(uId) == 32955 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.25 then
+	elseif not warned_star and self:GetUnitCreatureId(uId) == 32955 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.10 then
 		warned_star = true
 		specwarnStarLow:Show()
 	end

@@ -81,9 +81,9 @@ local function currentFullDate()
 end
 
 DBM = {
-	Revision = parseCurseDate("20220810154400"),
+	Revision = parseCurseDate("20220815163400"),
 	DisplayVersion = GetAddOnMetadata(_addonname, "Version"), -- the string that is shown as version
-	ReleaseRevision = releaseDate(2022, 08, 10, 15, 44, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	ReleaseRevision = releaseDate(2022, 08, 15, 16, 34, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 
 local fakeBWVersion = 7558
@@ -835,7 +835,8 @@ do
 			if spellId and event then
 				registeredSpellIds[event][spellId] = (registeredSpellIds[event][spellId] or 0) + 1
 			else
-				print("DBM CORE 844 event or spellid is nil ->" .. ((spellId and "s ") or "nil") .. (("  ->" .. event and "e ") or "nil"))
+				print("DBM CORE 844 event or spellid is nil ->" ..
+					((spellId and "s ") or "nil") .. (("  ->" .. event and "e ") or "nil"))
 			end
 		end
 
