@@ -117,8 +117,10 @@ end
 
 function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.YellAdds then
-		timerPriestsN:Start()
-		timerNextWrathN:Start()
+		if self:IsDifficulty("normal25") then
+			timerPriestsN:Start()
+			timerNextWrathN:Start()
+		end
 	elseif msg == L.YellPriests then
 		priestsN = true
 		timerAdds:Start()
