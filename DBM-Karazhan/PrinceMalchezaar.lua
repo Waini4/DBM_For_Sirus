@@ -6,7 +6,7 @@ mod:SetCreatureID(15690)
 mod:RegisterCombat("combat", 15690)
 
 mod:RegisterEvents(
-	"SPELL_CAST_START 305425 305443 305447",
+	"SPELL_CAST_START 305425 305443 305447 30852",
 	"SPELL_AURA_APPLIED 305433 305435 305429",
 	"CHAT_MSG_MONSTER_YELL"
 )
@@ -85,7 +85,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 end
 
 function mod:SPELL_CAST_START(args)
-	if args:IsSpellID(305425) then
+	if args:IsSpellID(305425, 30852) then
 		warningNovaCast:Show()
 		timerNovaCD:Start()
 	elseif args:IsSpellID(305443) then
