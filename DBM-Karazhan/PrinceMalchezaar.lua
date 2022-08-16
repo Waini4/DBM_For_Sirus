@@ -85,7 +85,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 end
 
 function mod:SPELL_CAST_START(args)
-	if args:IsSpellID(305425) then
+	if args:IsSpellID(305425, 30852) then
 		warningNovaCast:Show()
 		timerNovaCD:Start()
 	elseif args:IsSpellID(305443) then
