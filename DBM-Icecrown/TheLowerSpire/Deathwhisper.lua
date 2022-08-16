@@ -40,7 +40,7 @@ local warnDarkEmpowerment			= mod:NewSpellAnnounce(70901, 4)
 local specWarnVampricMight			= mod:NewSpecialWarningDispel(70674, "MagicDispeller", nil, nil, 1, 2)
 local specWarnDarkMartyrdom			= mod:NewSpecialWarningRun(71236, "Melee", nil, nil, 4, 2)
 
-local timerAdds						= mod:NewTimer(60, "TimerAdds", 61131, nil, nil, 1, (DBM_COMMON_L.TANK_ICON)..(DBM_COMMON_L.DAMAGE_ICON))
+local timerAdds						= mod:NewTimer(60, "TimerAdds", 61131, nil, nil, 1, DBM_COMMON_L.TANK_ICON)
 
 -- Boss
 mod:AddTimerLine(L.name)
