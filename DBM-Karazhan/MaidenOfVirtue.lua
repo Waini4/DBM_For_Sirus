@@ -63,6 +63,7 @@ mod:RegisterEvents(
 local timerRepentanceCD = mod:NewCDTimer(68, 305277, nil, nil, nil, 2)
 local timerGroundCD     = mod:NewCDTimer(20, 305271, nil, nil, nil, 3)
 
+local specWarnSpell = mod:NewSpecialWarningSpell(73654, nil, nil, nil, 1, 2, 3)
 local specWarnGround = mod:NewSpecialWarningYou(305271, nil, nil, nil, 3, 2)
 
 -- local warnSound						= mod:NewSoundAnnounce()
@@ -149,6 +150,8 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		if args:IsPlayer() then
 			specWarnGround:Show()
+		else
+			specWarnSpell:Show(args.destName)
 		end
 		if self.Options.GroundIcon then
 			self:SetIcon(args.destName, 8, 5)
