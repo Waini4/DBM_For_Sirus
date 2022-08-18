@@ -21,7 +21,9 @@ L:SetWarningLocalization({
 
 L:SetTimerLocalization({
 	TimerBear		= "Форма медведя",
-	TimerNormal		= "Обычная форма"
+	TimerNormal		= "Обычная форма",
+	BearForm = "Форма медведя",
+	TrollForm = "Форма тролля"
 })
 
 L:SetOptionLocalization({
@@ -84,8 +86,8 @@ L:SetOptionLocalization{
 	Explosion = "Отсчет времени до взрыва"
 }
 L:SetMiscLocalization({
-	YellBomb	= "Сгиньте в огне!",
-	YellAdds	= "Где мои Наседки? Пора за яйца приниматься!",
+	YellBombs		= "Щас я вас сожгу!",
+	YellHatcher		= "Эй, хранители! Займитесь яйцами!"
 })
 
 --------------

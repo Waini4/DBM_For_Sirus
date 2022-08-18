@@ -25,7 +25,7 @@ local specWarnStorm					= mod:NewSpecialWarningSpell(43648, nil, nil, nil, 2, 2)
 local timerNextDisrupt				= mod:NewCDTimer(11, 43622)
 local timerStorm					= mod:NewCastTimer(8, 43648, nil, nil, nil, 2, nil, DBM_COMMON_L.HEALER_ICON)
 local timerStormCD					= mod:NewCDTimer(55, 43648, nil, nil, nil, 3)
-
+local timerNextStatic				= mod:NewCDTimer(14, 44008)
 local SayOnElectricStorm			= mod:NewYellMe(43622)
 local berserkTimer					= mod:NewBerserkTimer(480)
 
@@ -40,6 +40,7 @@ function mod:OnCombatStart(delay)
 	warnStormSoon:Schedule(43)
 	timerStormCD:Start(48)
 	berserkTimer:Start(-delay)
+	timerNextStatic:Start()
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Show()
 	end
@@ -87,5 +88,8 @@ end
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(43621) then
 		warnWind:Show(args.destName)
+	elseif args:IsSpellID(44008) then
+		timerNextStatic:Show()
+		
 	end
 end
