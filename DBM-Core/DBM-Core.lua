@@ -7099,9 +7099,13 @@ end
 function bossModPrototype:GetStage()
 	if not self.vb.phase then
 		-- error("DBM mod" .. self.id .. " dont have stage")
-		return nil
+		self.vb.phase = 0
+		return self.vb.phase
 	end
-	return self.vb.phase
+	if self and self.inCombat then
+		return self.vb.phase or 0, self.vb.stageTotality or 0
+	end
+	return 0
 end
 
 --------------

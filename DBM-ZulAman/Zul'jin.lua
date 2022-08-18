@@ -145,7 +145,7 @@ function mod:UNIT_HEALTH(uId)
 	if self:GetUnitCreatureId(uId) == 23863 then
 		local hp = DBM:GetBossHPByUnitID(uId)
 		local stage = self:GetStage()
-		if stage and hp then
+		if stage and stage ~= 0 and hp then
 			if (stage == 1 and hp <= 81) then
 				self:SetStage(2)
 				-- phaseCounter = phaseCounter + 1
@@ -169,7 +169,7 @@ function mod:UNIT_HEALTH(uId)
 				timerFlamePillar:Start(18)
 
 			end
-		elseif stage == nil then
+		elseif stage == 0 then
 			self:SetStage(1)
 		end
 

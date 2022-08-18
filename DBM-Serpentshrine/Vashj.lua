@@ -302,31 +302,32 @@ end
 
 function mod:UNIT_HEALTH(uId)
 	if self:GetUnitCreatureId(uId) == 21212 then
-		if not DBM:GetBossHP(21212) then return end
-		if self:GetStage() == 1 then
-			if  not warned_preP1  and DBM:GetBossHP(21212) <= 72 then
+		if not DBM:GetBossHPByUnitID(uId) then return end
+		local stage = self:GetStage()
+		if stage == 1 then
+			if  not warned_preP1  and DBM:GetBossHPByUnitID(uId) <= 72 then
 				warned_preP1 = true
 				warnPhase2Soon:Show()
 			end
-			if  not warned_preP2  and DBM:GetBossHP(21212) <= 70 then
+			if  not warned_preP2  and DBM:GetBossHPByUnitID(uId) <= 70 then
 				warned_preP2 = true
 				self:SetStage(2)
 				warnPhase2:Show()
 			end
 		end
 		if mod:IsDifficulty("heroic25") then
-			if self:GetStage() == 2 and not warned_preP3  and DBM:GetBossHP(21212) <= 42 then
+			if stage == 2 and not warned_preP3  and DBM:GetBossHPByUnitID(uId) <= 42 then
 				warned_preP3 = true
 				warnPhase3Soon:Show()
 			end
-			if self:GetStage() == 2 and not warned_preP4  and DBM:GetBossHP(21212) <= 40 then
+			if stage == 2 and not warned_preP4  and DBM:GetBossHPByUnitID(uId) <= 40 then
 				warned_preP4 = true
 				self:SetStage(3)
 				warnPhase3:Show()
 				timerElemCD:Cancel()
 			end
 		else
-			if self:GetStage() == 2 and not warned_preP4  and DBM:GetBossHP(21212) <= 50 then
+			if stage == 2 and not warned_preP4  and DBM:GetBossHPByUnitID(uId) <= 50 then
 				warned_preP4 = true
 				self:SetStage(3)
 				warnPhase3:Show()

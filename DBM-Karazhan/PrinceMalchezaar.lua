@@ -129,10 +129,11 @@ end
 
 function mod:UNIT_HEALTH(uId)
 	if self:GetUnitCreatureId(uId) == 15690 then
-		local hp = DBM:GetBossHPByUnitID(uId)
+
 		local stage = self:GetStage()
-		if stage then
+		if stage and stage ~= 0 then
 			if  self:IsDifficulty("heroic10") then
+				local hp = DBM:GetBossHPByUnitID(uId)
 				if hp then
 					if (stage == 1 and hp <= 80) then
 						self:SetStage(2)
@@ -172,7 +173,7 @@ function mod:UNIT_HEALTH(uId)
 					end
 				end
 			end
-		else
+		elseif stage == 0 then
 			self:SetStage(1)
 		end
 	end

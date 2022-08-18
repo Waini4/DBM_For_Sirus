@@ -278,9 +278,9 @@ function mod:SPELL_INTERRUPT(args)
 end
 function mod:UNIT_HEALTH()
 	local stage = mod:GetStage()
-	if stage == nil then
+	if stage == 0 then
 		mod:SetStage(1)
-	elseif stage and UnitAffectingCombat("player") then
+	elseif stage and stage ~= 0 and UnitAffectingCombat("player") then
 		if stage == 1 then
 			local hp = DBM:GetBossHPByUnitID("boss3") -- чудовищная
 			if hp <= 1 then

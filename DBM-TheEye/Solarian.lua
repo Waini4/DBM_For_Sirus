@@ -265,14 +265,14 @@ function mod:UNIT_HEALTH(uId)
 	-- 	warnPhase2:Show()
 	-- 	timerAdds:Cancel()
 	if self:GetUnitCreatureId(uId) == 18805 then
-		if self:GetStage() and self:GetStage() == 1 then
+		if self:GetStage() == 1 then
 			if  DBM:GetBossHPByUnitID(uId) <= 40 and self:IsDifficulty("heroic25") then
 				self:SetStage(2)
 				timerAdds:Cancel()
 			elseif DBM:GetBossHPByUnitID(uId) <= 20 and self:IsDifficulty("normal25") then
 				self:SetStage(2)
 			end
-		elseif self:GetStage() == nil then
+		elseif self:GetStage() == 0 then
 			self:SetStage(1)
 		end
 	end
