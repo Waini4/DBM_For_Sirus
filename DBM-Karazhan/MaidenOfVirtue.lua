@@ -150,7 +150,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		if args:IsPlayer() then
 			specWarnGround:Show()
-Else 
+else 
 specWarnSpell:Show(args.destName) 
 		end
 		if self.Options.GroundIcon then
