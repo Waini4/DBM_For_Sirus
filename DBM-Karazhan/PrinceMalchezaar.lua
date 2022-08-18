@@ -42,7 +42,11 @@ local yellPorchFades    = mod:NewShortFadesYell(305429)
 local flameTargets = {}
 local PorchTargets = {}
 mod.vb.PorchIcons = 8
-
+mod.vb.warned_preP2 = false
+mod.vb.warned_preP3 = false
+mod.vb.warned_preP4 = false
+mod.vb.warned_preP5 = false
+mod.vb.warned_preP6 = false
 
 mod:AddBoolOption("AnnouncePorch", false)
 -- mod:SetStage(0)
@@ -134,30 +138,35 @@ function mod:UNIT_HEALTH(uId)
 		if stage then
 			if  self:IsDifficulty("heroic10") then
 				if hp then
-					if (stage == 1 and hp <= 80) then
+					if (stage == 1 and hp <= 80) and not self.vb.warned_preP2 then
+self.vb.warned_preP2 = true
 						self:SetStage(2)
 						warnNextPhaseSoon:Show("2")
 						timerFlameCD:Start(20)
 						timerCurseCD:Start(20)
-					elseif (stage == 2 and hp <= 40) then
+					elseif (stage == 2 and hp <= 40) and not self.vb.warned_preP3 = true then
+self.vb.warned_preP3 = true
 						self:SetStage(3)
 						warnNextPhaseSoon:Show(L.FlameWorld)
 						timerCurseCD:Cancel()
 						timerNovaCD:Cancel()
 						timerFlameCD:Start(10)
-					elseif (stage == 3 and hp <= 30) then
+					elseif (stage == 3 and hp <= 30) and not self.vb.warned_preP4 then
+self.vb.warned_preP4 = true
 						self:SetStage(4)
 						warnNextPhaseSoon:Show(L.IceWorld)
 						timerFlameCD:Cancel()
 						timerIceSpikeCD:Start()
 						timerCurseCD:Start(20)
-					elseif (stage == 4 and hp <= 20) then
+					elseif (stage == 4 and hp <= 20) and not self.vb.warned_preP5 then
+self.vb.warned_preP5 = true
 						self:SetStage(5)
 						warnNextPhaseSoon:Show(L.BlackForest)
 						timerCurseCD:Cancel()
 						timerIceSpikeCD:Cancel()
 						timerCallofDeadCD:Start()
-					elseif (stage == 5 and hp <= 10) then
+					elseif (stage == 5 and hp <= 10) and not self.vb.warned_preP6 then
+self.vb.warned_preP6 = true
 						warnNextPhaseSoon:Show(L.LastPhase)
 						timerCallofDeadCD:Cancel()
 						timerFlameCD:Start()
@@ -165,9 +174,11 @@ function mod:UNIT_HEALTH(uId)
 				end
 			elseif self:IsDifficulty("normal10") then
 				if hp then
-					if (stage == 1 and hp <= 60) then
+					if (stage == 1 and hp <= 60) and not self.vb.warned_preP2 then
+self.vb.warned_preP2 = true
 						self:SetStage(2)
-					elseif (stage == 2 and hp <= 30) then
+					elseif (stage == 2 and hp <= 30) and not self.vb.warned_preP3 then
+self.vb.warned_preP3 = true
 						self:SetStage(3)
 					end
 				end
