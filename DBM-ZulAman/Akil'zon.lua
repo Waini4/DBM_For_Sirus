@@ -90,6 +90,5 @@ function mod:SPELL_CAST_SUCCESS(args)
 		warnWind:Show(args.destName)
 	elseif args:IsSpellID(44008) then
 		timerNextStatic:Show()
-		
 	end
 end
