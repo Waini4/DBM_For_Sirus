@@ -15,12 +15,13 @@ mod:RegisterEventsInCombat(
 )
 
 --обычка--
-local warningInfernal = mod:NewSpellAnnounce(37277, 2)
-local timerInfernal   = mod:NewCDTimer(45, 37277) -- метеоры
+local warningInfernal 	= mod:NewSpellAnnounce(37277, 2)
+local timerInfernal   	= mod:NewCDTimer(45, 37277) -- метеоры
+local timerNova			= mod:NewCDTimer(30, 30852) -- кольцо тьмы
 
 --хм--
-local warningNovaCast = mod:NewCastAnnounce(30852, 3)
-local timerNovaCD     = mod:NewCDTimer(12, 305425)
+local warningNovaCast = mod:NewCastAnnounce(305425, 3)
+local timerNovaCD     = mod:NewCDTimer(12, 305425) -- кольцо мрака
 local timerFlameCD    = mod:NewCDTimer(30, 305433)
 local specWarnFlame   = mod:NewSpecialWarningYou(305433)
 local warnFlame       = mod:NewTargetAnnounce(305433, 3)
@@ -51,6 +52,7 @@ function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 15690, "Prince Malchezaar")
 	if self:IsDifficulty("normal10") then
 		timerInfernal:Start()
+		timerNova:Start(35)
 	elseif self:IsDifficulty("heroic10") then
 		self.vb.PorchIcons = 8
 		timerCurseCD:Start(20-delay)
@@ -64,28 +66,25 @@ function mod:OnCombatEnd(wipe)
 end
 
 function mod:CHAT_MSG_MONSTER_YELL(msg)
-	if msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2 then
+	if self:GetStage() == 1 and (msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2) then
 		warningInfernal:Show()
 		timerInfernal:Start()
-	elseif msg == L.DBM_PRINCE_YELL_P3 then
+	elseif self:GetStage() == 2 and msg == L.DBM_PRINCE_YELL_P3 then
 		self:SetStage(3)
 		warnNextPhaseSoon:Show("3")
-		timerInfernal:Cancel()
 		warningInfernal:Show()
 		timerInfernal:Start(15)
-	elseif msg == L.DBM_PRINCE_YELL_P2 then
+		timerNova:Start()
+	elseif self:GetStage() == 1 and msg == L.DBM_PRINCE_YELL_P2 then
 		self:SetStage(2)
 		warnNextPhaseSoon:Show("2")
-	elseif self:GetStage() == 3 then
-		if (msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2) then
-			warningInfernal:Show()
+	elseif self:GetStage() == 3 and (msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2) then
 			timerInfernal:Start(17)
-		end
 	end
 end
 
 function mod:SPELL_CAST_START(args)
-	if args:IsSpellID(305425, 30852) then
+	if args:IsSpellID(305425) then
 		warningNovaCast:Show()
 		timerNovaCD:Start()
 	elseif args:IsSpellID(305443) then
@@ -96,6 +95,8 @@ function mod:SPELL_CAST_START(args)
 		if args:IsPlayer() then
 			specWarnCallofDead:Show()
 		end
+	elseif args:IsSpellID(30852) then
+		timerNova:Start()
 	end
 end
 
