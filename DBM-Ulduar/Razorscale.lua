@@ -40,7 +40,7 @@ local timerTurret1            = mod:NewTimer(53, "timerTurret1", 48642, nil, nil
 local timerTurret2            = mod:NewTimer(73, "timerTurret2", 48642, nil, nil, 5)
 local timerTurret3            = mod:NewTimer(93, "timerTurret3", 48642, nil, nil, 5)
 local timerTurret4            = mod:NewTimer(113, "timerTurret4", 48642, nil, nil, 5)
-local timerGrounded           = mod:NewTimer(40, "timerGrounded", nil, nil, nil, 6)
+local timerGrounded           = mod:NewTimer(35.5, "timerGrounded", nil, nil, nil, 6)
 local timerFuseArmorCD        = mod:NewCDTimer(12.1, 64771, nil, "Tank", nil, 5, nil, CL.TANK_ICON)
 
 local combattime = 0
@@ -159,12 +159,12 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, mob)
 			timerTurret1:Start(23)
 			timerTurret2:Start(43)
 		else
-			warnTurretsReadySoon:Schedule(123)
-			warnTurretsReady:Schedule(133)
-			timerTurret1:Start(70)
-			timerTurret2:Start(91)
-			timerTurret3:Start(112)
-			timerTurret4:Start(133)
+			warnTurretsReadySoon:Schedule(110)
+			warnTurretsReady:Schedule(115)
+			timerTurret1:Start(53)
+			timerTurret2:Start(73)
+			timerTurret3:Start(95)
+			timerTurret4:Start(115)
 		end
 	elseif msg == L.YellGround then
 		timerGrounded:Start()
