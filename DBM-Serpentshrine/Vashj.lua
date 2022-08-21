@@ -62,7 +62,8 @@ local timerStaticAngerCD 	     = mod:NewCDTimer(15, 310636, nil, nil, nil, 3) --
 local timerStaticAnger     		 = mod:NewTargetTimer(8, 310636, nil, nil, nil,3) -- Статический заряд на игроке
 local timerElemCD     			 = mod:NewCDTimer(60, 310635, nil, nil, nil, 1) -- Элементали
 
-
+mod:AddNamePlateOption("Nameplate1", 310636, true)
+mod:AddNamePlateOption("Nameplate2", 310659, true)
 mod:AddBoolOption("Elem")
 mod:AddSetIconOption("SetIconOnStaticTargets", 310636, true, true, {7, 8})
 mod:AddBoolOption("AnnounceStatic", false)
@@ -213,7 +214,10 @@ function mod:SPELL_AURA_APPLIED(args)
 		StaticTargets[#StaticTargets + 1] = args.destName
 		self:UnscheduleMethod("StaticAngerIcons")
 		self:ScheduleMethod(0.1, "StaticAngerIcons")
-	elseif spellId == 310659 then -- хм заряд
+		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+			DBM.Nameplate:Show(args.destGUID, 310659)
+		end
+	elseif spellId == 310659 then -- хм заряд 310660 еще есть
 		if args:IsPlayer() then
 			specWarnStaticAnger:Show()
 			yellStaticAngerPhase2:Yell()
@@ -230,6 +234,9 @@ function mod:SPELL_AURA_APPLIED(args)
 				if inRange then
 					specWarnStaticAngerNear:Show()
 				end
+			end
+			if DBM:CanUseNameplateIcons() and self.Options.Nameplate2 then
+				DBM.Nameplate:Show(args.destGUID, 310659)
 			end
 		end
 		timerStaticAnger:Start(args.destName)
@@ -256,9 +263,12 @@ end
 
 function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
-	if spellId == 310636 or spellId == 310659 then
+	if args:IsSpellID(310659,310636) then
 		if self.Options.SetIconOnStaticTargets then
 			self:RemoveIcon(args.destName)
+		end
+		if DBM:CanUseNameplateIcons() and (self.Options.Nameplate1 or  self.Options.Nameplate) then
+			DBM.Nameplate:Hide(args.destGUID, spellId)
 		end
 	end
 end
