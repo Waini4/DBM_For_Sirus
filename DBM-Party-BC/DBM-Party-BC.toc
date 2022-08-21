@@ -5,7 +5,7 @@
 ## Title-esES:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Mazmorras (TBC)|r
 ## Author: Arta/MysticalOS
 ## LoadOnDemand: 1
-## RequiredDeps: DBM-Core
+## Dependencies: DBM-Core
 ## SavedVariables: DBMPartyBC_AllSavedVars
 ## SavedVariablesPerCharacter: DBMPartyBC_SavedStats
 ## X-DBM-Mod: 1

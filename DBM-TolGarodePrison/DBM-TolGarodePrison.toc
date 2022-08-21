@@ -2,7 +2,7 @@
 ## Title-ruRU:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Тол'Гародская тюрьма|r
 ## LoadOnDemand: 1
 ## Author: Stekolnyu, Waini, Master
-## RequiredDeps: DBM-Core
+## Dependencies: DBM-Core
 ## SavedVariables: DBMTolGarodePrison_AllSavedVars
 ## SavedVariablesPerCharacter: DBMTolGarodePrison_SavedStats
 ## X-DBM-Mod: 1

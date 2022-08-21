@@ -9,7 +9,7 @@
 ## Title-esES:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Ciudadela de la Corona de Hielo|r
 ## Title-esMX:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Ciudadela de la Corona de Hielo|r
 ## LoadOnDemand: 1
-## RequiredDeps: DBM-Core
+## Dependencies: DBM-Core
 ## SavedVariables: DBMIcecrown_AllSavedVars
 ## SavedVariablesPerCharacter: DBMIcecrown_SavedStats
 ## X-DBM-Mod: 1

@@ -2,7 +2,7 @@
 ## Title:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Karazhan|r
 ## Author: Ritual
 ## LoadOnDemand: 1
-## RequiredDeps: DBM-Core
+## Dependencies: DBM-Core
 ## SavedVariables: DBMKarazhan_AllSavedVars
 ## SavedVariablesPerCharacter: DBMKarazhan_SavedStats
 ## X-DBM-Mod: 1

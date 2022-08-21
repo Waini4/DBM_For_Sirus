@@ -2,7 +2,7 @@
 ## Title:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Crusaders' Coliseum|r
 ## Title-ruRU:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Колизей Авангарда|r
 ## LoadOnDemand: 1
-## RequiredDeps: DBM-Core
+## Dependencies: DBM-Core
 ## SavedVariables: DBMColiseum_AllSavedVars
 ## SavedVariablesPerCharacter: DBMColiseum_SavedStats
 ## X-DBM-Mod: 1

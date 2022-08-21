@@ -9,7 +9,7 @@
 ## Title-zhCN:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0安其拉神殿|r
 ## Title-zhTW:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0安其拉神廟|r
 ## LoadOnDemand: 1
-## RequiredDeps: DBM-Core
+## Dependencies: DBM-Core
 ## SavedVariables: DBMAQ40_AllSavedVars
 ## SavedVariablesPerCharacter: DBMAQ40_SavedStats
 ## X-DBM-Mod: 1

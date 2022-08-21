@@ -9,7 +9,7 @@
 ## Title-zhTW:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0熔火之心|r
 ## Title-zhCN:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0熔火之心|r
 ## LoadOnDemand: 1
-## RequiredDeps: DBM-Core
+## Dependencies: DBM-Core
 ## SavedVariables: DBMMC_AllSavedVars
 ## SavedVariablesPerCharacter: DBMMC_SavedStats
 ## X-DBM-Mod: 1

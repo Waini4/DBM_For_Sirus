@@ -9,7 +9,8 @@
 ## Title-zhCN:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0安其拉废墟|r
 ## Title-zhTW:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0安其拉廢墟|r
 ## LoadOnDemand: 1
-## RequiredDeps: DBM-Core
+## Dependencies: DBM-Core
+## Dependencies: DBM-Core
 ## SavedVariables: DBMAQ20_AllSavedVars
 ## SavedVariablesPerCharacter: DBMAQ20_SavedStats
 ## X-DBM-Mod: 1

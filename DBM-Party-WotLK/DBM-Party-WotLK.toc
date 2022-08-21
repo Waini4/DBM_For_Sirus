@@ -8,7 +8,7 @@
 ## Title-ruRU:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Групповые подземелья-WotLK|r
 ## Title-koKR:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf05인던전-리치왕의 분노|r
 ## LoadOnDemand: 1
-## RequiredDeps: DBM-Core
+## Dependencies: DBM-Core
 ## SavedVariables: DBMPartyWotLK_AllSavedVars
 ## SavedVariablesPerCharacter: DBMPartyWotLK_SavedStats
 ## X-DBM-Mod: 1

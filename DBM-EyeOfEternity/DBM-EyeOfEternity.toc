@@ -7,7 +7,7 @@
 ## Title-koKR:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0영원의 눈|r
 ## Title-esES:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0El Ojo de la Eternidad|r
 ## LoadOnDemand: 1
-## RequiredDeps: DBM-Core
+## Dependencies: DBM-Core
 ## SavedVariables: DBMEyeOfEternity_AllSavedVars
 ## SavedVariablesPerCharacter: DBMEyeOfEternity_SavedStats
 ## X-DBM-Mod: 1
