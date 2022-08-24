@@ -1,5 +1,5 @@
-local mod = DBM:NewMod("Ctrax", "DBM-Tol'GarodePrison")
-local L   = mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Ctrax", "DBM-TolGarodePrison")
+-- local L   = mod:GetLocalizedStrings()
 
 local CL = DBM_COMMON_L
 
@@ -11,10 +11,11 @@ mod:SetUsedIcons(4, 5, 6, 7, 8)
 mod:RegisterEvents(
 	"SPELL_CAST_START 317579 317596 317571 317604",
 	-- "SPELL_CAST_SUCCESS",
-	"SPELL_AURA_APPLIED 317594 317595 317565",
+	"SPELL_AURA_APPLIED 317593 317594 317737 317738 317595 317565",
 	"SPELL_AURA_APPLIED_DOSE 317594 317595 317565",
-	"SPELL_AURA_REMOVED 317594 317565",
+	"SPELL_AURA_REMOVED 317593 317594 317737 317738 317565",
 	"SPELL_SUMMON 317567",
+	"CHAT_MSG_RAID_BOSS_EMOTE",
 	"UNIT_HEALTH"
 )
 
@@ -56,33 +57,10 @@ mod:AddSetIconOption("SetIconOnCurse", 317594, true, true, { 4, 5, 6, 7 })
 
 local function CurseIcons(self)
 	table.wipe(CurseTargets)
-	self.vb.MarkofFilthIcon = 7
-end
--- mod:SetStage(0)
-function mod:OnCombatStart()
-	DBM:FireCustomEvent("DBM_EncounterStart", 84002, "Ctrax")
-	self:SetStage(1)
-	timerEscapingDarkness:Start()
-	self:ScheduleMethod(0.5, "CreatePowerFrame")
-	if mod:IsDifficulty("normal10") then
-		if self.Options.BossHealthFrame then
-			DBM.BossHealth:Show(L.name)
-			DBM.BossHealth:AddBoss(84002, L.name)
-		end
-	end
-	if self.Options.InfoFrame then
-		DBM.InfoFrame:SetHeader(DBM_CORE_L.INFOFRAME_POWER)
-		DBM.InfoFrame:Show(2, "enemypower", 1) --TODO, figure out power type
-	end
+	self.vb.CurseIcon = 7
 end
 
-function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 84002, "Ctrax", wipe)
-	if self.Options.InfoFrame then
-		DBM.InfoFrame:Hide()
-	end
-end
-
+--[[
 do -- тест!!!!!
 	local last = 100
 	local function getPowerPercent()
@@ -104,6 +82,43 @@ do -- тест!!!!!
 
 	function mod:CreatePowerFrame()
 		DBM.BossHealth:AddBoss(getPowerPercent, L.PowerPercent)
+	end
+end]]
+
+local f = CreateFrame("Frame", nil, UIParent)
+f:RegisterEvent("PLAYER_REGEN_DISABLED")
+f:SetScript("OnEvent", function(self)
+	for i = 1, MAX_RAID_MEMBERS do
+		local pt = UnitName("raid" .. i .. "target")
+		if pt and pt == "Поглотитель разума Ктракс" then
+			DBM:FireCustomEvent("DBM_EncounterStart", 84002, "Ctrax")
+			--self:SetStage(1)
+			timerEscapingDarkness:Start()
+			--self:Schedule(0.1, "CreatePowerFrame")
+		end
+	end
+end)
+--[[
+function mod:OnCombatStart()
+	DBM:FireCustomEvent("DBM_EncounterStart", 84002, "Ctrax")
+	self:SetStage(1)
+	timerEscapingDarkness:Start()
+	self:ScheduleMethod(0.1, "CreatePowerFrame")
+	if self.Options.BossHealthFrame then
+		DBM.BossHealth:Show(L.name)
+		DBM.BossHealth:AddBoss(84002, L.name)
+	end
+
+	if self.Options.InfoFrame then
+		DBM.InfoFrame:SetHeader(CL.INFOFRAME_POWER)
+		DBM.InfoFrame:Show(2, "enemypower", 1) --TODO, figure out power type
+	end
+end]]
+
+function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 84002, "Ctrax", wipe)
+	if self.Options.InfoFrame then
+		DBM.InfoFrame:Hide()
 	end
 end
 
@@ -129,7 +144,7 @@ end
 
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
-	if args:IsSpellID(317594) then
+	if args:IsSpellID(317593, 317594, 317737, 317738) then
 		CurseTargets[#CurseTargets + 1] = args.destName
 		if self.Options.SetIconOnCurse and self.vb.CurseIcon > 0 then
 			self:SetIcon(args.destName, self.vb.CurseIcon)
@@ -144,7 +159,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		self.vb.CurseIcon = self.vb.CurseIcon - 1
 		self:Unschedule(CurseIcons)
-		self:Schedule(0.5, CurseIcons, self)
+		self:Schedule(0.1, CurseIcons, self)
 	elseif args:IsSpellID(317595) and self:AntiSpam(3) then --Теневой Колодец
 		if args:IsPlayer() then
 			specWarnWell:Show()
@@ -166,7 +181,7 @@ function mod:SPELL_SUMMON(args)
 end
 
 function mod:SPELL_AURA_REMOVED(args)
-	if args:IsSpellID(317594) then --Древнее проклятие
+	if args:IsSpellID(317593, 317594, 317737, 317738) then --Древнее проклятие
 		if self.Options.SetIconOnCurse then
 			self:RemoveIcon(args.destName)
 		end

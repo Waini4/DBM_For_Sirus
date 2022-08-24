@@ -1,4 +1,3 @@
-
 local mod   = DBM:NewMod("Solarian", "DBM-TheEye", 1)
 local L     = mod:GetLocalizedStrings()
 local bband = bit.band
@@ -29,6 +28,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 308548 308544 308563 42783",
 	"SPELL_AURA_APPLIED_DOSE 308548 308544 308563 42783",
 	"SWING_DAMAGE",
+	"UNIT_HEALTH",
 	"UNIT_DEAD"
 )
 --------------------------нормал--------------------------
@@ -39,14 +39,14 @@ local warnAddsSoon = mod:NewAnnounce("WarnAddsSoon", 3, 55342)
 local specWarnWrathN = mod:NewSpecialWarningRun(42783, nil, nil, nil, 1, 2)
 
 local timerAdds       = mod:NewTimer(60, "TimerAdds", 55342, "RemoveEnrage", nil, 5, nil, CL.ENRAGE_ICON)
-local timerPriestsN   = mod:NewTimer(14, "TimerPriests", 47788)
+local timerPriestsN   = mod:NewTimer(14, "TimerPriests", 47788, "SpellCaster",nil, 5, nil, CL.HEALER_ICON)
 local timerWrathN     = mod:NewTargetTimer(6, 42783, nil, "RemoveEnrage", nil, 5, nil, CL.ENRAGE_ICON, nil, 1, 5)
 local timerNextWrathN = mod:NewCDTimer(21, 42783, nil, "RemoveEnrage", nil, 5, nil, CL.ENRAGE_ICON)
 
 --------------------------героик--------------------------
 
 local warnRing       = mod:NewSoonAnnounce(308563, 3) -- ослепляющее кольцо
-local warnPhase2Soon = mod:NewPrePhaseAnnounce(2)
+-- local warnPhase2Soon = mod:NewPrePhaseAnnounce(2)
 local warnPhase2     = mod:NewPhaseAnnounce(2)
 local warnKol        = mod:NewTargetAnnounce(308563, 2) -- Кольцо
 local warnFlashVoid  = mod:NewSoonAnnounce(308585, 3)
@@ -61,17 +61,19 @@ local yellWrathHObFades = mod:NewShortFadesYell(42783, nil, nil, nil, "YELL")
 
 
 local timerRing       = mod:NewCDTimer(20, 308562, nil, nil, nil, 1, nil, CL.ENRAGE_ICON)
-local timerNextHelp   = mod:NewCDTimer(40, 308558, nil, nil, 3, CL.TANK_ICON)
+local timerNextHelp   = mod:NewCDTimer(40, 308558, nil, nil, nil, 3, nil, CL.TANK_ICON)
 local timerWrathH     = mod:NewTargetTimer(6, 308548, nil, "RemoveEnrage", nil, 1, nil, CL.ENRAGE_ICON, nil, 1, 5)
 local timerNextWrathH = mod:NewCDTimer(43, 308548, nil, "RemoveEnrage", nil, 1, nil, CL.ENRAGE_ICON)
 local timerFlashVoid  = mod:NewCDTimer(75, 308585, nil, nil, nil, 6, nil, CL.HEROIC_ICON)
+
+mod:AddNamePlateOption("Nameplate1", 42783, true)
 
 local priestsN = true
 local priestsH = true
 local provid = true
 local KolTargets = {}
 local warned_preP1 = false
-local warned_preP2 = false
+-- local warned_preP2 = false
 
 mod:AddBoolOption("Zrec", true)
 -- mod:AddBoolOption("RangeFrame", true)
@@ -82,13 +84,15 @@ local function Kolzo()
 	warnKol:Show(table.concat(KolTargets, "<, >"))
 	table.wipe(KolTargets)
 end
+
 -- mod:SetStage(0)
 function mod:OnCombatStart(delay)
+	self:SetStage(1)
 	DBM:FireCustomEvent("DBM_EncounterStart", 18805, "High Astromancer Solarian")
-	if mod:IsDifficulty("heroic25") then
-		timerNextHelp:Start(-delay)
-		timerNextWrathH:Start(-delay)
-		self:SetStage(1)
+	if self:IsDifficulty("heroic25") then
+		timerNextHelp:Start(40 - delay)
+		timerNextWrathH:Start(43 - delay)
+		-- self:SetStage(1)
 	else
 		self.vb.Fear = 0
 		timerAdds:Start()
@@ -116,8 +120,10 @@ end
 
 function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.YellAdds then
-		timerPriestsN:Start()
-		timerNextWrathN:Start()
+		if self:IsDifficulty("normal25") then
+			timerPriestsN:Start()
+			timerNextWrathN:Start()
+		end
 	elseif msg == L.YellPriests then
 		priestsN = true
 		timerAdds:Start()
@@ -139,7 +145,7 @@ function mod:SPELL_CAST_START(args)
 		warnRing:Show()
 		timerRing:Start()
 	elseif spellId == 308558 then -- послушники
-		timerNextHelp:Schedule(80)
+		timerNextHelp:Start(80)
 		specWarnHelp:Show(args.sourceName)
 		priestsH = true
 		provid   = true
@@ -178,7 +184,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnWrathN:Show(args.destName)
 		timerWrathN:Start(args.destName)
 		---TODO elvui test
-		if DBM:CanUseNameplateIcons() then
+		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
 			DBM.Nameplate:Show(args.destGUID, 42783)
 		end
 		self:SetIcon(args.destName, 8, 6)
@@ -192,7 +198,7 @@ end
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(42783) then
-		if DBM:CanUseNameplateIcons() then
+		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
 			DBM.Nameplate:Hide(args.destGUID, 42783)
 		end
 	end
@@ -236,9 +242,9 @@ end
 function mod:SWING_DAMAGE(_, sourceName, sourceFlags, destGUID, destName)
 	if self:GetCIDFromGUID(destGUID) == 3410 and bit.band(sourceFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 then
 		if sourceName ~= UnitName("player") then
-			for i = 1,25 do
-				local unit = "raid"..i.."target"
-				if not UnitExists("raid"..i) then break end
+			for i = 1, 25 do
+				local unit = "raid" .. i .. "target"
+				if not UnitExists("raid" .. i) then break end
 				if UnitGUID(unit) == destGUID then
 					if self.Options.Zrec then
 						DBM.Arrow:ShowRunTo(unit, 0, 0)
@@ -251,20 +257,30 @@ function mod:SWING_DAMAGE(_, sourceName, sourceFlags, destGUID, destName)
 end
 
 function mod:UNIT_HEALTH(uId)
-	if self:GetStage() and not warned_preP1 and self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 33 then
-		warned_preP1 = true
-		warnPhase2Soon:Show()
-	elseif not warned_preP2 and self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 30 then
-		warned_preP2 = true
-		warnPhase2:Show()
-		timerAdds:Cancel()
-	elseif self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 40 and
-		self:GetCurrentInstanceDifficulty() == "heroic25" then -- TODO: 2 фаза для хма, может багаться получается?
-		self:SetStage(2)
-	elseif self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 20 and
-		self:GetCurrentInstanceDifficulty() == "normal25" then
-		self:SetStage(2)
+	-- if self:GetStage() and not warned_preP1 and self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHPByUnitID(uId) <= 33 and self:IsDifficulty("normal25") then
+	-- 	warned_preP1 = true
+	-- 	warnPhase2Soon:Show()
+	-- elseif not warned_preP2 and self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHPByUnitID(uId) <= 30 and self:IsDifficulty("normal25") then
+	-- 	warned_preP2 = true
+	-- 	warnPhase2:Show()
+	-- 	timerAdds:Cancel()
+	if self:GetUnitCreatureId(uId) == 18805 then
+		if self:GetStage() == 1 then
+			if  DBM:GetBossHPByUnitID(uId) <= 40 and self:IsDifficulty("heroic25") then
+				self:SetStage(2)
+				timerAdds:Cancel()
+			elseif DBM:GetBossHPByUnitID(uId) <= 20 and self:IsDifficulty("normal25") then
+				self:SetStage(2)
+			end
+		elseif self:GetStage() == 0 then
+			self:SetStage(1)
+		end
 	end
+	-- elseif self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 40 and self:IsDifficulty("heroic25") and self:GetStage() and self:GetStage() == 1 then -- TODO: 2 фаза для хма, может багаться получается?
+	-- 	self:SetStage(2)
+	-- elseif self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 20 and self:IsDifficulty("normal25") and self:GetStage() and self:GetStage() == 1 then
+	-- 	self:SetStage(2)
 end
+
 
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED

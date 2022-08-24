@@ -7,7 +7,7 @@
 ## Title-zhTW:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0海加爾山之戰|r
 ## Title-ruRU:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Битва за гору Хиджал|r
 ## LoadOnDemand: 1
-## RequiredDeps: DBM-Core
+## Dependencies: DBM-Core
 ## SavedVariables: DBMHyjal_AllSavedVars
 ## SavedVariablesPerCharacter: DBMHyjal_SavedStats
 ## X-DBM-Mod: 1

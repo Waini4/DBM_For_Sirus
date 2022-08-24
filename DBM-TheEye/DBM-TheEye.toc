@@ -3,7 +3,7 @@
 ## Title-ruRU:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Крепость Бурь|r
 ## Author: Ritual
 ## LoadOnDemand: 1
-## RequiredDeps: DBM-Core
+## Dependencies: DBM-Core
 ## SavedVariables: DBMTheEye_AllSavedVars
 ## SavedVariablesPerCharacter: DBMTheEye_SavedStats
 ## X-DBM-Mod: 1

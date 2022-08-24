@@ -9,7 +9,7 @@
 ## Title-koKR:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0오닉시아|r
 ## Title-deDE:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Onyxias Hort|r
 ## LoadOnDemand: 1
-## RequiredDeps: DBM-Core
+## Dependencies: DBM-Core
 ## SavedVariables: DBMOnyxia_AllSavedVars
 ## SavedVariablesPerCharacter: DBMOnyxia_SavedStats
 ## X-DBM-Mod: 1

@@ -2,12 +2,12 @@
 ## Title-ruRU:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Тол'Гародская тюрьма|r
 ## LoadOnDemand: 1
 ## Author: Stekolnyu, Waini, Master
-## RequiredDeps: DBM-Core
-## SavedVariables: DBMTol'GarodePrison_AllSavedVars
-## SavedVariablesPerCharacter: DBMTol'GarodePrison_SavedStats
+## Dependencies: DBM-Core
+## SavedVariables: DBMTolGarodePrison_AllSavedVars
+## SavedVariablesPerCharacter: DBMTolGarodePrison_SavedStats
 ## X-DBM-Mod: 1
 ## X-DBM-Mod-Type: RAID
-## X-DBM-StatTypes: normal
+## X-DBM-StatTypes: normal, normal25
 ## X-DBM-Mod-Category: ISLANDS
 ## X-DBM-Mod-Name: Tol'GarodePrison
 ## X-DBM-Mod-Name-ruRU: Тол'Гародская тюрьма

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 local mod	= DBM:NewMod("Stalker", "DBM-Party-BC", 5, 262)
+=======
+local mod	= DBM:NewMod("The Black Stalker", "DBM-Party-BC", 5, 262)
+>>>>>>> 2fad9c055c00b841bba090ea180ddeaf934245de
 
 mod:SetRevision("20220518110528")
 mod:SetCreatureID(17882)
@@ -19,12 +23,20 @@ local specWarnStaticCharge	= mod:NewSpecialWarningMoveAway(31715, nil, nil, nil,
 
 
 function mod:OnCombatStart(delay)
+<<<<<<< HEAD
 	DBM:FireCustomEvent("DBM_EncounterStart", 17882, "Stalker")
+=======
+	DBM:FireCustomEvent("DBM_EncounterStart", 17882, "The Black Stalker")
+>>>>>>> 2fad9c055c00b841bba090ea180ddeaf934245de
 	timerSummon:Start()	--скорее всего по хп это всё,но не может же он начать сумонить на 7 % хп ?
 end
 
 function mod:OnCombatEnd(wipe)
+<<<<<<< HEAD
 	DBM:FireCustomEvent("DBM_EncounterEnd", 17882, "Stalker", wipe)
+=======
+	DBM:FireCustomEvent("DBM_EncounterEnd", 17882, "The Black Stalker", wipe)
+>>>>>>> 2fad9c055c00b841bba090ea180ddeaf934245de
 end
 
 function mod:SPELL_AURA_APPLIED(args)

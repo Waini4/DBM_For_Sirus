@@ -9,7 +9,7 @@
 ## Title-esMX:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Terrallende|r
 ## Title-ruRU:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Запределье|r
 ## LoadOnDemand: 1
-## RequiredDeps: DBM-Core
+## Dependencies: DBM-Core
 ## SavedVariables: DBMOutland_AllSavedVars
 ## SavedVariablesPerCharacter: DBMOutland_SavedStats
 ## X-DBM-Mod: 1

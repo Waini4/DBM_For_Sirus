@@ -12,7 +12,7 @@ mod:RegisterEventsInCombat(
 )
 
 local timerNextBearForm  = mod:NewTimer(30, "BearForm", 9634)
-local timerNextTrollForm = mod:NewTimer(23.5, "TrollForm", 26297)
+local timerNextTrollForm = mod:NewTimer(30, "TrollForm", 26297)
 local timerNextSilence   = mod:NewCDTimer(9, 42398)
 local timerMangle        = mod:NewTargetTimer(60, 42389)
 local berserkTimer       = mod:NewBerserkTimer(420)
@@ -22,7 +22,7 @@ mod:AddBoolOption("TrollForm", true)
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 23576, "Nalorakk")
-	timerNextBearForm:Start(42)
+	timerNextBearForm:Start(45)
 	berserkTimer:Start()
 end
 

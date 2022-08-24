@@ -1,4 +1,4 @@
-local mod	= DBM:NewMod("HRTrash", "DBM-Party-BC", 2)
+local mod	= DBM:NewMod("HRTrash", "DBM-Party-BC", 1, 248)
 local L		= mod:GetLocalizedStrings()
 
 mod:SetRevision("20220518110528")

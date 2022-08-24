@@ -3,7 +3,7 @@
 ## Title-zhCN:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0格鲁尔的巢穴|r
 ## Title-ruRU:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Логово Груула|r
 ## LoadOnDemand: 1
-## RequiredDeps: DBM-Core
+## Dependencies: DBM-Core
 ## SavedVariables: DBMGruul_AllSavedVars
 ## SavedVariablesPerCharacter: DBMGruul_SavedStats
 ## X-DBM-Mod: 1

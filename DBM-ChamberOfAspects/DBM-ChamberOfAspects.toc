@@ -2,7 +2,7 @@
 ## Title:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Chamber of Aspects|r
 ## Title-ruRU:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Палата Аспектов|r
 ## LoadOnDemand: 1
-## RequiredDeps: DBM-Core
+## Dependencies: DBM-Core
 ## SavedVariables: DBMChamberOfAspects_AllSavedVars
 ## SavedVariablesPerCharacter: DBMChamberOfAspects_SavedStats
 ## X-DBM-Mod: 1

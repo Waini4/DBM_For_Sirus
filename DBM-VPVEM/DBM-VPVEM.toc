@@ -4,7 +4,7 @@
 ## Title-zhCN:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0VEM语音包|r
 ## Title-zhTW:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0VEM語音包|r
 ## DefaultState: enabled
-## RequiredDeps: DBM-Core
+## Dependencies: DBM-Core
 ## Author: Iceoven
 ## Version: 11.0.2
 ## X-DBM-Voice: 1

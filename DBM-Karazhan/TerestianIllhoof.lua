@@ -1,5 +1,5 @@
-local mod	= DBM:NewMod("TerestianIllhoof", "DBM-Karazhan")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("TerestianIllhoof", "DBM-Karazhan")
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20210502220000") -- fxpw check 202206151120000
 mod:SetCreatureID(15688)
@@ -12,11 +12,9 @@ mod:SetBossHealthInfo(
 mod:RegisterCombat("combat")
 --17229--imp, for future use
 
-mod:RegisterEventsInCombat(
-	"SPELL_AURA_APPLIED 305351 30115 305367	305360",
+mod:RegisterEvents(
+	"SPELL_AURA_APPLIED 305351 30115 305367 305360",
 	"SPELL_CAST_START 305345"
-	-- "SPELL_CAST_SUCCESS", -- TODO wtf
-	-- "SPELL_CAST_FAILED"
 )
 
 -- local warningWeakened	= mod:NewTargetAnnounce(30065, 2)
@@ -31,17 +29,17 @@ mod:RegisterEventsInCombat(
 -- local timerSacrifice	= mod:NewTargetTimer(30, 30115)
 -- local timerSacrificeCD	= mod:NewNextTimer(43, 30115)
 
-local warningHandCast			= mod:NewCastAnnounce(305345, 3)
+local warningHandCast = mod:NewCastAnnounce(305345, 3)
 -- local warnSound						= mod:NewSoundAnnounce()
 
-local timerHandCD				= mod:NewCDTimer(15, 305345)
-local timerMarkCD			    = mod:NewCDTimer(33, 305351)
-local timerSacrifice			= mod:NewCDTimer(42, 30115)
+local timerHandCD    = mod:NewCDTimer(15, 305345)
+local timerMarkCD    = mod:NewCDTimer(33, 305351)
+local timerSacrifice = mod:NewCDTimer(42, 30115)
 
-local WarnMark		            = mod:NewTargetAnnounce(305351, 3)
-local specWarnMark			    = mod:NewSpecialWarningYou(305351)
-local specWarnSeed	            = mod:NewSpecialWarningSpell(305360, "Tank")
-local specWarnDart		        = mod:NewSpecialWarningStack(305367, nil, 7)
+local WarnMark     = mod:NewTargetAnnounce(305351, 3)
+local specWarnMark = mod:NewSpecialWarningYou(305351)
+local specWarnSeed = mod:NewSpecialWarningSpell(305360, "Tank")
+local specWarnDart = mod:NewSpecialWarningStack(305367, nil, 7)
 
 -- local berserkTimer		        = mod:NewBerserkTimer(600)
 
@@ -94,14 +92,14 @@ mod.vb.tolik = true
 -- 	end
 -- end
 function mod:resetTolik()
-    self.vb.tolik = true
+	self.vb.tolik = true
 end
 
 function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 15688, "Terestian Illhoof")
-	if mod:IsDifficulty("normal10") then
+	if self:IsDifficulty("normal10") then
 		timerSacrifice:Start(28)
-	elseif mod:IsDifficulty("heroic10") then
+	elseif self:IsDifficulty("heroic10") then
 		self.vb.tolik = true
 		timerHandCD:Start()
 		timerMarkCD:Start()
@@ -139,4 +137,3 @@ function mod:SPELL_AURA_APPLIED(args)
 		specWarnSeed:Show()
 	end
 end
-

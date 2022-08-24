@@ -11,7 +11,7 @@
 ## Title-koKR:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0줄구룹|r
 ## Title-ruRU:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Зул'Гуруб|r
 ## LoadOnDemand: 1
-## RequiredDeps: DBM-Core
+## Dependencies: DBM-Core
 ## SavedVariables: DBMZG_AllSavedVars
 ## SavedVariablesPerCharacter: DBMZG_SavedStats
 ## X-DBM-Mod: 1

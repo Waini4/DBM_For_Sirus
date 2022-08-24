@@ -28,7 +28,7 @@ L:SetMiscLocalization {
 L = DBM:GetModLocalization("Ctrax")
 
 L:SetGeneralLocalization {
-	name = "Ктракс"
+	name = "Поглотитель разума Ктракс"
 }
 
 L:SetTimerLocalization {
@@ -55,4 +55,5 @@ L:SetGeneralLocalization {
 }
 
 L:SetMiscLocalization {
+	Puk = "Пожиратель яростно клацает пастями!"
 }

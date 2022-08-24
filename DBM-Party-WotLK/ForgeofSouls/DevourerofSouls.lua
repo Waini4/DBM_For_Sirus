@@ -1,4 +1,4 @@
-local mod	= DBM:NewMod("DevourerofSouls", "DBM-Party-WotLK", 14)
+local mod	= DBM:NewMod("Devourer of Souls", "DBM-Party-WotLK", 14)
 local L		= mod:GetLocalizedStrings()
 
 mod:SetRevision("20220518110528")
@@ -28,14 +28,22 @@ local timerUnleashedSouls		= mod:NewBuffActiveTimer(5, 68939, nil, nil, nil, 2)
 mod:AddSetIconOption("SetIconOnMirroredTarget", 69051, false, false, {8})
 
 function mod:OnCombatStart()
+<<<<<<< HEAD
 	DBM:FireCustomEvent("DBM_EncounterStart", 36502, "DevourerofSouls")
+=======
+	DBM:FireCustomEvent("DBM_EncounterStart", 36502, "Devourer of Souls")
+>>>>>>> 2fad9c055c00b841bba090ea180ddeaf934245de
 	timerMirroredSoulCD:Start(7.8)
 	timerUnleashedSoulsCD:Start(19.8)
 end
 
 
 function mod:OnCombatEnd(wipe)
+<<<<<<< HEAD
 	DBM:FireCustomEvent("DBM_EncounterEnd", 36502, "DevourerofSouls", wipe)
+=======
+	DBM:FireCustomEvent("DBM_EncounterEnd", 36502, "Devourer of Souls", wipe)
+>>>>>>> 2fad9c055c00b841bba090ea180ddeaf934245de
 end
 
 

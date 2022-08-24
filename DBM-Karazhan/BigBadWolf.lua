@@ -1,27 +1,27 @@
-local mod	= DBM:NewMod("BigBadWolf", "DBM-Karazhan")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("BigBadWolf", "DBM-Karazhan")
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20210502220000") -- fxpw check 202206151120000
 mod:SetCreatureID(17521)
 mod:RegisterCombat("yell", L.DBM_BBW_YELL_1)
 
-mod:RegisterEventsInCombat(
+mod:RegisterEvents(
 	"SPELL_AURA_APPLIED 30753 30752"
 )
 
-local warningFearSoon	= mod:NewSoonAnnounce(30752, 2)
-local warningFear		= mod:NewSpellAnnounce(30752, 3)
-local warningRRHSoon	= mod:NewSoonAnnounce(30753, 3)
-local warningRRH		= mod:NewTargetAnnounce(30753, 4)
+local warningFearSoon = mod:NewSoonAnnounce(30752, 2)
+local warningFear     = mod:NewSpellAnnounce(30752, 3)
+local warningRRHSoon  = mod:NewSoonAnnounce(30753, 3)
+local warningRRH      = mod:NewTargetAnnounce(30753, 4)
 
-local specWarnRRH		= mod:NewSpecialWarningYou(30753, nil, nil, nil, 4, 2)
+local specWarnRRH = mod:NewSpecialWarningYou(30753, nil, nil, nil, 4, 2)
 
-local timerRRH			= mod:NewTargetTimer(20, 30753, nil, nil, nil, 3)
-local timerRRHCD		= mod:NewNextTimer(30, 30753, nil, nil, nil, 3)
-local timerFearCD		= mod:NewNextTimer(24, 30752, nil, nil, nil, 2)
+local timerRRH    = mod:NewTargetTimer(20, 30753, nil, nil, nil, 3)
+local timerRRHCD  = mod:NewNextTimer(30, 30753, nil, nil, nil, 3)
+local timerFearCD = mod:NewNextTimer(24, 30752, nil, nil, nil, 2)
 
 mod:AddBoolOption("RRHIcon")
-mod:AddSetIconOption("RRHIcon", 69762, true, true, {8})
+mod:AddSetIconOption("RRHIcon", 69762, true, true, { 8 })
 
 
 local lastFear = 0

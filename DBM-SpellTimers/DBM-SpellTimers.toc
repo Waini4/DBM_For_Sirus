@@ -10,7 +10,7 @@
 ## Notes: Creates bars for Long term cooldowns or durations
 ## Notes-ruRU : Тут должен был быть какой то текст но мне впадлу было переводить
 ## LoadOnDemand: 0
-# RequiredDeps: DBM-Core
+## Dependencies: DBM-Core
 ## DefaultState: enabled
 ## Author: Nitram and Tandanu, fxpw
 ## URL: http://www.deadlybossmods.com

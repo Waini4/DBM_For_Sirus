@@ -12,7 +12,7 @@
 
 ## Author: MysticalOS
 ## LoadOnDemand: 1
-## RequiredDeps: DBM-Core
+## Dependencies: DBM-Core
 ## SavedVariables: DBMPartyClassic_AllSavedVars
 ## SavedVariablesPerCharacter: DBMPartyClassic_SavedStats
 ## X-DBM-Mod: 1

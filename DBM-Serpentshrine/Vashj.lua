@@ -62,7 +62,8 @@ local timerStaticAngerCD 	     = mod:NewCDTimer(15, 310636, nil, nil, nil, 3) --
 local timerStaticAnger     		 = mod:NewTargetTimer(8, 310636, nil, nil, nil,3) -- Статический заряд на игроке
 local timerElemCD     			 = mod:NewCDTimer(60, 310635, nil, nil, nil, 1) -- Элементали
 
-
+mod:AddNamePlateOption("Nameplate1", 310636, true)
+mod:AddNamePlateOption("Nameplate2", 310659, true)
 mod:AddBoolOption("Elem")
 mod:AddSetIconOption("SetIconOnStaticTargets", 310636, true, true, {7, 8})
 mod:AddBoolOption("AnnounceStatic", false)
@@ -213,7 +214,10 @@ function mod:SPELL_AURA_APPLIED(args)
 		StaticTargets[#StaticTargets + 1] = args.destName
 		self:UnscheduleMethod("StaticAngerIcons")
 		self:ScheduleMethod(0.1, "StaticAngerIcons")
-	elseif spellId == 310659 then -- хм заряд
+		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+			DBM.Nameplate:Show(args.destGUID, 310659)
+		end
+	elseif spellId == 310659 then -- хм заряд 310660 еще есть
 		if args:IsPlayer() then
 			specWarnStaticAnger:Show()
 			yellStaticAngerPhase2:Yell()
@@ -230,6 +234,9 @@ function mod:SPELL_AURA_APPLIED(args)
 				if inRange then
 					specWarnStaticAngerNear:Show()
 				end
+			end
+			if DBM:CanUseNameplateIcons() and self.Options.Nameplate2 then
+				DBM.Nameplate:Show(args.destGUID, 310659)
 			end
 		end
 		timerStaticAnger:Start(args.destName)
@@ -256,9 +263,12 @@ end
 
 function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
-	if spellId == 310636 or spellId == 310659 then
+	if args:IsSpellID(310659,310636) then
 		if self.Options.SetIconOnStaticTargets then
 			self:RemoveIcon(args.destName)
+		end
+		if DBM:CanUseNameplateIcons() and (self.Options.Nameplate1 or  self.Options.Nameplate) then
+			DBM.Nameplate:Hide(args.destGUID, spellId)
 		end
 	end
 end
@@ -302,30 +312,32 @@ end
 
 function mod:UNIT_HEALTH(uId)
 	if self:GetUnitCreatureId(uId) == 21212 then
-		if self:GetStage() == 1 then
-			if  not warned_preP1  and DBM:GetBossHP(uId) <= 72 then
+		if not DBM:GetBossHPByUnitID(uId) then return end
+		local stage = self:GetStage()
+		if stage == 1 then
+			if  not warned_preP1  and DBM:GetBossHPByUnitID(uId) <= 72 then
 				warned_preP1 = true
 				warnPhase2Soon:Show()
 			end
-			if  not warned_preP2  and DBM:GetBossHP(uId) <= 70 then
+			if  not warned_preP2  and DBM:GetBossHPByUnitID(uId) <= 70 then
 				warned_preP2 = true
 				self:SetStage(2)
 				warnPhase2:Show()
 			end
 		end
 		if mod:IsDifficulty("heroic25") then
-			if self:GetStage() == 2 and not warned_preP3  and DBM:GetBossHP(uId) <= 42 then
+			if stage == 2 and not warned_preP3  and DBM:GetBossHPByUnitID(uId) <= 42 then
 				warned_preP3 = true
 				warnPhase3Soon:Show()
 			end
-			if self:GetStage() == 2 and not warned_preP4  and DBM:GetBossHP(uId) <= 40 then
+			if stage == 2 and not warned_preP4  and DBM:GetBossHPByUnitID(uId) <= 40 then
 				warned_preP4 = true
 				self:SetStage(3)
 				warnPhase3:Show()
 				timerElemCD:Cancel()
 			end
 		else
-			if self:GetStage() == 2 and not warned_preP4  and DBM:GetBossHP(uId) <= 50 then
+			if stage == 2 and not warned_preP4  and DBM:GetBossHPByUnitID(uId) <= 50 then
 				warned_preP4 = true
 				self:SetStage(3)
 				warnPhase3:Show()
