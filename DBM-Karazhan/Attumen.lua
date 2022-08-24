@@ -4,6 +4,7 @@ local L   = mod:GetLocalizedStrings()
 mod:SetRevision("20210502220000") -- fxpw check 202206151120000
 mod:SetCreatureID(15550, 34972, 34972, 100507)
 mod:RegisterCombat("combat")
+mod:RegisterKill("kill")
 
 --[[mod:RegisterEvents(
 	"PLAYER_REGEN_DISABLED"
@@ -33,7 +34,7 @@ local timerCurseCD = mod:NewNextTimer(31, 43127, nil, nil, nil, 3)
 ------------------ХМ------------------
 
 local specWarnMezair = mod:NewSpecialWarningDodge(305258, nil, nil, nil, 2, 2)
-local WarInv         = mod:NewSpellAnnounce(305253) -- попытка поймать дебаф призрака
+-- local WarInv         = mod:NewSpellAnnounce(305253) -- попытка поймать дебаф призрака
 
 local timerInvCD       = mod:NewCDTimer(21, 305251, nil, nil, nil, 3) -- Незримое присутствие
 local timerChargeCD    = mod:NewCDTimer(11, 305258, nil, nil, nil, 2) -- Галоп фаза 2
@@ -118,17 +119,17 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerSufferingCD:Start()
 		timerInvCD:Cancel()
 		warnPhase2:Show()
-	elseif args:IsSpellID(305253) then -- попытка при получении скрытого дебафа игроком оповещение на экран кто полутал дебаф
-		WarInv:Show(args.destName)
-		if self.Options.SetIconOnTouchTarget then
-			self:SetIcon(args.destName, 8, 5)
-		end
-	elseif args:IsSpellID(305253) and args:IsPlayer() then -- попытка при получении скрытого дебафа крикнуть что он на тебе
-		SendChatMessage(L.YellInv, "SAY")
+	-- elseif args:IsSpellID(305253) then -- попытка при получении скрытого дебафа игроком оповещение на экран кто полутал дебаф
+	-- 	WarInv:Show(args.destName)
+	-- 	if self.Options.SetIconOnTouchTarget then
+	-- 		self:SetIcon(args.destName, 8, 5)
+	-- 	end
+	-- elseif args:IsSpellID(305253) and args:IsPlayer() then -- попытка при получении скрытого дебафа крикнуть что он на тебе updt. пидоры на сирусчае
+	-- 	SendChatMessage(L.YellInv, "SAY")
 	end
 end
 
-function mod:SPELL_AURA_REMOVED(args) -- ???????
+function mod:SPELL_AURA_REMOVED(args) -- Присутствие Аттумена, баф пропал - 3 фаза пошла
 	if args:IsSpellID(305265) then
 		timerCharge2CD:Start()
 		timerTrampCD:Start(20)
@@ -136,14 +137,14 @@ function mod:SPELL_AURA_REMOVED(args) -- ???????
 	end
 end
 
-function mod:SPELL_CAST_SUCCESS(args) -- попытка №6
-	if args:IsSpellID(305253) then -- попытка при получении скрытого дебафа игроком оповещение на экран кто полутал дебаф
-		WarInv:Show(args.destName)
-		if self.Options.SetIconOnTouchTarget then
-			self:SetIcon(args.destName, 8, 5)
-		end
-	end
-end
+-- function mod:SPELL_CAST_SUCCESS(args) -- попытка №6
+-- 	if args:IsSpellID(305253) then -- попытка при получении скрытого дебафа игроком оповещение на экран кто полутал дебаф
+-- 		WarInv:Show(args.destName)
+-- 		if self.Options.SetIconOnTouchTarget then
+-- 			self:SetIcon(args.destName, 8, 5)
+-- 		end
+-- 	end
+-- end -- есть предположение что дебаф призрака накладывается на последнего члена рейда(исключение петы) нужно больше логов.
 
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(305258) then -- галоп
@@ -153,6 +154,7 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(305263) then -- галоп2
 		timerCharge2CD:Start()
 		timerChargeCast:Start()
+		timerTrampCD:Start()	-- могучий топот тестовый, имхо видно всё.
 		specWarnMezair:Show()
 	elseif args:IsSpellID(305251) then -- незримое присутствие
 		timerInvCD:Start()
