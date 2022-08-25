@@ -67,7 +67,7 @@ local timerNextWrathH = mod:NewCDTimer(43, 308548, nil, "RemoveEnrage", nil, 1, 
 local timerFlashVoid  = mod:NewCDTimer(75, 308585, nil, nil, nil, 6, nil, CL.HEROIC_ICON)
 
 mod:AddNamePlateOption("Nameplate1", 42783, true)
-
+mod:AddNamePlateOption("Nameplate2", 308548, true)
 local priestsN = true
 local priestsH = true
 local provid = true
@@ -178,6 +178,9 @@ function mod:SPELL_AURA_APPLIED(args)
 			yellWrathH:Yell()
 			yellWrathHFades:Countdown(spellId)
 		end
+		if DBM:CanUseNameplateIcons() and self.Options.Nameplate2 then
+			DBM.Nameplate:Show(args.destGUID, 308548)
+		end
 	elseif spellId == 308544 and self.vb.phase == 1 then -- Стаки луча
 		if args:IsPlayer() then
 			specWarnDebaf:Show()
@@ -207,6 +210,10 @@ function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(42783) then
 		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
 			DBM.Nameplate:Hide(args.destGUID, 42783)
+		end
+	elseif args:IsSpellID(308548) then
+		if DBM:CanUseNameplateIcons() and self.Options.Nameplate2 then
+			DBM.Nameplate:Hide(args.destGUID, 308548)
 		end
 	end
 
@@ -248,7 +255,7 @@ end
 function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, destGUID, _, _, spellId)
 	if (spellId ~= 53189 or spellId ~= 53190 or spellId ~= 53194 or spellId ~= 53195) and self:GetCIDFromGUID(destGUID) == 3410 and bit.band(sourceFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 and self:IsInCombat() then--Any spell damage except for starfall (ranks 3 and 4)
 		if sourceGUID ~= UnitGUID("player") then
-			if self.Options.Zrec then
+			if self.Options.Zrec and self:GetStage() == 1 then
 				DBM.Arrow:ShowRunTo(sourceName, 0, 0)
 			end
 		end
@@ -259,8 +266,9 @@ function mod:SWING_DAMAGE(sourceGUID, sourceName, sourceFlags, destGUID, destNam
 	-- if self:GetCIDFromGUID(destGUID) == 3410 and bit.band(sourceFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 then
 	if self:GetCIDFromGUID(destGUID) == 3410 and bit.band(sourceFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 and self:IsInCombat() then
 		if sourceGUID ~= UnitGUID("player") then
-			if self.Options.Zrec then
+			if self.Options.Zrec and self:GetStage() == 1 then
 				DBM.Arrow:ShowRunTo(sourceName, 0, 0)
+				
 			end
 		end
 	end
@@ -278,6 +286,7 @@ function mod:UNIT_HEALTH(uId)
 	if self:GetUnitCreatureId(uId) == 18805 then
 		if self:GetStage() == 1 then
 			if  DBM:GetBossHPByUnitID(uId) <= 40 and self:IsDifficulty("heroic25") then
+				DBM.Arrow:Hide()
 				self:SetStage(2)
 				timerAdds:Cancel()
 			elseif DBM:GetBossHPByUnitID(uId) <= 20 and self:IsDifficulty("normal25") then
