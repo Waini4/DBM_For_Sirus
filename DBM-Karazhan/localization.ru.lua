@@ -71,6 +71,8 @@ L:SetOptionLocalization{
 }
 
 L:SetMiscLocalization{
+	Heroic					= "Героический режим",
+	Normal					= "Обычный режим"
 }
 
 

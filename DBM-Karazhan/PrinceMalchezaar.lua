@@ -160,6 +160,7 @@ function mod:UNIT_HEALTH(uId)
 						timerIceSpikeCD:Cancel()
 						timerCallofDeadCD:Start()
 					elseif (stage == 5 and hp <= 10) then
+						self:SetStage(6)
 						warnNextPhaseSoon:Show(L.LastPhase)
 						timerCallofDeadCD:Cancel()
 						timerFlameCD:Start()

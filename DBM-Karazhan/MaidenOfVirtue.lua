@@ -6,22 +6,22 @@ mod:SetCreatureID(16457)
 mod:RegisterCombat("combat")
 
 mod:RegisterEvents(
-	"SPELL_CAST_START 305286",
-	"SPELL_AURA_APPLIED 305271 305285",
+	"SPELL_CAST_START 305286 29511",
+	"SPELL_AURA_APPLIED 305271 305285 29522",
 	"SPELL_AURA_REMOVED 305285"
 -- "SPELL_INTERRUPT"
 )
+mod:AddTimerLine(L.Normal)
+local warningRepentanceSoon	= mod:NewSoonAnnounce(29511, nil, nil, nil, 2)
+local warningRepentance		= mod:NewSpellAnnounce(29511, nil, nil, nil, 3)
+local warningHolyFire		= mod:NewTargetAnnounce(29522, nil, nil, nil, 3)
 
--- local warningRepentanceSoon	= mod:NewSoonAnnounce(29511, 2)
--- local warningRepentance		= mod:NewSpellAnnounce(29511, 3)
--- local warningHolyFire		= mod:NewTargetAnnounce(29522, 3)
---
--- local timerRepentance		= mod:NewBuffActiveTimer(12.6, 29511)
--- local timerRepentanceCD		= mod:NewCDTimer(33, 29511)
--- local timerHolyFire			= mod:NewTargetTimer(12, 29522)
---
--- mod:AddBoolOption("RangeFrame", true)
---
+local timerRepentance		= mod:NewBuffActiveTimer(12.6, 29511)
+local timerRepentanceCDob		= mod:NewCDTimer(33, 29511)
+local timerHolyFire			= mod:NewTargetTimer(12, 29522)
+
+mod:AddBoolOption("RangeFrame", true)
+
 -- function mod:OnCombatStart(delay)
 -- 	timerRepentanceCD:Start(45-delay)
 -- 	warningRepentanceSoon:Schedule(40-delay)
@@ -29,13 +29,13 @@ mod:RegisterEvents(
 -- 		DBM.RangeCheck:Show(10)
 -- 	end
 -- end
---
+
 -- function mod:OnCombatEnd()
 -- 	if self.Options.RangeFrame then
 -- 		DBM.RangeCheck:Hide()
 -- 	end
 -- end
---
+
 -- function mod:SPELL_CAST_START(args)
 -- 	if args:IsSpellID(29511) then
 -- 		warningRepentanceSoon:Cancel()
@@ -45,25 +45,25 @@ mod:RegisterEvents(
 -- 		warningRepentanceSoon:Schedule(28)
 -- 	end
 -- end
---
+
 -- function mod:SPELL_AURA_APPLIED(args)
 -- 	if args:IsSpellID(29522) then
 -- 		warningHolyFire:Show(args.destName)
 -- 		timerHolyFire:Start(args.destName)
 -- 	end
 -- end
---
+
 -- function mod:SPELL_AURA_REMOVED(args)
 -- 	if args:IsSpellID(29522) then
 -- 		timerHolyFire:Cancel(args.destName)
 -- 	end
 -- end
 
-
-local timerRepentanceCD = mod:NewCDTimer(68, 305277, nil, nil, nil, 2)
+mod:AddTimerLine(L.Heroic)
+local timerRepentanceCD = mod:NewCDTimer(60, 305277, nil, nil, nil, 2)
 local timerGroundCD     = mod:NewCDTimer(20, 305271, nil, nil, nil, 3)
 
-local specWarnSpell = mod:NewSpecialWarningSpell(73654, nil, nil, nil, 1, 2, 3)
+local WarnGround = mod:NewAnnounce(305271, nil, nil, nil, 1, 2, 3)
 local specWarnGround = mod:NewSpecialWarningYou(305271, nil, nil, nil, 3, 2)
 
 -- local warnSound						= mod:NewSoundAnnounce()
@@ -76,8 +76,13 @@ mod:AddBoolOption("HealthFrame", true)
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 16457, "Maiden of Virtue")
 	if self:IsDifficulty("normal10") then
+		timerRepentanceCDob:Start(45-delay)
+		warningRepentanceSoon:Schedule(40-delay)
+		if self.Options.RangeFrame then
+			DBM.RangeCheck:Show(10)
+		end
 	elseif self:IsDifficulty("heroic10") then
-		timerRepentanceCD:Start(58 - delay)
+		timerRepentanceCD:Start(56.5 - delay)
 		timerGroundCD:Start(20 - delay)
 	end
 	if self.Options.HealthFrame then
@@ -89,6 +94,11 @@ end
 function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 16457, "Maiden of Virtue", wipe)
 	DBM.BossHealth:Clear()
+	if self:IsDifficulty("normal10") then
+		if self.Options.RangeFrame then
+			DBM.RangeCheck:Hide()
+		end
+	end
 end
 
 function mod:SPELL_CAST_START(args)
@@ -99,6 +109,12 @@ function mod:SPELL_CAST_START(args)
 		timerRepentanceCD:Start()
 		timerGroundCD:Start(30)
 		self.vb.ground = true
+	elseif args:IsSpellID(29511) then
+		warningRepentanceSoon:Cancel()
+		warningRepentance:Show()
+		timerRepentance:Start()
+		timerRepentanceCD:Start()
+		warningRepentanceSoon:Schedule(28)
 	end
 end
 
@@ -151,18 +167,24 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnGround:Show()
 		else
-			specWarnSpell:Show(args.destName)
+			WarnGround:Show(args.destName)
 		end
 		if self.Options.GroundIcon then
 			self:SetIcon(args.destName, 8, 5)
 		end
 	elseif args:IsSpellID(305285) then
 		showShieldHealthBar(self, args.destGUID, args.spellName, 600000)
+	elseif args:IsSpellID(29522) then
+		warningHolyFire:Show(args.destName)
+		timerHolyFire:Start(args.destName)
 	end
 end
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(305285) then
 		hideShieldHealthBar()
+	end
+	if args:IsSpellID(29522) then
+		timerHolyFire:Cancel(args.destName)
 	end
 end
