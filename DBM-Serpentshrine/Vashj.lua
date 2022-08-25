@@ -262,13 +262,13 @@ function mod:SPELL_SUMMON(args)
 end
 
 function mod:SPELL_AURA_REMOVED(args)
-	local spellId = args.spellId
+	-- local spellId = args.spellId
 	if args:IsSpellID(310659,310636) then
 		if self.Options.SetIconOnStaticTargets then
 			self:RemoveIcon(args.destName)
 		end
-		if DBM:CanUseNameplateIcons() and (self.Options.Nameplate1 or  self.Options.Nameplate) then
-			DBM.Nameplate:Hide(args.destGUID, spellId)
+		if DBM:CanUseNameplateIcons() and (self.Options.Nameplate1 or self.Options.Nameplate2) then
+			DBM.Nameplate:Hide(args.destGUID, args.spellId)
 		end
 	end
 end

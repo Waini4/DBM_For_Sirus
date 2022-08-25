@@ -27,9 +27,9 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_REMOVED 42783",
 	"SPELL_AURA_APPLIED 308548 308544 308563 42783",
 	"SPELL_AURA_APPLIED_DOSE 308548 308544 308563 42783",
-	"SWING_DAMAGE",
-	"UNIT_HEALTH",
-	"UNIT_DEAD"
+	-- "SWING_DAMAGE",
+	"UNIT_HEALTH"
+	-- "UNIT_DEAD"
 )
 --------------------------нормал--------------------------
 
@@ -72,7 +72,7 @@ local priestsN = true
 local priestsH = true
 local provid = true
 local KolTargets = {}
-local warned_preP1 = false
+-- local warned_preP1 = false
 -- local warned_preP2 = false
 
 mod:AddBoolOption("Zrec", true)
@@ -93,6 +93,12 @@ function mod:OnCombatStart(delay)
 		timerNextHelp:Start(40 - delay)
 		timerNextWrathH:Start(43 - delay)
 		-- self:SetStage(1)
+		self:RegisterShortTermEvents(
+		"SPELL_DAMAGE", -- unfiltered for DBM arrow
+		"SPELL_MISSED", -- unfiltered for DBM arrow
+		"SWING_DAMAGE",
+		"SWING_MISSED"
+	)
 	else
 		self.vb.Fear = 0
 		timerAdds:Start()
@@ -102,6 +108,7 @@ end
 
 function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 18805, "High Astromancer Solarian", wipe)
+	self:UnregisterShortTermEvents()
 end
 
 --------------------------нормал--------------------------
@@ -238,24 +245,28 @@ function mod:UNIT_TARGET()
 		self:ProvidIcon()
 	end
 end
-
-function mod:SWING_DAMAGE(_, sourceName, sourceFlags, destGUID, destName)
-	if self:GetCIDFromGUID(destGUID) == 3410 and bit.band(sourceFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 then
-		if sourceName ~= UnitName("player") then
-			for i = 1, 25 do
-				local unit = "raid" .. i .. "target"
-				if not UnitExists("raid" .. i) then break end
-				if UnitGUID(unit) == destGUID then
-					if self.Options.Zrec then
-						DBM.Arrow:ShowRunTo(unit, 0, 0)
-						break
-					end
-				end
+function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, destGUID, _, _, spellId)
+	if (spellId ~= 53189 or spellId ~= 53190 or spellId ~= 53194 or spellId ~= 53195) and self:GetCIDFromGUID(destGUID) == 3410 and bit.band(sourceFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 and self:IsInCombat() then--Any spell damage except for starfall (ranks 3 and 4)
+		if sourceGUID ~= UnitGUID("player") then
+			if self.Options.Zrec then
+				DBM.Arrow:ShowRunTo(sourceName, 0, 0)
 			end
 		end
 	end
 end
-
+mod.SPELL_MISSED = mod.SPELL_DAMAGE
+function mod:SWING_DAMAGE(sourceGUID, sourceName, sourceFlags, destGUID, destName)
+	-- if self:GetCIDFromGUID(destGUID) == 3410 and bit.band(sourceFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 then
+	if self:GetCIDFromGUID(destGUID) == 3410 and bit.band(sourceFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 and self:IsInCombat() then
+		if sourceGUID ~= UnitGUID("player") then
+			if self.Options.Zrec then
+				DBM.Arrow:ShowRunTo(sourceName, 0, 0)
+			end
+		end
+	end
+	-- end
+end
+mod.SWING_MISSED = mod.SWING_DAMAGE
 function mod:UNIT_HEALTH(uId)
 	-- if self:GetStage() and not warned_preP1 and self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHPByUnitID(uId) <= 33 and self:IsDifficulty("normal25") then
 	-- 	warned_preP1 = true
