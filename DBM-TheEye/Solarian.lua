@@ -268,7 +268,6 @@ function mod:SWING_DAMAGE(sourceGUID, sourceName, sourceFlags, destGUID, destNam
 		if sourceGUID ~= UnitGUID("player") then
 			if self.Options.Zrec and self:GetStage() == 1 then
 				DBM.Arrow:ShowRunTo(sourceName, 0, 0)
-				
 			end
 		end
 	end
