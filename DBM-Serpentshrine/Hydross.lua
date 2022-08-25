@@ -203,7 +203,6 @@ function mod:SPELL_AURA_REMOVED(args)
 			DBM.Nameplate:Hide(args.destGUID, 309046)
 		end
 	-- elseif args:IsSpellID(308749) then
-		
 	elseif spellId == 309065 then
 		if self.Options.SetIconOnKorTargets then
 			self:RemoveIcon(args.destName)
