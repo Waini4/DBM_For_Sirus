@@ -57,7 +57,7 @@ mod:RegisterEventsInCombat(
 -- "<529.70 21:17:12> [DBM_Announce] Defile on >player4<:Interface\\Icons\\Ability_Rogue_EnvelopingShadows:target:72762:LichKing:false:", -- [42826]
 -- "<529.70 21:17:12> [DBM_Debug] BossTargetScanner has ended for 36597:2:", -- [42827]
 
-local myRealm = select(3, DBM:GetMyPlayerInfo())
+-- local myRealm = select(3, DBM:GetMyPlayerInfo())
 
 -- General
 local timerCombatStart		= mod:NewCombatTimer(55)
@@ -247,7 +247,7 @@ local function NextPhase(self)
 	self.vb.valkyrWaveCount = 0
 	self.vb.soulReaperCount = 0
 	if self.vb.phase == 1 then
-		if myRealm == "Lordaeron" and self:IsDifficulty("normal10", "heroic10") then -- only normal10 confirmed, but added heroic10 just in case
+		if self:IsDifficulty("normal10", "heroic10") then -- only normal10 confirmed, but added heroic10 just in case
 			berserkTimer:Start(720)
 		else
 			berserkTimer:Start()
@@ -296,7 +296,7 @@ end
 function mod:OnCombatStart()
 	self:DestroyFrame()
 	self.vb.valkIcon = 1
-	self.vb.phase = 0
+	self:SetStage(0)
 	self.vb.warned_preP2 = false
 	self.vb.warned_preP3 = false
 	self.vb.ragingSpiritCount = 0
