@@ -177,6 +177,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	end
 end
 
+
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(308471) then
 		if self.Options.SetIconOnSignTargets then
