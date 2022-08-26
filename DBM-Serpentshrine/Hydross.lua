@@ -174,7 +174,7 @@ function mod:SPELL_AURA_APPLIED(args) -- все хм --
 		end
 		self:ScheduleMethod(0.1, "SetSklepIcons")
 		timerSklepCD:Start()
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+		if self.Options.Nameplate1 then
 			DBM.Nameplate:Show(args.destGUID, 309046)
 		end
 	elseif spellId == 309065 then
@@ -185,7 +185,7 @@ function mod:SPELL_AURA_APPLIED(args) -- все хм --
 		end
 		self:ScheduleMethod(0.1, "SetKorIcons")
 		timerKorCD:Start()
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate2 then
+		if self.Options.Nameplate2 then
 			DBM.Nameplate:Show(args.destGUID, 309065)
 		end
 	elseif spellId == 309068 then
@@ -199,7 +199,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnSklepTargets then
 			self:RemoveIcon(args.destName)
 		end
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+		if self.Options.Nameplate1 then
 			DBM.Nameplate:Hide(args.destGUID, 309046)
 		end
 	-- elseif args:IsSpellID(308749) then
@@ -207,7 +207,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnKorTargets then
 			self:RemoveIcon(args.destName)
 		end
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate2 then
+		if self.Options.Nameplate2 then
 			DBM.Nameplate:Hide(args.destGUID, 309065)
 		end
 	end

@@ -462,7 +462,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			BombIcons = 8
 		end
 	elseif args:IsSpellID(308749) then
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+		if self.Options.Nameplate1 then
 			DBM.Nameplate:Show(args.destGUID, 308749)
 		end
 	elseif args:IsSpellID(308756) then --хм искрящий удар
@@ -470,7 +470,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerIsc:Start(args.destName)
 		timerIscCD:Start()
 	elseif args:IsSpellID(308797) then --ВЗРЫВ
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate2 then
+		if self.Options.Nameplate2 then
 			DBM.Nameplate:Show(args.destGUID, 308797)
 		end
 		timerVzrivCD:Start()
@@ -512,11 +512,11 @@ function mod:SPELL_AURA_REMOVED(args)
 	elseif args:IsSpellID(36797) then
 		self:RemoveIcon(args.destName)
 	elseif args:IsSpellID(308749) then
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+		if self.Options.Nameplate1 then
 			DBM.Nameplate:Hide(args.destGUID, 308749)
 		end
 	elseif args:IsSpellID(308797) then
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate2 then
+		if  self.Options.Nameplate2 then
 			DBM.Nameplate:Hide(args.destGUID, 308797)
 		end
 	end

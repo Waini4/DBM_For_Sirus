@@ -178,7 +178,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			yellWrathH:Yell()
 			yellWrathHFades:Countdown(spellId)
 		end
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate2 then
+		if self.Options.Nameplate2 then
 			DBM.Nameplate:Show(args.destGUID, 308548)
 		end
 	elseif spellId == 308544 and self.vb.phase == 1 then -- Стаки луча
@@ -194,7 +194,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnWrathN:Show(args.destName)
 		timerWrathN:Start(args.destName)
 		---TODO elvui test
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+		if self.Options.Nameplate1 then
 			DBM.Nameplate:Show(args.destGUID, 42783)
 		end
 		self:SetIcon(args.destName, 8, 6)
@@ -208,11 +208,11 @@ end
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(42783) then
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+		if self.Options.Nameplate1 then
 			DBM.Nameplate:Hide(args.destGUID, 42783)
 		end
 	elseif args:IsSpellID(308548) then
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate2 then
+		if self.Options.Nameplate2 then
 			DBM.Nameplate:Hide(args.destGUID, 308548)
 		end
 	end

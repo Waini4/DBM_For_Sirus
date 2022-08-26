@@ -11101,6 +11101,7 @@ end
 ------------ NamePlates core
 ------------------------------------------
 function bossModPrototype:AddNamePlateOption(name, spellId, default)
+	if not DBM:CanUseNameplateIcons() then return end
 	if not spellId then
 		error("AddNamePlateOption must provide valid spellId", 2)
 	end
