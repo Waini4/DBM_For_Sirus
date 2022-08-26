@@ -47,10 +47,10 @@ local specWarnReturnInterrupt        = mod:NewSpecialWarningInterrupt(312214, "H
 local specWarnReturn                 = mod:NewSpecialWarningSwitch(312214, "-Healer", nil, nil, 1, 2)
 local specWarnTemporalCascadeYou     = mod:NewSpecialWarningYou(312206, nil, nil, nil, 3, 2)
 local specWarnReverseCascadeMoveAway = mod:NewSpecialWarningMoveAway(312208, nil, nil, nil, 4, 3)
-local yellTemporalCascade            = mod:NewYell(312206, nil, nil, nil, "YELL") --317158
-local yellReverseCascade             = mod:NewYell(312208, nil, nil, nil, "YELL")
-local yellTemporalCascadeFade        = mod:NewShortFadesYell(312206, nil, nil, nil, "YELL")
-local yellReverseCascadeFade         = mod:NewShortFadesYell(312208, nil, nil, nil, "YELL")
+local yellTemporalCascade            = mod:NewYell(312206) --317158
+local yellReverseCascade             = mod:NewYell(312208)
+local yellTemporalCascadeFade        = mod:NewShortFadesYell(312206)
+local yellReverseCascadeFade         = mod:NewShortFadesYell(312208)
 
 local EraseCount          = mod:NewCDCountTimer(60, 312204, nil, nil, nil, 4, nil, CL.HEALER_ICON) --Слово силы: Стереть
 local ResonantScream      = mod:NewCDTimer(12, 312210, nil, "SpellCaster", nil, 1, nil, nil, nil, 1) --Резонирующий крик(кик)

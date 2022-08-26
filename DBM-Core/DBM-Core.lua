@@ -81,9 +81,9 @@ local function currentFullDate()
 end
 
 DBM = {
-	Revision = parseCurseDate("20220825140000"),
+	Revision = parseCurseDate("20220825130000"),
 	DisplayVersion = GetAddOnMetadata(_addonname, "Version"), -- the string that is shown as version
-	ReleaseRevision = releaseDate(2022, 08, 25, 14, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	ReleaseRevision = releaseDate(2022, 08, 26, 13, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 
 local fakeBWVersion = 7558
@@ -3673,7 +3673,9 @@ do
 				("%s\t%s\t%s\t%s\t%s\t%s"):format(tostring(DBM.Revision), tostring(DBM.ReleaseRevision), DBM.DisplayVersion,
 					GetLocale(), tostring(not DBM.Options.DontSetIcons), VPVersion))
 		else
-			sendSync("DBMv4-Ver", ("%s\t%s\t%s\t%s\t%s"):format(tostring(DBM.Revision), tostring(DBM.ReleaseRevision), DBM.DisplayVersion, GetLocale(), tostring(not DBM.Options.DontSetIcons)))
+			sendSync("DBMv4-Ver",
+				("%s\t%s\t%s\t%s\t%s"):format(tostring(DBM.Revision), tostring(DBM.ReleaseRevision), DBM.DisplayVersion, GetLocale()
+					, tostring(not DBM.Options.DontSetIcons)))
 		end
 	end
 
@@ -8241,8 +8243,11 @@ do
 	function announcePrototype:Show(...) -- todo: reduce amount of unneeded strings
 		if not self.option or self.mod.Options[self.option] then
 			if DBM.Options.DontShowBossAnnounces then return end -- don't show the announces if the spam filter option is set
-			if DBM.Options.DontShowTargetAnnouncements and (self.announceType == "target" or self.announceType == "targetdistance" or self.announceType == "targetcount" or self.announceType == "targetcountdistance")
-				and not self.noFilter then return end--don't show announces that are generic target announces
+			if DBM.Options.DontShowTargetAnnouncements and
+				(
+				self.announceType == "target" or self.announceType == "targetdistance" or self.announceType == "targetcount" or
+					self.announceType == "targetcountdistance")
+				and not self.noFilter then return end --don't show announces that are generic target announces
 			local argTable = { ... }
 			local colorCode = ("|cff%.2x%.2x%.2x"):format(self.color.r * 255, self.color.g * 255, self.color.b * 255)
 			if #self.combinedtext > 0 then
@@ -8346,8 +8351,11 @@ do
 	function announcePrototype:CombinedShow(delay, ...)
 		if self.option and not self.mod.Options[self.option] then return end
 		if DBM.Options.DontShowBossAnnounces then return end -- don't show the announces if the spam filter option is set
-		if DBM.Options.DontShowTargetAnnouncements and (self.announceType == "target" or self.announceType == "targetdistance" or self.announceType == "targetcount" or self.announceType == "targetcountdistance")
-			and not self.noFilter then return end--don't show announces that are generic target announces
+		if DBM.Options.DontShowTargetAnnouncements and
+			(
+			self.announceType == "target" or self.announceType == "targetdistance" or self.announceType == "targetcount" or
+				self.announceType == "targetcountdistance")
+			and not self.noFilter then return end --don't show announces that are generic target announces
 		local argTable = { ... }
 		for i = 1, #argTable do
 			if type(argTable[i]) == "string" then
@@ -8380,8 +8388,11 @@ do
 		local voice = DBM.Options.ChosenVoicePack2
 		if voiceSessionDisabled or voice == "None" or not DBM.Options.VPReplacesAnnounce then return end
 		local always = DBM.Options.AlwaysPlayVoice
-		if DBM.Options.DontShowTargetAnnouncements and (self.announceType == "target" or self.announceType == "targetdistance" or self.announceType == "targetcount" or self.announceType == "targetcountdistance")
-		and not self.noFilter and not always then return end--don't show announces that are generic target announces
+		if DBM.Options.DontShowTargetAnnouncements and
+			(
+			self.announceType == "target" or self.announceType == "targetdistance" or self.announceType == "targetcount" or
+				self.announceType == "targetcountdistance")
+			and not self.noFilter and not always then return end --don't show announces that are generic target announces
 		if (not DBM.Options.DontShowBossAnnounces and (not self.option or self.mod.Options[self.option]) or always) and
 			self.sound <= SWFilterDisabled then
 			--Filter tank specific voice alerts for non tanks if tank filter enabled
@@ -8499,7 +8510,8 @@ do
 		local catType = "announce" --Default to General announce
 		if not self.NoSortAnnounce then --ALL announce objects will be assigned "announce", usually for mods that sort by phase instead
 			--Change if Personal or Other
-			if announceType == "target" or self.announceType == "targetdistance" or announceType == "targetcount" or self.announceType == "targetcountdistance" or announceType == "stack" then
+			if announceType == "target" or self.announceType == "targetdistance" or announceType == "targetcount" or
+				self.announceType == "targetcountdistance" or announceType == "stack" then
 				catType = "announceother"
 			end
 		end

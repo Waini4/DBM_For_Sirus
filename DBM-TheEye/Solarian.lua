@@ -29,7 +29,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED_DOSE 308548 308544 308563 42783",
 	-- "SWING_DAMAGE",
 	"UNIT_HEALTH"
-	-- "UNIT_DEAD"
+-- "UNIT_DEAD"
 )
 --------------------------нормал--------------------------
 
@@ -39,25 +39,25 @@ local warnAddsSoon = mod:NewAnnounce("WarnAddsSoon", 3, 55342)
 local specWarnWrathN = mod:NewSpecialWarningRun(42783, nil, nil, nil, 1, 2)
 
 local timerAdds       = mod:NewTimer(60, "TimerAdds", 55342, "RemoveEnrage", nil, 5, nil, CL.ENRAGE_ICON)
-local timerPriestsN   = mod:NewTimer(14, "TimerPriests", 47788, "SpellCaster",nil, 5, nil, CL.HEALER_ICON)
+local timerPriestsN   = mod:NewTimer(14, "TimerPriests", 47788, "SpellCaster", nil, 5, nil, CL.HEALER_ICON)
 local timerWrathN     = mod:NewTargetTimer(6, 42783, nil, "RemoveEnrage", nil, 5, nil, CL.ENRAGE_ICON, nil, 1, 5)
 local timerNextWrathN = mod:NewCDTimer(21, 42783, nil, "RemoveEnrage", nil, 5, nil, CL.ENRAGE_ICON)
 
 --------------------------героик--------------------------
 
-local warnRing       = mod:NewSoonAnnounce(308563, 3) -- ослепляющее кольцо
+local warnRing      = mod:NewSoonAnnounce(308563, 3) -- ослепляющее кольцо
 -- local warnPhase2Soon = mod:NewPrePhaseAnnounce(2)
-local warnPhase2     = mod:NewPhaseAnnounce(2)
-local warnKol        = mod:NewTargetAnnounce(308563, 2) -- Кольцо
-local warnFlashVoid  = mod:NewSoonAnnounce(308585, 3)
+local warnPhase2    = mod:NewPhaseAnnounce(2)
+local warnKol       = mod:NewTargetAnnounce(308563, 2) -- Кольцо
+local warnFlashVoid = mod:NewSoonAnnounce(308585, 3)
 
 local specWarnHelp      = mod:NewSpecialWarningAdds(308559, nil, nil, nil, 1, 2) -- Послушники
 local specWarnDebaf     = mod:NewSpecialWarningRun(308544, nil, nil, nil, 3, 4) -- Дебаф 1я фаза
 local specWarnFlashVoid = mod:NewSpecialWarningLookAway(308585, nil, nil, nil, 2, 2) -- фир 2 фаза
-local yellWrathH        = mod:NewYell(308548, nil, nil, nil, "YELL")
-local yellWrathHOb      = mod:NewYell(42783, nil, nil, nil, "YELL")
-local yellWrathHFades   = mod:NewShortFadesYell(308548, nil, nil, nil, "YELL")
-local yellWrathHObFades = mod:NewShortFadesYell(42783, nil, nil, nil, "YELL")
+local yellWrathH        = mod:NewYell(308548)
+local yellWrathHOb      = mod:NewYell(42783)
+local yellWrathHFades   = mod:NewShortFadesYell(308548)
+local yellWrathHObFades = mod:NewShortFadesYell(42783)
 
 
 local timerRing       = mod:NewCDTimer(20, 308562, nil, nil, nil, 1, nil, CL.ENRAGE_ICON)
@@ -94,11 +94,11 @@ function mod:OnCombatStart(delay)
 		timerNextWrathH:Start(43 - delay)
 		-- self:SetStage(1)
 		self:RegisterShortTermEvents(
-		"SPELL_DAMAGE", -- unfiltered for DBM arrow
-		"SPELL_MISSED", -- unfiltered for DBM arrow
-		"SWING_DAMAGE",
-		"SWING_MISSED"
-	)
+			"SPELL_DAMAGE", -- unfiltered for DBM arrow
+			"SPELL_MISSED", -- unfiltered for DBM arrow
+			"SWING_DAMAGE",
+			"SWING_MISSED"
+		)
 	else
 		self.vb.Fear = 0
 		timerAdds:Start()
@@ -252,8 +252,11 @@ function mod:UNIT_TARGET()
 		self:ProvidIcon()
 	end
 end
+
 function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, destGUID, _, _, spellId)
-	if (spellId ~= 53189 or spellId ~= 53190 or spellId ~= 53194 or spellId ~= 53195) and self:GetCIDFromGUID(destGUID) == 3410 and bit.band(sourceFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 and self:IsInCombat() then--Any spell damage except for starfall (ranks 3 and 4)
+	if (spellId ~= 53189 or spellId ~= 53190 or spellId ~= 53194 or spellId ~= 53195) and
+		self:GetCIDFromGUID(destGUID) == 3410 and bit.band(sourceFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 and
+		self:IsInCombat() then --Any spell damage except for starfall (ranks 3 and 4)
 		if sourceGUID ~= UnitGUID("player") then
 			if self.Options.Zrec and self:GetStage() == 1 then
 				DBM.Arrow:ShowRunTo(sourceName, 0, 0)
@@ -261,10 +264,12 @@ function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, destGUID, _, _, s
 		end
 	end
 end
+
 mod.SPELL_MISSED = mod.SPELL_DAMAGE
 function mod:SWING_DAMAGE(sourceGUID, sourceName, sourceFlags, destGUID, destName)
 	-- if self:GetCIDFromGUID(destGUID) == 3410 and bit.band(sourceFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 then
-	if self:GetCIDFromGUID(destGUID) == 3410 and bit.band(sourceFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 and self:IsInCombat() then
+	if self:GetCIDFromGUID(destGUID) == 3410 and bit.band(sourceFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 and
+		self:IsInCombat() then
 		if sourceGUID ~= UnitGUID("player") then
 			if self.Options.Zrec and self:GetStage() == 1 then
 				DBM.Arrow:ShowRunTo(sourceName, 0, 0)
@@ -273,6 +278,7 @@ function mod:SWING_DAMAGE(sourceGUID, sourceName, sourceFlags, destGUID, destNam
 	end
 	-- end
 end
+
 mod.SWING_MISSED = mod.SWING_DAMAGE
 function mod:UNIT_HEALTH(uId)
 	-- if self:GetStage() and not warned_preP1 and self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHPByUnitID(uId) <= 33 and self:IsDifficulty("normal25") then
@@ -284,7 +290,7 @@ function mod:UNIT_HEALTH(uId)
 	-- 	timerAdds:Cancel()
 	if self:GetUnitCreatureId(uId) == 18805 then
 		if self:GetStage() == 1 then
-			if  DBM:GetBossHPByUnitID(uId) <= 40 and self:IsDifficulty("heroic25") then
+			if DBM:GetBossHPByUnitID(uId) <= 40 and self:IsDifficulty("heroic25") then
 				DBM.Arrow:Hide()
 				self:SetStage(2)
 				timerAdds:Cancel()
@@ -300,6 +306,5 @@ function mod:UNIT_HEALTH(uId)
 	-- elseif self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 20 and self:IsDifficulty("normal25") and self:GetStage() and self:GetStage() == 1 then
 	-- 	self:SetStage(2)
 end
-
 
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
