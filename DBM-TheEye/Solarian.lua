@@ -34,7 +34,7 @@ mod:RegisterEventsInCombat(
 --------------------------нормал--------------------------
 
 local warnWrathN   = mod:NewTargetAnnounce(42783, 4)
-local warnAddsSoon = mod:NewAnnounce("WarnAddsSoon", 3, 55342)
+local warnAddsSoon = mod:NewSpecialWarningAdds(55342, nil, nil, nil, 1, 2)
 
 local specWarnWrathN = mod:NewSpecialWarningRun(42783, nil, nil, nil, 1, 2)
 
