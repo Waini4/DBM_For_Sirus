@@ -40,7 +40,8 @@ L:SetOptionLocalization({
 L:SetMiscLocalization({
 	YellBear		= "Хотели разбудить во мне зверя? Вам это удалось.",
 	YellTroll		= "С дороги!",
-	YellNormal	= "Пропустите Налоракка!"
+	YellNormal	= "Пропустите Налоракка!",
+	YellPullNal		= "Очень скоро вы умрете!"
 })
 
 ---------------
@@ -63,7 +64,8 @@ L:SetOptionLocalization{
 }
 
 L:SetMiscLocalization{
-	SayStorm = "Электрическая буря на мне!"
+	SayStorm = "Электрическая буря на мне!",
+	YellPullAKil = "Я - охотник! Вы - добыча!"
 }
 
 ---------------
@@ -87,7 +89,8 @@ L:SetOptionLocalization{
 }
 L:SetMiscLocalization({
 	YellBombs		= "Щас я вас сожгу!",
-	YellHatcher		= "Эй, хранители! Займитесь яйцами!"
+	YellHatcher		= "Эй, хранители! Займитесь яйцами!",
+	YellPullJan		= "Духи ветра станут вашей погибелью!"
 })
 
 --------------
@@ -123,9 +126,6 @@ L:SetGeneralLocalization({
 	name = "Малакрасс"
 })
 
-L:SetMiscLocalization({
-	YellPull	= "На вас падет тень..."
-})
 L:SetTimerLocalization{
 	TimerSpecial = "Спец. способность %s"
 }
@@ -143,6 +143,10 @@ L:SetOptionLocalization{
 	WarnSiphon = DBML.AUTO_ANNOUNCE_OPTIONS.spell:format(43501, GetSpellInfo(43501))
 
 }
+
+L:SetMiscLocalization({
+	YellPullMal	= "Тьма поглотит вас!"
+})
 --------------
 --  Zul'jin --
 --------------
@@ -188,5 +192,6 @@ L:SetMiscLocalization{
 	YellBearZul		= "Сейчас-сейчас. Выучил вот пару новых фокусов... вместе с братишкой-медведем.",
 	YellLynx		= "Знакомьтесь, мои новые братишки: клык и коготь!",
 	FrostPresence = "Власть льда",
-	DriudBearForm = "Облик лютого медведя"
+	DriudBearForm = "Облик лютого медведя",
+	YellPullZul	= "У нас вечно хотят что-то отнять. Теперь мы вернем себе все. Любой, кто встанет у нас на пути, захлебнется в собственной крови! Империя Амани возрождается...ради мщения. И начнем мы...с вас!"
 }

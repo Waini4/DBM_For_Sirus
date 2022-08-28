@@ -4,10 +4,9 @@ local L		= mod:GetLocalizedStrings()
 mod:SetRevision("20220802205228")
 mod:SetCreatureID(23574)
 
-mod:SetZone()
 mod:SetUsedIcons(1)
 
-mod:RegisterCombat("combat")
+mod:RegisterCombat("yell", L.YellPullAKil)
 
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS 43621",
@@ -29,10 +28,8 @@ local timerNextStatic				= mod:NewCDTimer(14, 44008)
 local SayOnElectricStorm			= mod:NewYellMe(43622)
 local berserkTimer					= mod:NewBerserkTimer(480)
 
-mod:AddRangeFrameOption("12")
-
+mod:AddRangeFrameOption(12,44008)
 mod:AddBoolOption("WarnWind", true)--old option
-
 mod:AddSetIconOption("SetIconOnElectricStorm", 43648, true, false, {1})
 
 function mod:OnCombatStart(delay)
@@ -68,7 +65,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			end)
 		end
 		if self.Options.SetIconOnElectricStorm then
-			self:SetIcon(args.destName, 8)
+			self:SetIcon(args.destName, 1)
 		end
 		SayOnElectricStorm:Yell()
 	elseif args:IsSpellID(44008) then

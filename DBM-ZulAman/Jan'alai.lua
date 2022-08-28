@@ -4,7 +4,7 @@ local L		= mod:GetLocalizedStrings()
 mod:SetRevision(("$Revision: 163 $"):sub(12, -3))
 
 mod:SetCreatureID(23578)
-mod:RegisterCombat("combat",23578)
+mod:RegisterCombat("yell", L.YellPullJan)
 
 mod:RegisterEvents(
 	"SPELL_CAST_START 43140",
@@ -20,7 +20,7 @@ mod:AddBoolOption("Hatchers", true)
 mod:AddBoolOption("Bombs", true)
 mod:AddBoolOption("Explosion",true)
 
-function mod:OnCombatStart(delay)
+function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 23578, "Jan'alai")
 	timerHatchers:Start(15)
 	timerBombs:Start(40)

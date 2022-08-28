@@ -4,7 +4,7 @@ local L   = mod:GetLocalizedStrings()
 mod:SetRevision(("$Revision: 163 $"):sub(12, -3))
 
 mod:SetCreatureID(24239)
-mod:RegisterCombat("combat", 24239)
+mod:RegisterCombat("yell", L.YellPullMal)
 
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 43442 43548 43451 43431",
@@ -41,7 +41,7 @@ mod:AddBoolOption("SpecWarnMelee", true)
 mod:AddBoolOption("SpecWarnMove", true)
 mod:AddBoolOption("WarnSiphon", true)
 
-function mod:OnCombatStart(delay)
+function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 24239, "Hex Lord Malacrass")
 	timerBolts:Start(20)
 end
