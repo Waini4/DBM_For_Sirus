@@ -6,7 +6,7 @@ mod:SetCreatureID(23863)
 
 mod:SetZone()
 
-mod:RegisterCombat("combat")
+mod:RegisterCombat("yell", L.YellPullZul)
 
 -- mod:RegisterEvents(
 -- 	"CHAT_MSG_MONSTER_YELL",
