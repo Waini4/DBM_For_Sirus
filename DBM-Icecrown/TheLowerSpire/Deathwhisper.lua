@@ -410,8 +410,8 @@ function mod:SPELL_SUMMON(args)
 	end
 end
 
-function mod:SWING_DAMAGE(sourceGUID, _, _, _,_,destFrag)
-	if (bband(destFrag, COMBATLOG_OBJECT_AFFILIATION_MINE) ~= 0 and bband(destFrag, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0) and self:GetCIDFromGUID(sourceGUID) == 38222 then
+function mod:SWING_DAMAGE(sourceGUID, _, _, destGUID)
+	if destGUID == UnitGUID("player") and self:GetCIDFromGUID(sourceGUID) == 38222 then
 		specWarnVengefulShade:Show()
 		specWarnVengefulShade:Play("targetyou")
 	end

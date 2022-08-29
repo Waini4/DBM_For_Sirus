@@ -11,10 +11,10 @@ mod:SetUsedIcons(5, 6, 7, 8)
 
 mod:RegisterEvents(
 	"SPELL_CAST_START 35941 40636 37036 308742 308732 308790",
-	"SPELL_AURA_APPLIED 36797 308732 308741 308750 308756 308797",
-	"SPELL_AURA_APPLIED_DOSE 36797 308732 308741 308750 308756 308797",
+	"SPELL_AURA_APPLIED 36797 308732 308741 308750 308756 308797 308749",
+	"SPELL_AURA_APPLIED_DOSE 36797 308732 308741 308750 308756 308797 308749",
 	"UNIT_TARGET",
-	"SPELL_AURA_REMOVED 308750 36797",
+	"SPELL_AURA_REMOVED 308750 36797 308797",
 	"CHAT_MSG_MONSTER_YELL",
 	"SPELL_CAST_SUCCESS 36797 37018 36723 308749 308743 36815 36731 308734"
 )
@@ -91,8 +91,7 @@ local timerCataCD     = mod:NewCDTimer(126, 308790, nil, nil, nil, 2)
 local timerCataCast   = mod:NewCastTimer(8, 308790, nil, nil, nil, 2)
 local timerVzrivCD    = mod:NewCDTimer(115, 308797, nil, nil, nil, 3)
 local timerVzrivCast  = mod:NewCastTimer(5, 308797, nil, nil, nil, 3)
-local timerGravityH   = mod:NewCDTimer(63, 35941, "Interface\\Icons\\Spell_Magic_FeatherFall", nil, nil, 6, nil,
-	CL.DEADLY_ICON) -- хм
+local timerGravityH   = mod:NewCDTimer(63, 35941, "Interface\\Icons\\Spell_Magic_FeatherFall", nil, nil, 6, nil, CL.DEADLY_ICON) -- хм
 local timerGravityHCD = mod:NewCDTimer(150, 35941, nil, nil, nil, 6, nil, CL.DEADLY_ICON) -- хм
 local timerAvengerS   = mod:NewCDTimer(22, 308743, nil, nil, nil, 3)
 
@@ -106,8 +105,9 @@ mod:AddBoolOption("RangeFrame", true)
 mod:AddBoolOption("AvengerLatencyCheck", false)
 mod:AddBoolOption("Avenger", true)
 mod:AddBoolOption("YellOnAvenger", true)
-
-mod:SetStage(0)
+mod:AddNamePlateOption("Nameplate1", 308749, true)
+mod:AddNamePlateOption("Nameplate2", 308797, true)
+-- mod:SetStage(0)
 local dominateMindTargets = {}
 local dominateMindIcon = 8
 local mincControl = {}
@@ -461,11 +461,18 @@ function mod:SPELL_AURA_APPLIED(args)
 			table.wipe(BombTargets)
 			BombIcons = 8
 		end
+	elseif args:IsSpellID(308749) then
+		if self.Options.Nameplate1 then
+			DBM.Nameplate:Show(args.destGUID, 308749)
+		end
 	elseif args:IsSpellID(308756) then --хм искрящий удар
 		warnIsc:Show(args.destName, args.amount or 1)
 		timerIsc:Start(args.destName)
 		timerIscCD:Start()
 	elseif args:IsSpellID(308797) then --ВЗРЫВ
+		if self.Options.Nameplate2 then
+			DBM.Nameplate:Show(args.destGUID, 308797)
+		end
 		timerVzrivCD:Start()
 		timerVzrivCast:Start()
 		warnVzriv:Show(args.destName)
@@ -504,6 +511,14 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 	elseif args:IsSpellID(36797) then
 		self:RemoveIcon(args.destName)
+	elseif args:IsSpellID(308749) then
+		if self.Options.Nameplate1 then
+			DBM.Nameplate:Hide(args.destGUID, 308749)
+		end
+	elseif args:IsSpellID(308797) then
+		if  self.Options.Nameplate2 then
+			DBM.Nameplate:Hide(args.destGUID, 308797)
+		end
 	end
 end
 

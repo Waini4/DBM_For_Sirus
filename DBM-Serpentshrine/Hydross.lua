@@ -68,7 +68,8 @@ mod:AddSetIconOption("SetIconOnSklepTargets", 309046, true, true, {6, 7, 8})
 mod:AddSetIconOption("SetIconOnKorTargets", 309065, true, true, {6, 7, 8})
 mod:AddBoolOption("AnnounceSklep", false)
 mod:AddBoolOption("AnnounceKor", false)
-
+mod:AddNamePlateOption("Nameplate1", 309046, true)
+mod:AddNamePlateOption("Nameplate2", 309065, true)
 mod.vb.phase = 0
 local SklepTargets = {}
 local KorTargets = {}
@@ -125,7 +126,7 @@ end
 
 function mod:OnCombatStart()
 	berserkTimer:Start()
-	self.vb.phase = 1
+	self:SetStage(1)
 	self.vb.SklepIcons = 8
 	self.vb.KorIcon = 8
 	if mod:IsDifficulty("heroic25") then
@@ -173,6 +174,9 @@ function mod:SPELL_AURA_APPLIED(args) -- все хм --
 		end
 		self:ScheduleMethod(0.1, "SetSklepIcons")
 		timerSklepCD:Start()
+		if self.Options.Nameplate1 then
+			DBM.Nameplate:Show(args.destGUID, 309046)
+		end
 	elseif spellId == 309065 then
 		KorTargets[#KorTargets + 1] = args.destName
 		if args:IsPlayer() then
@@ -181,8 +185,11 @@ function mod:SPELL_AURA_APPLIED(args) -- все хм --
 		end
 		self:ScheduleMethod(0.1, "SetKorIcons")
 		timerKorCD:Start()
-		elseif spellId == 309068 then
-			timerStaktimer:Start(args.destName)
+		if self.Options.Nameplate2 then
+			DBM.Nameplate:Show(args.destGUID, 309065)
+		end
+	elseif spellId == 309068 then
+		timerStaktimer:Start(args.destName)
 	end
 end
 
@@ -192,9 +199,16 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnSklepTargets then
 			self:RemoveIcon(args.destName)
 		end
+		if self.Options.Nameplate1 then
+			DBM.Nameplate:Hide(args.destGUID, 309046)
+		end
+	-- elseif args:IsSpellID(308749) then
 	elseif spellId == 309065 then
 		if self.Options.SetIconOnKorTargets then
 			self:RemoveIcon(args.destName)
+		end
+		if self.Options.Nameplate2 then
+			DBM.Nameplate:Hide(args.destGUID, 309065)
 		end
 	end
 end

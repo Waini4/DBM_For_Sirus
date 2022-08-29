@@ -214,7 +214,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		StaticTargets[#StaticTargets + 1] = args.destName
 		self:UnscheduleMethod("StaticAngerIcons")
 		self:ScheduleMethod(0.1, "StaticAngerIcons")
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+		if self.Options.Nameplate1 then
 			DBM.Nameplate:Show(args.destGUID, 310659)
 		end
 	elseif spellId == 310659 then -- хм заряд 310660 еще есть
@@ -235,7 +235,7 @@ function mod:SPELL_AURA_APPLIED(args)
 					specWarnStaticAngerNear:Show()
 				end
 			end
-			if DBM:CanUseNameplateIcons() and self.Options.Nameplate2 then
+			if self.Options.Nameplate2 then
 				DBM.Nameplate:Show(args.destGUID, 310659)
 			end
 		end
@@ -262,13 +262,13 @@ function mod:SPELL_SUMMON(args)
 end
 
 function mod:SPELL_AURA_REMOVED(args)
-	local spellId = args.spellId
+	-- local spellId = args.spellId
 	if args:IsSpellID(310659,310636) then
 		if self.Options.SetIconOnStaticTargets then
 			self:RemoveIcon(args.destName)
 		end
-		if DBM:CanUseNameplateIcons() and (self.Options.Nameplate1 or  self.Options.Nameplate) then
-			DBM.Nameplate:Hide(args.destGUID, spellId)
+		if (self.Options.Nameplate1 or self.Options.Nameplate2) then
+			DBM.Nameplate:Hide(args.destGUID, args.spellId)
 		end
 	end
 end

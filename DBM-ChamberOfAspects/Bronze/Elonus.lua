@@ -218,7 +218,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			self:SetIcon(args.destName, self.vb.RevCascIcons)
 		end
 		ReverseCascadeBuff:Start()
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+		if self.Options.Nameplate1 then
 			DBM.Nameplate:Show(args.destGUID, 317160)
 		end
 
@@ -300,7 +300,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnRevCascTargets then
 			self:RemoveIcon(args.destName)
 		end
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+		if self.Options.Nameplate1 then
 			DBM.Nameplate:Hide(args.destGUID, 317160)
 		end
 		if args:IsPlayer() then

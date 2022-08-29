@@ -81,9 +81,9 @@ local function currentFullDate()
 end
 
 DBM = {
-	Revision = parseCurseDate("20220820141800"),
+	Revision = parseCurseDate("20220826140000"),
 	DisplayVersion = GetAddOnMetadata(_addonname, "Version"), -- the string that is shown as version
-	ReleaseRevision = releaseDate(2022, 08, 20, 14, 18, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	ReleaseRevision = releaseDate(2022, 08, 26, 14, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 
 local fakeBWVersion = 7558
@@ -9614,8 +9614,7 @@ do
 		return obj
 	end
 
-	local function newSpecialWarning(self, announceType, spellId, stacks, optionDefault, optionName, optionVersion, runSound
-	                                 , hasVoice, difficulty)
+	local function newSpecialWarning(self, announceType, spellId, stacks, optionDefault, optionName, optionVersion, runSound, hasVoice, difficulty)
 		if not spellId then
 			error("newSpecialWarning: you must provide spellId", 2)
 			return
@@ -11101,6 +11100,7 @@ end
 ------------ NamePlates core
 ------------------------------------------
 function bossModPrototype:AddNamePlateOption(name, spellId, default)
+	if not DBM:CanUseNameplateIcons() then return end
 	if not spellId then
 		error("AddNamePlateOption must provide valid spellId", 2)
 	end

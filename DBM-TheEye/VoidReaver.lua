@@ -94,6 +94,7 @@ end
 
 function mod:OnCombatStart(delay)
 	table.wipe(beaconIconTargets)
+	self:SetStage(1)
 	DBM:FireCustomEvent("DBM_EncounterStart", 19516, "Void Reaver")
 	if mod:IsDifficulty("heroic25") then
 	    timerLoadCD:Start()
@@ -134,13 +135,13 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	-- local spellId = args.spellId
 	if args:IsSpellID(308465) then --- 1 фаза
-		mod.vb.phase = 1
+		self:SetStage(1)
 		timerLoadCD:Start()
 		timerOrbCD:Start()
 		warnPhase1:Schedule(0)
 		timerOrbCD:Start(60)
 	elseif args:IsSpellID(308473) then  --- 2 фаза
-		mod.vb.phase = 2
+		self:SetStage(2)
 		timerReloadCD:Start()
 		warnPhase2:Schedule(0)
 	elseif args:IsSpellID(308471) then
@@ -149,7 +150,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			yellSign:Yell()
 			yellSignFades:Countdown(308471)
 		end
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+		if self.Options.Nameplate1 then
 			DBM.Nameplate:Show(args.destGUID, 308471)
 		end
 		if self.Options.InfoFrame and not DBM.InfoFrame:IsShown() then
@@ -181,7 +182,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnSignTargets then
 			self:RemoveIcon(args.destName)
 		end
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+		if self.Options.Nameplate1 then
 			DBM.Nameplate:Hide(args.destGUID, 308471)
 		end
 	end
@@ -194,8 +195,10 @@ end
 
 
 function mod:UNIT_HEALTH(uId)
-	if  self:GetUnitCreatureId(uId) == 19516 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.50 then
-		mod.vb.phase = 3
+	if  self:GetUnitCreatureId(uId) == 19516 and DBM:GetBossHPByUnitID(uId) <= 50 and self:IsDifficulty("heroic25") then
+		-- if self:IsDifficulty("heroic25") then
+			self:SetStage(3)
+		-- end
 	end
 end
 
