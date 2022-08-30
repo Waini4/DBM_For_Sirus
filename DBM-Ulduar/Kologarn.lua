@@ -96,23 +96,11 @@ function mod:UNIT_DIED(args)
 	end
 end
 
-local tab1 = {
-	["312399"] = true,
-	["312752"] = true,
-	["63783"] = true,
-	["63982"] = true
-}
-local tab2 = {
-	["312412"] = true,
-	["312765"] = true,
-	["63346"] = true,
-	["63976"] = true
-}
-function mod:SPELL_DAMAGE(_, _, _, destGUID, _, _, spellId)
-	if (tab1[spellId]) and destGUID == UnitGUID("player")  then
-	-- if args:IsSpellID(312399, 312752, 63783, 63982) and args:IsPlayer() then	-- Ударная волна
+
+function mod:SPELL_DAMAGE(_, _, _, destGUID, _, _, spellId) -- надо чекнуть айдишники
+	if ((spellId == 312399 or spellId == 312752 or spellId == 63783 or spellId == 63982) and destGUID == UnitGUID("player")) then-- Ударная волна
 		timerNextShockwave:Start()
-	elseif (tab2[spellId]) and destGUID == UnitGUID("player") then --Сосредоточенный взгляд
+	elseif ((spellId == 312412 or spellId == 312765 or spellId == 63346 or spellId == 63976) and destGUID == UnitGUID("player")) then --Сосредоточенный взгляд
 		specWarnEyebeam:Show()
 	end
 end
