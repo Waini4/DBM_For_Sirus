@@ -113,8 +113,7 @@ function mod:SPELL_CAST_START(args)
 end
 
 function mod:SPELL_DAMAGE(_, _, _, _, _, destFlags, spellId) -- слакер пишет в рейд что взорвал печать
-	if spellId == 305133 and bit.band(destFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) ~= 0 and
-		bit.band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 then
+	if spellId == 305133 and bit.band(destFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) ~= 0 and bit.band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 then
 		SendChatMessage(L.YellHandfail, "RAID")
 	end
 end

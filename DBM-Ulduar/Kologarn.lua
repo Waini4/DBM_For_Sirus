@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 DBM_COMMON_L = {}
 local CL = DBM_COMMON_L
-
+local bband = bit.band
 mod:SetRevision("20210501000000")
 
 mod:SetCreatureID(32930, 32933, 32934)
@@ -97,10 +97,10 @@ function mod:UNIT_DIED(args)
 end
 
 
-function mod:SPELL_DAMAGE(_, _, _, destGUID, _, _, spellId) -- надо чекнуть айдишники
-	if ((spellId == 312399 or spellId == 312752 or spellId == 63783 or spellId == 63982) and destGUID == UnitGUID("player")) then-- Ударная волна
+function mod:SPELL_DAMAGE(_, _, _, _, _, destFlags, spellId) -- надо чекнуть айдишники
+	if ((spellId == 312399 or spellId == 312752 or spellId == 63783 or spellId == 63982) and (bband(destFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) ~= 0 and bband(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0)) then-- Ударная волна
 		timerNextShockwave:Start()
-	elseif ((spellId == 312412 or spellId == 312765 or spellId == 63346 or spellId == 63976) and destGUID == UnitGUID("player")) then --Сосредоточенный взгляд
+	elseif ((spellId == 312412 or spellId == 312765 or spellId == 63346 or spellId == 63976) and (bband(destFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) ~= 0 and bband(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0)) then --Сосредоточенный взгляд
 		specWarnEyebeam:Show()
 	end
 end
