@@ -65,7 +65,7 @@ L:SetOptionLocalization{
 
 L:SetMiscLocalization{
 	SayStorm = "Электрическая буря на мне!",
-	YellPullAKil = "Я - охотник! Вы - добыча!"
+	YellPullAKil = "Я – охотник! Вы – добыча!"
 }
 
 ---------------
