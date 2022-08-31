@@ -22,7 +22,7 @@ mod:AddBoolOption("Hatchers", true)
 mod:AddBoolOption("Bombs", true)
 mod:AddBoolOption("Explosion",true)
 
-function mod:OnCombatStart()
+function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 23578, "Jan'alai")
 	timerHatchers:Start(15)
 	timerBombs:Start(40)
