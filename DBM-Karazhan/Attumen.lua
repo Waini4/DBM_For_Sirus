@@ -33,8 +33,8 @@ local timerCurseCD = mod:NewNextTimer(31, 43127, nil, nil, nil, 3)
 
 ------------------ХМ------------------
 
-local specWarnMezair = mod:NewSpecialWarningDodge(305258, nil, nil, nil, 2, 2)
--- local WarInv         = mod:NewSpellAnnounce(305253) -- попытка поймать дебаф призрака
+local specWarnMezair 	= mod:NewSpecialWarningDodge(305258, nil, nil, nil, 2, 2)
+local warningTramp		= mod:NewCastAnnounce(305264, 3)
 
 local timerInvCD       = mod:NewCDTimer(21, 305251, nil, nil, nil, 3) -- Незримое присутствие
 local timerChargeCD    = mod:NewCDTimer(11, 305258, nil, nil, nil, 2) -- Галоп фаза 2
@@ -43,6 +43,16 @@ local timerChargeCast  = mod:NewCastTimer(3, 305258, nil, nil, nil, 2) -- Гал
 local timerSufferingCD = mod:NewCDTimer(21, 305259, nil, nil, nil, 3) -- Разделенные муки
 local timerTrampCD     = mod:NewCDTimer(15, 305264, nil, nil, nil, 3) -- Могучий топот
 
+local TrampTimers = {
+	[2] = 17,
+	[3] = 16,
+	[4] = 15,
+	[5] = 14,
+	[6] = 13,
+	[7] = 13,
+	[8] = 13
+}
+
 -- local warnSound						= mod:NewSoundAnnounce()
 
 mod:AddSetIconOption("InvIcons", 305253, true, true, { 8 })
@@ -50,6 +60,7 @@ mod:AddSetIconOption("InvIcons", 305253, true, true, { 8 })
 mod.vb.phase = 0
 mod.vb.lastCurse = 0
 mod.vb.phaseCounter = true
+local cast = 1
 
 function mod:PLAYER_REGEN_DISABLED()
 	if not mod.inCombat then
@@ -91,6 +102,7 @@ function mod:OnCombatStart(delay)
 				mod.vb.phaseCounter = true
 				if self:IsDifficulty("heroic10") then
 					timerInvCD:Start(20 - delay)
+					cast = 2
 				end
 			end
 		end
@@ -147,18 +159,23 @@ end
 -- end -- есть предположение что дебаф призрака накладывается на последнего члена рейда(исключение петы) нужно больше логов.
 
 function mod:SPELL_CAST_START(args)
-	if args:IsSpellID(305258) then -- галоп
+	if args:IsSpellID(305258) then	-- галоп
 		timerChargeCD:Start()
 		timerChargeCast:Start()
 		specWarnMezair:Show()
-	elseif args:IsSpellID(305263) then -- галоп2
+	elseif args:IsSpellID(305263) then	-- галоп2
 		timerCharge2CD:Start()
 		timerChargeCast:Start()
-		timerTrampCD:Start()	-- могучий топот тестовый, имхо видно всё.
 		specWarnMezair:Show()
-	elseif args:IsSpellID(305251) then -- незримое присутствие
+	elseif args:IsSpellID(305264) then	-- могучий топот тестовый, имхо видно всё.
+		warningTramp:Show()
+		if cast >= 2 then
+			timerTrampCD:Start(TrampTimers[cast])
+			cast = cast + 1
+		end
+	elseif args:IsSpellID(305251) then	-- незримое присутствие
 		timerInvCD:Start()
-	elseif args:IsSpellID(305259) then -- муки
+	elseif args:IsSpellID(305259) then	-- муки
 		timerSufferingCD:Start()
 	end
 end
