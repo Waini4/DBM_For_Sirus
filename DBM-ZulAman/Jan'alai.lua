@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Janalai", "DBM-ZulAman")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 163 $"):sub(12, -3))
+mod:SetRevision("20220831140000")
 
 mod:SetCreatureID(23578)
 mod:RegisterCombat("yell", L.YellPullJan)
@@ -16,6 +16,8 @@ local timerBombs			= mod:NewTimer(50, "Bombs", 31961)
 local timerExplosion		= mod:NewTimer(11, "Explosion", 66313)
 local timerNextBreath		= mod:NewCDTimer(12, 43140)
 
+local berserkTimer					= mod:NewBerserkTimer(360)
+
 mod:AddBoolOption("Hatchers", true)
 mod:AddBoolOption("Bombs", true)
 mod:AddBoolOption("Explosion",true)
@@ -25,6 +27,7 @@ function mod:OnCombatStart()
 	timerHatchers:Start(15)
 	timerBombs:Start(40)
 	timerNextBreath:Start()
+	berserkTimer:Start(-delay)
 end
 
 function mod:OnCombatEnd(wipe)

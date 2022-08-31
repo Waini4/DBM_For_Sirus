@@ -1,7 +1,7 @@
 local mod = DBM:NewMod("Maiden", "DBM-Karazhan")
 local L   = mod:GetLocalizedStrings()
 
-mod:SetRevision("20210502220000") -- fxpw check 202206151120000
+mod:SetRevision("20220831140000")
 mod:SetCreatureID(16457)
 mod:RegisterCombat("combat")
 
@@ -13,8 +13,8 @@ mod:RegisterEvents(
 )
 mod:AddTimerLine(L.Normal)
 local warningRepentanceSoon	= mod:NewSoonAnnounce(29511, nil, nil, nil, 2)
-local warningRepentance		= mod:NewSpellAnnounce(29511, nil, nil, nil, 3)
-local warningHolyFire		= mod:NewTargetAnnounce(29522, nil, nil, nil, 3)
+local warningRepentance		= mod:NewSpellAnnounce(29511, nil, nil, nil, 3)	-- Покаяние
+local warningHolyFire		= mod:NewTargetAnnounce(29522, nil, nil, nil, 3)	--Священный огонь
 
 local timerRepentance		= mod:NewBuffActiveTimer(12.6, 29511)
 local timerRepentanceCDob		= mod:NewCDTimer(33, 29511)
@@ -60,13 +60,13 @@ mod:AddBoolOption("RangeFrame", true)
 -- end
 
 mod:AddTimerLine(L.Heroic)
-local timerRepentanceCD = mod:NewCDTimer(60, 305277, nil, nil, nil, 2)
-local timerGroundCD     = mod:NewCDTimer(20, 305271, nil, nil, nil, 3)
+local timerRepentanceCD = mod:NewCDTimer(60, 305277, nil, nil, nil, 2)	-- Всеобщее покаяние
+local timerGroundCD     = mod:NewCDTimer(20, 305271, nil, nil, nil, 3)	-- Священная земля
 
-local WarnGround = mod:NewAnnounce(305271, nil, nil, nil, 1, 2, 3)
+local WarnGround = mod:NewTargetNoFilterAnnounce(305271, nil, nil, nil, 3, 3)
 local specWarnGround = mod:NewSpecialWarningYou(305271, nil, nil, nil, 3, 2)
 
--- local warnSound						= mod:NewSoundAnnounce()
+local soundGroundOnYou				= mod:NewSoundYou(72762)
 
 mod.vb.ground = true
 
@@ -166,6 +166,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		if args:IsPlayer() then
 			specWarnGround:Show()
+			soundGroundOnYou:Play("runaway")
 		else
 			WarnGround:Show(args.destName)
 		end
