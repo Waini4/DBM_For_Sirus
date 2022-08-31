@@ -63,7 +63,7 @@ mod:AddTimerLine(L.Heroic)
 local timerRepentanceCD = mod:NewCDTimer(60, 305277, nil, nil, nil, 2)	-- Всеобщее покаяние
 local timerGroundCD     = mod:NewCDTimer(20, 305271, nil, nil, nil, 3)	-- Священная земля
 
-local WarnGround = mod:NewAnnounce(305271, nil, nil, nil, 1, 2, 3)
+local WarnGround = mod:NewTargetNoFilterAnnounce(305271, nil, nil, nil, 3, 3)
 local specWarnGround = mod:NewSpecialWarningYou(305271, nil, nil, nil, 3, 2)
 
 local soundGroundOnYou				= mod:NewSoundYou(72762)
