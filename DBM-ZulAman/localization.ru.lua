@@ -13,34 +13,28 @@ L:SetGeneralLocalization({
 L:SetWarningLocalization({
 	WarnBear		= "Форма медведя",
 	WarnBearSoon	= "Форма медведя через 5 секунд",
-	WarnNormal		= "Обычная форма",
-	WarnNormalSoon	= "Обычная форма через 5 секунд",
-	BearForm = "Форма медведя",
-	TrollForm = "Форма тролля"
+	WarnNormal		= "Форма тролля",
+	WarnNormalSoon	= "Форма тролля через 5 секунд",
 })
 
 L:SetTimerLocalization({
 	TimerBear		= "Форма медведя",
-	TimerNormal		= "Обычная форма",
-	BearForm = "Форма медведя",
-	TrollForm = "Форма тролля"
+	TimerTroll		= "Форма тролля",
 })
 
 L:SetOptionLocalization({
-	WarnBear		= "Show warning for Bear form",--Translate
-	WarnBearSoon	= "Show pre-warning for Bear form",--Translate
-	WarnNormal		= "Show warning for Normal form",--Translate
-	WarnNormalSoon	= "Show pre-warning for Normal form",--Translate
-	TimerBear		= "Show timer for Bear form",--Translate
-	TimerNormal		= "Show timer for Normal form",--Translate
-	BearForm = "Отсчет времени до следующей формы медведя",
-	TrollForm = "Отсчет времени до следующей формы тролля"
+	WarnBear		= "Предупреждение при форме тролля",
+	WarnBearSoon	= "Предупреждать заранее о следующей форме медведя",
+	WarnTroll		= "Предупреждение при форме тролля",
+	WarnTrollSoon	= "Предупреждать заранее о следующей форме тролля",
+	TimerBear		= "Отсчет времени до следующей формы медведя",
+	TimerTroll		= "Отсчет времени до следующей формы тролля"
+
 })
 
 L:SetMiscLocalization({
 	YellBear		= "Хотели разбудить во мне зверя? Вам это удалось.",
-	YellTroll		= "С дороги!",
-	YellNormal	= "Пропустите Налоракка!",
+	YellTroll		= "C дороги!",
 	YellPullNal		= "Очень скоро вы умрете!"
 })
 
@@ -65,7 +59,7 @@ L:SetOptionLocalization{
 
 L:SetMiscLocalization{
 	SayStorm = "Электрическая буря на мне!",
-	YellPullAKil = "Я - охотник! Вы - добыча!"
+	YellPullAKil = "Я – охотник! Вы – добыча!"
 }
 
 ---------------
@@ -168,7 +162,8 @@ L:SetMiscLocalization({
 	YellPhase2	= "Выучил новый фокус… прямо как братишка-медведь...",
 	YellPhase3	= "От орла нигде не скрыться!",
 	YellPhase4	= "Позвольте представить моих двух братцев: клык и коготь!",
-	YellPhase5	= "Для того чтобы увидеть дракондора, в небо смотреть необязательно!"
+	YellPhase5	= "Для того чтобы увидеть дракондора, в небо смотреть необязательно!",
+	YellPullZul	= "У нас вечно хотят что-то отнять. Теперь мы вернем себе все. Любой, кто встанет у нас на пути, захлебнется в собственной крови! Империя Амани возрождается...ради мщения. И начнем мы...с вас!"
 })
 L:SetWarningLocalization{
 	WarnThrow = "Кровотечение на >%s<!",
@@ -182,16 +177,4 @@ L:SetOptionLocalization{
 	WarnJump = "Анонсировать цели кровотечения на фазе рыси",
 	WarnNextPhaseSoon = "Предупреждать о скорой смене облика",
 	WarnFlamePillar = "Объявлять на ком Колонна огня"
-}
-
-L:SetMiscLocalization{
-	Bear = "медведя",
-	Hawk = "орла",
-	Lynx = "рыси",
-	Dragon = "драконодора",
-	YellBearZul		= "Сейчас-сейчас. Выучил вот пару новых фокусов... вместе с братишкой-медведем.",
-	YellLynx		= "Знакомьтесь, мои новые братишки: клык и коготь!",
-	FrostPresence = "Власть льда",
-	DriudBearForm = "Облик лютого медведя",
-	YellPullZul	= "У нас вечно хотят что-то отнять. Теперь мы вернем себе все. Любой, кто встанет у нас на пути, захлебнется в собственной крови! Империя Амани возрождается...ради мщения. И начнем мы...с вас!"
 }

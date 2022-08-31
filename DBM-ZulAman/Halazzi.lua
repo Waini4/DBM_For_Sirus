@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Halazzi", "DBM-ZulAman")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 163 $"):sub(12, -3))
+mod:SetRevision("20220831140000")
 
 mod:SetCreatureID(23577)
 mod:RegisterCombat("combat",23577)
@@ -17,8 +17,11 @@ local isDispeller = select(2, UnitClass("player")) == "PRIEST" or select(2, Unit
 local specWarnFrenzy		= mod:NewSpecialWarningDispel(41254, select(2, UnitClass("player")) == "HUNTER")
 local specWarnDispelShock	= mod:NewSpecialWarningDispel(43303, isDispeller)
 
+local berserkTimer					= mod:NewBerserkTimer(300)
+
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 23577, "Halazzi")
+	berserkTimer:Start(-delay)
 end
 
 function mod:OnCombatEnd(wipe)
