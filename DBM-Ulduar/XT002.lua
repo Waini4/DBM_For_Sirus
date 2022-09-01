@@ -23,9 +23,9 @@ local warnGravityBomb = mod:NewTargetAnnounce(312943, 3)
 local specWarnLightBomb    = mod:NewSpecialWarningMoveAway(312941, nil, nil, nil, 1, 2)
 local yellLightBomb        = mod:NewYell(312941)
 local specWarnGravityBomb  = mod:NewSpecialWarningMoveAway(312943, nil, nil, nil, 1, 2)
-local yellGravityBomb      = mod:NewYell(312943, nil, nil, nil, "YELL")
+local yellGravityBomb      = mod:NewYell(312943)
 local specWarnConsumption  = mod:NewSpecialWarningMove(64206, nil, nil, nil, 1, 2) --Hard mode void zone dropped by Gravity Bomb
-local yellGravityBombFades = mod:NewShortFadesYell(312943, nil, nil, nil, "YELL")
+local yellGravityBombFades = mod:NewShortFadesYell(312943)
 local yellLightBombFades   = mod:NewShortFadesYell(312941)
 
 local enrageTimer              = mod:NewBerserkTimer(600)

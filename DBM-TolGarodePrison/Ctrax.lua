@@ -33,8 +33,8 @@ local warnBreath       = mod:NewSpellAnnounce(317571, 2, nil, "Healer") --Дых
 local specwarnEscapingDarkness = mod:NewSpecialWarningCast(317579, nil, nil, nil, 2, 2)
 local specWarnAncientCurseYou  = mod:NewSpecialWarningMoveAway(317594, nil, nil, nil, 3, 2)
 local specWarnWell             = mod:NewSpecialWarningMove(317595, nil, nil, nil, 2, 1) --Теневой Колодец
-local yellAncientCurse         = mod:NewYell(317594, nil, nil, nil, "YELL") --317158
-local yellAncientCurseFade     = mod:NewShortFadesYell(317594, nil, nil, nil, "YELL")
+local yellAncientCurse         = mod:NewYell(317594) --317158
+local yellAncientCurseFade     = mod:NewShortFadesYell(317594)
 local specWarnImmersion        = mod:NewSpecialWarning("Immersion", nil, nil, nil, 2, 1) --Погружение во мрак
 
 local timerBreathCD         = mod:NewCDTimer(24, 317571, nil, nil, nil, 2) --Дыхание Мрака

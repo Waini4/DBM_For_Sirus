@@ -1,4 +1,3 @@
-
 --------------------------------------------------------------
 --------------------------------------------------------------
 
@@ -49,8 +48,8 @@ local warnPepel      = mod:NewSpellAnnounce(310514, 3) --пепел
 local warnVsp        = mod:NewStackAnnounce(310521, 5) --Вспышка
 local warnPhase2Soon = mod:NewPrePhaseAnnounce(2)
 local warnPhase2     = mod:NewPhaseAnnounce(2)
-local yellKlei       = mod:NewYell(310496, nil, nil, nil, "YELL")
-local yellKleiFade   = mod:NewShortFadesYell(310496, nil, nil, nil, "YELL")
+local yellKlei       = mod:NewYell(310496)
+local yellKleiFade   = mod:NewShortFadesYell(310496)
 
 
 local specWarnChardg  = mod:NewSpecialWarningYou(310481, nil, nil, nil, 1, 2)

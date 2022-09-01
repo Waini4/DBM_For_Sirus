@@ -23,8 +23,8 @@ local warnFlesh            = mod:NewStackAnnounce(317542, 3, nil, "Tank") --Оп
 
 local specwarnPrimalHorror        = mod:NewSpecialWarningLookAway(317548, nil, nil, nil, 2, 2)
 local specWarnMarkofFilthRun      = mod:NewSpecialWarningRun(317544, nil, nil, nil, 1, 2)
-local yellMarkofFilth             = mod:NewYell(317544, nil, nil, nil, "YELL") --317158
-local yellMarkofFilthFade         = mod:NewShortFadesYell(317544, nil, nil, nil, "YELL")
+local yellMarkofFilth             = mod:NewYell(317544) --317158
+local yellMarkofFilthFade         = mod:NewShortFadesYell(317544)
 local specWarnEndlessflameofFilth = mod:NewSpecialWarningDispel(317540, "MagicDispeller", nil, nil, 1, 2)
 
 local LightningofFilthCast = mod:NewCastTimer(1, 317549, nil, nil, nil, 2)
