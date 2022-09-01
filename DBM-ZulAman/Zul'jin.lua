@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("ZulJin", "DBM-ZulAman")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20220803000728")
+mod:SetRevision("20220831130000")
 mod:SetCreatureID(23863)
 
 mod:SetZone()
@@ -22,30 +22,37 @@ mod:RegisterEventsInCombat(
 	"UNIT_HEALTH"
 )
 -- общее
-local berserkTimer				= mod:NewBerserkTimer(600)
-
 local warnPhase					= mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2)
 local warnNextPhaseSoon			= mod:NewPrePhaseAnnounce(2, nil, nil, nil, nil, nil, 2)
+
+local berserkTimer				= mod:NewBerserkTimer(600)
+
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(1))
-local timerWhirlwind			= mod:NewCDTimer(17, 17207)
-local timerThrow				= mod:NewCDTimer(10, 43093)
+local timerWhirlwind			= mod:NewCDTimer(17, 17207)	-- Вихрь
+local timerThrow				= mod:NewCDTimer(10, 43093)	-- Горестный бросок
 
 local warnThrow					= mod:NewTargetNoFilterAnnounce(43093, 3, nil, "Tank|Healer")
 
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(2))
-local timerParalyzeCD			= mod:NewCDTimer(20, 43095, nil, nil, nil, 3, nil, DBM_COMMON_L.MAGIC_ICON)
+local timerParalyzeCD			= mod:NewCDTimer(20, 43095, nil, nil, nil, 3, nil, DBM_COMMON_L.MAGIC_ICON)	-- Ползучий паралич
 
-local warnParalyze				= mod:NewSpellAnnounce(43095, 4)
+local warnParalyze				= mod:NewSpellAnnounce(43095, 4)	-- Ползучий паралич
 local warnParalyzeSoon			= mod:NewPreWarnAnnounce(43095, 5, 3)
 
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(4))
-local timerJump					= mod:NewCDTimer(20, 43153)
-local timerBreath				= mod:NewCDTimer(10, 43215)
+local timerJump					= mod:NewCDTimer(20, 43153)	-- Скачок рыси
+local timerBreath				= mod:NewCDTimer(10, 43215)	-- Огненное дыхание
+
 local warnJump					= mod:NewAnnounce("WarnJump", 4, 43153)
 
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(5))
-local timerFlameWhirl			= mod:NewCDTimer(12, 43213)
-local timerFlamePillar			= mod:NewCDTimer(10, 43216)
+local timerFlameWhirl			= mod:NewCDTimer(12, 43213)	--Пламенный вихрь
+local timerFlamePillar			= mod:NewCDTimer(10, 43216)	--Столб огня
+
+local warnFlamePillar			= mod:NewAnnounce("WarnFlamePillar", 4, 43216)
+
+local specWarnFlamePillar		= mod:NewSpecialWarningRun(43216, nil, nil, 3, 2)
+local specWarnFlamePillarMelee	= mod:NewSpecialWarningRun(43216, "Melee", nil, nil, 3, 2)
 
 -- local lastPhase = false
 local notBleedWarned = true
@@ -67,8 +74,8 @@ end
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 23863, "Zul'jin")
 	self:SetStage(1)
-	timerWhirlwind:Start(6)
-	timerThrow:Start(7)
+	timerWhirlwind:Start(9.5)
+	timerThrow:Start(20)
 	notBleedWarned = true
 	-- lastPhase = false
 	table.wipe(bleedTargets)
@@ -85,7 +92,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(43093) then
 		warnThrow:Show(args.destName)
 		if self.Options.ThrowIcon then
-			self:SetIcon(args.destName, 7)
+			self:SetIcon(args.destName, 7, 4)
 		end
 	elseif args:IsSpellID(17207) then
 		timerWhirlwind:Start()
@@ -110,6 +117,22 @@ function mod:SPELL_CAST_SUCCESS(args)
 		timerFlameWhirl:Start()
 	elseif args:IsSpellID(43093) then
 		timerThrow:Start()
+	end
+end
+
+function mod:UNIT_TARGET(uId)
+	local stage = self:GetStage()
+	if (stage == 5 and self:GetUnitCreatureId(uId) == 23863) then
+		timerFlamePillar:Start()
+		if not self:IsTank("targettarget") then
+			warnFlamePillar:Show(UnitName("targettarget"))
+		end
+		if UnitName("player") == UnitName("targettarget") and not self:IsTank("player") then
+			specWarnFlamePillar:Show()
+		end
+		if self:IsMelee("player") and self:IsMelee("targettarget") and not self:IsTank("targettarget") then
+			specWarnFlamePillarMelee:Show()
+		end
 	end
 end
 
