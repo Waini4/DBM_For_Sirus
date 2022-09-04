@@ -1,9 +1,8 @@
-
 ---------------------------------------------
 ---------------------------------------------
 
-local mod	= DBM:NewMod("Vashj", "DBM-Serpentshrine")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Vashj", "DBM-Serpentshrine")
+local L   = mod:GetLocalizedStrings()
 
 -- local CL = DBM_COMMON_L
 mod:SetRevision("20220609123000") -- fxpw check 20220609123000
@@ -27,45 +26,46 @@ mod:RegisterEventsInCombat(
 	"SPELL_SUMMON 310635 310657"
 )
 
-local warnCore           = mod:NewAnnounce("WarnCore", 3, 38132)
-local warnCharge         = mod:NewTargetAnnounce(38280, 4)
-local warnPhase          = mod:NewAnnounce("WarnPhase", 1)
-local warnElemental      = mod:NewAnnounce("WarnElemental", 4)
+local warnCore      = mod:NewAnnounce("WarnCore", 3, 38132)
+local warnCharge    = mod:NewTargetAnnounce(38280, 4)
+local warnPhase     = mod:NewAnnounce("WarnPhase", 1)
+local warnElemental = mod:NewAnnounce("WarnElemental", 4)
 
-local specWarnCore       = mod:NewSpecialWarningYou(38132)
-local specWarnCharge     = mod:NewSpecialWarningRun(38280)
+local specWarnCore   = mod:NewSpecialWarningYou(38132)
+local specWarnCharge = mod:NewSpecialWarningRun(38280)
 
-local timerStrider       = mod:NewTimer(66, "Strider", "Interface\\Icons\\INV_Misc_Fish_13", nil, nil, 1)
-local timerElemental     = mod:NewTimer(53, "TaintedElemental", "Interface\\Icons\\Spell_Nature_ElementalShields", nil, nil, 1)
-local timerNaga          = mod:NewTimer(47.5, "Naga", "Interface\\Icons\\INV_Misc_MonsterHead_02", nil, nil, 1)
-local timerCharge        = mod:NewTargetTimer(20, 38280, nil, nil, nil, 4)
+local timerStrider   = mod:NewTimer(66, "Strider", "Interface\\Icons\\INV_Misc_Fish_13", nil, nil, 1)
+local timerElemental = mod:NewTimer(53, "TaintedElemental", "Interface\\Icons\\Spell_Nature_ElementalShields", nil, nil,
+	1)
+local timerNaga      = mod:NewTimer(47.5, "Naga", "Interface\\Icons\\INV_Misc_MonsterHead_02", nil, nil, 1)
+local timerCharge    = mod:NewTargetTimer(20, 38280, nil, nil, nil, 4)
 
 --------------------------------Героик--------------------------------
 
 
-local warnStaticAnger       	 = mod:NewTargetAnnounce(310636, 3) -- Статический заряд
-local warnElemAnonce       		 = mod:NewSoonAnnounce(310635, 1) -- Скоро призыв элементалей хм
-local warnStartElem     		 = mod:NewSpellAnnounce(310635, 1) -- Призыв элемов хм
-local warnScat      		     = mod:NewSpellAnnounce(310657, 1) -- Призыв скатов хм
-local warnPhase2Soon			 = mod:NewPrePhaseAnnounce(2)
-local warnPhase3Soon		     = mod:NewPrePhaseAnnounce(3)
-local warnPhase2     		 	 = mod:NewPhaseAnnounce(2)
-local warnPhase3     	 		 = mod:NewPhaseAnnounce(3)
+local warnStaticAnger = mod:NewTargetAnnounce(310636, 3) -- Статический заряд
+local warnElemAnonce  = mod:NewSoonAnnounce(310635, 1) -- Скоро призыв элементалей хм
+local warnStartElem   = mod:NewSpellAnnounce(310635, 1) -- Призыв элемов хм
+local warnScat        = mod:NewSpellAnnounce(310657, 1) -- Призыв скатов хм
+local warnPhase2Soon  = mod:NewPrePhaseAnnounce(2)
+local warnPhase3Soon  = mod:NewPrePhaseAnnounce(3)
+local warnPhase2      = mod:NewPhaseAnnounce(2)
+local warnPhase3      = mod:NewPhaseAnnounce(3)
 
-local specWarnStaticAnger  	 	 = mod:NewSpecialWarningMove(310636, nil, nil, nil, 4, 5) -- Статический заряд на игроке
-local specWarnStaticAngerNear	 = mod:NewSpecialWarning("SpecWarnStaticAngerNear", 310636, nil, nil, 1, 2) -- Статический заряд около игрока
-local yellStaticAnger			= mod:NewYell(310636)
-local yellStaticAngerFade		= mod:NewShortFadesYell(310636)
-local yellStaticAngerPhase2		= mod:NewYell(310659, nil, nil, nil, "YELL")
-local yellStaticAngerPhase2Fade	= mod:NewShortFadesYell(310659, nil, nil, nil, "YELL")
-local timerStaticAngerCD 	     = mod:NewCDTimer(15, 310636, nil, nil, nil, 3) -- Статический заряд
-local timerStaticAnger     		 = mod:NewTargetTimer(8, 310636, nil, nil, nil,3) -- Статический заряд на игроке
-local timerElemCD     			 = mod:NewCDTimer(60, 310635, nil, nil, nil, 1) -- Элементали
+local specWarnStaticAnger       = mod:NewSpecialWarningMove(310636, nil, nil, nil, 4, 5) -- Статический заряд на игроке
+local specWarnStaticAngerNear   = mod:NewSpecialWarning("SpecWarnStaticAngerNear", 310636, nil, nil, 1, 2) -- Статический заряд около игрока
+local yellStaticAnger           = mod:NewYell(310636)
+local yellStaticAngerFade       = mod:NewShortFadesYell(310636)
+local yellStaticAngerPhase2     = mod:NewYell(310659)
+local yellStaticAngerPhase2Fade = mod:NewShortFadesYell(310659)
+local timerStaticAngerCD        = mod:NewCDTimer(15, 310636, nil, nil, nil, 3) -- Статический заряд
+local timerStaticAnger          = mod:NewTargetTimer(8, 310636, nil, nil, nil, 3) -- Статический заряд на игроке
+local timerElemCD               = mod:NewCDTimer(60, 310635, nil, nil, nil, 1) -- Элементали
 
 mod:AddNamePlateOption("Nameplate1", 310636, true)
 mod:AddNamePlateOption("Nameplate2", 310659, true)
 mod:AddBoolOption("Elem")
-mod:AddSetIconOption("SetIconOnStaticTargets", 310636, true, true, {7, 8})
+mod:AddSetIconOption("SetIconOnStaticTargets", 310636, true, true, { 7, 8 })
 mod:AddBoolOption("AnnounceStatic", false)
 
 local ti = true
@@ -83,7 +83,7 @@ do
 	-- end
 	function mod:StaticAngerIcons() -- метки и анонс целей статического заряда
 		if DBM:GetRaidRank() >= 0 then
-			table.sort(StaticTargets, function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
+			table.sort(StaticTargets, function(v1, v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 			for _, v in ipairs(StaticTargets) do
 				if mod.Options.AnnounceStatic then
 					if DBM:GetRaidRank() > 0 then
@@ -136,9 +136,8 @@ function mod:ElementalSoon()
 	warnElemental:Show()
 end
 
-
 function mod:SWING_DAMAGE(sourceGUID, sourceName, _, destGUID)
-	if self:GetCIDFromGUID(destGUID) == 36899  and self:IsSrcTypePlayer(sourceGUID) then
+	if self:GetCIDFromGUID(destGUID) == 36899 and self:IsSrcTypePlayer(sourceGUID) then
 		if sourceName ~= UnitName("player") then
 			if self.Options.Elem then
 				DBM.Arrow:ShowRunTo(sourceName, 0, 0)
@@ -147,13 +146,12 @@ function mod:SWING_DAMAGE(sourceGUID, sourceName, _, destGUID)
 	end
 end
 
-
 function mod:TaintedIcon()
 	if DBM:GetRaidRank() >= 1 then
 		for i = 1, GetNumRaidMembers() do
-			if UnitName("raid"..i.."target") == L.TaintedElemental then
+			if UnitName("raid" .. i .. "target") == L.TaintedElemental then
 				ti = false
-				SetRaidTarget("raid"..i.."target", 8)
+				SetRaidTarget("raid" .. i .. "target", 8)
 				break
 			end
 		end
@@ -245,7 +243,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		-- self:ScheduleMethod(0.1, "StaticAngerIcons")
 		if self.Options.SetIconOnStaticTargets then
 			-- function module:SetSortedIcon(mod, sortType, delay, target, startIcon, maxIcon, descendingIcon, returnFunc, scanId)
-			self:SetSortedIcon("roster", args.destName, 7,8)
+			self:SetSortedIcon("roster", args.destName, 7, 8)
 		end
 	end
 end
@@ -263,7 +261,7 @@ end
 
 function mod:SPELL_AURA_REMOVED(args)
 	-- local spellId = args.spellId
-	if args:IsSpellID(310659,310636) then
+	if args:IsSpellID(310659, 310636) then
 		if self.Options.SetIconOnStaticTargets then
 			self:RemoveIcon(args.destName)
 		end
@@ -315,29 +313,29 @@ function mod:UNIT_HEALTH(uId)
 		if not DBM:GetBossHPByUnitID(uId) then return end
 		local stage = self:GetStage()
 		if stage == 1 then
-			if  not warned_preP1  and DBM:GetBossHPByUnitID(uId) <= 72 then
+			if not warned_preP1 and DBM:GetBossHPByUnitID(uId) <= 72 then
 				warned_preP1 = true
 				warnPhase2Soon:Show()
 			end
-			if  not warned_preP2  and DBM:GetBossHPByUnitID(uId) <= 70 then
+			if not warned_preP2 and DBM:GetBossHPByUnitID(uId) <= 70 then
 				warned_preP2 = true
 				self:SetStage(2)
 				warnPhase2:Show()
 			end
 		end
 		if mod:IsDifficulty("heroic25") then
-			if stage == 2 and not warned_preP3  and DBM:GetBossHPByUnitID(uId) <= 42 then
+			if stage == 2 and not warned_preP3 and DBM:GetBossHPByUnitID(uId) <= 42 then
 				warned_preP3 = true
 				warnPhase3Soon:Show()
 			end
-			if stage == 2 and not warned_preP4  and DBM:GetBossHPByUnitID(uId) <= 40 then
+			if stage == 2 and not warned_preP4 and DBM:GetBossHPByUnitID(uId) <= 40 then
 				warned_preP4 = true
 				self:SetStage(3)
 				warnPhase3:Show()
 				timerElemCD:Cancel()
 			end
 		else
-			if stage == 2 and not warned_preP4  and DBM:GetBossHPByUnitID(uId) <= 50 then
+			if stage == 2 and not warned_preP4 and DBM:GetBossHPByUnitID(uId) <= 50 then
 				warned_preP4 = true
 				self:SetStage(3)
 				warnPhase3:Show()
