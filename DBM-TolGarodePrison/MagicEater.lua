@@ -75,9 +75,9 @@ local f = CreateFrame("Frame", nil, UIParent)
 f:RegisterEvent("PLAYER_REGEN_DISABLED")
 f:SetScript("OnEvent", function()
 	for i = 1, MAX_RAID_MEMBERS do
-		local pt = UnitName("raid" .. i .. "target")
+		local pt = UnitName("raid" .. i .. "-target")
 		if pt and pt == "Пожиратель магии" then
-			DBM:FireCustomEvent("DBM_EncounterStart", 84002, "MagicEater")
+			DBM:FireCustomEvent("DBM_EncounterStart", 84017, "MagicEater")
 			--self:SetStage(1)
 			timerShockingCD:Start(34)
 			timerShadowCD:Start()

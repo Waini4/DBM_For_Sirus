@@ -25,12 +25,12 @@ mod:AddSetIconOption("SetIconOnDominateMind", 30923, true, true, {5})
 mod:AddBoolOption("RemoveWeaponOnMindControl", true)
 
 function mod:OnCombatStart(delay)
-	DBM:FireCustomEvent("DBM_EncounterStart", 17381, "TheMaker")
+	DBM:FireCustomEvent("DBM_EncounterStart", 17381, "The Maker")
 	MC = 2
 end
 
 function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 17381, "TheMaker", wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 17381, "The Maker", wipe)
 	MC = 1
 end
 
