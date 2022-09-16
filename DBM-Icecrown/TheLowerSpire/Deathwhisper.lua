@@ -4,7 +4,7 @@ local L		= mod:GetLocalizedStrings()
 mod:SetRevision("20220702001333")
 mod:SetCreatureID(36855)
 mod:SetUsedIcons(4, 5, 6, 7, 8)
-mod:RegisterCombat("combat")
+mod:RegisterCombat("yell", L.YellPull)
 
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 71289 71001 72108 72109 72110 71237 70674 71204",
@@ -410,8 +410,10 @@ function mod:SPELL_SUMMON(args)
 	end
 end
 
-function mod:SWING_DAMAGE(sourceGUID, _, _, destGUID)
-	if destGUID == UnitGUID("player") and self:GetCIDFromGUID(sourceGUID) == 38222 then
+function mod:SWING_DAMAGE(sourceGUID, _, _, _, _,destFlags)
+	if bband(destFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) ~= 0 and
+	bband(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 and
+	self:GetCIDFromGUID(sourceGUID) == 38222 then
 		specWarnVengefulShade:Show()
 		specWarnVengefulShade:Play("targetyou")
 	end
