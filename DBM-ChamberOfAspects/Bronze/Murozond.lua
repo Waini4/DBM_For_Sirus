@@ -292,9 +292,11 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 317252 then
 		warnBredHM:Show(args.destName, args.amount or 1)
 		timerBredHM:Start(args.destName)
-	elseif self.Options.AnnounceFails and  args.destName  and args:IsSpellID(313119,317256) and DBM:GetRaidRank() >= 1 and DBM:GetRaidUnitId(args.destName) ~= "none" then
+	elseif args.destName and args:IsSpellID(313119,317256) and DBM:GetRaidUnitId(args.destName) ~= "none" then
 		FearTargets[args.destName] = (FearTargets[args.destName] or 0) + 1
-		SendChatMessage(L.FearOn:format(args.destName), "RAID")
+		if self.Options.AnnounceFails then
+			SendChatMessage(L.FearOn:format(args.destName), "RAID")
+		end
 	end
 end
 
