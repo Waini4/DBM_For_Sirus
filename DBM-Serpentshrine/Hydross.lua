@@ -3,7 +3,7 @@
 
 local mod = DBM:NewMod("Hydross", "DBM-Serpentshrine")
 local L   = mod:GetLocalizedStrings()
-
+local tonumber = tonumber
 mod:SetRevision("20220609123000") -- fxpw check 20220609123000
 
 
@@ -212,29 +212,29 @@ function mod:SPELL_AURA_REMOVED(args)
 	end
 end
 
-local sidToTimeH = {
-	["38215"] = { 10, 25 },
-	["38216"] = { 25, 50 },
-	["38217"] = { 50, 100 },
-	["38218"] = { 100, 250 },
-	["38231"] = { 250, 500 },
-	["40584"] = { 500, 500 },
+local SidToTimeH = {
+	[38215] = { 10, 25 },
+	[38216] = { 25, 50 },
+	[38217] = { 50, 100 },
+	[38218] = { 100, 250 },
+	[38231] = { 250, 500 },
+	[40584] = { 500, 500 },
 }
 local SidToTimeC = {
-	["38219"] = { 10, 25 },
-	["38220"] = { 25, 50 },
-	["38221"] = { 50, 100 },
-	["38222"] = { 100, 250 },
-	["38230"] = { 250, 500 },
-	["40583"] = { 500, 500 },
+	[38219] = { 10, 25 },
+	[38220] = { 25, 50 },
+	[38221] = { 50, 100 },
+	[38222] = { 100, 250 },
+	[38230] = { 250, 500 },
+	[40583] = { 500, 500 },
 
 }
 
 function mod:SPELL_CAST_SUCCESS(args)
-	local spellId = args.spellId
-	if sidToTimeH[spellId] then
-		warnMarkOfHydross:Show(sidToTimeH[spellId][1])
-		timerMarkOfHydross:Start(sidToTimeH[spellId][2])
+	local spellId = tonumber(args.spellId)
+	if SidToTimeH[spellId] then
+		warnMarkOfHydross:Show(SidToTimeH[spellId][1])
+		timerMarkOfHydross:Start(SidToTimeH[spellId][2])
 
 		-- if spellId == 38215 then
 		-- 	warnMarkOfHydross:Show("10")
