@@ -162,7 +162,12 @@ L = DBM:GetModLocalization("Putricide")
 L:SetGeneralLocalization({
 	name = "Профессор Мерзоцид"
 })
-
+L:SetMiscLocalization{
+	EmoteMalleable	= "|TInterface\\Icons\\inv_misc_herb_evergreenmoss.blp:16|t %s разливает |cFF00FF00вязкую жижу!|r",
+	YellPull		= "Отличные новости, народ! Я усовершенствовал штамм чумы, которая уничтожит весь Азерот!",
+	YellMalleable	= "Вязкая гадость на мне!",
+	YellUnbound		= "Безудержная чума на мне!"
+}
 ----------------------------
 --  Blood Prince Council  --
 ----------------------------

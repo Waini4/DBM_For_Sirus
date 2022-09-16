@@ -15,9 +15,11 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED_DOSE 72451 72463 72671 72672 70542",
 	"SPELL_AURA_REFRESH 70539 72457 72875 72876 70542",
 	"SPELL_AURA_REMOVED 70447 72836 72837 72838 70672 72455 72832 72833 72855 72856 70911 71615 70539 72457 72875 72876 70542",
-	"UNIT_HEALTH boss1"
+	"UNIT_HEALTH boss1",
+	"CHAT_MSG_RAID_BOSS_EMOTE"
 )
-
+-- 72458
+-- 72295
 local myRealm = select(3, DBM:GetMyPlayerInfo())
 
 -- General
@@ -289,7 +291,11 @@ function mod:SPELL_CAST_SUCCESS(args)
 		GooTime = GetTime()
 	end
 end
-
+-- function mod:UNIT_SPELLCAST_SUCCEEDED(_,spellName)
+-- 	if spellName == GetSpellInfo(72295) then
+-- 		timerMalleableGooCD:Start()
+-- 	end
+-- end
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
 	if args:IsSpellID(70447, 72836, 72837, 72838) then--Green Slime
@@ -392,18 +398,29 @@ end
 
 --values subject to tuning depending on dps and his health pool
 function mod:UNIT_HEALTH(uId)
-	if self.vb.phase == 1 and not self.vb.warned_preP2 and self:GetUnitCreatureId(uId) == 36678 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.83 then
-		self.vb.warned_preP2 = true
-		warnPhase2Soon:Show()
-		warnPhase2Soon:Play("nextphasesoon")
-	elseif self.vb.phase == 2 and not self.vb.warned_preP3 and self:GetUnitCreatureId(uId) == 36678 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.38 then
-		self.vb.warned_preP3 = true
-		warnPhase3Soon:Show()
-		warnPhase3Soon:Play("nextphasesoon")
-	elseif self:GetUnitCreatureId(uId) == 36678 and UnitHealth(uId) / UnitHealthMax(uId) == 0.35 then
-		warnUnstableExperimentSoon:Cancel()
-		warnChokingGasBombSoon:Cancel()
-		soundMalleableGooSoon:Cancel()
-		soundChokingGasSoon:Cancel()
+	if self:GetUnitCreatureId(uId) == 36678 then
+		if self:GetStage() == 1 and not self.vb.warned_preP2  and DBM:GetBossHPByUnitID(uId) <= 83 then
+			self.vb.warned_preP2 = true
+			warnPhase2Soon:Show()
+			warnPhase2Soon:Play("nextphasesoon")
+		elseif self:GetStage() == 2 and not self.vb.warned_preP3  and  DBM:GetBossHPByUnitID(uId) <= 38 then
+			self.vb.warned_preP3 = true
+			warnPhase3Soon:Show()
+			warnPhase3Soon:Play("nextphasesoon")
+		elseif DBM:GetBossHPByUnitID(uId) == 0.35 then
+			warnUnstableExperimentSoon:Cancel()
+			warnChokingGasBombSoon:Cancel()
+			soundMalleableGooSoon:Cancel()
+			soundChokingGasSoon:Cancel()
+		end
+	end
+end
+
+
+function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg)
+	if msg == L.EmoteMalleable then
+		specWarnMalleableGooCast:Show()
+		-- specWarnMalleableGooCast:Play("watchstep")
+		timerMalleableGooCD:Start()
 	end
 end
