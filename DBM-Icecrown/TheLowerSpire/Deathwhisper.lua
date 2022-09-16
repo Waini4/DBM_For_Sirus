@@ -285,19 +285,8 @@ end
 
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
-	if spellId == 71289 then
-		dominateMindTargets[#dominateMindTargets + 1] = args.destName
-		if self.Options.SetIconOnDominateMind then
-			self:SetIcon(args.destName, self.vb.dominateMindIcon, 12)
-		end
-		self.vb.dominateMindIcon = self.vb.dominateMindIcon - 1
-		self:Unschedule(showDominateMindWarning)
-		if self:IsDifficulty("heroic10", "normal25") or (self:IsDifficulty("heroic25") and #dominateMindTargets >= 3) then
-			showDominateMindWarning(self)
-		else
-			self:Schedule(0.9, showDominateMindWarning, self)
-		end
-	elseif args:IsSpellID(71001, 72108, 72109, 72110) then
+	
+	if args:IsSpellID(71001, 72108, 72109, 72110) then
 		if args:IsPlayer() then
 			specWarnDeathDecay:Show()
 			specWarnDeathDecay:Play("watchfeet")
@@ -381,12 +370,23 @@ end
 function mod:SPELL_CAST_SUCCESS(args)
 	if args.spellId == 71289 then
 		timerDominateMindCD:Start()
-		DBM:Debug("MC on "..args.destName,2)
+		-- DBM:Debug("MC on "..args.destName,2)
 		if self.Options.EqUneqWeapons and args.destName == UnitName("player") and self:IsDps() then
 			self:UnW()
 			self:UnW()
 			self:ScheduleMethod(0.01, "UnW")
 			DBM:Debug("Unequipping",2)
+		end
+		dominateMindTargets[#dominateMindTargets + 1] = args.destName
+		if self.Options.SetIconOnDominateMind then
+			self:SetIcon(args.destName, self.vb.dominateMindIcon, 12)
+		end
+		self.vb.dominateMindIcon = self.vb.dominateMindIcon - 1
+		self:Unschedule(showDominateMindWarning)
+		if self:IsDifficulty("heroic10", "normal25") or (self:IsDifficulty("heroic25") and #dominateMindTargets >= 3) then
+			showDominateMindWarning(self)
+		else
+			self:Schedule(0.9, showDominateMindWarning, self)
 		end
 	end
 end
