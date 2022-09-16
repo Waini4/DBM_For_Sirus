@@ -285,7 +285,7 @@ end
 
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
-	
+
 	if args:IsSpellID(71001, 72108, 72109, 72110) then
 		if args:IsPlayer() then
 			specWarnDeathDecay:Show()
