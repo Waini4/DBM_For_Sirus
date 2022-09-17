@@ -42,8 +42,8 @@ local warnTemporalArrow = mod:NewTargetAnnounce(316519, 4)
 
 local TemporalBeatStack = mod:NewBuffActiveTimer(30, 316508, nil, "Tank", nil, 5, nil, CL.TANK_ICON)
 local IadCD             = mod:NewCDTimer(58, 312199, nil, nil, nil, 3, nil, CL.POISON_ICON)
-local RezonansCD        = mod:NewCDTimer(48, 316523, nil, nil, nil, 3, nil, CL.DEADLY_ICON)
-local BurningTimeCD     = mod:NewCDTimer(48, 316526, nil, nil, nil, 1, nil, CL.DEADLY_ICON)
+local RezonansCD        = mod:NewCDTimer(53, 316523, nil, nil, nil, 3, nil, CL.DEADLY_ICON)
+local BurningTimeCD     = mod:NewCDTimer(53, 316526, nil, nil, nil, 1, nil, CL.DEADLY_ICON)
 local TemporalArrow     = mod:NewCDTimer(20, 316519, nil, nil, nil, 3)
 
 mod:AddBoolOption("YellOnTemporalCrash", true, "announce")
@@ -85,12 +85,12 @@ function mod:SPELL_CAST_START(args)
 		warnRezonansCast:Show()
 		RezonansCast:Start()
 		BurningTimeCD:Start()
-		specWarnnBurningTimeSoon:Schedule(43)
+		specWarnnBurningTimeSoon:Schedule(48)
 	elseif args:IsSpellID(316526) then
 		warnBurningTimeCast:Show()
 		BurningTimeCast:Start()
 		RezonansCD:Start()
-		specWarnnRezonansSoon:Schedule(38)
+		specWarnnRezonansSoon:Schedule(42)
 	elseif args:IsSpellID(312197) then
 		if self:IsTank() and not DBM:UnitDebuff("player", args.spellID) then
 			specWarnTemporalBeat:Show(args.destName)
@@ -141,10 +141,10 @@ function mod:SPELL_CAST_SUCCESS(args)
 		self:ScheduleMethod(0.1, "TemporalBeatTarget")
 	elseif args:IsSpellID(316523) then
 		BurningTimeCD:Start()
-		specWarnnBurningTimeSoon:Schedule(40)
+		specWarnnBurningTimeSoon:Schedule(45)
 	elseif args:IsSpellID(16526) then
 		RezonansCD:Start()
-		specWarnnRezonansSoon:Schedule(40)
+		specWarnnRezonansSoon:Schedule(45)
 	elseif args:IsSpellID(312199) then
 		IadCD:Start()
 	end
