@@ -60,8 +60,8 @@ function mod:OnCombatStart(delay)
 	if mod:IsDifficulty("heroic25") then
 		enrage:Start()
 		TemporalArrow:Start(-delay)
-		RezonansCD:Start(45)
-		specWarnnRezonansSoon:Schedule(36)
+		RezonansCD:Start(50)
+		specWarnnRezonansSoon:Schedule(41)
 	else
 		RezonansCD:Start(30)
 		specWarnnRezonansSoon:Schedule(22)
@@ -90,7 +90,7 @@ function mod:SPELL_CAST_START(args)
 		warnBurningTimeCast:Show()
 		BurningTimeCast:Start()
 		RezonansCD:Start()
-		specWarnnRezonansSoon:Schedule(42)
+		specWarnnRezonansSoon:Schedule(43)
 	elseif args:IsSpellID(312197) then
 		if self:IsTank() and not DBM:UnitDebuff("player", args.spellID) then
 			specWarnTemporalBeat:Show(args.destName)
@@ -140,11 +140,11 @@ function mod:SPELL_CAST_SUCCESS(args)
 		TemporalArrow:Start()
 		self:ScheduleMethod(0.1, "TemporalBeatTarget")
 	elseif args:IsSpellID(316523) then
-		BurningTimeCD:Start()
-		specWarnnBurningTimeSoon:Schedule(45)
+	--	BurningTimeCD:Start()
+	--	specWarnnBurningTimeSoon:Schedule(45)
 	elseif args:IsSpellID(16526) then
-		RezonansCD:Start()
-		specWarnnRezonansSoon:Schedule(45)
+	--	RezonansCD:Start()
+	--	specWarnnRezonansSoon:Schedule(45)
 	elseif args:IsSpellID(312199) then
 		IadCD:Start()
 	end
