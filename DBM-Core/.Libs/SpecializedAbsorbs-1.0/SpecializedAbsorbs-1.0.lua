@@ -464,7 +464,7 @@ end
 -- have accumulated. It will be called in case this library version gets
 -- replaced by a new one
 function Core.Disable()
-	for guid, effects in pairs(activeEffectsBySpell) do
+	for guid, _ in pairs(activeEffectsBySpell) do
 		callbacks:Fire("UnitCleared", guid)
 	end
 
@@ -876,7 +876,7 @@ function Core.RemoveCombatTrigger(target, event, func)
 			local old_funcList = DeepTableCopy(funcList)
 			wipe(funcList)
 
-			for k, v in pairs(old_funcList) do
+			for _, v in pairs(old_funcList) do
 				if v ~= func then
 					tinsert(funcList, v)
 				end
@@ -1671,7 +1671,7 @@ end
 
 
 local lastDkAbsorbTable = {}
--- lastDkAbsorbTable 
+-- lastDkAbsorbTable
 local lastPalAbsorbTable = {}
 
 -- lastPalAbsorbTable[guid][1] = last update
@@ -1794,8 +1794,6 @@ end
 local function druid_SavageDefense_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
 	-- TODO: what happens to mixed school attacks?
 	druidAbsorb = 0
-	-- effectEntry[3] > 
-	-- print()
 	if spellschool == SCHOOL_MASK_PHYSICAL then
 		return min(effectEntry[3], absorbedRemaining), false
 	end
