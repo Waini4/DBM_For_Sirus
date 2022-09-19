@@ -49,7 +49,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnMindControl:Show(args.destName)
 		timerMindControl:Start(args.destName)
 		if MC >= 2 then
-			timerMindControlCD:Start()(MCTimers[MC])
+			timerMindControlCD:Start(MCTimers[MC])
 			MC = MC + 1
 		end
 		if args:IsPlayer() and self.Options.RemoveWeaponOnMindControl then	-- автоснятие шмоток
