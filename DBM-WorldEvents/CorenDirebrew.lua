@@ -24,11 +24,11 @@ local timerBrewStun			= mod:NewTargetTimer(6, 47340)
 mod:AddBoolOption("YellOnBarrel", true, "yell")
 
 function mod:OnCombatStart(delay)
-	DBM:FireCustomEvent("DBM_EncounterStart", 23872, "CorenDirebrew")
+	DBM:FireCustomEvent("DBM_EncounterStart", 23872, "Coren Direbrew")
 end
 
 function mod:OnCombatEnd(delay)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 23872, "CorenDirebrew")
+	DBM:FireCustomEvent("DBM_EncounterEnd", 23872, "Coren Direbrew")
 end
 
 function mod:SPELL_CAST_START(args)
