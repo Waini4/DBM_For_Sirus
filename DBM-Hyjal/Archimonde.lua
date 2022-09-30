@@ -42,10 +42,14 @@ function mod:BurstTarget(targetname, uId)
 end
 
 function mod:OnCombatStart(delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 17968, "Archimonde")
 	timerFearCD:Start(40-delay)
 	berserkTimer:Start(-delay)
 end
 
+function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 17968, "Archimonde")
+end
 
 function mod:SPELL_AURA_APPLIED(args)
 	if args.spellId == 31972 then

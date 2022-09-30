@@ -28,7 +28,11 @@ local berserkTimer		= mod:NewBerserkTimer(600)
 mod:AddSetIconOption("IceBoltIcon", 31249, false, false, {8})
 
 function mod:OnCombatStart(delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 17767, "Rage Winterchill")
 	berserkTimer:Start(-delay)
+end
+function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 17767, "Rage Winterchill", wipe)
 end
 
 function mod:SPELL_AURA_APPLIED(args)

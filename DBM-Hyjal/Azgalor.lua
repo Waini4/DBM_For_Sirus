@@ -28,9 +28,16 @@ local berserkTimer		= mod:NewBerserkTimer(600)
 
 mod:AddSetIconOption("DoomIcon", 31347, true, false, {8})
 
+
 function mod:OnCombatStart(delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 17888, "Azgalor")
 	berserkTimer:Start(-delay)
 end
+
+function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 17888, "Azgalor")
+end
+
 
 function mod:SPELL_AURA_APPLIED(args)
 	if args.spellId == 31340 and args:IsPlayer() and self:AntiSpam() then

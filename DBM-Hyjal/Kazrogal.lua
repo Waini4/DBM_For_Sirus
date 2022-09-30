@@ -21,9 +21,14 @@ mod.vb.count = 0
 mod.vb.time = 45
 
 function mod:OnCombatStart(delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 17888, "Kaz'rogal")
 	self.vb.time = 45
 	self.vb.count = 0
 	timerMarkCD:Start(-delay)
+end
+
+function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 17888, "Kaz'rogal")
 end
 
 function mod:SPELL_CAST_START(args)
