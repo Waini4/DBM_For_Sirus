@@ -247,6 +247,7 @@ local function RestoreWipeTime(self)
 end
 
 function mod:OnCombatStart(delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 36597, "The Lich King")
 	self:DestroyFrame()
 	self.vb.phase = 0
 	self.vb.warned_preP2 = false
@@ -259,6 +260,7 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
+	DBM:FireCustomEvent("DBM_EncounterEnd", 36597, "The Lich King")
 	self:UnregisterShortTermEvents()
 	self:DestroyFrame()
 	if self.Options.RangeFrame then
