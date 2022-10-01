@@ -165,7 +165,7 @@ function mod:WaveFunction(currentWave)
 					warnWave:Show(L.WarnWave_2:format(currentWave, 5, L.Ghoul, 2, L.Necromancer))
 				elseif currentWave == 2 then
 					warnWave:Show(L.WarnWave_3:format(currentWave, 5, L.Ghoul, 2, L.Fiend, 2, L.Necromancer))
-				elseif currentWave == 3 then 
+				elseif currentWave == 3 then
 					self.frameForPudge.Scan = true
 					warnWave:Show(L.WarnWave_3:format(currentWave, 2, L.Fiend, 2, L.Necromancer, 1, L.Pudge1))
 				elseif currentWave == 4 then
