@@ -285,14 +285,14 @@ mod.frameForPudge:SetScript("OnUpdate", function(self,up)
 				local unit = "raid" .. i .. "target"
 				local name = UnitName(unit)
 				if name == L.Pudge1 then
-					if UnitName(unit) == name then
+					-- if UnitName(unit) == name then
 						local hp = UnitHealth(unit) / UnitHealthMax(unit) * 100
 						if hp and hp > 1 and hp < 15  then
 							if mod:AntiSpam(3,1) then
 								specWarnSlimeFinal:Show()
 							end
 						end
-					end
+					-- end
 				end
 			end
 			upd = 0
