@@ -288,7 +288,7 @@ mod.frameForPudge:SetScript("OnUpdate", function(self,up)
 					if UnitName(unit) == name then
 						local hp = UnitHealth(unit) / UnitHealthMax(unit) * 100
 						if hp and hp > 1 and hp < 15  then
-							if self:AntiSpam(3,1) then
+							if mod:AntiSpam(3,1) then
 								specWarnSlimeFinal:Show()
 							end
 						end
