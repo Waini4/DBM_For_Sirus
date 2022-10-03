@@ -242,7 +242,7 @@ L.CombatMessages			= "Combat Message Options"
 L.ShowEngageMessage 		= "Show engage messages in chat frame"
 L.ShowDefeatMessage 		= "Show kill/wipe messages in chat frame"
 L.ShowGuildMessages 		= "Show engage/kill/wipe messages for guild raids in chat frame"
-L.ShowGuildMessagesPlus		= "Also show Mythic+ engage/kill/wipe messages for guild groups (requires raid option)"
+-- L.ShowGuildMessagesPlus		= "Also show Mythic+ engage/kill/wipe messages for guild groups (requires raid option)"
 
 L.Area_ChatAlerts			= "Additional Alert Options"
 L.RoleSpecAlert				= "Show alert message on raid join when your loot spec does not match current spec"

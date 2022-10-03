@@ -178,7 +178,7 @@ DBM.DefaultOptions = {
 	ShowEngageMessage = true,
 	ShowDefeatMessage = true,
 	ShowGuildMessages = true,
-	ShowGuildMessagesPlus = false,
+	-- ShowGuildMessagesPlus = false,
 	AutoRespond = true,
 	EnableWBSharing = true,
 	WhisperStats = false,
@@ -3978,7 +3978,7 @@ do
 			if DBM:AntiSpam(10, "GCB") then
 				if IsInInstance() then return end --Simple filter, if you are inside an instance, just filter it, if not in instance, good to go.
 				difficulty = tonumber(difficulty)
-				if not DBM.Options.ShowGuildMessagesPlus then return end
+				-- if not DBM.Options.ShowGuildMessagesPlus then return end
 				modId = tonumber(modId)
 				local bossName = modId and DBM:GetModLocalization(modId).general.name or name or CL.UNKNOWN
 				local difficultyName
@@ -4001,7 +4001,7 @@ do
 			if DBM:AntiSpam(5, "GCE") then
 				if IsInInstance() then return end --Simple filter, if you are inside an instance, just filter it, if not in instance, good to go.
 				difficulty = tonumber(difficulty)
-				if not DBM.Options.ShowGuildMessagesPlus then return end
+				-- if not DBM.Options.ShowGuildMessagesPlus then return end
 				modId = tonumber(modId)
 				local bossName = modId and DBM:GetModLocalization(modId).general.name or name or CL.UNKNOWN
 				local difficultyName
@@ -5063,11 +5063,9 @@ do
 		if not statusGuildDisabled and updateNotificationDisplayed == 0 then
 			if thisTime then --Wipe event
 				if wipeHP then
-					SendAddonMessage(DBMPrefix .. "-GCE", modId .. "\t6\t1\t" ..
-						thisTime .. "\t" .. difficultyIndex .. "\t" .. name .. "\t" .. wipeHP, "GUILD")
+					SendAddonMessage(DBMPrefix .. "-GCE", modId .. "\t6\t1\t" ..thisTime .. "\t" .. difficultyIndex .. "\t" .. name .. "\t" .. wipeHP, "GUILD")
 				else
-					SendAddonMessage(DBMPrefix .. "-GCE", modId .. "\t6\t0\t" .. thisTime .. "\t" .. difficultyIndex .. "\t" .. name,
-						"GUILD")
+					SendAddonMessage(DBMPrefix .. "-GCE", modId .. "\t6\t0\t" .. thisTime .. "\t" .. difficultyIndex .. "\t" .. name, "GUILD")
 				end
 			else
 				SendAddonMessage(DBMPrefix .. "-GCB", modId .. "\t3\t" .. difficultyIndex .. "\t" .. name, "GUILD")
