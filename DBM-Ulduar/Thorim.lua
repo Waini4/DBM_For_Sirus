@@ -13,6 +13,7 @@ mod:RegisterKill("yell", L.YellKill)
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 312542 312895",
 	"SPELL_AURA_APPLIED 312889 312536 62042 312898 312545 62130 312911 312910 312558 312557 62526 62527",
+	"SPELL_AURA_APPLIED_DOSE 312889 312536 62042 312898 312545 62130 312911 312910 312558 312557 62526 62527",
 	"SPELL_CAST_SUCCESS 62042 62507 312897 312896 312898 312545 62604 312895 312542 300871 64390 64213",
 	"SPELL_DAMAGE 62017 312539 312892 312897"
 )
@@ -103,7 +104,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnUnbalancingStrikeSelf:Play("defensive")
 		else
 			specWarnUnbalancingStrike:Show(args.destName)
-			specWarnUnbalancingStrike:Play("tauntboss")
 		end
 	elseif args:IsSpellID(312911, 312910, 312558, 312557, 62526, 62527) then	-- Runic Detonation
 		if args:IsPlayer() then
@@ -119,6 +119,8 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	end
 end
+
+mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 function mod:SPELL_CAST_SUCCESS(args)
 	local spellId = args.spellId
