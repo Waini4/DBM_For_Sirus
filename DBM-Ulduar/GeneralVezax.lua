@@ -141,7 +141,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 	if spellId == 312978 or spellId == 62660 then -- Shadow Crash
 		self:BossTargetScanner(33271, "ShadowCrashTarget", 0.05, 20)
 		timerShadowCrashCD:Start()
-	elseif spellId == 312974 or spellId == 63276 then -- Mark of the Faceless
+	elseif args:IsSpellID(312974,63276,312621) then -- Mark of the Faceless
 		if self.Options.SetIconOnLifeLeach then
 			self:SetIcon(args.destName, 7, 10)
 		end
@@ -163,7 +163,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 				end
 			end
 		end
-	elseif args.spellId == 63364 then
+	elseif spellId == 63364 then
 		specWarnAnimus:Show()
 		specWarnAnimus:Play("bigmob")
 	end

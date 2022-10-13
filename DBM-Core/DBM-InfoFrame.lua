@@ -409,7 +409,7 @@ local function updateEnemyPower()
 	local specificUnit = value[3]
 	if powerType then -- Only do power type defined
 		if specificUnit then
-			specificUnit = UnitExists(specificUnit) or DBM:GetUnitIdFromGUID(specificUnit)--unitID already passed or GUID we convert into unitID
+			specificUnit = UnitExists(specificUnit) or DBM:GetUnitIDFromGUID(specificUnit)--unitID already passed or GUID we convert into unitID
 			if UnitExists(specificUnit) then
 				local currentPower, maxPower = UnitPower(specificUnit, powerType), UnitPowerMax(specificUnit, powerType)
 				if maxPower and maxPower > 0 then
@@ -433,7 +433,7 @@ local function updateEnemyPower()
 		end
 	else -- Check primary power type and alternate power types together. This should only be used if BOTH power types exist on same boss
 		if specificUnit then
-			specificUnit = UnitExists(specificUnit) or DBM:GetUnitIdFromGUID(specificUnit)--unitID already passed or GUID we convert into unitID
+			specificUnit = UnitExists(specificUnit) or DBM:GetUnitIDFromGUID(specificUnit)--unitID already passed or GUID we convert into unitID
 			if UnitExists(specificUnit) then
 				-- Primary Power
 				local currentPower, maxPower = UnitPower(specificUnit), UnitPowerMax(specificUnit)
@@ -482,7 +482,7 @@ local function updateEnemyAbsorb()
 	local totalAbsorb = value[2]
 	local specificUnit = value[3]
 	if specificUnit then
-		specificUnit = UnitExists(specificUnit) or DBM:GetUnitIdFromGUID(specificUnit)--unitID already passed or GUID we convert into unitID
+		specificUnit = UnitExists(specificUnit) or DBM:GetUnitIDFromGUID(specificUnit)--unitID already passed or GUID we convert into unitID
 		if UnitExists(specificUnit) then
 			local absorbAmount
 			if spellInput then -- Get specific spell absorb

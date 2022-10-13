@@ -2350,7 +2350,7 @@ function DBM:GetBossUnitId(name, bossOnly) --Deprecated, only old mods use this
 	return returnUnitID
 end
 
-function DBM:GetUnitIdFromGUID(cidOrGuid, bossOnly)
+function DBM:GetUnitIDFromGUID(cidOrGuid, bossOnly)
 	local returnUnitID
 	for i = 1, 4 do
 		local unitId = "boss" .. i
@@ -2378,6 +2378,22 @@ function DBM:GetUnitIdFromGUID(cidOrGuid, bossOnly)
 		end
 	end
 	return returnUnitID
+end
+
+function DBM:GetUnitIDByName(name, tableForMemorize)
+	local returnUnitID
+	for uId in DBM:GetGroupMembers() do
+		local UnitID = uId .. "target"
+		local guid = UnitGUID(UnitID)
+		if UnitName(UnitID) == name and guid then
+			returnUnitID = UnitID
+			if tableForMemorize then
+				tableForMemorize[guid] = true
+			end
+			return returnUnitID
+		end
+	end
+	return nil
 end
 
 function DBM:CheckNearby(range, targetname)
@@ -7288,7 +7304,7 @@ bossModPrototype.HasMapRestrictions = DBM.HasMapRestrictions
 bossModPrototype.GetUnitCreatureId = DBM.GetUnitCreatureId
 bossModPrototype.GetCIDFromGUID = DBM.GetCIDFromGUID
 bossModPrototype.IsCreatureGUID = DBM.IsCreatureGUID
-bossModPrototype.GetUnitIdFromGUID = DBM.GetUnitIdFromGUID
+bossModPrototype.GetUnitIDFromGUID = DBM.GetUnitIDFromGUID
 bossModPrototype.CheckNearby = DBM.CheckNearby
 bossModPrototype.IsTrivial = DBM.IsTrivial
 
@@ -7374,7 +7390,7 @@ do
 	function bossModPrototype:CheckBossDistance(cidOrGuid, onlyBoss, itemId, distance, defaultReturn)
 		if not DBM.Options.DontShowFarWarnings then return true end --Global disable.
 		cidOrGuid = cidOrGuid or self.creatureId
-		local uId = DBM:GetUnitIdFromGUID(cidOrGuid, onlyBoss)
+		local uId = DBM:GetUnitIDFromGUID(cidOrGuid, onlyBoss)
 		if uId then
 			itemId = itemId or 32698
 			local inRange = IsItemInRange(itemId, uId)
