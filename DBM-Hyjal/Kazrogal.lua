@@ -181,7 +181,7 @@ function mod:UNIT_HEALTH(uId)
 		if not warned_F2 and hp < 67 then
 			warned_F2 = true
 			self:SetStage(2)
-			self:Unschedule(Abyssals)
+			-- self:Unschedule(Abyssals)
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(2))
 			warnPhase:Play("ptwo")
 			timerUnstableAbyssalsCD:Stop()
