@@ -6,13 +6,14 @@ mod:SetRevision("20220901020228")
 mod:SetCreatureID(17888)
 
 mod:RegisterCombat("combat")
-
+mod:SetUsedIcons(6, 7, 8)
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 318818 318824 318823 318834 318833",
 	"SPELL_CAST_SUCCESS 318828 318825 318826",
 	"SPELL_AURA_APPLIED 318819 318825 318845 318822 318828 318839",
 	--"SPELL_AURA_REFRESH ",
 	"SPELL_AURA_REMOVED 318822",
+	"UNIT_TARGET",
 --"SPELL_SUMMON ",
 	"UNIT_HEALTH"
 )
@@ -60,7 +61,7 @@ local warned_S2 = false
 local warned_F2 = false
 local warned_F3 = false
 -- last = math.floor(UnitMana(player) / UnitManaMax(player) * 100)
-
+local AbbGuids = {}
 mod.vb.BurningCount = 0
 mod.vb.MarkCount = 0
 mod.vb.HorrorflamesCount = 0
@@ -68,10 +69,12 @@ mod.vb.AbyssalsCount = 0
 mod.vb.FallofFilthCount = 0
 local kik = false
 mod:AddInfoFrameOption(318819, true)
+mod:AddBoolOption("SetAbbIcon")
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 17888, "Kaz'rogal")
 	self:SetStage(1)
+	table.wipe(AbbGuids)
 	self.vb.BurningCount = 0
 	self.vb.MarkCount = 0
 	self.vb.HorrorflamesCount = 0
@@ -205,4 +208,31 @@ function mod:UNIT_HEALTH(uId)
 			specwarnAbbasSoon:Schedule(8)
 
 		end
+end
+local function ScanWhitName(name)
+	local target
+	for i = 1, GetNumRaidMembers() do
+		local unit = "raid" .. i .. "target"
+		local guid = UnitGUID(unit)
+		-- if name == "Некромант" then
+			if UnitName(unit) == name and guid and not AbbGuids[guid] then
+				target = unit
+				AbbGuids[guid] = true
+				return target
+			end
+		-- end
+	end
+	return nil
+end
+function mod:UNIT_TARGET()
+	if self.Options.SetAbbIcon then
+		local uid = ScanWhitName("Нестабильный абиссал")
+		if uid then
+			self:SetIcon(uid, self.vb.AbbIcon)
+			mod.vb.AbbIcon = mod.vb.AbbIcon - 1
+			if mod.vb.AbbIcon < 6 then
+				mod.vb.AbbIcon = 8
+			end
+		end
+	end
 end
