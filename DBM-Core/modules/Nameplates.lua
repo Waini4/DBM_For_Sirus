@@ -1,6 +1,6 @@
 local LD = DBM_CORE_L
-local E = nil
-local NP = nil
+local E
+local NP
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
@@ -14,16 +14,21 @@ local NP = nil
 ----------------------------------------------------------------------
 
 
-local isElvUILoad = IsAddOnLoaded("ElvUI")
+local isElvUILoad = false
+
+if ElvUI then
+	E = unpack(ElvUI)
+	NP = E:GetModule("NamePlates")
+	isElvUILoad = true
+end
+
 function DBM:CanUseNameplateIcons()
 	return isElvUILoad and DBM.Options.UseNPForElvUI or false
 end
 
 
-if not isElvUILoad then return end
-E = unpack(ElvUI)
+-- if not isElvUILoad then return end
 
-NP = E:GetModule("NamePlates")
 -- globals
 DBM.Nameplate = {}
 -- locals
@@ -203,18 +208,18 @@ end
 --  On Event  --
 ----------------
 
-DBMNameplateFrame:SetScript("OnEvent", function(_, event, ...)
-	if event == 'CHAT_MSG_ADDON' then
-		local prefix,guid,distribution,sender = ...
-		if prefix ~= "DBM_ShowIconAtPlate" then return end
-		-- local guid = ...
-		if not guid then return end
-		local f = NP:SearchNameplateByGUID(guid)
-		if not f then return end
+-- DBMNameplateFrame:SetScript("OnEvent", function(_, event, ...)
+-- 	if event == 'CHAT_MSG_ADDON' then
+-- 		local prefix,guid,distribution,sender = ...
+-- 		if prefix ~= "DBM_ShowIconAtPlate" then return end
+-- 		-- local guid = ...
+-- 		if not guid then return end
+-- 		local f = NP:SearchNameplateByGUID(guid)
+-- 		if not f then return end
 
-		Nameplate_UnitAdded(f,guid)
-	end
-end)
+-- 		Nameplate_UnitAdded(f,guid)
+-- 	end
+-- end)
 
 -----------------
 --  Functions  --
@@ -238,9 +243,9 @@ end)
 --isGUID: guid or name (bool)
 function nameplateFrame:Show(guid, spellId, duration, desaturate)
 	if not DBM:CanUseNameplateIcons() then return end
-	if DBM.Options.DontShowNameplateIcons then return end
+	-- if DBM.Options.DontShowNameplateIcons then return end
 	-- ignore player nameplate;
-	if E.myguid == guid then return end
+	if not E or E.myguid == guid then return end
 
 	--Texture Id passed as string so as not to get confused with spellID for GetSpellTexture
 	local name, rank, currentTexture, castTime, minRange, maxRange, spellID = GetSpellInfo(spellId)
@@ -257,7 +262,7 @@ function nameplateFrame:Show(guid, spellId, duration, desaturate)
 	if not self:IsShown() then
 		DBMNameplateFrame:Show()
 		-- DBMNameplateFrame:RegisterEvent("NAME_PLATE_UNIT_ADDED")
-		DBMNameplateFrame:RegisterEvent("CHAT_MSG_ADDON")
+		-- DBMNameplateFrame:RegisterEvent("CHAT_MSG_ADDON")
 		DBM:Debug("DBM.Nameplate Enabling", 2)
 	end
 
@@ -283,7 +288,7 @@ end
 
 
 function nameplateFrame:Hide(guid, spellId, force)
-	if not DBM:CanUseNameplateIcons()  then return end
+	if not DBM:CanUseNameplateIcons() then return end
 	local name, rank, currentTexture, castTime, minRange, maxRange, spellID = GetSpellInfo(spellId)
 	-- if self:SupportedNPMod() then
 	-- 	DBM:Debug("DBM.Nameplate Found supported NP mod, only sending Hide callbacks", 3)
@@ -326,7 +331,7 @@ function nameplateFrame:Hide(guid, spellId, force)
 	if force or num_units <= 0 then
 		twipe(units)
 		num_units = 0
-		DBMNameplateFrame:UnregisterEvent("CHAT_MSG_ADDON")
+		-- DBMNameplateFrame:UnregisterEvent("CHAT_MSG_ADDON")
 		-- DBMNameplateFrame:UnregisterEvent("NAME_PLATE_UNIT_ADDED")
 		DBMNameplateFrame:Hide()
 		DBM:Debug("DBM.Nameplate Disabling", 2)
