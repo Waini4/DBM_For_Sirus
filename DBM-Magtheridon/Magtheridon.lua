@@ -17,9 +17,11 @@ mod:RegisterEventsInCombat(
 	"UNIT_HEALTH",
 	"SPELL_DAMAGE"
 )
+
+local myPomoi5 = select(3, DBM:GetMyPlayerInfo())
 -- общее --
 mod:AddTimerLine(L.General)
-local timerNovaCD 				= mod:NewCDTimer(80, 305129, nil, nil, nil, 3) -- Кубы
+local timerNovaCD 				= mod:NewCDTimer(myPomoi5 == "Sirus x5 - 3.3.5a+" and 66.5 or 80, 305129, nil, nil, nil, 3) -- Кубы
 local timerPull   				= mod:NewTimer(112, "Pull", 305131, nil, nil, 6) -- Пулл босса
 
 local warnPhase3Soon			= mod:NewPrePhaseAnnounce(3)

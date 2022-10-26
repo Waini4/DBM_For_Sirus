@@ -19,14 +19,17 @@ mod:RegisterEvents(
 )
 mod.noStatistics = true
 
-local warnWave        = mod:NewAnnounce("WarnWave", 1)
-local warnSlime       = mod:NewTargetAnnounce(319230)
-local warnCannibalize = mod:NewSpellAnnounce(31538, 2)
+local warnWave        	= mod:NewAnnounce("WarnWave", 1)
+local warnBrandofHorror = mod:NewTargetNoFilterAnnounce(319502)
+local warnCannibalize 	= mod:NewSpellAnnounce(31538, 2)
 
-local specWarnSlimeFinal = mod:NewSpecialWarningMoveAway(319236, nil, nil, nil, 4, 2)
-local specWarnSlime      = mod:NewSpecialWarningDodge(319230, nil, nil, nil, 1, 2)
-local specWarnSlimeNear  = mod:NewSpecialWarningClose(319230, nil, nil, nil, 1, 2)
-local yellSlime          = mod:NewYell(319230)
+local specWarnSlimeFinal 	= mod:NewSpecialWarningMoveAway(319236, nil, nil, nil, 4, 2)
+local specWarnBrandofHorror = mod:NewSpecialWarningMoveAway(319502, nil, nil, nil, 4, 2)
+local specWarnSlime     	= mod:NewSpecialWarningDodge(319230, nil, nil, nil, 1, 2)
+local specWarnSlimeNear  	= mod:NewSpecialWarningClose(319230, nil, nil, nil, 1, 2)
+local yellSlime         	= mod:NewYell(319230)
+local yellBrandofHorror		= mod:NewYell(319502)
+local yellBrandofHorrorFade	= mod:NewShortFadesYell(319502)
 -- local specWarnSuicide              = mod:NewSpecialWarningGTFO(319236, nil, nil, nil, 1, 5)
 
 local timerWave = mod:NewTimer(125, "TimerWave", nil, nil, nil, 1)
@@ -143,13 +146,22 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	if args.spellId == 31538 then
 		warnCannibalize:Show()
-	elseif args:IsSpellID(319232) then
+	elseif args:IsSpellID(319502) then
+		warnBrandofHorror:Show(args.destName)
+		if args:IsPlayer() then
+			specWarnBrandofHorror:Show()
+			yellBrandofHorror:Yell()
+			yellBrandofHorrorFade:Countdown(319502)
+		end
 	end
 end
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(319232) then
 		self:BossTargetScanner(50640, "Slime", 0.05, 6)
+	elseif args:IsSpellID(319502) then
+		elseif args:IsPlayer() then
+			yellBrandofHorrorFade:Cancel()
 	end
 end
 function mod:WaveFunction(currentWave)
@@ -286,12 +298,12 @@ mod.frameForPudge:SetScript("OnUpdate", function(self,up)
 				local name = UnitName(unit)
 				if name == L.Pudge1 then
 					-- if UnitName(unit) == name then
-					local hp = UnitHealth(unit) / UnitHealthMax(unit) * 100
-					if hp and hp > 1 and hp < 15  then
-						if mod:AntiSpam(3,1) then
-							specWarnSlimeFinal:Show()
+						local hp = UnitHealth(unit) / UnitHealthMax(unit) * 100
+						if hp and hp > 1 and hp < 15  then
+							if mod:AntiSpam(3,1) then
+								specWarnSlimeFinal:Show()
+							end
 						end
-					end
 					-- end
 				end
 			end
