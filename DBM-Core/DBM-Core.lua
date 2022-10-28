@@ -417,11 +417,9 @@ local chatPrefixShort = "<" .. L.DBM .. "> "
 local usedProfile = "Default"
 local dbmIsEnabled = true
 -- Table variables
-local newerVersionPerson, cSyncSender, iconSetRevision, iconSetPerson, loadcIds, inCombat, oocBWComms, combatInfo, bossIds, raid, autoRespondSpam, queuedBattlefield, bossHealth, bossHealthuIdCache, lastBossEngage, lastBossDefeat = {}
-	, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
+local newerVersionPerson, cSyncSender, iconSetRevision, iconSetPerson, loadcIds, inCombat, oocBWComms, combatInfo, bossIds, raid, autoRespondSpam, queuedBattlefield, bossHealth, bossHealthuIdCache, lastBossEngage, lastBossDefeat = {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
 -- False variables
-local voiceSessionDisabled, statusGuildDisabled, statusWhisperDisabled, targetEventsRegistered, combatInitialized, healthCombatInitialized, watchFrameRestore, bossuIdFound, timerRequestInProgress, encounterInProgress = false
-	, false, false, false, false, false, false, false, false, false
+local voiceSessionDisabled, statusGuildDisabled, statusWhisperDisabled, targetEventsRegistered, combatInitialized, healthCombatInitialized, watchFrameRestore, bossuIdFound, timerRequestInProgress, encounterInProgress = false, false, false, false, false, false, false, false, false, false
 -- Nil variables
 local currentSpecID, currentSpecName, currentSpecGroup, pformat, loadOptions, checkWipe, checkBossHealth, checkCustomBossHealth, fireEvent, LastInstanceType, breakTimerStart, AddMsg, delayedFunction, handleSync, savedDifficulty, difficultyText, difficultyIndex, encounterDifficulty, encounterDifficultyText, encounterDifficultyIndex
 -- 0 variables
@@ -1558,8 +1556,8 @@ do
 		if not callbacks[event] then return end
 		for _, v in ipairs(callbacks[event]) do
 			local ok, err = pcall(v, event, ...)
-			if not ok then DBM:AddMsg(("Error while executing callback %s for event %s: %s"):format(tostring(v), tostring(event),
-					err))
+			if not ok then
+				DBM:AddMsg(("Error while executing callback %s for event %s: %s"):format(tostring(v), tostring(event), err))
 			end
 		end
 	end
@@ -1596,7 +1594,9 @@ do
 			end
 			--> checking from the end to start and not stoping after found one result in case of a func being twice registered.
 			for i = #callbacks[event], 1, -1 do
-				if callbacks[event][i] == f then tremove(callbacks[event], i) end
+				if callbacks[event][i] == f then
+					tremove(callbacks[event], i)
+				end
 			end
 		else
 			callbacks[event] = nil
@@ -2049,7 +2049,6 @@ do
 			if #iconSeter > 0 then
 				tsort(iconSeter, function(a, b) return a > b end)
 				local elected = iconSeter[1]
-				-- print()
 				if playerName == elected:sub(elected:find(" ") + 1) then
 					private.enableIcons = true
 				end
@@ -2499,13 +2498,9 @@ function DBM:LoadModOptions(modId, inCombat, first)
 			--clean unused saved variables (do not work on combat load)
 			if not inCombat then
 				for option, _ in pairs(savedOptions[id][profileNum]) do
-					-- print(option)
-					-- print(type(option))
 					if type(option) == "number" then -- is that fix?
 						option = tostring(option)
 					end
-					-- print(mod.DefaultOptions[option])
-					-- print(option)
 					if mod.DefaultOptions[option] == nil and
 						not
 						(
@@ -3990,7 +3985,7 @@ do
 
 		guildSyncHandlers["DBMv4-GCB"] = function(_, modId, ver, difficulty, name)
 			if not DBM.Options.ShowGuildMessages or not difficulty then return end
-			if not ver or ver ~= "2" then return end --Ignore old versions
+			if not ver or ver ~= "3" then return end --Ignore old versions
 			if DBM:AntiSpam(10, "GCB") then
 				if IsInInstance() then return end --Simple filter, if you are inside an instance, just filter it, if not in instance, good to go.
 				difficulty = tonumber(difficulty)
@@ -4013,11 +4008,10 @@ do
 
 		guildSyncHandlers["DBMv4-GCE"] = function(_, modId, ver, wipe, time, difficulty, name, wipeHP)
 			if not DBM.Options.ShowGuildMessages or not difficulty then return end
-			if not ver or ver ~= "5" then return end --Ignore old versions
+			if not ver or ver ~= "6" then return end --Ignore old versions
 			if DBM:AntiSpam(5, "GCE") then
 				if IsInInstance() then return end --Simple filter, if you are inside an instance, just filter it, if not in instance, good to go.
 				difficulty = tonumber(difficulty)
-				-- if not DBM.Options.ShowGuildMessagesPlus then return end
 				modId = tonumber(modId)
 				local bossName = modId and DBM:GetModLocalization(modId).general.name or name or CL.UNKNOWN
 				local difficultyName
@@ -5076,15 +5070,18 @@ do
 	local tooltipsHidden = false
 	--Delayed Guild Combat sync object so we allow time for RL to disable them
 	local function delayedGCSync(modId, difficultyIndex, name, thisTime, wipeHP)
-		if not statusGuildDisabled and updateNotificationDisplayed == 0 then
+		if not thisTime and updateNotificationDisplayed == 0 then ---t3 is version
+			SendAddonMessage(DBMPrefix .. "-GCB", modId .. "\t3\t" .. difficultyIndex .. "\t" .. name, "GUILD")
+		end
+		if not statusGuildDisabled and updateNotificationDisplayed == 0 then ---t6 is version
 			if thisTime then --Wipe event
 				if wipeHP then
 					SendAddonMessage(DBMPrefix .. "-GCE", modId .. "\t6\t1\t" ..thisTime .. "\t" .. difficultyIndex .. "\t" .. name .. "\t" .. wipeHP, "GUILD")
 				else
 					SendAddonMessage(DBMPrefix .. "-GCE", modId .. "\t6\t0\t" .. thisTime .. "\t" .. difficultyIndex .. "\t" .. name, "GUILD")
 				end
-			else
-				SendAddonMessage(DBMPrefix .. "-GCB", modId .. "\t3\t" .. difficultyIndex .. "\t" .. name, "GUILD")
+			-- else
+			-- 	SendAddonMessage(DBMPrefix .. "-GCB", modId .. "\t3\t" .. difficultyIndex .. "\t" .. name, "GUILD")
 			end
 		end
 	end
