@@ -127,8 +127,8 @@ do
 	end
 
 	function module:GetBossUnitByCreatureId(mod, cid)
-		for i = 1, 5 do
-			local uId = "boss"..i
+		for _, uId in ipairs(bossTargetuIds) do
+			-- local uId = "boss"..i
 			if mod:GetUnitCreatureId(uId) == cid then
 				return uId
 			end

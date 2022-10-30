@@ -1834,7 +1834,7 @@ do
 			return
 		end
 		if sender and ignore[sender] then return end
-		text = text:sub(1, 16)
+		-- text = text:sub(1, 16)
 		text = text:gsub("%%t", UnitName("target") or "<no target>")
 		if time < 3 then
 			self:AddMsg(L.PIZZA_ERROR_USAGE)
