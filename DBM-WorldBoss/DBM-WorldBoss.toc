@@ -2,8 +2,8 @@
 ## Title-ruRU:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Мировые боссы и боссы категорий|r
 ## LoadOnDemand: 1
 ## Dependencies: DBM-Core
-## SavedVariables: DBMWORLDBOSS_AllSavedVars
-## SavedVariablesPerCharacter: DBMWORLDBOSS_SavedStats
+## SavedVariables: DBMWorldBoss_AllSavedVars
+## SavedVariablesPerCharacter: DBMWorldBoss_SavedStats
 ## X-DBM-Mod: 1
 ## X-DBM-Mod-Type: RAID
 ## X-DBM-StatTypes: normal
