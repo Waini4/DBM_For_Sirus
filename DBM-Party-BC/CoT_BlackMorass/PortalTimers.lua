@@ -25,7 +25,7 @@ function mod:UNIT_DIED(args)
 	local cid = self:GetCIDFromGUID(args.destGUID)
 	if cid == 17879 or cid == 17880 then
 		timerNextPortal:Start(nil, lastPortal + 1)
-		warnWavePortalSoon:Schedule(120)
+		warnWavePortalSoon:Schedule(60)
 	end
 end
 
