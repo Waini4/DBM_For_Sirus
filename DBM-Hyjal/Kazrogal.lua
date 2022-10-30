@@ -135,7 +135,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(318828) then
 		self.vb.BurningCount = self.vb.BurningCount + 1
 		timerBurningSoulCD:Start(nil, self.vb.BurningCount + 1)
-	elseif args:IsSpellID(318826) then
+	elseif args:IsSpellID(318826) and self:AntiSpam(4) then
 		self.vb.AbyssalsCount = self.vb.AbyssalsCount + 1
 		timerUnstableAbyssalsCD:Start(stage == 1 and 90 or 20 , self.vb.AbyssalsCount + 1)
 		specwarnAbbasSoon:Schedule(stage == 1 and 86 or 16)
