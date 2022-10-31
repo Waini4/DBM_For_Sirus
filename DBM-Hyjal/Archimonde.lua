@@ -36,7 +36,7 @@ local perstCD			= mod:NewNextTimer(8, 319906, nil, "Tank", nil, 4, nil, DBM_COMM
 local berserkTimer		= mod:NewBerserkTimer(600)
 local yellMark			= mod:NewYell(319907)
 local yellMarkFade		= mod:NewShortFadesYell(319907)
-local yellHaras			= mod:NewYell(319907)
+local yellHaras			= mod:NewYell(319931)
 
 
 mod:AddNamePlateOption("markOfLegPlate", 319907, true)
