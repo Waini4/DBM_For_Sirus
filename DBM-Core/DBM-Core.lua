@@ -844,6 +844,7 @@ do
 				return
 			end
 			local refs = (registeredSpellIds[event][spellId] or 1) - 1
+			if not event or not spellId or (not registeredSpellIds[event] and not registeredSpellIds[event][spellId]) then return end
 			registeredSpellIds[event][spellId] = refs
 			if refs <= 0 then
 				registeredSpellIds[event][spellId] = nil
