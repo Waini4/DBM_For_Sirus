@@ -276,22 +276,24 @@ function mod:UNIT_HEALTH()
 	elseif stage and stage ~= 0 and UnitAffectingCombat("player") then
 		if stage == 1 then
 			local hp = DBM:GetBossHPByUnitID("boss3") -- чудовищная
-			if hp <= 1 then
+			if hp and hp <= 1 then
 				self:NextStage() -- stage == 2
 			end
 		elseif stage == 2 then
 			local hp = DBM:GetBossHPByUnitID("boss2") -- лик
-			if hp <= 1 then
+			if hp and hp <= 1 then
 				self:NextStage() -- stage == 3
 			end
 		elseif stage == 3 then
 			local hp = DBM:GetBossHPByUnitID("boss4") -- щупальце плеть
-			if hp <= 1 then
+			if hp and  hp <= 1 then
 				self:NextStage() -- stage == 4
 			end
 		elseif stage == 4 then
-			if DBM:GetBossHPByUnitID("boss2") < 1 and DBM:GetBossHPByUnitID("boss3") < 1 and DBM:GetBossHPByUnitID("boss4") < 1 then
-				self:NextStage() -- stage == 5
+			if UnitExists("boss2") then
+				if DBM:GetBossHPByUnitID("boss2") < 1 and DBM:GetBossHPByUnitID("boss3") < 1 and DBM:GetBossHPByUnitID("boss4") < 1 then
+					self:NextStage() -- stage == 5
+				end
 			end
 		end
 		-- local hpz = DBM:GetBossHPByUnitID("boss1")
