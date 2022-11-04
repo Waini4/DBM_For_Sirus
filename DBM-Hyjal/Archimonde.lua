@@ -9,8 +9,8 @@ mod:SetUsedIcons(1,2,3,4,5,7, 8)
 mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
-	"SPELL_CAST_START 319910 319907 319906 319917 319922",
-	"SPELL_AURA_APPLIED 319907 319914 319917 319931",
+	"SPELL_CAST_START 319910 319906 319917 319922",
+	"SPELL_AURA_APPLIED 319907 319917 319931",
 	"SPELL_AURA_REMOVED 319907 319917 319931",
 	-- "SPELL_CAST_SUCCESS "
 	"UNIT_HEALTH"
@@ -172,15 +172,14 @@ end
 -- SPELL_CAST_START,0xF130004630000052,"Архимонд",0x10a48,0x0000000000000000,nil,0x80000000,319906,"Перст гибели",0x20
 -- 10/20 20:53:30.653  SPELL_CAST_START,0xF130004630000001,"Архимонд",0x10a48,0x0000000000000000,nil,0x80000000,319917,"Похищение души",0x20
 function mod:UNIT_HEALTH(uId)
-	local hp = DBM:GetBossHP(17968)
-	if self:GetUnitCreatureId(uId) == 17968 then -- or hp < 82 or hp < 72 or hp < 62 or hp < 52 or hp < 42 or hp < 32 or hp < 22 or hp < 12 then
-		if not warned_F1 and hp < 77 and hp then
+	local hp = self:GetUnitCreatureId(uId) == 17968 and DBM:GetBossHP(17968) or nil
+	if hp then -- or hp < 82 or hp < 72 or hp < 62 or hp < 52 or hp < 42 or hp < 32 or hp < 22 or hp < 12 then
+		if not warned_F1 and hp < 77 then
 			self:SetStage(2)
 			warned_F1 = true
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(2))
 			warnPhase:Play("ptwo")
-		end
-		if not warned_F2 and hp < 50 and hp then
+		elseif not warned_F2 and hp < 50 then
 			warned_F2 = true
 			self:SetStage(3)
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(3))

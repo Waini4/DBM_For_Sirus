@@ -9,8 +9,8 @@ mod:RegisterCombat("combat")
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 317870 317872 317873 317884",
 	--"SPELL_CAST_SUCCESS",
-	"SPELL_AURA_APPLIED 317876",
-	"SPELL_AURA_REFRESH 317876",
+	"SPELL_AURA_APPLIED 317876 317872",
+	"SPELL_AURA_REFRESH 317876 317872",
 	--"SPELL_AURA_REMOVED",
 	"SPELL_SUMMON 317870",
 	"UNIT_HEALTH"
@@ -123,41 +123,33 @@ end
 
 function mod:UNIT_HEALTH(uId)
 	--local hp = self:GetUnitCreatureId(uId) == 17808
-	local hp = DBM:GetBossHP(17808)
-	if self:GetUnitCreatureId(uId) == 17808 then -- or hp < 82 or hp < 72 or hp < 62 or hp < 52 or hp < 42 or hp < 32 or hp < 22 or hp < 12 then
+	local hp = self:GetUnitCreatureId(uId) == 17808 and DBM:GetBossHP(17808) or nil
+	if hp then -- or hp < 82 or hp < 72 or hp < 62 or hp < 52 or hp < 42 or hp < 32 or hp < 22 or hp < 12 then
 		if not warned_F1 and hp < 92 then
 			warned_F1 = true
 			warnwarnInfernoSoon:Show()
-		end
-		if not warned_F2 and hp < 82 then
+		elseif not warned_F2 and hp < 82 then
 			warned_F2 = true
 			warnwarnInfernoSoon:Show()
-		end
-		if not warned_F3 and hp < 72 then
+		elseif	not warned_F3 and hp < 72 then
 			warned_F3 = true
 			warnwarnInfernoSoon:Show()
-		end
-		if not warned_F4 and hp < 62 then
+		elseif	not warned_F4 and hp < 62 then
 			warned_F4 = true
 			warnwarnInfernoSoon:Show()
-		end
-		if not warned_F5 and hp < 52 then
+		elseif not warned_F5 and hp < 52 then
 			warned_F5 = true
 			warnwarnInfernoSoon:Show()
-		end
-		if not warned_F6 and hp < 42 then
+		elseif not warned_F6 and hp < 42 then
 			warned_F6 = true
 			warnwarnInfernoSoon:Show()
-		end
-		if not warned_F7 and hp < 32 then
+		elseif not warned_F7 and hp < 32 then
 			warned_F7 = true
 			warnwarnInfernoSoon:Show()
-		end
-		if not warned_F8 and hp < 22 then
+		elseif	not warned_F8 and hp < 22 then
 			warned_F8 = true
 			warnwarnInfernoSoon:Show()
-		end
-		if not warned_F9 and hp < 12 then
+		elseif	not warned_F9 and hp < 12 then
 			warned_F9 = true
 			warnwarnInfernoSoon:Show()
 		end
