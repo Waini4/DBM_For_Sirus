@@ -101,7 +101,7 @@ function mod:OnCombatStart(delay)
 				self:SetStage(1)
 				mod.vb.phaseCounter = true
 				if self:IsDifficulty("heroic10") then
-					timerInvCD:Start(20 - delay)
+					timerInvCD:Start(20)
 					cast = 2
 				end
 			end
