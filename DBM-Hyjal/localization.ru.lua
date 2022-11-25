@@ -29,6 +29,10 @@ L:SetGeneralLocalization({
 	name = "Каз'рогал"
 })
 
+L:SetOptionLocalization({
+	HpOff = "Если выбивает ошибки отключите данную функцию"
+})
+
 ---------------
 --  Azgalor  --
 ---------------

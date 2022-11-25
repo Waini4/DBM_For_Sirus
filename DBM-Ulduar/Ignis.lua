@@ -17,7 +17,7 @@ mod:RegisterEventsInCombat(
 local announceSlagPot			= mod:NewTargetNoFilterAnnounce(312731, 3)
 local announceConstruct			= mod:NewCountAnnounce(62488, 2)
 
-local warnFlameJetsCast			= mod:NewSpecialWarningCast(312727, "SpellCaster", nil, nil, 2, 2)
+local warnFlameJetsCast			= mod:NewSpecialWarningCast(312727, nil, nil, nil, 2, 2)
 local warnFlameBrittle			= mod:NewSpecialWarningSwitch(62382, "Dps", nil, nil, 1, 2)
 
 local timerFlameJetsCast		= mod:NewCastTimer(2.7, 312727)
@@ -28,21 +28,16 @@ local timerScorchCast			= mod:NewCastTimer(3, 312730)
 local timerSlagPot				= mod:NewTargetTimer(10, 312731, nil, nil, nil, 3)
 local timerAchieve				= mod:NewAchievementTimer(240, 2930)
 
-mod.vb.ConstructCount = 0
+mod.vb.FlameJetsCount = 0
 
 mod:AddSetIconOption("SlagPotIcon", 63477, false, false, {8})
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 33118, "Ignis the Furnace Master")
-	self.vb.ConstructCount = 0
+	self.vb.FlameJetsCount = 0
 	timerAchieve:Start()
-	if self:IsDifficulty("normal10") then
-		timerActivateConstruct:Start(40-delay, self.vb.ConstructCount)
-	else
-		timerActivateConstruct:Start(-delay, self.vb.ConstructCount)
-	end
 	timerScorchCooldown:Start(12-delay)
-	timerFlameJetsCooldown:Start(29)
+	timerFlameJetsCooldown:Start(29, self.vb.FlameJetsCount)
 end
 
 function mod:OnCombatEnd(wipe)
@@ -55,13 +50,8 @@ function mod:SPELL_CAST_START(args)
 		timerFlameJetsCast:Start()
 		warnFlameJetsCast:Show()
 		warnFlameJetsCast:Play("stopcast")
-		timerFlameJetsCooldown:Start()
-	elseif args.spellId == 62488 then		-- Activate Construct
-		self.vb.ConstructCount = self.vb.ConstructCount + 1
-		announceConstruct:Show(self.vb.ConstructCount)
-		if self.vb.ConstructCount < 20 then
-			timerActivateConstruct:Start(self:IsDifficulty("normal10") and 40 or 30, self.vb.ConstructCount)
-		end
+		self.vb.FlameJetsCount = self.vb.FlameJetsCount + 1
+		timerFlameJetsCooldown:Start(nil, self.vb.FlameJetsCount + 1)
 	end
 end
 

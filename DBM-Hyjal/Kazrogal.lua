@@ -38,7 +38,7 @@ local specWarnGTFO                 = mod:NewSpecialWarningGTFO(318825, nil, nil,
 local timerMarkCD                   = mod:NewNextCountTimer(24, 318818, nil, nil, nil, 2, nil, CL.IMPORTANT_ICON)
 local timerBurningSoulCD            = mod:NewNextCountTimer(20, 318828, nil, "RemoveMagic", nil, 3, nil, CL.HEALER_ICON)
 local timerHorrorflamesCD           = mod:NewNextCountTimer(16, 318824, nil, nil, nil, 3)
-local timerUnstableAbyssalsCD       = mod:NewNextCountTimer(90, 318825, nil, nil, nil, 4, nil, CL.DEADLY_ICON)
+local timerUnstableAbyssalsCD       = mod:NewNextCountTimer(90, 318825, "Падение Абиссалов", nil, nil, 4, nil, CL.DEADLY_ICON)
 local timerInfernalStrikeCD         = mod:NewNextTimer(9, 318823, nil, "Tank|Healer", nil, 4, nil, CL.TANK_ICON)
 local timerunstoppableonslaughtBuff = mod:NewBuffActiveTimer(25, 318822, nil, "HasInterrupt", nil, 4, nil, CL.INTERRUPT_ICON)
 local timerFatalBlowofFilthCD       = mod:NewNextTimer(17, 318833, nil, "Tank|Healer", nil, 4, nil, CL.TANK_ICON)
@@ -70,6 +70,7 @@ mod.vb.FallofFilthCount = 0
 local kik = false
 mod:AddInfoFrameOption(318819, true)
 mod:AddBoolOption("SetAbbIcon")
+mod:AddBoolOption("HpOff", true)
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 17888, "Kaz'rogal")
@@ -168,17 +169,10 @@ end
 function mod:UNIT_HEALTH(uId)
 	local stage = mod:GetStage()
 	--local hp = self:GetUnitCreatureId(uId) == 17808
-	local hp = DBM:GetBossHPByUnitID("boss1")
-	if not hp then
-		if self:GetUnitCreatureId(uId) == 17888 then
-			hp = DBM:GetBossHPByUnitID(uId)
-		end
-	end -- or hp < 82 or hp < 72 or hp < 62 or hp < 52 or hp < 42 or hp < 32 or hp < 22 or hp < 12 then
-		if not warned_S2 and hp < 70 then
-			warned_S2 = true
-			warn2phaseSoon:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.prestage:format(2))
-		end
-		if not warned_F2 and hp < 67 then
+	local hp = self:GetUnitCreatureId(uId) == 17888 and DBM:GetBossHP(17888) or nil
+	if self.Options.HpOff then
+	 -- or hp < 82 or hp < 72 or hp < 62 or hp < 52 or hp < 42 or hp < 32 or hp < 22 or hp < 12 then
+		if hp and hp < 67 and not warned_F2 and self.Options.HpOff then
 			warned_F2 = true
 			self:SetStage(2)
 			-- self:Unschedule(Abyssals)
@@ -194,8 +188,7 @@ function mod:UNIT_HEALTH(uId)
 			timerMutilationlCD:Start()
 			timerFallofFilthCD:Start(16.5, self.vb.BurningCount)
 			timerFatalBlowofFilthCD:Start(15)
-		end
-		if not warned_F3 and hp < 33 then
+		elseif hp and hp < 33 and not warned_F3 then
 			warned_F3 = true
 			self.vb.AbyssalsCount = 0
 			self:SetStage(3)
@@ -206,8 +199,8 @@ function mod:UNIT_HEALTH(uId)
 			timerUnstableAbyssalsCD:Start(15)
 			timerHorrorflamesCD:Start(10) -- ~~~~~~
 			specwarnAbbasSoon:Schedule(8)
-
 		end
+	end
 end
 local function ScanWhitName(name)
 	local target

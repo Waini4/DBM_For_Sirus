@@ -33,7 +33,7 @@ local specWarnEonarsGift    = mod:NewSpecialWarning("EonarsGift", 3)
 local specWarnFury			= mod:NewSpecialWarningMoveAway(312880, nil, nil, nil, 1, 2)
 local yellFury				= mod:NewYell(312880)
 local yellRoots				= mod:NewYell(312860)
-local specWarnTremor		= mod:NewSpecialWarningCast(312842, "SpellCaster", nil, 2, 1, 2)	-- Hard mode
+local specWarnTremor		= mod:NewSpecialWarningCast(312842, nil, nil, 2, 1, 2)	-- Hard mode
 local specWarnBeam			= mod:NewSpecialWarningMove(312888, nil, nil, nil, 1, 2)	-- Hard mode
 
 local enrage 				= mod:NewBerserkTimer(600)

@@ -19,7 +19,7 @@ mod:RegisterEventsInCombat(
 
 local warnLeg   				= mod:NewTargetNoFilterAnnounce(319907, 3)
 local warnSoulAbductionTarget 	= mod:NewTargetAnnounce(319917, 1)
-local warnHarassmentTarget 		= mod:NewTargetAnnounce(319917, 1)
+local warnHarassmentTarget 		= mod:NewTargetAnnounce(319931, 1)
 local warnPhase					= mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2)
 
 local specWarnSoulAbduction	= mod:NewSpecialWarningMoveTo(319917, nil, nil, nil, 2, 4)
