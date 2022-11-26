@@ -57,7 +57,6 @@ local warnInfernalStrike3p = mod:NewCastAnnounce(318841, 4, 1.5)
 local timerInfernalStrike3pCD       = mod:NewNextTimer(6, 318841, nil, "Tank|Healer", nil, 4, nil, CL.TANK_ICON)
 
 --local MarkBuff = DBM:GetSpellInfoNew(318819)
-local warned_S2 = false
 local warned_F2 = false
 local warned_F3 = false
 -- last = math.floor(UnitMana(player) / UnitManaMax(player) * 100)
@@ -82,7 +81,6 @@ function mod:OnCombatStart(delay)
 	self.vb.AbyssalsCount = 0
 	self.vb.FallofFilthCount = 0
 	kik = false
-	warned_S2 = false
 	warned_F2 = false
 	warned_F3 = false
 	timerHorrorflamesCD:Start(15, self.vb.HorrorflamesCount)
