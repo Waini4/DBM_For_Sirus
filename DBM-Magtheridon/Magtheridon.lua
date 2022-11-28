@@ -180,14 +180,14 @@ function mod:UNIT_HEALTH(uId)
 end
 
 function mod:CHAT_MSG_MONSTER_YELL(msg) -- идею взял с бс гер вайни --обновление таймера в случае потолка
-	-- if msg == L.YellPhase2 then
-	-- 	if timerNovaCD:GetRemaining() then
-	-- 		local elapsed, total = timerNovaCD:GetTime()
-	-- 		local extend = total - elapsed
-	-- 		timerNovaCD:Stop()
-	-- 		timerNovaCD:Update(0, 10 + extend)
-	-- 	end
-	if msg == L.YellPhase1 then -- попытка словить активацию магика
+	if msg == L.YellPhase2 then
+		if timerNovaCD:GetRemaining() then
+			local elapsed, total = timerNovaCD:GetTime()
+			local extend = total - elapsed
+			timerNovaCD:Stop()
+			timerNovaCD:Update(0, 10 + extend)
+		end
+	elseif msg == L.YellPhase1 then -- попытка словить активацию магика
 		if self:IsHeroic() then
 			timerNovaCD:Start()
 			timerHandOfMagtCD:Start(20)
