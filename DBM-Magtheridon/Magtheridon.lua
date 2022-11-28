@@ -18,10 +18,11 @@ mod:RegisterEventsInCombat(
 	"SPELL_DAMAGE"
 )
 
-local myPomoi5 = select(3, DBM:GetMyPlayerInfo())
+local myPomoi5 = select(3, DBM:GetMyPlayerInfo()) == "Sirus x5 - 3.3.5a+"
+
 -- общее --
 mod:AddTimerLine(L.General)
-local timerNovaCD 				= mod:NewCDTimer(myPomoi5 == "Sirus x5 - 3.3.5a+" and 66.5 or 80, 305129, nil, nil, nil, 3) -- Кубы
+local timerNovaCD 				= mod:NewCDTimer(myPomoi5 and 66.5 or 80, 305129, nil, nil, nil, 3) -- Кубы
 local timerPull   				= mod:NewTimer(112, "Pull", 305131, nil, nil, 6) -- Пулл босса
 
 local warnPhase3Soon			= mod:NewPrePhaseAnnounce(3)
@@ -79,10 +80,10 @@ function mod:OnCombatEnd(wipe)
 end
 
 local cubsTimers = {
-	[2] = 66.5,
-	[3] = 74.1,
-	[4] = 73.0,	-- пока не пойму сколько секунд дает каждая из абилок - это гадание на картах таро. Ведь сирусовский дифф желает лучшего
-	[5] = 80,
+	[2] = 74,
+	[3] = 67,
+	[4] = 67,	-- пока не пойму сколько секунд дает каждая из абилок - это гадание на картах таро. Ведь сирусовский дифф желает лучшего
+	[5] = 74,
 	[6] = 70,
 	[7] = 74,
 	[8] = 74 --этот сделан на угад остальные по стриму [https://www.twitch.tv/videos/1303324658?t]
