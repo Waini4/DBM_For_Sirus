@@ -55,7 +55,19 @@ local shake = 1
 
 local handTargets = {}
 local targetShattered
--- mod:SetStage(0)
+
+--- обновление кубов чтобы не было лишнего спама, можно принцепе реализовать еще как прототип мб наерно так и надо сделать
+local elapsed, total, extend
+local function UpdateTimer(timer, time)
+	if timer and timer:GetRemaining() then
+		time = time or 0
+		elapsed, total = timer:GetTime()
+		extend = total - elapsed
+		timer:Stop()
+		timer:Update(0, time + extend)
+	end
+end
+
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 17257, "Magtheridon")
 	self:SetStage(1)
@@ -181,12 +193,13 @@ end
 
 function mod:CHAT_MSG_MONSTER_YELL(msg) -- идею взял с бс гер вайни --обновление таймера в случае потолка
 	if msg == L.YellPhase2 then
-		if timerNovaCD:GetRemaining() then
-			local elapsed, total = timerNovaCD:GetTime()
-			local extend = total - elapsed
-			timerNovaCD:Stop()
-			timerNovaCD:Update(0, 10 + extend)
-		end
+		-- if timerNovaCD:GetRemaining() then
+		-- 	local elapsed, total = timerNovaCD:GetTime()
+		-- 	local extend = total - elapsed
+		-- 	timerNovaCD:Stop()
+		-- 	timerNovaCD:Update(0, 10 + extend)
+		-- end
+		UpdateTimer(timerNovaCD,10)
 	elseif msg == L.YellPhase1 then -- попытка словить активацию магика
 		if self:IsHeroic() then
 			timerNovaCD:Start()
