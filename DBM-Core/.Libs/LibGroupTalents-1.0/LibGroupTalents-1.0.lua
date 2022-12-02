@@ -181,20 +181,28 @@ do
 			if (delay > 1) then
 				delay = 0
 				local now = GetTime()
+				if type(now) == "string" then
+					now = tonumber(now)
+				end
 				local triggers
 				for guid,when in pairs(lib.talentTimers) do
-					if (now > when) then
-						-- Pass to second table to process, because RefreshTimers can affect this talentTimers table
-						-- So it's important we're not still iterating it at the time
-						if (not triggers) then
-							triggers = new()
+					-- if now and when then
+						if type(when) == "string" then
+							when = tonumber(when)
 						end
-						triggers[guid] = true
-						lib.talentTimers[guid] = nil
-						if (not next(lib.talentTimers)) then
-							lib.talentTimers = del(lib.talentTimers)
-							break
-						end
+						if (now > when) then
+							-- Pass to second table to process, because RefreshTimers can affect this talentTimers table
+							-- So it's important we're not still iterating it at the time
+							if (not triggers) then
+								triggers = new()
+							end
+							triggers[guid] = true
+							lib.talentTimers[guid] = nil
+							if (not next(lib.talentTimers)) then
+								lib.talentTimers = del(lib.talentTimers)
+								break
+							end
+						-- end
 					end
 				end
 
