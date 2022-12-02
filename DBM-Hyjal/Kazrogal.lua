@@ -13,7 +13,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 318819 318825 318845 318822 318828 318839",
 	--"SPELL_AURA_REFRESH ",
 	"SPELL_AURA_REMOVED 318822",
-	"UNIT_TARGET",
+	-- "UNIT_TARGET",
 --"SPELL_SUMMON ",
 	"UNIT_HEALTH"
 )
@@ -165,7 +165,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	end
 end
 local hp
-local stage 
+local stage
 function mod:UNIT_HEALTH(uId)
 	stage = self:GetStage()
 	if self:GetUnitCreatureId(uId) == 17888 then
@@ -175,9 +175,7 @@ function mod:UNIT_HEALTH(uId)
 	 -- or hp < 82 or hp < 72 or hp < 62 or hp < 52 or hp < 42 or hp < 32 or hp < 22 or hp < 12 then
 	if stage and hp then
 		if hp < 67 and stage == 1 then
-			-- warned_F2 = true
 			self:SetStage(2)
-			-- self:Unschedule(Abyssals)
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(2))
 			warnPhase:Play("ptwo")
 			timerUnstableAbyssalsCD:Stop()
@@ -191,7 +189,6 @@ function mod:UNIT_HEALTH(uId)
 			timerFallofFilthCD:Start(16.5, self.vb.BurningCount)
 			timerFatalBlowofFilthCD:Start(15)
 		elseif hp < 33 and stage == 2 then
-			-- warned_F3 = true
 			self.vb.AbyssalsCount = 0
 			self:SetStage(3)
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(3))
@@ -205,30 +202,30 @@ function mod:UNIT_HEALTH(uId)
 	end
 
 end
-local function ScanWhitName(name)
-	local target
-	for i = 1, GetNumRaidMembers() do
-		local unit = "raid" .. i .. "target"
-		local guid = UnitGUID(unit)
-		-- if name == "Некромант" then
-			if UnitName(unit) == name and guid and not AbbGuids[guid] then
-				target = unit
-				AbbGuids[guid] = true
-				return target
-			end
-		-- end
-	end
-	return nil
-end
-function mod:UNIT_TARGET()
-	if self.Options.SetAbbIcon then
-		local uid = ScanWhitName("Нестабильный абиссал")
-		if uid then
-			self:SetIcon(uid, self.vb.AbbIcon)
-			mod.vb.AbbIcon = mod.vb.AbbIcon - 1
-			if mod.vb.AbbIcon < 6 then
-				mod.vb.AbbIcon = 8
-			end
-		end
-	end
-end
+-- local function ScanWhitName(name)
+-- 	local target
+-- 	for i = 1, GetNumRaidMembers() do
+-- 		local unit = "raid" .. i .. "target"
+-- 		local guid = UnitGUID(unit)
+-- 		-- if name == "Некромант" then
+-- 			if UnitName(unit) == name and guid and not AbbGuids[guid] then
+-- 				target = unit
+-- 				AbbGuids[guid] = true
+-- 				return target
+-- 			end
+-- 		-- end
+-- 	end
+-- 	return nil
+-- end
+-- function mod:UNIT_TARGET()
+-- 	if self.Options.SetAbbIcon then
+-- 		local uid = ScanWhitName("Нестабильный абиссал")
+-- 		if uid then
+-- 			self:SetIcon(uid, self.vb.AbbIcon)
+-- 			mod.vb.AbbIcon = mod.vb.AbbIcon - 1
+-- 			if mod.vb.AbbIcon < 6 then
+-- 				mod.vb.AbbIcon = 8
+-- 			end
+-- 		end
+-- 	end
+-- end
