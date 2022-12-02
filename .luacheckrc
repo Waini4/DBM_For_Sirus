@@ -1812,6 +1812,7 @@ globals = {
 	"GetAchievementComparisonInfo",
 	"GetAchievementCriteriaInfo",
 	"GetAchievementInfo",
+	"C_AchievementManager",
 	"GetAchievementInfoFromCriteria",
 	"GetAchievementLink",
 	"GetAchievementNumCriteria",

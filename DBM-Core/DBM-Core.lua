@@ -42,7 +42,7 @@ private.DBMPrefix = DBMPrefix
 
 local L = DBM_CORE_L
 local CL = DBM_COMMON_L
-
+local GetAchievementInfo = C_AchievementManager._GetAchievementInfo
 -------------------------------
 --  Globals/Default Options  --
 -------------------------------
