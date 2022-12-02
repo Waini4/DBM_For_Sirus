@@ -68,7 +68,7 @@ mod.vb.AbyssalsCount = 0
 mod.vb.FallofFilthCount = 0
 local kik = false
 mod:AddInfoFrameOption(318819, true)
-mod:AddBoolOption("SetAbbIcon")
+-- mod:AddBoolOption("SetAbbIcon")
 -- mod:AddBoolOption("HpOff", true)
 
 function mod:OnCombatStart(delay)
