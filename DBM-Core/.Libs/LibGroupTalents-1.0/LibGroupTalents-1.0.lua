@@ -175,7 +175,6 @@ do
 				lib:CheckForMissingTalents()
 			end
 		end
-
 		if (lib.talentTimers) then
 			delay = delay + elapsed
 			if (delay > 1) then
