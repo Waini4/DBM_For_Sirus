@@ -22,4 +22,4 @@ NorthrendBeasts.lua
 Jaraxxus.lua
 Champions.lua
 Twins.lua
-Anub'arak.lua
+AnubArak.lua
