@@ -5,7 +5,7 @@ mod:SetRevision("20220518110528")
 mod:SetCreatureID(17968)
 mod:SetZone()
 -- mod:SetUsedIcons(8)
-mod:SetUsedIcons(1,2,3,4,5,7, 8)
+mod:SetUsedIcons(1,2,3,4,5,7,8)
 mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(

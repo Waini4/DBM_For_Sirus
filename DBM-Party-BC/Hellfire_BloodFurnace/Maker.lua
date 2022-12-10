@@ -53,12 +53,12 @@ function mod:SPELL_AURA_APPLIED(args)
 			MC = MC + 1
 		end
 		if args:IsPlayer() and self.Options.RemoveWeaponOnMindControl then	-- автоснятие шмоток
-			if self:IsWeaponDependent("player") then
+			-- if self:IsWeaponDependent("player") then
 				PickupInventoryItem(16)
 				PutItemInBackpack()
 				PickupInventoryItem(17)
 				PutItemInBackpack()
-			elseif select(2, UnitClass("player")) == "HUNTER" then
+			if select(2, UnitClass("player")) == "HUNTER" then
 				PickupInventoryItem(18)
 				PutItemInBackpack()
 			end

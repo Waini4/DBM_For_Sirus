@@ -336,12 +336,12 @@ function mod:SPELL_CAST_SUCCESS(args)
 		timerAxeCD:Start()
 	elseif args:IsSpellID(36797) then
 		if args:IsPlayer() and self.Options.RemoveWeaponOnMindControl then
-			if self:IsWeaponDependent("player") then
+			-- if self:IsWeaponDependent("player") then --TODO IsWeaponDependent
 				PickupInventoryItem(16)
 				PutItemInBackpack()
 				PickupInventoryItem(17)
 				PutItemInBackpack()
-			elseif select(2, UnitClass("player")) == "HUNTER" then
+			if select(2, UnitClass("player")) == "HUNTER" then
 				PickupInventoryItem(18)
 				PutItemInBackpack()
 			end

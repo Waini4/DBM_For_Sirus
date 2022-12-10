@@ -131,12 +131,12 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(305386) then
 		if UnitAura("player", L.Pyromancer, nil, "HARMFUL") or
 			UnitAura("player", L.Hypothermia, nil, "HARMFUL") and self.Options.RemoveWeaponOnMindControl then
-			if self:IsWeaponDependent("player") then
+			-- if self:IsWeaponDependent("player") then
 				PickupInventoryItem(16)
 				PutItemInBackpack()
 				PickupInventoryItem(17)
 				PutItemInBackpack()
-			elseif select(2, UnitClass("player")) == "HUNTER" then
+			if select(2, UnitClass("player")) == "HUNTER" then
 				PickupInventoryItem(18)
 				PutItemInBackpack()
 			end
