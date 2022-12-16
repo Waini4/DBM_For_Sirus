@@ -206,14 +206,9 @@ function mod:SPELL_AURA_REMOVED(args)
 	end
 end
 
-local cids = { --- check dead?
-	["21966"] = true,
-	["21965"] = true,
-	["21964"] = true,
-}
 function mod:UNIT_DIED(args)
 	local cid = self:GetCIDFromGUID(args.destGUID)
-	if cids[cid] then
+	if cid == 21966 or cid == 21965 or cid == 21964 then
 		if self.Options.HealthFrameBoss then
 			DBM.BossHealth:RemoveBoss(cid)
 		end

@@ -21,7 +21,7 @@
 ## X-DBM-Mod-Name-zhCN: 海加尔之战
 ## X-DBM-Mod-Name-zhTW: 海加爾山之戰
 ## X-DBM-Mod-Name-ruRU: Битва за гору Хиджал
-## X-DBM-Mod-MapID: 776
+## X-DBM-Mod-MapID: 776,864
 ## X-DBM-Mod-LoadZone: Hyjal Summit
 ## X-DBM-Mod-LoadZone-zhCN: 海加尔峰
 ## X-DBM-Mod-LoadZone-ruRU: Вершина Хиджала

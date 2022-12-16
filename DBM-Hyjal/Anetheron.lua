@@ -30,7 +30,7 @@ local specWarnManaAbsorption = mod:NewSpecialWarningInterrupt(317884, "HasInterr
 
 local timerCrimsonBarrierNext = mod:NewNextTimer(30, 317872, nil, nil, nil, 4)
 local timerManaAbsorptionNext = mod:NewNextTimer(20, 317884, nil, nil, nil, 4)
-local timerWaveHorror         = mod:NewCDTimer(20, 317873, nil, nil, nil, 5)
+local timerWaveHorror         = mod:NewCDTimer(20, 317873, nil, nil, nil, 5, nil, nil, nil, 1)
 local timerFingerofDeathCD    = mod:NewCDTimer(7, 317876, nil, nil, nil, 4)
 local timerInfernoCast        = mod:NewCastTimer(3, 317870, nil, nil, nil, 3)
 local berserkTimer		      = mod:NewBerserkTimer(600)

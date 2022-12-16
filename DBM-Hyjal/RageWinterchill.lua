@@ -96,7 +96,7 @@ function mod:SPELL_CAST_START(args)
 	local stage = mod:GetStage()
 	if args:IsSpellID(317788) then
 		warnOskvCast:Show()
-		timerOskvCD:Start(stage == 2 and 45 or 72)
+		timerOskvCD:Start(stage == 2 and 42 or 72)
 		timerOskvCast:Start(2)
 		timerOskvCast:Schedule(2)
 		warnOskvSoon:Schedule(65)
@@ -181,11 +181,11 @@ function mod:UNIT_HEALTH(uId)
 		timerVipe:Start()
 		timerCurce:Stop()
 		timerCurce2:Start()
-		timerOskvCD:Start(35)
+		timerOskvCD:Start(30)
 		timerCursingBlowCD:Start(10)
 		timerFingerofPainCD:Start(20)
 		warnOskvSoon:Cancel()
-		warnOskvSoon:Schedule(25)
+		warnOskvSoon:Schedule(28)
 	end
 
 end
