@@ -64,7 +64,7 @@ local timerkik              = mod:NewCDTimer(15, 307829, nil, nil, nil, 3)
 local timerShkval           = mod:NewCDTimer(20, 307821, nil, nil, nil, 3)
 local timerCowardice        = mod:NewCDTimer(33, 307834)
 -- local timerFlame            = mod:NewCDTimer(15, 307839)
-local timerBreathNightmare  = mod:NewCDTimer(40, 308512, nil, nil, nil, 1, nil, nil, nil, 1)
+local timerBreathNightmare  = mod:NewCDTimer(42, 308512, nil, nil, nil, 1, nil, nil, nil, 1)
 local timerAmonstrousblow   = mod:NewCDTimer(15, 307845)
 local timerCDChep           = mod:NewCDTimer(6, 308520)
 
@@ -81,7 +81,6 @@ mod:AddBoolOption("AnnounceKnopk", false)
 mod:AddBoolOption("Testicepi", true)
 mod:AddBoolOption("AnnounceOFF", false)
 mod:AddBoolOption("RangeFrame", true)
-mod:AddInfoFrameOption(308620, true)
 
 mod:AddNamePlateOption("Nameplate1", 307839, true)
 
@@ -137,6 +136,7 @@ function mod:OnCombatEnd(wipe)
 end
 
 function mod:SPELL_CAST_START(args)
+	local stage = mod:GetStage()
 	if args:IsSpellID(307829) then
 		--warnkik:Show()
 		timerkik:Start()
@@ -152,7 +152,7 @@ function mod:SPELL_CAST_START(args)
 		timerPriziv:Start()
 	elseif args:IsSpellID(308512) then
 		specWarnBreathNightmare:Show(args.destName)
-		timerBreathNightmare:Start()
+		timerBreathNightmare:Start(stage == 5 and 30 or 42)
 	elseif args:IsSpellID(307845) then
 		timerAmonstrousblow:Start()
 	end
@@ -204,7 +204,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif args:IsSpellID(308512) and self:AntiSpam(3) then
 		specWarnBreathNightmare:Show()
-		timerBreathNightmare:Start(45)
 	elseif args:IsSpellID(307861) then
 		if args:IsPlayer() then
 			specWarnFlame2:Show()
@@ -213,10 +212,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		SveazTargets[#SveazTargets + 1] = args.destName
 		if self.Options.SetIconOnSveazTarget and self.vb.SveazIcons > 0 then
 			self:SetIcon(args.destName, self.vb.SveazIcons, 10)
-		end
-		if self.Options.InfoFrame and not DBM.InfoFrame:IsShown() then
-			DBM.InfoFrame:SetHeader(args.spellName)
-			DBM.InfoFrame:Show(15, "playerdebuffremaining", 308620)
 		end
 		self.vb.SveazIcons = self.vb.SveazIcons - 1
 		self:Unschedule(warnSveazTargets)
