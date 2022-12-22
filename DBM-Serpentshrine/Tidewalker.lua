@@ -49,7 +49,7 @@ local timerVzglad	      = mod:NewTargetTimer(60, 310136, nil, "Tank", nil, 5, ni
 local timerHwatCD         = mod:NewCDTimer(32, 310144, nil, nil, nil, 3) -- хватка
 local timerHwat           = mod:NewTargetTimer(3, 310144, nil, nil, nil, 3)
 local timerZemlaCast      = mod:NewCastTimer(8, 310152, nil, nil, nil, 1) -- Землетрясение
-local timerZemlaCD        = mod:NewCDTimer(45, 310152, nil, nil, nil, 1) -- Землетрясение
+local timerZemlaCD        = mod:NewCDTimer(45, 310152, nil, nil, nil, 1) -- Землетрясение -- fxpw непонятно он теперь меньше или больше 
 local timerTopCast        = mod:NewCastTimer(3, 310140, nil, nil, nil, 2) -- Топот
 local timerTopCD          = mod:NewCDTimer(20, 310140, nil, nil, nil, 2)
 local timerKrikCast			= mod:NewCastTimer(3, 310151, nil, nil, nil, 2)
@@ -58,6 +58,7 @@ local timerKrikCD          = mod:NewCDTimer(28, 310151, nil, nil, nil, 2)
 local timerSuhCD          = mod:NewCDTimer(20, 310155, nil, nil, nil, 1)
 
 local berserkTimerhm      = mod:NewBerserkTimer(360)
+local berserkTimerNM      = mod:NewBerserkTimer(480)
 
 mod:AddSetIconOption("SetIconOnSuhTargets", 310155, true, true, {4, 5, 6, 7, 8})
 
@@ -95,15 +96,16 @@ end
 function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 21213, "Morogrim Tidewalker")
 	if mod:IsDifficulty("heroic25") then
-	berserkTimerhm:Start()
-	self.vb.phase = 1
-	warned_preP1 = false
-	warned_preP2 = false
+		berserkTimerhm:Start()
+		self.vb.phase = 1
+		warned_preP1 = false
+		warned_preP2 = false
 	else
-	warnMurlocksSoon:Schedule(37)
-	timerMurlocks:Start(42)
-	timerGravesCD:Start()
-	berserkTimer:Start()
+		berserkTimerNM:Start()
+		warnMurlocksSoon:Schedule(37)
+		timerMurlocks:Start(42)
+		timerGravesCD:Start()
+		berserkTimer:Start()
 	end
 end
 

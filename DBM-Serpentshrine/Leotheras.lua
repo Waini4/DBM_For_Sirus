@@ -32,7 +32,7 @@ local timerInnerDemons = mod:NewTimer(32.5, "TimerInnerDemons", 11446)
 local timerWhirlwind   = mod:NewCastTimer(12, 37640)
 local timerWhirlwindCD = mod:NewCDTimer(19, 37640)
 
-local berserkTimer = mod:NewBerserkTimer(600)
+local berserkTimer = mod:NewBerserkTimer(360)
 
 
 ---------------------------------хм---------------------------------
@@ -135,7 +135,7 @@ end
 function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 21215, "Leotheras the Blind")
 	table.wipe(demonTargets)
-	self.vb.phase = 1
+	self:SetStage(1)
 	if mod:IsDifficulty("heroic25") then
 		if self.Options.InfoFrame then
 			DBM.InfoFrame:SetHeader(uId1)
@@ -252,14 +252,24 @@ end
 
 function mod:UNIT_HEALTH(uId)
 	if self:GetUnitCreatureId(uId) == 2121 then
-		if self.vb.phase == 1 and not warned_preP1 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.37 then
-			warned_preP1 = true
-			warnPhase2Soon:Show()
-		end
-		if self.vb.phase == 1 and not warned_preP2 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.35 then
-			warned_preP2 = true
-			self.vb.phase = 2
-			warnPhase2:Show()
+		if self:GetStage() == 1 and not warned_preP1 then
+			if mod:IsDifficulty("heroic25") and DBM:GetBossHPByUnitID(uId) <= 37 then
+				warned_preP1 = true
+				warnPhase2Soon:Show()
+			elseif DBM:GetBossHPByUnitID(uId) <= 27 then
+				warned_preP1 = true
+				warnPhase2Soon:Show()
+			end
+		elseif self:GetStage() == 1 and not warned_preP2  then
+			if mod:IsDifficulty("heroic25") and DBM:GetBossHPByUnitID(uId) <= 35 then
+				warned_preP2 = true
+				self:SetStage(2)
+				warnPhase2:Show()
+			elseif DBM:GetBossHPByUnitID(uId) <= 25 then
+				warned_preP2 = true
+				self:SetStage(2)
+				warnPhase2:Show()
+			end
 		end
 	end
 end

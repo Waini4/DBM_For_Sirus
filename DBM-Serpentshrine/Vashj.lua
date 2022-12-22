@@ -39,6 +39,7 @@ local timerElemental = mod:NewTimer(53, "TaintedElemental", "Interface\\Icons\\S
 	1)
 local timerNaga      = mod:NewTimer(47.5, "Naga", "Interface\\Icons\\INV_Misc_MonsterHead_02", nil, nil, 1)
 local timerCharge    = mod:NewTargetTimer(20, 38280, nil, nil, nil, 4)
+local berserkTimer          = mod:NewBerserkTimer(600)
 
 --------------------------------Героик--------------------------------
 
@@ -112,18 +113,18 @@ end
 function mod:NextStrider()
 	timerStrider:Start()
 	self:UnscheduleMethod("NextStrider")
-	self:ScheduleMethod(66, "NextStrider")
+	self:ScheduleMethod(45, "NextStrider")
 end
 
 function mod:NextNaga()
 	timerNaga:Start()
 	self:UnscheduleMethod("NextNaga")
-	self:ScheduleMethod(47.5, "NextNaga")
+	self:ScheduleMethod(30, "NextNaga")
 end
 
 function mod:NextElem()
 	timerElemCD:Start()
-	self:ScheduleMethod(50, "NextElemAnonce")
+	self:ScheduleMethod(45, "NextElemAnonce")
 end
 
 function mod:NextElemAnonce()
@@ -167,6 +168,7 @@ function mod:OnCombatStart(delay)
 		timerElemCD:Start(10)
 		timerStaticAngerCD:Start()
 	else -- Обычка
+		berserkTimer:Start()
 	end
 end
 
@@ -288,9 +290,9 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		timerStrider:Start()
 		timerElemental:Start()
 		timerNaga:Start()
-		self:ScheduleMethod(66, "NextStrider")
-		self:ScheduleMethod(47.5, "NextNaga")
-		self:ScheduleMethod(48, "ElementalSoon")
+		self:ScheduleMethod(45, "NextStrider")
+		self:ScheduleMethod(30, "NextNaga")
+		self:ScheduleMethod(42, "ElementalSoon")
 	elseif msg == L.YellPhase3 then
 		warnPhase:Show(3)
 		timerStrider:Cancel()
@@ -304,7 +306,7 @@ end
 function mod:UNIT_DIED(args)
 	if args.destName == L.TaintedElemental then
 		timerElemental:Start()
-		self:ScheduleMethod(48, "ElementalSoon")
+		self:ScheduleMethod(45, "ElementalSoon")
 	end
 end
 

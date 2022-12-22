@@ -28,7 +28,8 @@ local warnNovaSoon       = mod:NewSoonAnnounce(38445, 3)   -- Огненная �
 local specWarnNova       = mod:NewSpecialWarningSpell(38445)  -- Огненная звезда
 
 local timerNovaCD        = mod:NewCDTimer(26, 38445, nil, nil, nil, 2)
-local timerSpitfireCD    = mod:NewCDTimer(60, 38236, nil, nil, nil, 2)
+local timerSpitfireCD    = mod:NewCDTimer(30, 38236, nil, nil, nil, 2)
+local timerDispelCD    = mod:NewCDTimer(15, 38306, nil, nil, nil, 2)
 
 local berserkTimer          = mod:NewBerserkTimer(600)
 
@@ -117,7 +118,7 @@ function mod:OnCombatStart()
 	else -- Обычка
 		berserkTimer:Start()
 		timerNovaCD:Start()
-		timerSpitfireCD:Start()
+		timerSpitfireCD:Start(15)
 		warnNovaSoon:Show(23)
 	end
 end
@@ -166,6 +167,8 @@ function mod:SPELL_CAST_SUCCESS(args)
 	local spellId = args.spellId
 	if spellId == 38236 then -- Обычка
 		timerSpitfireCD:Start()
+	elseif spellId == timerDispelCD.spellId then -- противоядие
+		timerDispelCD:Start()
 	elseif spellId == 309258 then -- Око
 		warnOko:Show()
 		timerOkoCD:Start()
