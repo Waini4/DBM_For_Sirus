@@ -1,4 +1,4 @@
-local ipairs = ipairs
+-- local ipairs = ipairs
 -- local pairs = pairs
 -- local ceil, floor = math.ceil, math.floor
 
@@ -6,13 +6,13 @@ local ipairs = ipairs
 local GetNumPartyMembers = GetNumPartyMembers
 local GetNumRaidMembers = GetNumRaidMembers
 
-function tIndexOf(tbl, item)
-	for i, v in ipairs(tbl) do
-		if item == v then
-			return i;
-		end
-	end
-end
+-- function tIndexOf(tbl, item)
+-- 	for i, v in ipairs(tbl) do
+-- 		if item == v then
+-- 			return i;
+-- 		end
+-- 	end
+-- end
 
 function IsInGroup()
 	return GetNumPartyMembers() > 0 or GetNumRaidMembers() > 0
