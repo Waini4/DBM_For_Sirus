@@ -841,7 +841,8 @@ local GetCellAlign = function (dir, tableObj, colObj, cellObj, cell, child)
 			or colObj and (colObj["align" .. dir] or colObj.align)
 			or tableObj["align" .. dir] or tableObj.align
 			or "CENTERLEFT"
-	local child, cell, val = child or 0, cell or 0, nil
+	local val
+	child, cell, val = child or 0, cell or 0, nil
 
 	if type(fn) == "string" then
 		fn = fn:lower()
