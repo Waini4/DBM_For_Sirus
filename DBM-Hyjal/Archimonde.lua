@@ -1,11 +1,11 @@
-local mod	= DBM:NewMod("Archimonde", "DBM-Hyjal")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Archimonde", "DBM-Hyjal")
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20220518110528")
 mod:SetCreatureID(17968)
 mod:SetZone()
 -- mod:SetUsedIcons(8)
-mod:SetUsedIcons(1,2,3,4,5,7,8)
+mod:SetUsedIcons(1, 2, 3, 4, 5, 7, 8)
 mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
@@ -17,33 +17,33 @@ mod:RegisterEventsInCombat(
 )
 
 
-local warnLeg   				= mod:NewTargetNoFilterAnnounce(319907, 3)
-local warnSoulAbductionTarget 	= mod:NewTargetAnnounce(319917, 1)
-local warnHarassmentTarget 		= mod:NewTargetAnnounce(319931, 1)
-local warnPhase					= mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2)
+local warnLeg                 = mod:NewTargetNoFilterAnnounce(319907, 3)
+local warnSoulAbductionTarget = mod:NewTargetAnnounce(319917, 1)
+local warnHarassmentTarget    = mod:NewTargetAnnounce(319931, 1)
+local warnPhase               = mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2)
 
-local specWarnSoulAbduction	= mod:NewSpecialWarningMoveTo(319917, nil, nil, nil, 2, 4)
-local specWarnMarkofLegion	= mod:NewSpecialWarningYou(319907, nil, nil, nil, 4, 2)
-local specWarnHarassment	= mod:NewSpecialWarningMoveAway(319931, nil, nil, nil, 4, 4)
+local specWarnSoulAbduction = mod:NewSpecialWarningMoveTo(319917, nil, nil, nil, 2, 4)
+local specWarnMarkofLegion = mod:NewSpecialWarningYou(319907, nil, nil, nil, 4, 2)
+local specWarnHarassment = mod:NewSpecialWarningMoveAway(319931, nil, nil, nil, 4, 4)
 
 -- 10/20 19:48:32.669  SPELL_CAST_START,0xF130004630000052,"Архимонд",0xa48,0x0000000000000000,nil,0x80000000,319910,"Пламя Рока",0x8
-local markOfRockCD		= mod:NewCDTimer(40, 319910, nil, nil, nil, 3) -- Пламя рока кд
-local markOfLegDur		= mod:NewTargetTimer(10, 319907, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON) -- метка легиона
-local sosCD				= mod:NewCDTimer(40, 319917, nil, nil, nil, 3) -- состалка кд
-local markOfLegCD		= mod:NewCDTimer(22, 319907, nil, nil, nil, 2) -- метка легиона кд
-local ShadowGeyserCD	= mod:NewCDTimer(20, 319922, nil, nil, nil, 4)
-local perstCD			= mod:NewNextTimer(8, 319906, nil, "Tank", nil, 4, nil, DBM_COMMON_L.TANK_ICON) -- перст кд
-local berserkTimer		= mod:NewBerserkTimer(600)
-local yellMark			= mod:NewYell(319907)
-local yellMarkFade		= mod:NewShortFadesYell(319907)
-local yellHaras			= mod:NewYell(319931)
+local markOfRockCD   = mod:NewCDTimer(40, 319910, nil, nil, nil, 3) -- Пламя рока кд
+local markOfLegDur   = mod:NewTargetTimer(10, 319907, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON) -- метка легиона
+local sosCD          = mod:NewCDTimer(40, 319917, nil, nil, nil, 3) -- состалка кд
+local markOfLegCD    = mod:NewCDTimer(22, 319907, nil, nil, nil, 2) -- метка легиона кд
+local ShadowGeyserCD = mod:NewCDTimer(20, 319922, nil, nil, nil, 4)
+local perstCD        = mod:NewNextTimer(8, 319906, nil, "Tank", nil, 4, nil, DBM_COMMON_L.TANK_ICON) -- перст кд
+local berserkTimer   = mod:NewBerserkTimer(600)
+local yellMark       = mod:NewYell(319907)
+local yellMarkFade   = mod:NewShortFadesYell(319907)
+local yellHaras      = mod:NewYell(319931)
 
 
 mod:AddNamePlateOption("markOfLegPlate", 319907, true)
 mod:AddNamePlateOption("SoulAbductionPlate", 319917, true)
 mod:AddNamePlateOption("HarassmentPlate", 319931, true)
 mod:AddSetIconOption("SetIconOnLegTarget", 319907, true, true, { 7, 8 })
-mod:AddSetIconOption("SetIconOnSos", 319917, true, true, { 1,2,3,4,5 })
+mod:AddSetIconOption("SetIconOnSos", 319917, true, true, { 1, 2, 3, 4, 5 })
 
 local SoulTargets = {}
 local HarasmTargets = {}
@@ -90,7 +90,6 @@ function mod:SPELL_CAST_START(args)
 		ShadowGeyserCD:Start()
 	end
 end
-
 
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(markOfLegDur.spellId) then
@@ -168,13 +167,14 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 	end
 end
+
 --40.5
 -- SPELL_CAST_START,0xF130004630000052,"Архимонд",0x10a48,0x0000000000000000,nil,0x80000000,319906,"Перст гибели",0x20
 -- 10/20 20:53:30.653  SPELL_CAST_START,0xF130004630000001,"Архимонд",0x10a48,0x0000000000000000,nil,0x80000000,319917,"Похищение души",0x20
 function mod:UNIT_HEALTH(uId)
 	local hp = self:GetUnitCreatureId(uId) == 17968 and DBM:GetBossHP(17968) or nil
-	if hp then -- or hp < 82 or hp < 72 or hp < 62 or hp < 52 or hp < 42 or hp < 32 or hp < 22 or hp < 12 then
-		if not warned_F1 and hp < 77 then
+	if hp then
+		if not warned_F1 and hp < 75 then
 			self:SetStage(2)
 			warned_F1 = true
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(2))
@@ -187,6 +187,3 @@ function mod:UNIT_HEALTH(uId)
 		end
 	end
 end
-
-
-

@@ -20,6 +20,15 @@ L:SetGeneralLocalization({
 	name = "Анетерон"
 })
 
+L:SetOptionLocalization {
+	AnnounceFails = "Объявлять игроков, попавших под $spell:317873, в рейд-чат\n(требуются права лидера или помощника)",
+}
+
+L:SetMiscLocalization {
+	FearOn = "Фир на: %s",
+	Fear   = "Кто попал под Фир (в этом бою): %s"
+}
+
 ----------------
 --  Kazrogal  --
 ----------------
@@ -57,61 +66,61 @@ L:SetGeneralLocalization({
 L = DBM:GetModLocalization("HyjalWaveTimers")
 
 L:SetGeneralLocalization({
-	name 		= "Треш-мобы"
+	name = "Треш-мобы"
 })
 
 L:SetWarningLocalization({
-	WarnWave	= "%s",
-	WarnWaveSoon= "Скоро следующая волна"
+	WarnWave = "%s",
+	WarnWaveSoon = "Скоро следующая волна"
 })
 
 L:SetTimerLocalization({
-	TimerWave	= "Следующая волна"
+	TimerWave = "Следующая волна"
 })
 
 L:SetOptionLocalization({
-	WarnWave		= "Warn when a new wave is incoming",--Translate
-	WarnWaveSoon	= "Warn when a new wave is incoming soon",--Translate
-	DetailedWave	= "Detailed warning when a new wave is incoming (which mobs)",--Translate
-	TimerWave		= "Show a timer for next wave"--Translate
+	WarnWave     = "Warn when a new wave is incoming", --Translate
+	WarnWaveSoon = "Warn when a new wave is incoming soon", --Translate
+	DetailedWave = "Detailed warning when a new wave is incoming (which mobs)", --Translate
+	TimerWave    = "Show a timer for next wave" --Translate
 })
 
 L:SetMiscLocalization({
-	HyjalZoneName		= "Вершина Хиджала",
-	Thrall				= "Тралл",
-	Jaina				= "Леди Джайна Праудмур",
-	RageWinterchill		= "Лютый Хлад",
-	Anetheron			= "Анетерон",
-	Kazrogal			= "Каз'рогал",
-	Azgalor				= "Азгалор",
-	WaveCheck			= "Текущая атака: (%d+) из 5",
-	WarnWave_0			= "Волна %s/5",
-	WarnWave_1			= "Волна %s/5 - %s %s",
-	WarnWave_2			= "Волна %s/5 - %s %s и %s %s",
-	WarnWave_3			= "Волна %s/5 - %s %s, %s %s и %s %s",
-	WarnWave_4			= "Волна %s/5 - %s %s, %s %s, %s %s и %s %s",
-	WarnWave_5			= "Волна %s/5 - %s %s, %s %s, %s %s, %s %s и %s %s",
-	WarnWave__1			= "Волна %s/5 - %s %s, %s %s",
-	RageGossip			= "Леди Праудмур, мертвецы построили еще один лагерь. В скором времени они начнут атаковать нас. Мы готовы помочь!",
-	AnetheronGossip		= "Мы готовы встретить любого, кого пошлет Архимонд, леди Праудмур.",
-	KazrogalGossip		= "Я с тобой, Тралл.",
-	AzgalorGossip		= "Нам нечего бояться.",
-	JainaFirst 			= "Держитесь! Мы должны победить!",
+	HyjalZoneName   = "Вершина Хиджала",
+	Thrall          = "Тралл",
+	Jaina           = "Леди Джайна Праудмур",
+	RageWinterchill = "Лютый Хлад",
+	Anetheron       = "Анетерон",
+	Kazrogal        = "Каз'рогал",
+	Azgalor         = "Азгалор",
+	WaveCheck       = "Текущая атака: (%d+) из 5",
+	WarnWave_0      = "Волна %s/5",
+	WarnWave_1      = "Волна %s/5 - %s %s",
+	WarnWave_2      = "Волна %s/5 - %s %s и %s %s",
+	WarnWave_3      = "Волна %s/5 - %s %s, %s %s и %s %s",
+	WarnWave_4      = "Волна %s/5 - %s %s, %s %s, %s %s и %s %s",
+	WarnWave_5      = "Волна %s/5 - %s %s, %s %s, %s %s, %s %s и %s %s",
+	WarnWave__1     = "Волна %s/5 - %s %s, %s %s",
+	RageGossip      = "Леди Праудмур, мертвецы построили еще один лагерь. В скором времени они начнут атаковать нас. Мы готовы помочь!",
+	AnetheronGossip = "Мы готовы встретить любого, кого пошлет Архимонд, леди Праудмур.",
+	KazrogalGossip  = "Я с тобой, Тралл.",
+	AzgalorGossip   = "Нам нечего бояться.",
+	JainaFirst      = "Держитесь! Мы должны победить!",
 
-	Boss1GossipStart	= "Леди Праудмур, мы отразили натиск нежити, но разведчики докладывают о прибытии могущественного лича. Помогите нам!",
+	Boss1GossipStart = "Леди Праудмур, мы отразили натиск нежити, но разведчики докладывают о прибытии могущественного лича. Помогите нам!",
 
-	Pudge1 				= "Изрыгатель слизи",
-	Pudge2				= "Монструозное поганище",
-	Fiend				= "Могильщика",
-	Necromancer			= "Некроманта",
+	Pudge1      = "Изрыгатель слизи",
+	Pudge2      = "Монструозное поганище",
+	Fiend       = "Могильщика",
+	Necromancer = "Некроманта",
 
-	Ghoul				= "Вурдалака",
-	Abomination			= "Поганища",
+	Ghoul       = "Вурдалака",
+	Abomination = "Поганища",
 
-	Banshee				= "Банши",
+	Banshee = "Банши",
 
-	Gargoyle			= "Горгульи",
-	Wyrm				= "Ледяной змей",
-	Stalker				= "Ловчих Скверны",
-	Infernal			= "Инфернала"
+	Gargoyle = "Горгульи",
+	Wyrm     = "Ледяной змей",
+	Stalker  = "Ловчих Скверны",
+	Infernal = "Инфернала"
 })

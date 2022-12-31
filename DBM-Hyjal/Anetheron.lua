@@ -21,19 +21,20 @@ local warnFingerofDeath      = mod:NewTargetNoFilterAnnounce(317876, 4)
 local warnManaAbsorptionCast = mod:NewCastAnnounce(317884, 5, 1.5)
 local warnWaveHorrorSoon     = mod:NewSoonAnnounce(317873, 3)
 
-local specWarnTimerMoved 	 = mod:NewSpecialWarning("|cff71d5ff|Hspell:317873|hФир|h|r СМЕСТИЛСЯ НА 3 СЕК!")
+local specWarnTimerMoved     = mod:NewSpecialWarning("|cff71d5ff|Hspell:317873|hФир|h|r СМЕСТИЛСЯ НА 3 СЕК!")
 local warnwarnInfernoSoon    = mod:NewSpecialWarningSoon(317870, "Melee", nil, nil, 4, 2)
 local specWarnInfernoDeff    = mod:NewSpecialWarningDefensive(317870, "Tank", nil, nil, 1, 2)
 local specWarnInferno        = mod:NewSpecialWarningMoveAway(317870, nil, nil, nil, 4, 2)
 local specWarnCrimsonBarrier = mod:NewSpecialWarningDispel(317872, "MagicDispeller", nil, nil, 1, 2)
 local specWarnManaAbsorption = mod:NewSpecialWarningInterrupt(317884, "HasInterrupt", nil, nil, 1, 2)
+local yellFear               = mod:NewYell(317884, "Хлебушек: " .. UnitName("player"))
 
 local timerCrimsonBarrierNext = mod:NewNextTimer(30, 317872, nil, nil, nil, 4)
 local timerManaAbsorptionNext = mod:NewNextTimer(20, 317884, nil, nil, nil, 4)
 local timerWaveHorror         = mod:NewCDTimer(20, 317873, nil, nil, nil, 5, nil, nil, nil, 1)
 local timerFingerofDeathCD    = mod:NewCDTimer(7, 317876, nil, nil, nil, 4)
 local timerInfernoCast        = mod:NewCastTimer(3, 317870, nil, nil, nil, 3)
-local berserkTimer		      = mod:NewBerserkTimer(600)
+local berserkTimer            = mod:NewBerserkTimer(600)
 
 local warned_F1 = false
 local warned_F2 = false
@@ -44,6 +45,9 @@ local warned_F6 = false
 local warned_F7 = false
 local warned_F8 = false
 local warned_F9 = false
+
+mod:AddBoolOption("AnnounceFails", false, "announce")
+local FearTargets = {}
 
 function mod:InfernoTarget(targetname)
 	if not targetname then return end
@@ -70,10 +74,28 @@ function mod:OnCombatStart(delay)
 	warned_F7 = false
 	warned_F8 = false
 	warned_F9 = false
+	table.wipe(FearTargets)
+end
+
+local FearFails = {}
+local function FearFails1(e1, e2)
+	return (FearTargets[e1] or 0) > (FearTargets[e2] or 0)
 end
 
 function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 17808, "Anetheron", wipe)
+	if self.Options.AnnounceFails and DBM:GetRaidRank() >= 1 and self:AntiSpam(5) then
+		local lFear = ""
+		for k, _ in pairs(FearTargets) do
+			table.insert(FearFails, k)
+		end
+		table.sort(FearFails, FearFails1)
+		for _, v in ipairs(FearFails) do
+			lFear = lFear .. " " .. v .. "(" .. (FearTargets[v] or "") .. ")"
+		end
+		SendChatMessage(L.Fear:format(lFear), "RAID")
+		table.wipe(FearFails)
+	end
 end
 
 function mod:SPELL_CAST_START(args)
@@ -107,6 +129,14 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerFingerofDeathCD:Start()
 	elseif args:IsSpellID(317872) then
 		specWarnCrimsonBarrier:Show()
+	elseif args:IsSpellID(317873) and DBM:GetRaidUnitId(args.destName) ~= "none" and args.destName then
+		FearTargets[args.destName] = (FearTargets[args.destName] or 0) + 1
+		if self.Options.AnnounceFails then
+			if args:IsPlayer() then
+				yellFear:Yell()
+			end
+			SendChatMessage(L.FearOn:format(args.destName), "RAID")
+		end
 	end
 end
 
@@ -131,10 +161,10 @@ function mod:UNIT_HEALTH(uId)
 		elseif not warned_F2 and hp < 82 then
 			warned_F2 = true
 			warnwarnInfernoSoon:Show()
-		elseif	not warned_F3 and hp < 72 then
+		elseif not warned_F3 and hp < 72 then
 			warned_F3 = true
 			warnwarnInfernoSoon:Show()
-		elseif	not warned_F4 and hp < 62 then
+		elseif not warned_F4 and hp < 62 then
 			warned_F4 = true
 			warnwarnInfernoSoon:Show()
 		elseif not warned_F5 and hp < 52 then
@@ -146,10 +176,10 @@ function mod:UNIT_HEALTH(uId)
 		elseif not warned_F7 and hp < 32 then
 			warned_F7 = true
 			warnwarnInfernoSoon:Show()
-		elseif	not warned_F8 and hp < 22 then
+		elseif not warned_F8 and hp < 22 then
 			warned_F8 = true
 			warnwarnInfernoSoon:Show()
-		elseif	not warned_F9 and hp < 12 then
+		elseif not warned_F9 and hp < 12 then
 			warned_F9 = true
 			warnwarnInfernoSoon:Show()
 		end

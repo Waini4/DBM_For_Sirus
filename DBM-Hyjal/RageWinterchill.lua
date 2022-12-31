@@ -24,11 +24,12 @@ mod:AddTimerLine(L.name)
 local warnOskvCast         = mod:NewCastAnnounce(317788, nil, 2)
 local warnFingerofPain     = mod:NewTargetAnnounce(317801) --перст боли 317801
 local warnCursingBlowStack = mod:NewStackAnnounce(317807, 5, nil, "Tank|Healer") -- 317807 Проклинающий удар
-local warn2plaseSoon	   = mod:NewPrePhaseAnnounce(2, nil, nil, nil, nil, nil, 2)
-local warnPhase			   = mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2)
+local warn2plaseSoon       = mod:NewPrePhaseAnnounce(2, nil, nil, nil, nil, nil, 2)
+local warnPhase            = mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2)
 
 local warnOskvSoon              = mod:NewSpecialWarningMoveAway(317788, nil, nil, nil, 4, 5)
-local specwarnCurseofDeception  = mod:NewSpecialWarning("|cff71d5ff|Hspell:317799|hПроклятие обмана|h|r НЕ ДИСПЕЛИТЬ!", "RemoveCurse")
+local specwarnCurseofDeception  = mod:NewSpecialWarning("|cff71d5ff|Hspell:317799|hПроклятие обмана|h|r НЕ ДИСПЕЛИТЬ!"
+	, "RemoveCurse")
 local specWarnOscv              = mod:NewSpecialWarningGTFO(317788, nil, nil, nil, 1, 5)
 local specWarnCurseofImpotence  = mod:NewSpecialWarningDispel(317793, "RemoveCurse", nil, nil, 1, 5) -- бессилие
 local specWarnCurseofFever      = mod:NewSpecialWarningDispel(317796, "RemoveCurse", nil, nil, 1, 5) -- лихорадка
@@ -43,7 +44,7 @@ local timerCurce2            = mod:NewCDTimer(53.5, 317806, nil, nil, nil, 5, ni
 local timerFingerofPainCD    = mod:NewCDTimer(9, 317801, nil, nil, nil, 4, nil, CL.IMPORTANT_ICON) --перст боли кд 317801
 local timerChainsofDestinies = mod:NewCDTimer(10, 317784, nil, nil, nil, 4, nil, CL.IMPORTANT_ICON) --цепи
 local timerOskvCD            = mod:NewNextTimer(72, 317788, nil, nil, nil, 3, nil, CL.DEADLY_ICON) --оскв
-local timerVipe		         = mod:NewNextTimer(90, 317805, nil, nil, nil, 3, nil, CL.DEADLY_ICON)
+local timerVipe              = mod:NewNextTimer(90, 317805, nil, nil, nil, 3, nil, CL.DEADLY_ICON)
 
 mod:AddInfoFrameOption(317785, true)
 local RangeBuff = DBM:GetSpellInfoNew(317785)
@@ -61,8 +62,6 @@ function mod:FingerTarget(targetname)
 	end
 	warnFingerofPain:Show(targetname)
 end
-
-
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 17767, "Rage Winterchill")
@@ -99,7 +98,7 @@ function mod:SPELL_CAST_START(args)
 		timerOskvCD:Start(stage == 2 and 42 or 72)
 		timerOskvCast:Start(2)
 		timerOskvCast:Schedule(2)
-		warnOskvSoon:Schedule(65)
+		warnOskvSoon:Schedule(stage == 2 and 41 or 65)
 	elseif args:IsSpellID(317801) then
 		self:BossTargetScanner(17767, "FingerTarget", 0.05, 3)
 		--warnFingerofPain:Show()
@@ -164,7 +163,7 @@ function mod:UNIT_HEALTH(uId)
 	local hp = DBM:GetBossHPByUnitID("boss1")
 	if not hp then
 		if self:GetUnitCreatureId(uId) == 17767 then
-				hp = DBM:GetBossHPByUnitID(uId)
+			hp = DBM:GetBossHPByUnitID(uId)
 		end
 	end
 	if hp and hp <= 37 and not warned_p2 then
@@ -185,7 +184,7 @@ function mod:UNIT_HEALTH(uId)
 		timerCursingBlowCD:Start(10)
 		timerFingerofPainCD:Start(20)
 		warnOskvSoon:Cancel()
-		warnOskvSoon:Schedule(28)
+		warnOskvSoon:Schedule(30)
 	end
 
 end

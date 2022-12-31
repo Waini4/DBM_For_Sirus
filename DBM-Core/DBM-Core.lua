@@ -81,9 +81,9 @@ local function currentFullDate()
 end
 
 DBM = {
-	Revision = parseCurseDate("2022".."12".."25".."10".."00".."00"),
+	Revision = parseCurseDate("2022" .. "12" .. "31" .. "14" .. "00" .. "00"),
 	DisplayVersion = GetAddOnMetadata(_addonname, "Version"), -- the string that is shown as version
-	ReleaseRevision = releaseDate(2022, 12, 25, 10, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	ReleaseRevision = releaseDate(2022, 12, 31, 14, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 
 local fakeBWVersion = 7558
@@ -417,9 +417,11 @@ local chatPrefixShort = "<" .. L.DBM .. "> "
 local usedProfile = "Default"
 local dbmIsEnabled = true
 -- Table variables
-local newerVersionPerson, cSyncSender, iconSetRevision, iconSetPerson, loadcIds, inCombat, oocBWComms, combatInfo, bossIds, raid, autoRespondSpam, queuedBattlefield, bossHealth, bossHealthuIdCache, lastBossEngage, lastBossDefeat = {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
+local newerVersionPerson, cSyncSender, iconSetRevision, iconSetPerson, loadcIds, inCombat, oocBWComms, combatInfo, bossIds, raid, autoRespondSpam, queuedBattlefield, bossHealth, bossHealthuIdCache, lastBossEngage, lastBossDefeat = {}
+	, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
 -- False variables
-local voiceSessionDisabled, statusGuildDisabled, statusWhisperDisabled, targetEventsRegistered, combatInitialized, healthCombatInitialized, watchFrameRestore, bossuIdFound, timerRequestInProgress, encounterInProgress = false, false, false, false, false, false, false, false, false, false
+local voiceSessionDisabled, statusGuildDisabled, statusWhisperDisabled, targetEventsRegistered, combatInitialized, healthCombatInitialized, watchFrameRestore, bossuIdFound, timerRequestInProgress, encounterInProgress = false
+	, false, false, false, false, false, false, false, false, false
 -- Nil variables
 local currentSpecID, currentSpecName, currentSpecGroup, pformat, loadOptions, checkWipe, checkBossHealth, checkCustomBossHealth, fireEvent, LastInstanceType, breakTimerStart, AddMsg, delayedFunction, handleSync, savedDifficulty, difficultyText, difficultyIndex, encounterDifficulty, encounterDifficultyText, encounterDifficultyIndex
 -- 0 variables
@@ -833,7 +835,9 @@ do
 			if spellId and event then
 				registeredSpellIds[event][spellId] = (registeredSpellIds[event][spellId] or 0) + 1
 			else
-				DBM:AddMsg(("DBM core 844 event or spellid is nil ->" .. ((spellId and "s ") or "nil") .. (("  ->" .. event and "e ") or "nil")))
+				DBM:AddMsg((
+					"DBM core 844 event or spellid is nil ->" .. ((spellId and "s ") or "nil") .. (("  ->" .. event and "e ") or "nil")
+					))
 			end
 		end
 
@@ -3733,7 +3737,7 @@ do
 							if updateNotificationDisplayed < 3 then
 								updateNotificationDisplayed = 3
 								AddMsg(DBM, L.UPDATEREMINDER_DISABLE)
-							--	DBM:Disable(true)
+								--	DBM:Disable(true)
 							end
 						end
 					end
@@ -5077,12 +5081,14 @@ do
 		if not statusGuildDisabled and updateNotificationDisplayed == 0 then ---t6 is version
 			if thisTime then --Wipe event
 				if wipeHP then
-					SendAddonMessage(DBMPrefix .. "-GCE", modId .. "\t6\t1\t" ..thisTime .. "\t" .. difficultyIndex .. "\t" .. name .. "\t" .. wipeHP, "GUILD")
+					SendAddonMessage(DBMPrefix .. "-GCE",
+						modId .. "\t6\t1\t" .. thisTime .. "\t" .. difficultyIndex .. "\t" .. name .. "\t" .. wipeHP, "GUILD")
 				else
-					SendAddonMessage(DBMPrefix .. "-GCE", modId .. "\t6\t0\t" .. thisTime .. "\t" .. difficultyIndex .. "\t" .. name, "GUILD")
+					SendAddonMessage(DBMPrefix .. "-GCE", modId .. "\t6\t0\t" .. thisTime .. "\t" .. difficultyIndex .. "\t" .. name,
+						"GUILD")
 				end
-			-- else
-			-- 	SendAddonMessage(DBMPrefix .. "-GCB", modId .. "\t3\t" .. difficultyIndex .. "\t" .. name, "GUILD")
+				-- else
+				-- 	SendAddonMessage(DBMPrefix .. "-GCB", modId .. "\t3\t" .. difficultyIndex .. "\t" .. name, "GUILD")
 			end
 		end
 	end
