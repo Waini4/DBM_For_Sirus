@@ -1,9 +1,8 @@
-
 --------------------------------------------------------------
 --------------------------------------------------------------
 
-local mod	= DBM:NewMod("Tidewalker", "DBM-Serpentshrine")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Tidewalker", "DBM-Serpentshrine")
+local L   = mod:GetLocalizedStrings()
 
 local CL = DBM_COMMON_L
 mod:SetRevision("20220609123000") -- fxpw check 20220609123000
@@ -14,53 +13,53 @@ mod:SetUsedIcons(4, 5, 6, 7, 8)
 
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 310152 310151",
-    "SPELL_CAST_SUCCESS 310140",
+	"SPELL_CAST_SUCCESS 310140",
 	"SPELL_AURA_APPLIED 310136 310144 310155 310138 37850 38023 38024 38025 38049",
 	"SPELL_AURA_APPLIED_DOSE 310136 310144 310155 310138 37850 38023 38024 38025 38049",
 	"CHAT_MSG_RAID_BOSS_EMOTE",
 	"UNIT_HEALTH"
 )
 mod:SetModelID(20739)
-local warnMurlocksSoon  = mod:NewAnnounce("WarnMurlocksSoon", 3, "Interface\\Icons\\INV_Misc_MonsterHead_02")
-local warnGraves        = mod:NewTargetAnnounce(37850, 3)
-local warnGlobes        = mod:NewAnnounce("WarnGlobes", 3)
+local warnMurlocksSoon = mod:NewAnnounce("WarnMurlocksSoon", 3, "Interface\\Icons\\INV_Misc_MonsterHead_02")
+local warnGraves       = mod:NewTargetAnnounce(37850, 3)
+local warnGlobes       = mod:NewAnnounce("WarnGlobes", 3)
 
-local timerMurlocks     = mod:NewTimer(50, "TimerMurlocks", "Interface\\Icons\\INV_Misc_MonsterHead_02")
-local timerGravesCD     = mod:NewCDTimer(30, 37850)
+local timerMurlocks = mod:NewTimer(50, "TimerMurlocks", "Interface\\Icons\\INV_Misc_MonsterHead_02")
+local timerGravesCD = mod:NewCDTimer(30, 37850)
 
-local berserkTimer      = mod:NewBerserkTimer(720)
+local berserkTimer = mod:NewBerserkTimer(480)
 
 -----------ХМ-------------
 
-local warnVzglad          = mod:NewStackAnnounce(310136, 5, nil, "Tank") -- Взгляд
-local warnZemla           = mod:NewSoonAnnounce(310152, 2) -- Землетрясение
-local warnHwat            = mod:NewTargetAnnounce(310144, 3) -- Хватка
-local warnSuh             = mod:NewTargetAnnounce(310155, 3) -- Обезвоживание
-local warnKrik            = mod:NewSpellAnnounce(310151, 2) -- Земля
-local warnTop             = mod:NewSpellAnnounce(310140, 2) -- Топот
-local warnMon             = mod:NewSpellAnnounce(310137, 4) -- Топот
-local warnPhase2Soon   	  = mod:NewPrePhaseAnnounce(2)
-local warnPhase2     	  = mod:NewPhaseAnnounce(2)
+local warnVzglad     = mod:NewStackAnnounce(310136, 5, nil, "Tank") -- Взгляд
+local warnZemla      = mod:NewSoonAnnounce(310152, 2) -- Землетрясение
+local warnHwat       = mod:NewTargetAnnounce(310144, 3) -- Хватка
+local warnSuh        = mod:NewTargetAnnounce(310155, 3) -- Обезвоживание
+local warnKrik       = mod:NewSpellAnnounce(310151, 2) -- Земля
+local warnTop        = mod:NewSpellAnnounce(310140, 2) -- Топот
+local warnMon        = mod:NewSpellAnnounce(310137, 4) -- Топот
+local warnPhase2Soon = mod:NewPrePhaseAnnounce(2)
+local warnPhase2     = mod:NewPhaseAnnounce(2)
 
-local specWarnZemla       = mod:NewSpecialWarningMoveAway(310152, nil, nil, nil, 3, 5) -- Землетрясение
-local specWarnKrik		  = mod:NewSpecialWarningCast(310151, "SpellCaster", nil, nil, 1, 2)
+local specWarnZemla = mod:NewSpecialWarningMoveAway(310152, nil, nil, nil, 3, 5) -- Землетрясение
+local specWarnKrik  = mod:NewSpecialWarningCast(310151, "SpellCaster", nil, nil, 1, 2)
 
-local timerVzglad	      = mod:NewTargetTimer(60, 310136, nil, "Tank", nil, 5, nil, CL.TANK_ICON) -- Взгляд
-local timerHwatCD         = mod:NewCDTimer(32, 310144, nil, nil, nil, 3) -- хватка
-local timerHwat           = mod:NewTargetTimer(3, 310144, nil, nil, nil, 3)
-local timerZemlaCast      = mod:NewCastTimer(8, 310152, nil, nil, nil, 1) -- Землетрясение
-local timerZemlaCD        = mod:NewCDTimer(45, 310152, nil, nil, nil, 1) -- Землетрясение -- fxpw непонятно он теперь меньше или больше
-local timerTopCast        = mod:NewCastTimer(3, 310140, nil, nil, nil, 2) -- Топот
-local timerTopCD          = mod:NewCDTimer(20, 310140, nil, nil, nil, 2)
-local timerKrikCast			= mod:NewCastTimer(3, 310151, nil, nil, nil, 2)
-local timerMonCD          = mod:NewCDTimer(12, 310137, nil, nil, nil, 4)
-local timerKrikCD          = mod:NewCDTimer(28, 310151, nil, nil, nil, 2)
-local timerSuhCD          = mod:NewCDTimer(20, 310155, nil, nil, nil, 1)
+local timerVzglad    = mod:NewTargetTimer(60, 310136, nil, "Tank", nil, 5, nil, CL.TANK_ICON) -- Взгляд
+local timerHwatCD    = mod:NewCDTimer(32, 310144, nil, nil, nil, 3) -- хватка
+local timerHwat      = mod:NewTargetTimer(3, 310144, nil, nil, nil, 3)
+local timerZemlaCast = mod:NewCastTimer(8, 310152, nil, nil, nil, 1) -- Землетрясение
+local timerZemlaCD   = mod:NewCDTimer(45, 310152, nil, nil, nil, 1) -- Землетрясение -- fxpw непонятно он теперь меньше или больше
+local timerTopCast   = mod:NewCastTimer(3, 310140, nil, nil, nil, 2) -- Топот
+local timerTopCD     = mod:NewCDTimer(20, 310140, nil, nil, nil, 2)
+local timerKrikCast  = mod:NewCastTimer(3, 310151, nil, nil, nil, 2)
+local timerMonCD     = mod:NewCDTimer(12, 310137, nil, nil, nil, 4)
+local timerKrikCD    = mod:NewCDTimer(28, 310151, nil, nil, nil, 2)
+local timerSuhCD     = mod:NewCDTimer(20, 310155, nil, nil, nil, 1)
 
-local berserkTimerhm      = mod:NewBerserkTimer(360)
-local berserkTimerNM      = mod:NewBerserkTimer(480)
+local berserkTimerhm = mod:NewBerserkTimer(360)
+local berserkTimerNM = mod:NewBerserkTimer(480)
 
-mod:AddSetIconOption("SetIconOnSuhTargets", 310155, true, true, {4, 5, 6, 7, 8})
+mod:AddSetIconOption("SetIconOnSuhTargets", 310155, true, true, { 4, 5, 6, 7, 8 })
 
 mod.vb.phase = 0
 
@@ -75,16 +74,16 @@ do
 	-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
 	-- end
 	function mod:SetSuhIcons()
-		table.sort(SuhTargets, function(v1,v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
+		table.sort(SuhTargets, function(v1, v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 		for _, v in ipairs(SuhTargets) do
 			if self.Options.SetIconOnSklepTargets then
 				self:SetIcon(UnitName(v), SuhIcons, 10)
 			end
 			SuhIcons = SuhIcons - 1
 		end
-			warnSuh:Show(table.concat(SuhTargets, "<, >"))
-			table.wipe(SuhTargets)
-			SuhIcons = 8
+		warnSuh:Show(table.concat(SuhTargets, "<, >"))
+		table.wipe(SuhTargets)
+		SuhIcons = 8
 	end
 end
 
@@ -116,11 +115,13 @@ end
 
 function mod:UNIT_HEALTH(uId)
 	if mod:IsDifficulty("heroic25") then
-		if self.vb.phase == 1 and not warned_preP1 and self:GetUnitCreatureId(uId) == 21213 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.52 then
+		if self.vb.phase == 1 and not warned_preP1 and self:GetUnitCreatureId(uId) == 21213 and
+			UnitHealth(uId) / UnitHealthMax(uId) <= 0.52 then
 			warned_preP1 = true
 			warnPhase2Soon:Show()
 		end
-		if self.vb.phase == 1 and not warned_preP2 and self:GetUnitCreatureId(uId) == 21213 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.50 then
+		if self.vb.phase == 1 and not warned_preP2 and self:GetUnitCreatureId(uId) == 21213 and
+			UnitHealth(uId) / UnitHealthMax(uId) <= 0.50 then
 			warned_preP2 = true
 			self.vb.phase = 2
 			warnPhase2:Show()
@@ -132,7 +133,7 @@ end
 
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
-	if  spellId == 310152 then -- Землетрясение
+	if spellId == 310152 then -- Землетрясение
 		warnZemla:Show(10)
 		timerZemlaCast:Start()
 		timerZemlaCD:Start()
@@ -155,8 +156,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 	end
 end
 
-
-local spellIds ={
+local spellIds = {
 	["37850"] = true,
 	["38023"] = true,
 	["38024"] = true,
@@ -192,11 +192,10 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg)
 		timerMurlocks:Start(50)
 	elseif msg == L.EmoteGraves then
 		timerGravesCD:Start()
-		self:ScheduleMethod(0.2 , "AnnounceGraves")
+		self:ScheduleMethod(0.2, "AnnounceGraves")
 	elseif msg == L.EmoteGlobes then
 		warnGlobes:Show()
 	end
 end
-
 
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED

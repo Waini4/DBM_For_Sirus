@@ -25,7 +25,7 @@ mod:RegisterEventsInCombat(
 )
 -----обычка-----
 local timerNextPounding  = mod:NewCDTimer(14, 34162, nil, nil, nil, 1)
-local timerNextKnockback = mod:NewCDTimer(30, 25778, nil, "Healer", nil, 5, CL.HEALER_ICON)
+local timerNextKnockback = mod:NewCDTimer(20, 25778, nil, "Healer", nil, 5, CL.HEALER_ICON)
 ------героик------
 
 local warnPhase1 = mod:NewAnnounce("Phase1", 2) -- Фаза пониженного урона
@@ -50,7 +50,7 @@ local timerReloadCD = mod:NewCDTimer(60, 308474, nil, nil, nil, 2, nil, CL.DAMAG
 local timerSignCD   = mod:NewCDTimer(16, 308471, nil, nil, nil, 7) -- Знак
 
 
-local berserkTimer = mod:NewBerserkTimer(600)
+local berserkTimer = mod:NewBerserkTimer(360)
 
 mod:AddSetIconOption("SetIconOnSignTargets", 308471, true, true, { 3, 4, 5, 6, 7, 8 })
 mod:AddBoolOption("AnnounceSign", false)

@@ -1,9 +1,8 @@
-
 -----------------------------------------------
 -----------------------------------------------
 
-local mod	= DBM:NewMod("LurkerBelow", "DBM-Serpentshrine")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("LurkerBelow", "DBM-Serpentshrine")
+local L   = mod:GetLocalizedStrings()
 
 local CL = DBM_COMMON_L
 mod:SetRevision("20220609123000") -- fxpw check 20220609123000
@@ -15,15 +14,15 @@ mod:RegisterEventsInCombat(
 	"CHAT_MSG_RAID_BOSS_EMOTE"
 )
 
-local warnSubmerge        = mod:NewAnnounce("WarnSubmerge", 3)
-local warnEmerge          = mod:NewAnnounce("WarnEmerge", 3)
+local warnSubmerge = mod:NewAnnounce("WarnSubmerge", 3)
+local warnEmerge   = mod:NewAnnounce("WarnEmerge", 3)
 
-local specWarnSpout       = mod:NewSpecialWarningRun(37433)
+local specWarnSpout = mod:NewSpecialWarningRun(37433)
 
-local timerSubmerge       = mod:NewTimer(50, "Submerge", "Interface\\AddOns\\DBM-Core\\Textures\\CryptFiendBurrow.blp")
-local timerEmerge         = mod:NewTimer(64, "Emerge", "Interface\\AddOns\\DBM-Core\\Textures\\CryptFiendUnBurrow.blp")
-local timerSpout          = mod:NewCastTimer(14, 37433)
-local timerSpoutCD        = mod:NewCDTimer(14, 37433)
+local timerSubmerge = mod:NewTimer(50, "Submerge", "Interface\\AddOns\\DBM-Core\\Textures\\CryptFiendBurrow.blp")
+local timerEmerge   = mod:NewTimer(64, "Emerge", "Interface\\AddOns\\DBM-Core\\Textures\\CryptFiendUnBurrow.blp")
+local timerSpout    = mod:NewCastTimer(14, 37433)
+local timerSpoutCD  = mod:NewCDTimer(14, 37433)
 
 function mod:Submerge()
 	warnSubmerge:Show()
@@ -43,8 +42,8 @@ end
 
 function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 21217, "The Lurker Below")
-	timerSubmerge:Start(90)
-	self:ScheduleMethod(90, "Submerge")
+	timerSubmerge:Start(60)
+	self:ScheduleMethod(60, "Submerge")
 	timerSpoutCD:Start(47)
 end
 

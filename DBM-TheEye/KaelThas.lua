@@ -16,6 +16,7 @@ mod:RegisterEvents(
 	"UNIT_TARGET",
 	"SPELL_AURA_REMOVED 308750 36797 308797",
 	"CHAT_MSG_MONSTER_YELL",
+	"CHAT_MSG_MONSTER_EMOTE",
 	"SPELL_CAST_SUCCESS 36797 37018 36723 308749 308743 36815 36731 308734"
 )
 
@@ -55,7 +56,7 @@ local timerBombCD        = mod:NewCDTimer(25, 37036, nil, nil, nil, 3)
 local timerFlameStrike   = mod:NewCDTimer(35, 36731, nil, nil, nil, 3)
 
 local timerBarrierCD = mod:NewCDTimer(70, 36815, nil, nil, nil, 3)
-local timerPhoenixCD = mod:NewCDTimer(60, 36723, nil, nil, nil, 1, nil, CL.DAMAGE_ICON)
+local timerPhoenixCD = mod:NewCDTimer(45, 36723, nil, nil, nil, 1, nil, CL.DAMAGE_ICON)
 local timerMCCD      = mod:NewCDTimer(70, 36797, nil, nil, nil, 3)
 
 local timerGravity   = mod:NewBuffFadesTimer(32.5, 35941, nil, nil, nil, 4, nil, CL.DEADLY_ICON, nil, 2, 5) --- хм
@@ -91,7 +92,8 @@ local timerCataCD     = mod:NewCDTimer(126, 308790, nil, nil, nil, 2)
 local timerCataCast   = mod:NewCastTimer(8, 308790, nil, nil, nil, 2)
 local timerVzrivCD    = mod:NewCDTimer(115, 308797, nil, nil, nil, 3)
 local timerVzrivCast  = mod:NewCastTimer(5, 308797, nil, nil, nil, 3)
-local timerGravityH   = mod:NewCDTimer(63, 35941, "Interface\\Icons\\Spell_Magic_FeatherFall", nil, nil, 6, nil, CL.DEADLY_ICON) -- хм
+local timerGravityH   = mod:NewCDTimer(63, 35941, "Interface\\Icons\\Spell_Magic_FeatherFall", nil, nil, 6, nil,
+	CL.DEADLY_ICON) -- хм
 local timerGravityHCD = mod:NewCDTimer(150, 35941, nil, nil, nil, 6, nil, CL.DEADLY_ICON) -- хм
 local timerAvengerS   = mod:NewCDTimer(22, 308743, nil, nil, nil, 3)
 
@@ -337,10 +339,10 @@ function mod:SPELL_CAST_SUCCESS(args)
 	elseif args:IsSpellID(36797) then
 		if args:IsPlayer() and self.Options.RemoveWeaponOnMindControl then
 			-- if self:IsWeaponDependent("player") then --TODO IsWeaponDependent
-				PickupInventoryItem(16)
-				PutItemInBackpack()
-				PickupInventoryItem(17)
-				PutItemInBackpack()
+			PickupInventoryItem(16)
+			PutItemInBackpack()
+			PickupInventoryItem(17)
+			PutItemInBackpack()
 			if select(2, UnitClass("player")) == "HUNTER" then
 				PickupInventoryItem(18)
 				PutItemInBackpack()
@@ -516,7 +518,7 @@ function mod:SPELL_AURA_REMOVED(args)
 			DBM.Nameplate:Hide(args.destGUID, 308749)
 		end
 	elseif args:IsSpellID(308797) then
-		if  self.Options.Nameplate2 then
+		if self.Options.Nameplate2 then
 			DBM.Nameplate:Hide(args.destGUID, 308797)
 		end
 	end

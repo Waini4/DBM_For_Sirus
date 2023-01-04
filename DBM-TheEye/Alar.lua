@@ -1,4 +1,3 @@
-
 -------------------------------------------
 -------------------------------------------
 
@@ -35,13 +34,13 @@ local warnBomb        = mod:NewTargetAnnounce(35181, 3)
 local specWarnBomb = mod:NewSpecialWarningYou(35181)
 -- local specWarnPatch				= mod:NewSpecialWarningMove(35383)
 
-local timerNextPlat    = mod:NewTimer(33, "TimerNextPlat", 46599)
+local timerNextPlat    = mod:NewTimer(43, "TimerNextPlat", 46599)
 local timerFeather     = mod:NewCastTimer(10, 34229)
 local timerNextFeather = mod:NewCDTimer(180, 34229)
-local timerNextCharge  = mod:NewCDTimer(22, 35412)
+local timerNextCharge  = mod:NewCDTimer(20, 35412)
 local timerNextBomb    = mod:NewCDTimer(46, 35181)
 
-local berserkTimerN = mod:NewBerserkTimer(1200)
+local berserkTimerN = mod:NewBerserkTimer(360)
 
 -- Heroic
 local specWarnPhase2Soon    = mod:NewSpecialWarning("WarnPhase2Soon", 1) -- Вторая фаза

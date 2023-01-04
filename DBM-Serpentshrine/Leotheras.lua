@@ -17,7 +17,9 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 37676 310510 310508 310503 310487 310521 310514",
 	"UNIT_HEALTH",
 	"SPELL_AURA_APPLIED 37640 37676 310480 310502 310502 310521 310496 310497 310514",
-	"SPELL_AURA_REMOVED 37676"
+	"SPELL_AURA_REMOVED 37676",
+	"SPELL_HEAL",
+	"SPELL_PERIODIC_HEAL"
 )
 
 -- local warnDemonSoon         = mod:NewAnnounce("WarnDemonSoon", 3, "Interface\\Icons\\Spell_Shadow_Metamorphosis")
@@ -77,17 +79,19 @@ local timerPepelCast  = mod:NewCastTimer(3, 310514, nil, nil, nil, 3) -- Исп�
 mod:AddSetIconOption("SetIconOnDemonTargets", 37676, true, true, { 5, 6, 7, 8 })
 mod:AddSetIconOption("SetIconOnPepelTargets", 310514, true, true, { 4, 5, 6, 7 })
 mod:AddSetIconOption("KleiIcon", 310496, true, true, { 8 })
+mod:AddBoolOption("PepelShieldFrame", false, "misc")
 mod:AddBoolOption("AnnounceKlei", false)
 mod:AddBoolOption("AnnouncePepel", false)
 
 mod.vb.phase = 0
+mod.vb.PepelCount = 0
 local demonTargets = {}
 local warned_preP1 = false
 local warned_preP2 = false
 local PepelTargets = {}
 local KleiIcons = 8
 local uId1 = DBM:GetRaidUnitId(21215)
-mod:AddInfoFrameOption(uId1, true)
+local PepelTargetName
 
 do
 	-- local function sort_by_group(v1, v2)
@@ -98,7 +102,7 @@ do
 			table.sort(PepelTargets, function(v1, v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
 			local PepelIcons = 7
 			for _, v in ipairs(PepelTargets) do
-				if mod.Options.AnnouncePepel then
+				if mod.Options.IncinerateShieldFrame then
 					if DBM:GetRaidRank() > 0 then
 						SendChatMessage(L.PepelIcon:format(PepelIcons, UnitName(v)), "RAID_WARNING")
 					else
@@ -119,6 +123,58 @@ do
 	end
 end
 
+local setPepelTarget, clearPepelTarget, updateInfoFrame
+local diffMaxAbsorb = { heroic25 = 150000 }
+do
+	local incinerateTarget
+	local healed = 0
+	local maxAbsorb = diffMaxAbsorb[DBM:GetCurrentInstanceDifficulty()] or 0
+
+	local twipe = table.wipe
+	local lines, sortedLines = {}, {}
+	local function addLine(key, value)
+		-- sort by insertion order
+		lines[key] = value
+		sortedLines[#sortedLines + 1] = key
+	end
+
+	local function getShieldHP()
+		return math.max(1, math.floor(healed / maxAbsorb * 100))
+	end
+
+	function mod:SPELL_HEAL(_, _, _, destGUID, _, _, _, _, _, _, _, absorbed)
+		if destGUID == incinerateTarget then
+			healed = healed + (absorbed or 0)
+		end
+	end
+
+	mod.SPELL_PERIODIC_HEAL = mod.SPELL_HEAL
+
+	function setPepelTarget(_, target, name)
+		incinerateTarget = target
+		healed = 0
+		DBM.BossHealth:RemoveBoss(getShieldHP)
+		DBM.BossHealth:AddBoss(getShieldHP, L.PepelTarget:format(name))
+	end
+
+	function clearPepelTarget(self, name)
+		DBM.BossHealth:RemoveBoss(getShieldHP)
+		healed = 0
+		if self.Options.PepelIcon then
+			self:RemoveIcon(name)
+		end
+	end
+
+	updateInfoFrame = function()
+		twipe(lines)
+		twipe(sortedLines)
+		if PepelTargetName then
+			addLine(PepelTargetName, getShieldHP() .. "%")
+		end
+		return lines, sortedLines
+	end
+end
+
 function mod:WarnDemons()
 	warnDemons:Show(table.concat(demonTargets, "<, >"))
 	if self.Options.SetIconOnDemonTargets then
@@ -132,15 +188,21 @@ function mod:WarnDemons()
 	table.wipe(demonTargets)
 end
 
+function mod:FlashFunc(args)
+	local targetname = self:GetBossTarget(21215)
+	if not targetname then return end
+	if self.Options.SetIconOnStrela then
+		self:SetIcon(targetname, 8, 6)
+	end
+	warnVsp:Show(args.destName, args.amount or 1)
+end
+
 function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 21215, "Leotheras the Blind")
 	table.wipe(demonTargets)
 	self:SetStage(1)
 	if mod:IsDifficulty("heroic25") then
-		if self.Options.InfoFrame then
-			DBM.InfoFrame:SetHeader(uId1)
-			DBM.InfoFrame:Show(8, "enemypower", uId1)
-		end
+		self.vb.PepelCount = 0
 	else
 		berserkTimer:Start()
 		timerDemon:Start(60)
@@ -214,10 +276,17 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif spellId == 310514 then
 		PepelTargets[#PepelTargets + 1] = args.destName
+		self.vb.PepelCount = self.vb.PepelCount + 1
 		if args:IsPlayer() then
 			specWarnPepely:Show(args.destName)
 		end
 		self:ScheduleMethod(0.1, "SetPepelIcons")
+		if self.Options.InfoFrame and not DBM.InfoFrame:IsShown() then
+			PepelTargetName = args.destName
+			DBM.InfoFrame:SetHeader(args.spellName)
+			DBM.InfoFrame:Show(6, "function", updateInfoFrame, false, true)
+		end
+		setPepelTarget(self, args.destGUID, args.destName)
 	end
 end
 
@@ -225,6 +294,12 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 37676 then
 		self:RemoveIcon(args.destName)
+	elseif spellId == 310514 then
+		self.vb.PepelCount = self.vb.PepelCount - 1
+		if self.Options.InfoFrame and self.vb.fleshCount == 0 then
+			DBM.InfoFrame:Hide()
+		end
+		clearPepelTarget(self, args.destName)
 	end
 end
 
@@ -242,6 +317,7 @@ function mod:SPELL_CAST_START(args)
 	elseif spellId == 310487 then
 		specWarnPechat:Show()
 	elseif spellId == 310521 then
+		self:BossTargetScanner(21215, "ShadowCrashTarget", 0.05, 1)
 		warnVsp:Show()
 	elseif spellId == 310514 then
 		specWarnPepel:Show()
@@ -260,7 +336,7 @@ function mod:UNIT_HEALTH(uId)
 				warned_preP1 = true
 				warnPhase2Soon:Show()
 			end
-		elseif self:GetStage() == 1 and not warned_preP2  then
+		elseif self:GetStage() == 1 and not warned_preP2 then
 			if mod:IsDifficulty("heroic25") and DBM:GetBossHPByUnitID(uId) <= 35 then
 				warned_preP2 = true
 				self:SetStage(2)

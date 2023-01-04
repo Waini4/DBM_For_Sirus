@@ -34,12 +34,12 @@ local warnElemental = mod:NewAnnounce("WarnElemental", 4)
 local specWarnCore   = mod:NewSpecialWarningYou(38132)
 local specWarnCharge = mod:NewSpecialWarningRun(38280)
 
-local timerStrider   = mod:NewTimer(66, "Strider", "Interface\\Icons\\INV_Misc_Fish_13", nil, nil, 1)
-local timerElemental = mod:NewTimer(53, "TaintedElemental", "Interface\\Icons\\Spell_Nature_ElementalShields", nil, nil,
+local timerStrider   = mod:NewTimer(45, "Strider", "Interface\\Icons\\INV_Misc_Fish_13", nil, nil, 1)
+local timerElemental = mod:NewTimer(45, "TaintedElemental", "Interface\\Icons\\Spell_Nature_ElementalShields", nil, nil,
 	1)
-local timerNaga      = mod:NewTimer(47.5, "Naga", "Interface\\Icons\\INV_Misc_MonsterHead_02", nil, nil, 1)
+local timerNaga      = mod:NewTimer(45, "Naga", "Interface\\Icons\\INV_Misc_MonsterHead_02", nil, nil, 1)
 local timerCharge    = mod:NewTargetTimer(20, 38280, nil, nil, nil, 4)
-local berserkTimer          = mod:NewBerserkTimer(600)
+local berserkTimer   = mod:NewBerserkTimer(600)
 
 --------------------------------Героик--------------------------------
 
