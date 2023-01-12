@@ -1,8 +1,8 @@
 ---------------------------------------------
 ---------------------------------------------
 
-local mod = DBM:NewMod("Hydross", "DBM-Serpentshrine")
-local L   = mod:GetLocalizedStrings()
+local mod      = DBM:NewMod("Hydross", "DBM-Serpentshrine")
+local L        = mod:GetLocalizedStrings()
 local tonumber = tonumber
 mod:SetRevision("20220609123000") -- fxpw check 20220609123000
 
@@ -21,7 +21,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_REMOVED 309046 309065",
 	"CHAT_MSG_MONSTER_YELL",
 	"SPELL_CAST_START 309052 309069 309072"
-	-- "UNIT_HEALTH"
+-- "UNIT_HEALTH"
 
 )
 
@@ -53,15 +53,16 @@ local yellSklep      = mod:NewYell(309046)
 local yellSklepFades = mod:NewShortFadesYell(309046)
 local yellKor        = mod:NewYell(309065)
 
-local timerSklepCD   = mod:NewCDTimer(32, 309046, nil, nil, nil, 3) -- лужа
-local timerKorCD     = mod:NewCDTimer(32, 309065, nil, nil, nil, 3) -- коррозия
-local timerArrowCD   = mod:NewCDTimer(25, 309052, nil, nil, nil, 3) -- залп вод
-local timerAyaCD     = mod:NewCDTimer(25, 309069, nil, nil, nil, 3) -- залп яда
-local timerArrowCast = mod:NewCastTimer(1.5, 309052, nil, nil, nil, 3) -- залп  вод каст
-local timerAyaCast   = mod:NewCastTimer(1.5, 309069, nil, nil, nil, 3) -- залп  яда каст
-local timerYadCast   = mod:NewCastTimer(25, 309072, nil, nil, nil, 6) -- яд
-local timerChisCast  = mod:NewCastTimer(20, 309055, nil, nil, nil, 6) -- чистота
-local timerStaktimer = mod:NewTargetTimer(30, 309068, nil, "Healer|Tank", nil, 1)
+local timerSklepCD    = mod:NewCDTimer(32, 309046, nil, nil, nil, 3) -- лужа
+local timerKorCD      = mod:NewCDTimer(32, 309065, nil, nil, nil, 3) -- коррозия
+local timerArrowCD    = mod:NewCDTimer(25, 309052, nil, nil, nil, 3) -- залп вод
+local timerAyaCD      = mod:NewCDTimer(25, 309069, nil, nil, nil, 3) -- залп яда
+local timerArrowCast  = mod:NewCastTimer(1.5, 309052, nil, nil, nil, 3) -- залп  вод каст
+local timerAyaCast    = mod:NewCastTimer(1.5, 309069, nil, nil, nil, 3) -- залп  яда каст
+local timerYadCast    = mod:NewCastTimer(25, 309072, nil, nil, nil, 6) -- яд
+local timerChisCast   = mod:NewCastTimer(20, 309055, nil, nil, nil, 6) -- чистота
+local timerStaktimer  = mod:NewTargetTimer(30, 309068, "Диспел танка: ", "Healer|Tank", nil, 1)
+local timerStak1timer = mod:NewTargetTimer(30, 309051, "Диспел танка: ", "Healer|Tank", nil, 1)
 
 mod:AddSetIconOption("SetIconOnSklepTargets", 309046, true, true, { 6, 7, 8 })
 mod:AddSetIconOption("SetIconOnKorTargets", 309065, true, true, { 6, 7, 8 })
@@ -189,6 +190,8 @@ function mod:SPELL_AURA_APPLIED(args) -- все хм --
 		end
 	elseif spellId == 309068 then
 		timerStaktimer:Start(args.destName)
+	elseif spellId == 309051 then
+		timerStak1timer:Start(args.destName)
 	end
 end
 

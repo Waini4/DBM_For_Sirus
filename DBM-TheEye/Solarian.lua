@@ -68,10 +68,12 @@ local timerFlashVoid  = mod:NewCDTimer(75, 308585, nil, nil, nil, 6, nil, CL.HER
 
 mod:AddNamePlateOption("Nameplate1", 42783, true)
 mod:AddNamePlateOption("Nameplate2", 308548, true)
-local priestsN = true
+mod:AddBoolOption("SetPriestIcon")
+--local priestsN = true
 local priestsH = true
 local provid = true
 local KolTargets = {}
+mod.vb.PriestIcon = 7
 -- local warned_preP1 = false
 -- local warned_preP2 = false
 
@@ -117,7 +119,7 @@ function mod:PriestNIcon() --об
 	if DBM:GetRaidRank() >= 1 then
 		for i = 1, GetNumRaidMembers() do
 			if UnitName("raid" .. i .. "target") == L.PriestN then
-				priestsN = false
+				--priestsN = false
 				SetRaidTarget("raid" .. i .. "target", 6)
 				break
 			end
@@ -132,7 +134,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 			timerNextWrathN:Start()
 		end
 	elseif msg == L.YellPriests then
-		priestsN = true
+		--priestsN = true
 		timerAdds:Start()
 		warnAddsSoon:Schedule(52)
 	end
@@ -246,10 +248,25 @@ end
 function mod:UNIT_TARGET()
 	if priestsH then
 		self:PriestHIcon()
-	elseif priestsN then -- TODO: что за новый и опять переназначение
+	end
+	--[[if priestsN then -- TODO: что за новый и опять переназначение
 		self:PriestNIcon()
-	elseif provid then
+	end]]
+	if provid then
 		self:ProvidIcon()
+	end
+	if self.Options.SetPriestIcon then
+		if DBM:GetRaidRank() >= 1 then
+			for i = 1, GetNumRaidMembers() do
+				if UnitName("raid" .. i .. "target") == L.PriestN then
+					SetRaidTarget("raid" .. i .. "target", self.vb.PriestIcon)
+					self.vb.PriestIcon = self.vb.PriestIcon - 1
+					if self.vb.PriestIcon <= 6 then
+						self.vb.PriestIcon = 7
+					end
+				end
+			end
+		end
 	end
 end
 
