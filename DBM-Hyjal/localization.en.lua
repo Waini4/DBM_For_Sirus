@@ -27,6 +27,11 @@ L:SetGeneralLocalization({
 	name = "Kaz'rogal"
 })
 
+L:SetOptionLocalization({
+	HpOff = "Если выбивает ошибки отключите данную функцию",
+	SetAbbIcon = "Ставить метки на инферналов(1 фаза)",
+})
+
 ---------------
 --  Azgalor  --
 ---------------

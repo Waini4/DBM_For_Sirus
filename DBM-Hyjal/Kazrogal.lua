@@ -13,7 +13,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 318819 318825 318845 318822 318828 318839",
 	--"SPELL_AURA_REFRESH ",
 	"SPELL_AURA_REMOVED 318822",
-	-- "UNIT_TARGET",
+	"UNIT_TARGET",
 	--"SPELL_SUMMON ",
 	"UNIT_HEALTH"
 )
@@ -70,7 +70,7 @@ mod.vb.AbyssalsCount = 0
 mod.vb.FallofFilthCount = 0
 local kik = false
 mod:AddInfoFrameOption(318819, true)
--- mod:AddBoolOption("SetAbbIcon")
+mod:AddBoolOption("SetAbbIcon",false)
 -- mod:AddBoolOption("HpOff", true)
 
 local function Abyssals(self)
@@ -92,6 +92,7 @@ function mod:OnCombatStart(delay)
 	self.vb.HorrorflamesCount = 0
 	self.vb.AbyssalsCount = 0
 	self.vb.FallofFilthCount = 0
+	self.vb.AbbIcon = 8
 	kik = false
 	-- warned_F2 = false
 	-- warned_F3 = false
@@ -214,4 +215,34 @@ function mod:UNIT_HEALTH(uId)
 		end
 	end
 
+end
+
+local function ScanWhitName(name)
+	local target
+	for i = 1, GetNumRaidMembers() do
+		local unit = "raid" .. i .. "target"
+		local guid = UnitGUID(unit)
+		-- if name == "Некромант" then
+			if guid and UnitName(unit) == name and not AbbGuids[guid] then
+				target = unit
+				AbbGuids[guid] = true
+				return target
+			end
+		-- end
+	end
+	return nil
+end
+function mod:UNIT_TARGET()
+	if self.Options.SetAbbIcon then
+		local uid = ScanWhitName("Нестабильный абиссал")
+		if uid then
+			if self:GetStage() == 1 then
+				self:SetIcon(uid, self.vb.AbbIcon)
+				mod.vb.AbbIcon = mod.vb.AbbIcon - 1
+				if mod.vb.AbbIcon < 6 then
+					mod.vb.AbbIcon = 8
+				end
+			end
+		end
+	end
 end
