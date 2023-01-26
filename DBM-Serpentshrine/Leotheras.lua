@@ -321,7 +321,7 @@ function mod:SPELL_CAST_START(args)
 	elseif spellId == 310487 then
 		specWarnPechat:Show()
 	elseif spellId == 310521 then
-		-- self:BossTargetScanner(21215, "ShadowCrashTarget", 0.05, 1) -- dont has function for return value
+		-- self:BossTargetScanner(21215, "ShadowCrashTarget", 0.05, 1) -- dont has function for return value -- todo
 		warnVsp:Show()
 	elseif spellId == 310514 then
 		specWarnPepel:Show()
