@@ -148,7 +148,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(318828) then
 		self.vb.BurningCount = self.vb.BurningCount + 1
 		timerBurningSoulCD:Start(nil, self.vb.BurningCount + 1)
-	elseif args:IsSpellID(318826) and stage == 2 then
+	elseif args:IsSpellID(318826) and stage == 3 then
 		self.vb.AbyssalsCount = self.vb.AbyssalsCount + 1
 		timerUnstableAbyssalsCD:Start(20, self.vb.AbyssalsCount + 1)
 		specwarnAbbasSoon:Schedule(16)
