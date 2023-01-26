@@ -203,6 +203,10 @@ function mod:OnCombatStart()
 	self:SetStage(1)
 	if mod:IsDifficulty("heroic25") then
 		self.vb.PepelCount = 0
+		if self.Options.PepelShieldFrame then
+			DBM.BossHealth:Show(L.name)
+			DBM.BossHealth:AddBoss(21215, L.name)
+		end
 	else
 		berserkTimer:Start()
 		timerDemon:Start(60)

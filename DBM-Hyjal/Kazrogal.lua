@@ -14,13 +14,13 @@ mod:RegisterEventsInCombat(
 	--"SPELL_AURA_REFRESH ",
 	"SPELL_AURA_REMOVED 318822",
 	-- "UNIT_TARGET",
---"SPELL_SUMMON ",
+	--"SPELL_SUMMON ",
 	"UNIT_HEALTH"
 )
 
 
-local warn2phaseSoon	 = mod:NewPrePhaseAnnounce(2, nil, nil, nil, nil, nil, 2)
-local warnPhase			 = mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2)
+local warn2phaseSoon = mod:NewPrePhaseAnnounce(2, nil, nil, nil, nil, nil, 2)
+local warnPhase      = mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2)
 
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(1))
 local warnMark             = mod:NewTargetNoFilterAnnounce(318819, 3)
@@ -38,23 +38,25 @@ local specWarnGTFO                 = mod:NewSpecialWarningGTFO(318825, nil, nil,
 local timerMarkCD                   = mod:NewNextCountTimer(24, 318818, nil, nil, nil, 2, nil, CL.IMPORTANT_ICON)
 local timerBurningSoulCD            = mod:NewNextCountTimer(20, 318828, nil, "RemoveMagic", nil, 3, nil, CL.HEALER_ICON)
 local timerHorrorflamesCD           = mod:NewNextCountTimer(16, 318824, nil, nil, nil, 3)
-local timerUnstableAbyssalsCD       = mod:NewNextCountTimer(90, 318825, "Падение Абиссалов", nil, nil, 4, nil, CL.DEADLY_ICON)
+local timerUnstableAbyssalsCD       = mod:NewNextCountTimer(90, 318825, "Падение Абиссалов", nil, nil, 4
+	, nil, CL.DEADLY_ICON)
 local timerInfernalStrikeCD         = mod:NewNextTimer(9, 318823, nil, "Tank|Healer", nil, 4, nil, CL.TANK_ICON)
-local timerunstoppableonslaughtBuff = mod:NewBuffActiveTimer(25, 318822, nil, "HasInterrupt", nil, 4, nil, CL.INTERRUPT_ICON)
+local timerunstoppableonslaughtBuff = mod:NewBuffActiveTimer(25, 318822, nil, "HasInterrupt", nil, 4, nil,
+	CL.INTERRUPT_ICON)
 local timerFatalBlowofFilthCD       = mod:NewNextTimer(17, 318833, nil, "Tank|Healer", nil, 4, nil, CL.TANK_ICON)
 
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(2))
-local specwarnFallofFilthSoon      = mod:NewSpecialWarningSoon(318834, nil, nil, nil, 1, 3)
-local specWarnMutilation           = mod:NewSpecialWarningDispel(318839, "RemoveCurse", nil, nil, 1, 3)
-local specWarnFallofFilth          = mod:NewSpecialWarningInterrupt(318834, "HasInterrupt", nil, nil, 1, 2)
-local timerMutilationlCD           = mod:NewNextTimer(20, 318839, nil, "RemoveCurse", nil, 3, nil, CL.CURSE_ICON)
+local specwarnFallofFilthSoon = mod:NewSpecialWarningSoon(318834, nil, nil, nil, 1, 3)
+local specWarnMutilation      = mod:NewSpecialWarningDispel(318839, "RemoveCurse", nil, nil, 1, 3)
+local specWarnFallofFilth     = mod:NewSpecialWarningInterrupt(318834, "HasInterrupt", nil, nil, 1, 2)
+local timerMutilationlCD      = mod:NewNextTimer(20, 318839, nil, "RemoveCurse", nil, 3, nil, CL.CURSE_ICON)
 
-local timerFallofFilthCD           = mod:NewNextCountTimer(17, 318834, nil, nil, nil, 3)
+local timerFallofFilthCD = mod:NewNextCountTimer(17, 318834, nil, nil, nil, 3)
 
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(3))
 local warnInfernalStrike3p = mod:NewCastAnnounce(318841, 4, 1.5)
 
-local timerInfernalStrike3pCD       = mod:NewNextTimer(6, 318841, nil, "Tank|Healer", nil, 4, nil, CL.TANK_ICON)
+local timerInfernalStrike3pCD = mod:NewNextTimer(6, 318841, nil, "Tank|Healer", nil, 4, nil, CL.TANK_ICON)
 
 --local MarkBuff = DBM:GetSpellInfoNew(318819)
 -- local warned_F2 = false
@@ -70,6 +72,16 @@ local kik = false
 mod:AddInfoFrameOption(318819, true)
 -- mod:AddBoolOption("SetAbbIcon")
 -- mod:AddBoolOption("HpOff", true)
+
+local function Abyssals(self)
+	self.vb.AbyssalsCount = self.vb.AbyssalsCount + 1
+	timerUnstableAbyssalsCD:Start(nil, self.vb.AbyssalsCount + 1)
+	self:Schedule(90, Abyssals, self)
+	specwarnAbbasSoon:Schedule(87)
+	specwarnAbbasSoon:Schedule(89)
+	--warnAbbasSoon:Schedule(55)
+	--warnAbbasSoon:Schedule(59)
+end
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 17888, "Kaz'rogal")
@@ -90,10 +102,12 @@ function mod:OnCombatStart(delay)
 	specwarnAbbasSoon:Schedule(56)
 	specwarnAbbasSoon:Schedule(59)
 	timerUnstableAbyssalsCD:Start(60, self.vb.AbyssalsCount)
+	self:Schedule(60, Abyssals, self)
 end
 
 function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 17888, "Kaz'rogal", wipe)
+	self:Unschedule(Abyssals)
 end
 
 function mod:SPELL_CAST_START(args)
@@ -134,11 +148,11 @@ function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(318828) then
 		self.vb.BurningCount = self.vb.BurningCount + 1
 		timerBurningSoulCD:Start(nil, self.vb.BurningCount + 1)
-	elseif args:IsSpellID(318826) and self:AntiSpam(4) then
+	elseif args:IsSpellID(318826) and stage == 2 then
 		self.vb.AbyssalsCount = self.vb.AbyssalsCount + 1
-		timerUnstableAbyssalsCD:Start(stage == 1 and 90 or 20 , self.vb.AbyssalsCount + 1)
-		specwarnAbbasSoon:Schedule(stage == 1 and 86 or 16)
-		specwarnAbbasSoon:Schedule(stage == 1 and 89 or 19)
+		timerUnstableAbyssalsCD:Start(20, self.vb.AbyssalsCount + 1)
+		specwarnAbbasSoon:Schedule(16)
+		specwarnAbbasSoon:Schedule(19)
 	end
 end
 
@@ -164,6 +178,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		kik = false
 	end
 end
+
 local hp
 local stage
 function mod:UNIT_HEALTH(uId)
@@ -171,8 +186,6 @@ function mod:UNIT_HEALTH(uId)
 	if self:GetUnitCreatureId(uId) == 17888 then
 		hp = DBM:GetBossHPByUnitID(uId)
 	end
-	-- if self.Options.HpOff then
-	 -- or hp < 82 or hp < 72 or hp < 62 or hp < 52 or hp < 42 or hp < 32 or hp < 22 or hp < 12 then
 	if stage and hp then
 		if hp < 67 and stage == 1 then
 			self:SetStage(2)
@@ -202,30 +215,3 @@ function mod:UNIT_HEALTH(uId)
 	end
 
 end
--- local function ScanWhitName(name)
--- 	local target
--- 	for i = 1, GetNumRaidMembers() do
--- 		local unit = "raid" .. i .. "target"
--- 		local guid = UnitGUID(unit)
--- 		-- if name == "Некромант" then
--- 			if UnitName(unit) == name and guid and not AbbGuids[guid] then
--- 				target = unit
--- 				AbbGuids[guid] = true
--- 				return target
--- 			end
--- 		-- end
--- 	end
--- 	return nil
--- end
--- function mod:UNIT_TARGET()
--- 	if self.Options.SetAbbIcon then
--- 		local uid = ScanWhitName("Нестабильный абиссал")
--- 		if uid then
--- 			self:SetIcon(uid, self.vb.AbbIcon)
--- 			mod.vb.AbbIcon = mod.vb.AbbIcon - 1
--- 			if mod.vb.AbbIcon < 6 then
--- 				mod.vb.AbbIcon = 8
--- 			end
--- 		end
--- 	end
--- end

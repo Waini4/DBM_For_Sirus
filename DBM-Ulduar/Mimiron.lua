@@ -208,6 +208,7 @@ local function NextPhase(self)
 		end
 	end
 end
+
 -- mod:SetStage(0)
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 33670, "Mimiron")
@@ -349,14 +350,13 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		self:SendSync("Phase4") -- SPELL_AURA_REMOVED detection might fail in phase 3...there are simply not enough debuffs on him
 	elseif msg == L.YellHardPull or msg:find(L.YellHardPull) then
 		timerHardmode:Start()
-		timerFlameSuppressant:Start()
 		enrage:Stop()
 		self.vb.hardmode = true
 		timerNextFlames:Start(1.5)
 		self:Schedule(1.5, Flames, self)
 		warnFlamesSoon:Schedule(1)
 		timerPlasmaBlastCD:Start(28)
-		timerFlameSuppressant:Start()
+		timerFlameSuppressant:Start(69)
 		timerProximityMines:Start(21)
 		timerNextShockblast:Start(37)
 	elseif (msg == L.YellKilled or msg:find(L.YellKilled)) then -- register kill
