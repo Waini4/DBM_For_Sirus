@@ -170,8 +170,10 @@ do
 				mod:UnscheduleMethod("BossTargetScanner", cidOrGuid, returnFunc)--Unschedule all checks just to be sure none are running, we are done.
 				if (tankFilter and mod:IsTanking(targetuid, bossuid)) or (isFinalScan and isEnemyScan) or onlyPlayers and not UnitIsPlayer("player", targetuid) then return end--If enemyScan and playerDetected, return nothing
 				local scanningTime = (targetScanCount[cidOrGuid] or 1) * scanInterval
-				mod[returnFunc](mod, targetname, targetuid, bossuid, scanningTime)--Return results to warning function with all variables.
-				DBM:Debug("BossTargetScanner has ended for "..cidOrGuid, 2)
+				if mod[returnFunc] then
+					mod[returnFunc](mod, targetname, targetuid, bossuid, scanningTime)--Return results to warning function with all variables.
+					DBM:Debug("BossTargetScanner has ended for "..cidOrGuid, 2)
+				end
 			end
 		else--target was nil, lets schedule a rescan here too.
 			if targetScanCount[cidOrGuid] < scanTimes then--Make sure not to infinite loop here as well.
