@@ -154,7 +154,7 @@ do
 		incinerateTarget = target
 		healed = 0
 		DBM.BossHealth:RemoveBoss(getShieldHP)
-		DBM.BossHealth:AddBoss(getShieldHP, L.PepelTarget:format(name))
+		-- DBM.BossHealth:AddBoss(getShieldHP, L.PepelTarget:format(name)) --todo L.PepelTarget
 	end
 
 	function clearPepelTarget(self, name)
