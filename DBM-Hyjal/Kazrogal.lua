@@ -75,10 +75,10 @@ mod:AddBoolOption("SetAbbIcon",false)
 
 local function Abyssals(self)
 	self.vb.AbyssalsCount = self.vb.AbyssalsCount + 1
-	timerUnstableAbyssalsCD:Start(nil, self.vb.AbyssalsCount + 1)
-	self:Schedule(90, Abyssals, self)
-	specwarnAbbasSoon:Schedule(87)
-	specwarnAbbasSoon:Schedule(89)
+	timerUnstableAbyssalsCD:Start(mod:GetStage() == 1 and 90 or 20, self.vb.AbyssalsCount + 1)
+	self:Schedule(mod:GetStage() == 1 and 90 or 20, Abyssals, self)
+	specwarnAbbasSoon:Schedule(mod:GetStage() == 1 and 86 or 16)
+	specwarnAbbasSoon:Schedule(mod:GetStage() == 1 and 89 or 19)
 	--warnAbbasSoon:Schedule(55)
 	--warnAbbasSoon:Schedule(59)
 end
