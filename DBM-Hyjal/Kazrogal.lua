@@ -70,7 +70,9 @@ mod.vb.AbyssalsCount = 0
 mod.vb.FallofFilthCount = 0
 local kik = false
 mod:AddInfoFrameOption(318819, true)
-mod:AddBoolOption("SetAbbIcon",false)
+mod:AddBoolOption("SetAbbIcon", false)
+mod:AddBoolOption("AnnounceVoicePhase", true, "misc")
+local MarkBuff = DBM:GetSpellInfoNew(318819)
 -- mod:AddBoolOption("HpOff", true)
 
 local function Abyssals(self)
@@ -109,6 +111,9 @@ end
 function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 17888, "Kaz'rogal", wipe)
 	self:Unschedule(Abyssals)
+	if self.Options.InfoFrame then
+		DBM.InfoFrame:Hide()
+	end
 end
 
 function mod:SPELL_CAST_START(args)
@@ -149,17 +154,21 @@ function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(318828) then
 		self.vb.BurningCount = self.vb.BurningCount + 1
 		timerBurningSoulCD:Start(nil, self.vb.BurningCount + 1)
-	elseif args:IsSpellID(318826) and stage == 3 then
+		--[[elseif args:IsSpellID(318826) and stage == 3 then
 		self.vb.AbyssalsCount = self.vb.AbyssalsCount + 1
 		timerUnstableAbyssalsCD:Start(20, self.vb.AbyssalsCount + 1)
 		specwarnAbbasSoon:Schedule(16)
-		specwarnAbbasSoon:Schedule(19)
+		specwarnAbbasSoon:Schedule(19)]]
 	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(318819) then
 		warnMark:Show(args.destName)
+		if self.Options.InfoFrame and not DBM.InfoFrame:IsShown() then
+			DBM.InfoFrame:SetHeader(args.spellName)
+			DBM.InfoFrame:Show(10, "playerdebuffremaining", 318819)
+		end
 	elseif args:IsSpellID(318839) and self:AntiSpam(2) then
 		specWarnMutilation:Show(args.destName)
 		timerMutilationlCD:Start()
@@ -190,8 +199,11 @@ function mod:UNIT_HEALTH(uId)
 	if stage and hp then
 		if hp < 67 and stage == 1 then
 			self:SetStage(2)
+			self:Unschedule(Abyssals)
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(2))
-			warnPhase:Play("ptwo")
+			if self.Options.AnnounceVoicePhase then
+				DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\2phaseTrall.mp3")
+			end
 			timerUnstableAbyssalsCD:Stop()
 			timerHorrorflamesCD:Stop()
 			timerInfernalStrikeCD:Stop()
@@ -205,11 +217,14 @@ function mod:UNIT_HEALTH(uId)
 		elseif hp < 33 and stage == 2 then
 			self.vb.AbyssalsCount = 0
 			self:SetStage(3)
+			if self.Options.AnnounceVoicePhase then
+				DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\3phaseTrall.mp3")
+			end
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(3))
-			warnPhase:Play("pthree")
 			timerMutilationlCD:Stop()
 			timerFallofFilthCD:Stop()
 			timerUnstableAbyssalsCD:Start(15)
+			self:Schedule(15, Abyssals, self)
 			timerHorrorflamesCD:Start(10) -- ~~~~~~
 			specwarnAbbasSoon:Schedule(8)
 		end
@@ -223,15 +238,16 @@ local function ScanWhitName(name)
 		local unit = "raid" .. i .. "target"
 		local guid = UnitGUID(unit)
 		-- if name == "Некромант" then
-			if guid and UnitName(unit) == name and not AbbGuids[guid] then
-				target = unit
-				AbbGuids[guid] = true
-				return target
-			end
+		if guid and UnitName(unit) == name and not AbbGuids[guid] then
+			target = unit
+			AbbGuids[guid] = true
+			return target
+		end
 		-- end
 	end
 	return nil
 end
+
 function mod:UNIT_TARGET()
 	if self.Options.SetAbbIcon then
 		local uid = ScanWhitName("Нестабильный абиссал")

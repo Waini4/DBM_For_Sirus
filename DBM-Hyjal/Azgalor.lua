@@ -49,6 +49,7 @@ mod:AddSetIconOption("SetIconFlameTargets", 320374, true, false, { 1, 2, 3 })
 mod:AddSetIconOption("SetIconMarkTarget", 319029, true, false, { 8 })
 mod:AddNamePlateOption("Nameplate1", 320374, true)
 mod:AddNamePlateOption("Nameplate2", 319029, true)
+mod:AddBoolOption("AnnounceVoicePhase", true, "misc")
 mod.vb.NecromancerIcon = 7
 mod.vb.FlameIcons = 3
 mod.vb.MarkIcon = 8
@@ -102,8 +103,10 @@ function mod:SPELL_INSTAKILL(args)
 		self.vb.TotemKill = self.vb.TotemKill + 1
 		if self.vb.TotemKill == 4 then
 			self:SetStage(2)
+			if self.Options.AnnounceVoicePhase then
+				DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\2phaseTrall.mp3")
+			end
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(2))
-			warnPhase:Play("ptwo")
 			timerInfernalDownpourCD:Stop()
 		end
 	end
@@ -170,7 +173,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		if args:IsPlayer() then
 			yellMarkFade:Cancel()
 		end
-		if self.vb.MarkCount == (1 or 3 or 5) then
+		if self.vb.MarkCount == (1 or 3 or 5 or 7 or 9) then
 			timerguardianofthespiritCD:Start(args.destName)
 		end
 	elseif args:IsSpellID(319006) then

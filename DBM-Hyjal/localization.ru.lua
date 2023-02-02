@@ -10,7 +10,9 @@ L = DBM:GetModLocalization("Rage")
 L:SetGeneralLocalization({
 	name = "Лютый Хлад"
 })
-
+L:SetOptionLocalization {
+	AnnounceVoicePhase = "Озвучка фаз тралом :)"
+}
 -----------------
 --  Anetheron  --
 -----------------
@@ -41,6 +43,7 @@ L:SetGeneralLocalization({
 L:SetOptionLocalization({
 	HpOff = "Если выбивает ошибки отключите данную функцию",
 	SetAbbIcon = "Ставить метки на инферналов(1 фаза)",
+	AnnounceVoicePhase = "Озвучка фазы тралом :)"
 })
 
 ---------------
@@ -52,6 +55,10 @@ L:SetGeneralLocalization({
 	name = "Азгалор"
 })
 
+L:SetOptionLocalization {
+	AnnounceVoicePhase = "Озвучка фаз тралом :)"
+}
+
 ------------------
 --  Archimonde  --
 ------------------
@@ -60,6 +67,10 @@ L = DBM:GetModLocalization("Archimonde")
 L:SetGeneralLocalization({
 	name = "Архимонд"
 })
+
+L:SetOptionLocalization {
+	AnnounceVoicePhase = "Озвучка фаз тралом :)"
+}
 
 ----------------
 -- WaveTimers --

@@ -51,6 +51,7 @@ local RangeBuff = DBM:GetSpellInfoNew(317785)
 mod:AddRangeFrameOption(6, nil, true)
 --mod:AddBoolOption("RangeFrame", true)
 mod:AddSetIconOption("SetIconOnFinger", 317801, true, false, { 7 })
+mod:AddBoolOption("AnnounceVoicePhase", true, "misc")
 --mod:AddSetIconOption("IceBoltIcon", 31249, false, false, { 7 })
 local warned_p2 = false
 
@@ -172,11 +173,13 @@ function mod:UNIT_HEALTH(uId)
 	end
 	if hp and hp <= 35 and stage == 1 then
 		self:SetStage(2)
+		if self.Options.AnnounceVoicePhase then
+			DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\2phaseTrall.mp3")
+		end
 		warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(2))
 		if self.Options.InfoFrame then
 			DBM.InfoFrame:Hide()
 		end
-		warnPhase:Play("ptwo")
 		timerVipe:Start()
 		timerCurce:Stop()
 		timerCurce2:Start()

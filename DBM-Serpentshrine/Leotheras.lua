@@ -79,7 +79,7 @@ local timerPepelCast  = mod:NewCastTimer(3, 310514, nil, nil, nil, 3) -- Исп�
 mod:AddSetIconOption("SetIconOnDemonTargets", 37676, true, true, { 5, 6, 7, 8 })
 mod:AddSetIconOption("SetIconOnPepelTargets", 310514, true, true, { 4, 5, 6, 7 })
 mod:AddSetIconOption("KleiIcon", 310496, true, true, { 8 })
-mod:AddBoolOption("PepelShieldFrame", false, "misc")
+mod:AddBoolOption("PepelShieldFrame", true, "misc")
 mod:AddBoolOption("AnnounceKlei", false)
 mod:AddBoolOption("AnnouncePepel", false)
 
@@ -90,8 +90,6 @@ local warned_preP1 = false
 local warned_preP2 = false
 local PepelTargets = {}
 local KleiIcons = 8
-local uId1 = DBM:GetRaidUnitId(21215)
-local PepelTargetName
 
 do
 	-- local function sort_by_group(v1, v2)
@@ -123,57 +121,49 @@ do
 	end
 end
 
-local setPepelTarget, clearPepelTarget, updateInfoFrame
-local diffMaxAbsorb = { heroic25 = 150000 }
+local setPepelTarget, clearPepelTarget, clearPepelVariables
 do
-	local incinerateTarget
-	local healed = 0
-	local maxAbsorb = diffMaxAbsorb[DBM:GetCurrentInstanceDifficulty()] or 0
-
-	local twipe = table.wipe
-	local lines, sortedLines = {}, {}
-	local function addLine(key, value)
-		-- sort by insertion order
-		lines[key] = value
-		sortedLines[#sortedLines + 1] = key
-	end
-
-	local function getShieldHP()
-		return math.max(1, math.floor(healed / maxAbsorb * 100))
-	end
+	local incinerateTarget = {}
+	local healed = {}
 
 	function mod:SPELL_HEAL(_, _, _, destGUID, _, _, _, _, _, _, _, absorbed)
-		if destGUID == incinerateTarget then
-			healed = healed + (absorbed or 0)
+		if incinerateTarget[destGUID] then
+			healed[destGUID] = healed[destGUID] + (absorbed or 0)
+			DBM.BossHealth:Update()
+			--print(destName .. ":" .. healed[destGUID])
 		end
 	end
 
 	mod.SPELL_PERIODIC_HEAL = mod.SPELL_HEAL
 
-	function setPepelTarget(_, target, name)
-		incinerateTarget = target
-		healed = 0
-		DBM.BossHealth:RemoveBoss(getShieldHP)
-		-- DBM.BossHealth:AddBoss(getShieldHP, L.PepelTarget:format(name)) --todo L.PepelTarget
-	end
 
-	function clearPepelTarget(self, name)
-		DBM.BossHealth:RemoveBoss(getShieldHP)
-		healed = 0
-		if self.Options.PepelIcon then
-			self:RemoveIcon(name)
+	local function updatePepelTargets()
+		local maxAbsorb = 150000
+		for i, v in pairs(incinerateTarget) do
+			DBM.BossHealth:AddBoss(function() return math.max(1, math.floor((healed[i] or 0) / maxAbsorb * 100)) end,
+				L.IncinerateTarget:format(v))
 		end
 	end
 
-	updateInfoFrame = function()
-		twipe(lines)
-		twipe(sortedLines)
-		if PepelTargetName then
-			addLine(PepelTargetName, getShieldHP() .. "%")
-		end
-		return lines, sortedLines
+	function setPepelTarget(guid, name)
+		incinerateTarget[guid] = name
+		healed[guid] = 0
+		updatePepelTargets()
+	end
+
+	function clearPepelTarget(guid, name)
+		incinerateTarget[guid] = nil
+		healed[guid] = nil
+		updatePepelTargets()
+	end
+
+	function clearPepelVariables()
+		table.wipe(incinerateTarget)
+		table.wipe(incinerateTarget)
+		updatePepelTargets()
 	end
 end
+
 
 function mod:WarnDemons()
 	warnDemons:Show(table.concat(demonTargets, "<, >"))
@@ -206,6 +196,7 @@ function mod:OnCombatStart()
 		if self.Options.PepelShieldFrame then
 			DBM.BossHealth:Show(L.name)
 			DBM.BossHealth:AddBoss(21215, L.name)
+			clearPepelVariables()
 		end
 	else
 		berserkTimer:Start()
@@ -285,12 +276,10 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnPepely:Show(args.destName)
 		end
 		self:ScheduleMethod(0.1, "SetPepelIcons")
-		if self.Options.InfoFrame and not DBM.InfoFrame:IsShown() then
-			PepelTargetName = args.destName
-			DBM.InfoFrame:SetHeader(args.spellName)
-			DBM.InfoFrame:Show(6, "function", updateInfoFrame, false, true)
+		if self.Options.PepelShieldFrame then
+			setPepelTarget(args.destGUID, args.destName)
+			self:Schedule(12, clearPepelTarget, args.destGUID, args.destName)
 		end
-		setPepelTarget(self, args.destGUID, args.destName)
 	end
 end
 
@@ -300,10 +289,6 @@ function mod:SPELL_AURA_REMOVED(args)
 		self:RemoveIcon(args.destName)
 	elseif spellId == 310514 then
 		self.vb.PepelCount = self.vb.PepelCount - 1
-		if self.Options.InfoFrame and self.vb.fleshCount == 0 then
-			DBM.InfoFrame:Hide()
-		end
-		clearPepelTarget(self, args.destName)
 	end
 end
 
