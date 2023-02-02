@@ -86,7 +86,7 @@ local warnFrostBomb = mod:NewSpecialWarningDodge(64623, nil, nil, nil, 2, 2)
 
 local timerNextFrostBomb    = mod:NewNextTimer(60, 64623, nil, nil, nil, 3, nil, CL.HEROIC_ICON) --Ледяная бомба
 local timerFlameSuppressant = mod:NewCastTimer(71, 312793, nil, nil, nil, 3)
-local timerBombExplosion    = mod:NewCastTimer(17, 312804, nil, nil, nil, 3)
+local timerBombExplosion    = mod:NewCastTimer(15, 312804, nil, nil, nil, 3)
 
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(3) .. ": " .. L.MobPhase3 .. " " .. L.HARD_MODE)
 local specWarnDeafeningSiren = mod:NewSpecialWarningMove(64616, nil, nil, nil, 1, 2)
