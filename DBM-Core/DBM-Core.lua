@@ -3739,7 +3739,7 @@ do
 						if revDifference > 100000000 then --Approx 1 month old 20190416172622
 							if updateNotificationDisplayed < 3 then
 								updateNotificationDisplayed = 3
-								AddMsg(DBM, L.UPDATEREMINDER_DISABLE)
+								--AddMsg(DBM, L.UPDATEREMINDER_DISABLE)
 								--	DBM:Disable(true)
 							end
 						end
@@ -7103,6 +7103,7 @@ function DBM:PlaySoundAtStage(mod)
 		end
 	end
 end
+
 function bossModPrototype:SetStage(stage)
 	if stage == 0 then --Increment request instead of hard value
 		if not self.vb.phase then self.vb.phase = 0 return end --Person DCed mid fight and somehow managed to perfectly time running SetStage with a value of 0 before getting variable recovery
