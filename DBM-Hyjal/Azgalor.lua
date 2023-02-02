@@ -103,9 +103,9 @@ function mod:SPELL_INSTAKILL(args)
 		self.vb.TotemKill = self.vb.TotemKill + 1
 		if self.vb.TotemKill == 4 then
 			self:SetStage(2)
-			if self.Options.AnnounceVoicePhase then
-				DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\2phaseTrall.mp3")
-			end
+			-- if self.Options.AnnounceVoicePhase then
+			-- 	DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\2phaseTrall.mp3")
+			-- end
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(2))
 			timerInfernalDownpourCD:Stop()
 		end

@@ -7086,6 +7086,23 @@ function bossModPrototype:UnregisterOnUpdateHandler()
 	twipe(private.updateFunctions)
 end
 
+function DBM:PlaySoundAtStage(mod)
+	if mod.Options.AnnounceVoicePhase then
+		if mod.vb.phase >= 1 then
+			if mod.vb.phase == 1 then
+				-- DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\1phaseTrall.mp3")
+			elseif mod.vb.phase == 2 then
+				DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\2phaseTrall.mp3")
+			elseif mod.vb.phase == 3 then
+				DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\3phaseTrall.mp3")
+			elseif mod.vb.phase == 4 then
+				DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\4phaseTrall.mp3")
+			elseif mod.vb.phase == 5 then
+				-- DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\5phaseTrall.mp3")
+			end
+		end
+	end
+end
 function bossModPrototype:SetStage(stage)
 	if stage == 0 then --Increment request instead of hard value
 		if not self.vb.phase then self.vb.phase = 0 return end --Person DCed mid fight and somehow managed to perfectly time running SetStage with a value of 0 before getting variable recovery
@@ -7098,9 +7115,11 @@ function bossModPrototype:SetStage(stage)
 		self.vb.stageTotality = 0
 	end
 	self.vb.stageTotality = self.vb.stageTotality + 1
+
 	if self.inCombat then --Safety, in event mod manages to run any phase change calls out of combat/during a wipe we'll just safely ignore it
 		fireEvent("DBM_SetStage", self, self.id, self.vb.phase, self.vb.stageTotality) --Mod, modId, Stage (if available), total number of times SetStage has been called since combat start
 		DBM:Debug("DBM_SetStage: " .. self.vb.phase .. "/" .. self.vb.stageTotality)
+		DBM:PlaySoundAtStage(self)
 	end
 end
 
@@ -7115,6 +7134,7 @@ function bossModPrototype:NextStage()
 	if self.inCombat then --Safety, in event mod manages to run any phase change calls out of combat/during a wipe we'll just safely ignore it
 		fireEvent("DBM_SetStage", self, self.id, self.vb.phase, self.vb.stageTotality) --Mod, modId, Stage (if available), total number of times SetStage has been called since combat start
 		DBM:Debug("DBM_SetStage: " .. self.vb.phase .. "/" .. self.vb.stageTotality)
+		DBM:PlaySoundAtStage(self)
 	end
 end
 

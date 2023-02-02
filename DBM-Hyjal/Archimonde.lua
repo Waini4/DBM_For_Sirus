@@ -179,15 +179,15 @@ function mod:UNIT_HEALTH(uId)
 			self:SetStage(2)
 			warned_F1 = true
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(2))
-			if self.Options.AnnounceVoicePhase then
-				DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\2phaseTrall.mp3")
-			end
+			-- if self.Options.AnnounceVoicePhase then
+			-- 	DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\2phaseTrall.mp3")
+			-- end
 		elseif not warned_F2 and hp < 50 then
 			warned_F2 = true
 			self:SetStage(3)
-			if self.Options.AnnounceVoicePhase then
-				DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\3phaseTrall.mp3")
-			end
+			-- if self.Options.AnnounceVoicePhase then
+			-- 	DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\3phaseTrall.mp3")
+			-- end
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(3))
 		end
 	end

@@ -173,9 +173,9 @@ function mod:UNIT_HEALTH(uId)
 	end
 	if hp and hp <= 35 and stage == 1 then
 		self:SetStage(2)
-		if self.Options.AnnounceVoicePhase then
-			DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\2phaseTrall.mp3")
-		end
+		-- if self.Options.AnnounceVoicePhase then
+		-- 	DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\2phaseTrall.mp3")
+		-- end
 		warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(2))
 		if self.Options.InfoFrame then
 			DBM.InfoFrame:Hide()

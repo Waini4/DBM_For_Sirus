@@ -201,9 +201,9 @@ function mod:UNIT_HEALTH(uId)
 			self:SetStage(2)
 			self:Unschedule(Abyssals)
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(2))
-			if self.Options.AnnounceVoicePhase then
-				DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\2phaseTrall.mp3")
-			end
+			-- if self.Options.AnnounceVoicePhase then
+			-- 	DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\2phaseTrall.mp3")
+			-- end
 			timerUnstableAbyssalsCD:Stop()
 			timerHorrorflamesCD:Stop()
 			timerInfernalStrikeCD:Stop()
@@ -217,9 +217,9 @@ function mod:UNIT_HEALTH(uId)
 		elseif hp < 33 and stage == 2 then
 			self.vb.AbyssalsCount = 0
 			self:SetStage(3)
-			if self.Options.AnnounceVoicePhase then
-				DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\3phaseTrall.mp3")
-			end
+			-- if self.Options.AnnounceVoicePhase then
+			-- 	DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\3phaseTrall.mp3")
+			-- end
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(3))
 			timerMutilationlCD:Stop()
 			timerFallofFilthCD:Stop()
