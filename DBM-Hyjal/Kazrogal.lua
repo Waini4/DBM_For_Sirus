@@ -76,11 +76,12 @@ local MarkBuff = DBM:GetSpellInfoNew(318819)
 -- mod:AddBoolOption("HpOff", true)
 
 local function Abyssals(self)
+	if mod:GetStage() ~= 2 then return end
 	self.vb.AbyssalsCount = self.vb.AbyssalsCount + 1
-	timerUnstableAbyssalsCD:Start(mod:GetStage() == 1 and 90 or 20, self.vb.AbyssalsCount + 1)
-	self:Schedule(mod:GetStage() == 1 and 90 or 20, Abyssals, self)
+	timerUnstableAbyssalsCD:Start((mod:GetStage() == 1 and 90) or 20, self.vb.AbyssalsCount + 1)
 	specwarnAbbasSoon:Schedule(mod:GetStage() == 1 and 86 or 16)
 	specwarnAbbasSoon:Schedule(mod:GetStage() == 1 and 89 or 19)
+	self:Schedule((mod:GetStage() == 1 and 90) or 20, Abyssals, self)
 	--warnAbbasSoon:Schedule(55)
 	--warnAbbasSoon:Schedule(59)
 end
