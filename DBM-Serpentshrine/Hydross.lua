@@ -16,8 +16,8 @@ mod:SetModelID(20162)
 
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS 38215 38216 38217 38218 38231 40584 38219 38220 38221 38222 38230 40583 38235 38246 309055",
-	"SPELL_AURA_APPLIED 309046 309065 309068",
-	"SPELL_AURA_APPLIED_DOSE 309046 309065 309068",
+	"SPELL_AURA_APPLIED 309046 309065 309068 309051",
+	"SPELL_AURA_APPLIED_DOSE 309046 309065 309068 309051",
 	"SPELL_AURA_REMOVED 309046 309065",
 	"CHAT_MSG_MONSTER_YELL",
 	"SPELL_CAST_START 309052 309069 309072"
@@ -25,44 +25,44 @@ mod:RegisterEventsInCombat(
 
 )
 
-local warnMarkOfHydross    = mod:NewAnnounce("WarnMarkOfHydross", 3, 38215)
-local warnMarkOfCorruption = mod:NewAnnounce("WarnMarkOfCorruption", 3, 38219)
-local warnWaterTomb        = mod:NewTargetAnnounce(38235, 3)
-local warnVileSludge       = mod:NewTargetAnnounce(38246, 3)
+local warnMarkOfHydross     = mod:NewAnnounce("WarnMarkOfHydross", 3, 38215)
+local warnMarkOfCorruption  = mod:NewAnnounce("WarnMarkOfCorruption", 3, 38219)
+local warnWaterTomb         = mod:NewTargetAnnounce(38235, 3)
+local warnVileSludge        = mod:NewTargetAnnounce(38246, 3)
 
-local specWarnThreatReset = mod:NewSpecialWarning("SpecWarnThreatReset", "-Tank|-Healer")
+local specWarnThreatReset   = mod:NewSpecialWarning("SpecWarnThreatReset", "-Tank|-Healer")
 
 local timerMarkOfHydross    = mod:NewTimer(15, "TimerMarkOfHydross", 38215, nil, nil, 7)
 local timerMarkOfCorruption = mod:NewTimer(15, "TimerMarkOfCorruption", 38219, nil, nil, 7)
 
-local berserkTimer = mod:NewBerserkTimer(600)
+local berserkTimer          = mod:NewBerserkTimer(600)
 
 ----------хм-------------------
 
-local warnSklep = mod:NewTargetAnnounce(309046, 4) -- лужа
-local warnKor   = mod:NewTargetAnnounce(309065, 4) -- коррозия
+local warnSklep             = mod:NewTargetAnnounce(309046, 4) -- лужа
+local warnKor               = mod:NewTargetAnnounce(309065, 4) -- коррозия
 
-local specWarnArrow = mod:NewSpecialWarningMove(309052, 2) -- залп вод
-local specWarnAya   = mod:NewSpecialWarningMove(309069, 2) -- залп яда
-local specWarnYad   = mod:NewSpecialWarning("Yad", 309072, nil, nil, 1, 6) -- Перефаза яда
-local specWarnChis  = mod:NewSpecialWarning("Chis", 309055, nil, nil, 1, 6) -- Перефаза чист
+local specWarnArrow         = mod:NewSpecialWarningMove(309052, 2) -- залп вод
+local specWarnAya           = mod:NewSpecialWarningMove(309069, 2) -- залп яда
+local specWarnYad           = mod:NewSpecialWarning("Yad", 309072, nil, nil, 1, 6) -- Перефаза яда
+local specWarnChis          = mod:NewSpecialWarning("Chis", 309055, nil, nil, 1, 6) -- Перефаза чист
 
-local specWarnSklep  = mod:NewSpecialWarningRun(309046, nil, nil, nil, 1, 4) -- лужа
-local specWarnKor    = mod:NewSpecialWarningRun(309065, nil, nil, nil, 1, 4) -- коррозия
-local yellSklep      = mod:NewYell(309046)
-local yellSklepFades = mod:NewShortFadesYell(309046)
-local yellKor        = mod:NewYell(309065)
+local specWarnSklep         = mod:NewSpecialWarningRun(309046, nil, nil, nil, 1, 4) -- лужа
+local specWarnKor           = mod:NewSpecialWarningRun(309065, nil, nil, nil, 1, 4) -- коррозия
+local yellSklep             = mod:NewYell(309046)
+local yellSklepFades        = mod:NewShortFadesYell(309046)
+local yellKor               = mod:NewYell(309065)
 
-local timerSklepCD    = mod:NewCDTimer(32, 309046, nil, nil, nil, 3) -- лужа
-local timerKorCD      = mod:NewCDTimer(32, 309065, nil, nil, nil, 3) -- коррозия
-local timerArrowCD    = mod:NewCDTimer(25, 309052, nil, nil, nil, 3) -- залп вод
-local timerAyaCD      = mod:NewCDTimer(25, 309069, nil, nil, nil, 3) -- залп яда
-local timerArrowCast  = mod:NewCastTimer(1.5, 309052, nil, nil, nil, 3) -- залп  вод каст
-local timerAyaCast    = mod:NewCastTimer(1.5, 309069, nil, nil, nil, 3) -- залп  яда каст
-local timerYadCast    = mod:NewCastTimer(25, 309072, nil, nil, nil, 6) -- яд
-local timerChisCast   = mod:NewCastTimer(20, 309055, nil, nil, nil, 6) -- чистота
-local timerStaktimer  = mod:NewTargetTimer(30, 309068, "Диспел танка: ", "Healer|Tank", nil, 1)
-local timerStak1timer = mod:NewTargetTimer(30, 309051, "Диспел танка: ", "Healer|Tank", nil, 1)
+local timerSklepCD          = mod:NewCDTimer(32, 309046, nil, nil, nil, 3) -- лужа
+local timerKorCD            = mod:NewCDTimer(32, 309065, nil, nil, nil, 3) -- коррозия
+local timerArrowCD          = mod:NewCDTimer(25, 309052, nil, nil, nil, 3) -- залп вод
+local timerAyaCD            = mod:NewCDTimer(25, 309069, nil, nil, nil, 3) -- залп яда
+local timerArrowCast        = mod:NewCastTimer(1.5, 309052, nil, nil, nil, 3) -- залп  вод каст
+local timerAyaCast          = mod:NewCastTimer(1.5, 309069, nil, nil, nil, 3) -- залп  яда каст
+local timerYadCast          = mod:NewCastTimer(25, 309072, nil, nil, nil, 6) -- яд
+local timerChisCast         = mod:NewCastTimer(20, 309055, nil, nil, nil, 6) -- чистота
+local timerStaktimer        = mod:NewTargetTimer(30, 309068, "Диспел танка: %s", "Healer|Tank", nil, 1)
+local timerStak1timer       = mod:NewTargetTimer(30, 309051, "Диспел танка: %s", "Healer|Tank", nil, 1)
 
 mod:AddSetIconOption("SetIconOnSklepTargets", 309046, true, true, { 6, 7, 8 })
 mod:AddSetIconOption("SetIconOnKorTargets", 309065, true, true, { 6, 7, 8 })
@@ -189,9 +189,9 @@ function mod:SPELL_AURA_APPLIED(args) -- все хм --
 			DBM.Nameplate:Show(args.destGUID, 309065)
 		end
 	elseif spellId == 309068 then
-		timerStaktimer:Start(args.destName)
+		timerStaktimer:Start(nil, args.destName)
 	elseif spellId == 309051 then
-		timerStak1timer:Start(args.destName)
+		timerStak1timer:Start(nil, args.destName)
 	end
 end
 
@@ -230,7 +230,6 @@ local SidToTimeC = {
 	[38222] = { 100, 250 },
 	[38230] = { 250, 500 },
 	[40583] = { 500, 500 },
-
 }
 
 function mod:SPELL_CAST_SUCCESS(args)
@@ -257,7 +256,6 @@ function mod:SPELL_CAST_SUCCESS(args)
 		-- elseif spellId == 40584 then
 		-- 	warnMarkOfHydross:Show("500")
 		-- 	timerMarkOfHydross:Start("500")
-
 	elseif SidToTimeC[spellId] then
 		warnMarkOfCorruption:Show(SidToTimeC[spellId][1])
 		timerMarkOfCorruption:Start(SidToTimeC[spellId][2])
@@ -280,7 +278,6 @@ function mod:SPELL_CAST_SUCCESS(args)
 		-- elseif spellId == 40583 then
 		-- 	warnMarkOfCorruption:Show("500")
 		-- 	timerMarkOfCorruption:Start("500")
-
 	elseif spellId == 38235 then
 		warnWaterTomb:Show(args.destName)
 	elseif spellId == 38246 then

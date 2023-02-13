@@ -24,9 +24,9 @@ mod:RegisterEventsInCombat(
 
 -- local warnDemonSoon         = mod:NewAnnounce("WarnDemonSoon", 3, "Interface\\Icons\\Spell_Shadow_Metamorphosis")
 -- local warnNormalSoon        = mod:NewAnnounce("WarnNormalSoon", 3, "Interface\\Icons\\INV_Weapon_ShortBlade_07")
-local warnDemons = mod:NewTargetAnnounce(37676, 4)
+local warnDemons       = mod:NewTargetAnnounce(37676, 4)
 
-local specWarnDemon = mod:NewSpecialWarningYou(37676)
+local specWarnDemon    = mod:NewSpecialWarningYou(37676)
 
 local timerDemon       = mod:NewTimer(45, "TimerDemon", "Interface\\Icons\\Spell_Shadow_Metamorphosis")
 local timerNormal      = mod:NewTimer(60, "TimerNormal", "Interface\\Icons\\INV_Weapon_ShortBlade_07")
@@ -34,7 +34,7 @@ local timerInnerDemons = mod:NewTimer(32.5, "TimerInnerDemons", 11446)
 local timerWhirlwind   = mod:NewCastTimer(12, 37640)
 local timerWhirlwindCD = mod:NewCDTimer(19, 37640)
 
-local berserkTimer = mod:NewBerserkTimer(360)
+local berserkTimer     = mod:NewBerserkTimer(360)
 
 
 ---------------------------------хм---------------------------------
@@ -139,6 +139,7 @@ do
 
 	local function updatePepelTargets()
 		local maxAbsorb = 150000
+		DBM.BossHealth:Clear()
 		for i, v in pairs(incinerateTarget) do
 			DBM.BossHealth:AddBoss(function() return math.max(1, math.floor((healed[i] or 0) / maxAbsorb * 100)) end,
 				L.IncinerateTarget:format(v))

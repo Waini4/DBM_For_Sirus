@@ -28,12 +28,13 @@ local warnInfernalStrike   = mod:NewCastAnnounce(318823, 4, 1.5)
 local warnFatalBlowofFilth = mod:NewCastAnnounce(318833, 4, 1.5)
 
 
-local specwarnAbbasSoon            = mod:NewSpecialWarningSoon(318825, nil, nil, nil, 1, 3)
-local specWarnBurningSoul          = mod:NewSpecialWarningDispel(318828, "RemoveMagic", nil, nil, 1, 3)
-local specWarnHorrorflames         = mod:NewSpecialWarningInterrupt(318822, "HasInterrupt", nil, nil, 1, 2)
-local specWarnUnstoppableOnslaught = mod:NewSpecialWarning("|cff71d5ff|Hspell:318822|hНеудержимый натиск|h|r Закончился можно сбивать касты!"
+local specwarnAbbasSoon             = mod:NewSpecialWarningSoon(318825, nil, nil, nil, 1, 3)
+local specWarnBurningSoul           = mod:NewSpecialWarningDispel(318828, "RemoveMagic", nil, nil, 1, 3)
+local specWarnHorrorflames          = mod:NewSpecialWarningInterrupt(318822, "HasInterrupt", nil, nil, 1, 2)
+local specWarnUnstoppableOnslaught  = mod:NewSpecialWarning(
+	"|cff71d5ff|Hspell:318822|hНеудержимый натиск|h|r Закончился можно сбивать касты!"
 	, "HasInterrupt")
-local specWarnGTFO                 = mod:NewSpecialWarningGTFO(318825, nil, nil, nil, 4, 8)
+local specWarnGTFO                  = mod:NewSpecialWarningGTFO(318825, nil, nil, nil, 4, 8)
 
 local timerMarkCD                   = mod:NewNextCountTimer(24, 318818, nil, nil, nil, 2, nil, CL.IMPORTANT_ICON)
 local timerBurningSoulCD            = mod:NewNextCountTimer(20, 318828, nil, "RemoveMagic", nil, 3, nil, CL.HEALER_ICON)
@@ -51,7 +52,7 @@ local specWarnMutilation      = mod:NewSpecialWarningDispel(318839, "RemoveCurse
 local specWarnFallofFilth     = mod:NewSpecialWarningInterrupt(318834, "HasInterrupt", nil, nil, 1, 2)
 local timerMutilationlCD      = mod:NewNextTimer(20, 318839, nil, "RemoveCurse", nil, 3, nil, CL.CURSE_ICON)
 
-local timerFallofFilthCD = mod:NewNextCountTimer(17, 318834, nil, nil, nil, 3)
+local timerFallofFilthCD      = mod:NewNextCountTimer(17, 318834, nil, nil, nil, 3)
 
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(3))
 local warnInfernalStrike3p = mod:NewCastAnnounce(318841, 4, 1.5)
@@ -76,7 +77,7 @@ local MarkBuff = DBM:GetSpellInfoNew(318819)
 -- mod:AddBoolOption("HpOff", true)
 
 local function Abyssals(self)
-	if mod:GetStage() ~= 2 then return end
+	if mod:GetStage() ~= 3 then return end
 	self.vb.AbyssalsCount = self.vb.AbyssalsCount + 1
 	timerUnstableAbyssalsCD:Start((mod:GetStage() == 1 and 90) or 20, self.vb.AbyssalsCount + 1)
 	specwarnAbbasSoon:Schedule(mod:GetStage() == 1 and 86 or 16)
@@ -202,9 +203,6 @@ function mod:UNIT_HEALTH(uId)
 			self:SetStage(2)
 			self:Unschedule(Abyssals)
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(2))
-			-- if self.Options.AnnounceVoicePhase then
-			-- 	DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\2phaseTrall.mp3")
-			-- end
 			timerUnstableAbyssalsCD:Stop()
 			timerHorrorflamesCD:Stop()
 			timerInfernalStrikeCD:Stop()
@@ -215,22 +213,18 @@ function mod:UNIT_HEALTH(uId)
 			timerMutilationlCD:Start()
 			timerFallofFilthCD:Start(16.5, self.vb.BurningCount)
 			timerFatalBlowofFilthCD:Start(15)
-		elseif hp < 33 and stage == 2 then
+		elseif hp < 33 and stage == 3 then
 			self.vb.AbyssalsCount = 0
 			self:SetStage(3)
-			-- if self.Options.AnnounceVoicePhase then
-			-- 	DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\3phaseTrall.mp3")
-			-- end
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(3))
 			timerMutilationlCD:Stop()
 			timerFallofFilthCD:Stop()
-			timerUnstableAbyssalsCD:Start(15)
-			self:Schedule(15, Abyssals, self)
+			timerUnstableAbyssalsCD:Start(17) -- ????? походу меняли таймер
+			self:Schedule(17, Abyssals, self)
 			timerHorrorflamesCD:Start(10) -- ~~~~~~
 			specwarnAbbasSoon:Schedule(8)
 		end
 	end
-
 end
 
 local function ScanWhitName(name)
