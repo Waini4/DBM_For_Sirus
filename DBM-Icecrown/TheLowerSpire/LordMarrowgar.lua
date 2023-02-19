@@ -42,6 +42,7 @@ mod:AddSetIconOption("SetIconOnImpale", 72669, true, false, {1, 2, 3, 4, 5, 6, 7
 mod.vb.impaleIcon	= 8
 
 function mod:OnCombatStart(delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 36612, "Lord Marrowgar")
 	preWarnWhirlwind:Schedule(43-delay) -- Edited
 	timerWhirlwindCD:Start(48-delay) -- Edited
 	timerBoneSpike:Start(15-delay)
@@ -49,6 +50,7 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 36612, "Lord Marrowgar",wipe)
 	DBM.BossHealth:Clear()
 end
 function mod:SPELL_AURA_APPLIED(args)

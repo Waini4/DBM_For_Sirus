@@ -85,6 +85,7 @@ local function warnVileGasTargets()
 end
 
 function mod:OnCombatStart(delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 36626, "Festergut")
 	berserkTimer:Start(-delay)
 	timerInhaledBlight:Start(-delay)
 	timerGasSporeCD:Start(20-delay)--This may need tweaking
@@ -101,7 +102,8 @@ function mod:OnCombatStart(delay)
 	end
 end
 
-function mod:OnCombatEnd()
+function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 36626, "Festergut",wipe)
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end

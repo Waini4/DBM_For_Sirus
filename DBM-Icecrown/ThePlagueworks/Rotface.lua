@@ -61,6 +61,7 @@ local function WallSlime(self)
 end
 
 function mod:OnCombatStart(delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 36627, "Rotface")
 	timerWallSlime:Start(9-delay) -- Adjust from 25 to 9 to have a correct timer from the start
 	timerSlimeSpray:Start(20-delay) -- Custom add for the first Slime Spray
 	timerVileGasCD:Start(29-delay) -- Edited.
@@ -78,7 +79,8 @@ function mod:OnCombatStart(delay)
 	)
 end
 
-function mod:OnCombatEnd()
+function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 36627, "Rotface", wipe)
 	self:UnregisterShortTermEvents()
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()

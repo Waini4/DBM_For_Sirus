@@ -109,6 +109,7 @@ local function warnGlitteringSparksTargets()
 end
 
 function mod:OnCombatStart(delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 37970, "BPCouncil")
 	self.vb.kineticIcon = 7
 	berserkTimer:Start(-delay)
 	warnTargetSwitchSoon:Schedule(42-delay)
@@ -123,7 +124,8 @@ function mod:OnCombatStart(delay)
 	end
 end
 
-function mod:OnCombatEnd()
+function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 37970, "BPCouncil", wipe)
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end

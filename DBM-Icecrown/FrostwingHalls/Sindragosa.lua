@@ -207,6 +207,7 @@ local function ResetRange(self)
 end
 -- mod:SetStage(0)
 function mod:OnCombatStart(delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 36853, "Sindragosa")
 	self:SetStage(1)
 	berserkTimer:Start(-delay)
 	timerNextAirphase:Start(50-delay)
@@ -224,7 +225,8 @@ function mod:OnCombatStart(delay)
 	self.vb.activeBeacons = false
 end
 
-function mod:OnCombatEnd()
+function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 36853, "Sindragosa",wipe)
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end
