@@ -6220,6 +6220,8 @@ function DBM:GetStage(modId)
 	return 0
 end
 
+
+
 function DBM:HasMapRestrictions()
 	local mapName = GetMapInfo()
 	local level = GetCurrentMapDungeonLevel()
@@ -7385,7 +7387,12 @@ function bossModPrototype:GetStage()
 	end
 	return 0
 end
-
+function bossModPrototype:IsStage(stage)
+	if not self.vb.phase then
+		return false
+	end
+	return self.vb.phase == stage
+end
 --------------
 --  Events  --
 --------------

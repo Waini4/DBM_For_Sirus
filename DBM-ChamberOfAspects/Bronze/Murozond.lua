@@ -13,8 +13,8 @@ mod:RegisterCombat("combat", 50612)
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 313116 313120 313118 313122 317252 317253 317255 317262",
 	"SPELL_CAST_SUCCESS 317259 313122",
-	"SPELL_AURA_APPLIED 313122 313115 313129 313130 317260",
-	"SPELL_AURA_APPLIED_DOSE 313122 313115 313129 313130 317260",
+	"SPELL_AURA_APPLIED 313122 313115 313129 313130 317260 317256 313119",
+	"SPELL_AURA_APPLIED_DOSE 313122 313115 313129 313130 317260 313119 317256",
 	-- "UNIT_DIED",
 	"SPELL_AURA_REMOVED 313122 317262",
 	"UNIT_HEALTH"
@@ -196,7 +196,7 @@ function mod:SPELL_CAST_START(args)
 end
 
 function mod:Perebejka()
-	if self.vb.phase == 2 then
+	if self:GetStage() == 2 then
 		specwarnPerebejka:Schedule(15)
 		self:ScheduleMethod(15, "Perebejka")
 	end
@@ -292,7 +292,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 317252 then
 		warnBredHM:Show(args.destName, args.amount or 1)
 		timerBredHM:Start(args.destName)
-	elseif args:IsSpellID(313119, 317256) and DBM:GetRaidUnitId(args.destName) ~= "none" and args.destName then
+	elseif args:IsSpellID(313119, 317256) and args.sourceName == L.name and args.destName then
 		FearTargets[args.destName] = (FearTargets[args.destName] or 0) + 1
 		if self.Options.AnnounceFails then
 			SendChatMessage(L.FearOn:format(args.destName), "RAID")
@@ -316,7 +316,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	local cid = self:GetCIDFromGUID(args.destGUID)
 	if spellId == 313122 then
-		if cid == 50612 and self.vb.phase == 2 then
+		if cid == 50612 and self:GetStage() == 2 then
 			mod:SetStage(1)
 			warned_preP1 = false
 			warned_preP2 = false
@@ -335,18 +335,7 @@ function mod:SPELL_AURA_REMOVED(args)
 end
 
 function mod:UNIT_HEALTH(uId)
-	if self.vb.phase == 1 and not warned_preP1 and self:GetUnitCreatureId(uId) == 50612 and
-		UnitHealth(uId) / UnitHealthMax(uId) <= 0.78 then
-		warned_preP1 = true
-		warnPhase2Soon:Show()
-	end
-	if self.vb.phase == 1 and not warned_preP1 and self:GetUnitCreatureId(uId) == 50612 and
-		UnitHealth(uId) / UnitHealthMax(uId) <= 0.53 then
-		warned_preP1 = true
-		warnPhase2Soon:Show()
-	end
-	if self.vb.phase == 1 and not warned_preP1 and self:GetUnitCreatureId(uId) == 50612 and
-		UnitHealth(uId) / UnitHealthMax(uId) <= 0.28 then
+	if self:IsStage(1) and not warned_preP1 and self:GetUnitCreatureId(uId) == 50612 and ((DBM:GetBossHPByUnitID(uId) % 25) < 3) then
 		warned_preP1 = true
 		warnPhase2Soon:Show()
 	end
