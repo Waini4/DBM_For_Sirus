@@ -14,8 +14,8 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED_DOSE 24818"
 )
 
---TODO, maybe taunt special warnings for classic version when it matters more.
---TODO, Needs valid spellIDs for Classic
+-- TODO, maybe taunt special warnings for classic version when it matters more.
+-- TODO, Needs valid spellIDs for Classic
 local warnNoxiousBreath			= mod:NewStackAnnounce(24818, 2, nil, "Tank", 2)
 
 local specWarnSleepingFog		= mod:NewSpecialWarningDodge(24814, nil, nil, nil, 2, 2)

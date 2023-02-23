@@ -3,7 +3,7 @@
 ------------------------------------------------------------------------
 local _,ns = ...
 local Compat = ns.Compat
-local MAJOR, MINOR = "SpecializedAbsorbs-1.0", 7
+local MAJOR, MINOR = "SpecializedAbsorbs-1.0", 8
 local lib, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 local Core
@@ -388,7 +388,7 @@ function Core.Enable()
 	CombatTriggersOnAuraApplied = Core.CombatTriggers.OnAuraApplied
 	CombatTriggersOnAuraRemoved = Core.CombatTriggers.OnAuraRemoved
 
-	Core.UnitStatsTable = {[playerid] = {playerclass, 0, 0, 1.0}}
+	Core.UnitStatsTable = {[playerid] = {playerclass, 0, 0, 1.0, 0, 0, 0, 0, 0}}
 	UnitStatsTable = Core.UnitStatsTable
 
 	Core.Scaling = {[-1] = {}, [playerid] = {}}
@@ -892,7 +892,8 @@ end
 local lastAP, lastSP = 0, 0
 function Core.SendUnitStats()
 	if curChatChannel then
-		local curAP, curSP = UnitStatsTable[playerid][2], UnitStatsTable[playerid][3]
+		local curAP = UnitStatsTable[playerid][2]
+		local curSP = UnitStatsTable[playerid][3]
 		local dodge = UnitStatsTable[playerid][5]
 		local parry = UnitStatsTable[playerid][6]
 		local armor = UnitStatsTable[playerid][7]
@@ -1053,7 +1054,6 @@ function Events.COMBAT_LOG_EVENT_UNFILTERED(timestamp, etype, srcGUID, srcName, 
 		local spellid, _, spellschool = ...
 		if Effects[spellid] then
 			if Effects[spellid][1] > 0 then
-				-- print(...,"-----------------1048")
 				ApplySingularEffect(timestamp, srcGUID, srcName, dstGUID, dstName, spellid, spellschool)
 			else
 				ApplyAreaEffect(timestamp, srcGUID, srcName, dstGUID, dstName, spellid, spellschool)
@@ -1149,8 +1149,8 @@ function Events.STATS_CHANGED()
 end
 
 function Events.OnUnitStatsReceived(prefix, text, distribution, target)
-	if not text then return end
 
+	if not text then return end
 	local success, guid, class, ap, sp, dodge, parry, armor, block = Core:Deserialize(text)
 	if not (success and guid and class and ap and sp) then return end
 	if guid == playerid then return end
@@ -1349,9 +1349,22 @@ end
 function lib.UnitStats(guid, missingQuality)
 	local guidStats = UnitStatsTable and UnitStatsTable[guid]
 	if guidStats then
-		return guidStats[2], guidStats[3], guidStats[4], guidStats[5], guidStats[6], guidStats[7]
+		return guidStats[2], guidStats[3], guidStats[4], guidStats[5], guidStats[6], guidStats[7], guidStats[8]
 	end
 	return 0, 0, missingQuality
+end
+-- curAP = 2
+-- curSP = 3
+-- dodge = 5
+-- parry = 6
+-- armor = 7
+-- block = 8
+function lib.UnitStatsIndex(guid, index)
+	local guidStats = UnitStatsTable and UnitStatsTable[guid]
+	if guidStats then
+		return guidStats[tonumber(index)] and guidStats[tonumber(index)] or 0
+	end
+	return 0
 end
 
 function lib.UnitScaling(guid, defaultScaling, defaultQuality)
@@ -1413,8 +1426,10 @@ end
 local PushCharge = Core.PushCharge
 local PopCharge = Core.PopCharge
 local UnitStats = lib.UnitStats
+local UnitStatsIndex = lib.UnitStatsIndex
 local UnitScaling = lib.UnitScaling
 local UnitStatsAndScaling = lib.UnitStatsAndScaling
+
 
 --- Generic Create function (only for documentary purposes)
 -- @param	srcGUID			guid of the originating unit
@@ -1670,9 +1685,11 @@ local function Tanks_CLEU(self,...)
 
 	if csd[subevent3] and spellname11 == "Ледяной удар" then
 		------ 400 average for 270 ilvl
-		local dodge = (UnitStatsTable[whoguid4] and UnitStatsTable[whoguid4][5] or 400) * 0.0237735849
+		local dodge = UnitStatsIndex(whoguid4,5)>0 and UnitStatsIndex(whoguid4,5) or 400
+		dodge = dodge * 0.0237735849
 		------ 800 average for 270 ilvl
-		local parry = (UnitStatsTable[whoguid4] and UnitStatsTable[whoguid4][6] or 800) * 0.0237037037
+		local parry = UnitStatsIndex(whoguid4,6)> 0 and UnitStatsIndex(whoguid4,6) or 800
+		parry = parry * 0.0237037037
 
 		if (whoguid4 == PlayerGUID and privateScaling["4dktRaid5"] >= 2) or true then
 			dodge = GetCombatRating(3) * 0.0237735849
@@ -1692,6 +1709,9 @@ local function Tanks_CLEU(self,...)
 			lastPalAbsorbTable[whoguid4][1] = 0
 		end
 		if time2 and lastPalAbsorbTable[whoguid4] and lastPalAbsorbTable[whoguid4][1] and (time2 - lastPalAbsorbTable[whoguid4][1] <= 2) then
+			if spelldmg13 > 25000 then
+				spelldmg13 = 25000
+			end
             lastPalAbsorbTable[whoguid4][2] = lastPalAbsorbTable[whoguid4][2] + spelldmg13
             if lastPalAbsorbTable[whoguid4][2] > 50000 then
                 lastPalAbsorbTable[whoguid4][2] = 50000
@@ -1699,6 +1719,9 @@ local function Tanks_CLEU(self,...)
         else
 			lastPalAbsorbTable[whoguid4][1] = time2
             lastPalAbsorbTable[whoguid4][2] = 0
+			if spelldmg13 > 25000 then
+				spelldmg13 = 25000
+			end
             lastPalAbsorbTable[whoguid4][2] = lastPalAbsorbTable[whoguid4][2] + spelldmg13
             if lastPalAbsorbTable[whoguid4][2] > 50000 then
                 lastPalAbsorbTable[whoguid4][2] = 50000
@@ -1734,7 +1757,7 @@ local function deathknight_T62FrostTankOnCreate(...)
 	if whog == PlayerGUID then
 		armor = select(2,UnitArmor("player"))
 	else
-		armor = UnitStatsTable[whog] and UnitStatsTable[whog][7] or 0
+		armor = UnitStatsIndex(whog,7) or 0
 	end
 	return armor,1.0
 end
@@ -1954,7 +1977,7 @@ local function paladin_SacredShield_Create(srcGUID, srcName, dstGUID, dstName, s
 	local _, sp, quality1, sourceScaling, quality2 = UnitStatsAndScaling(srcGUID, 0.1, paladin_defaultScaling, 0.2)
 	t6PalValue = 0
 	if t6PalTable[dstGUID] and srcGUID == dstGUID then
-		t6PalValue = UnitStatsTable and UnitStatsTable[dstGUID] and UnitStatsTable[dstGUID][8] or 0
+		t6PalValue = UnitStatsIndex(srcGUID,8)
 	end
 	return floor((500 + t6PalValue + (sp * 0.75)) * (sourceScaling[1] or paladin_defaultScaling[1]) * ZONE_MODIFIER), min(quality1, quality2)
 end
@@ -2440,6 +2463,15 @@ local function items_Stoicism_Create(srcGUID, srcName, dstGUID, dstName, spellid
 	return floor(maxHealth * 0.2), 1.0
 end
 
+
+------------------
+-- effects race --
+------------------
+local function race_Panda_AbsorbOnCreate(srcGUID, srcName, dstGUID, dstName, spellid, destEffects)
+	return UnitStatsIndex(srcGUID,3),1.0
+end
+
+
 -----------------
 -- Data Tables --
 -----------------
@@ -2533,7 +2565,7 @@ Core.Effects = {
 	[47891] = warlock_ShadowWard_Entry, -- Shadow Ward (rank 5)
 	[64413] = {1.0, 8, items_Valanyr_Create, generic_Hit}, -- Val'anyr (spellid of the created absorb effect)
 	[60218] = {5.0, 10, function() return 4000, 1.0 end, items_EssenceOfGossamer_Hit}, -- Essence of Gossamer
-	[71586] = {1.0, 10, function() return 6400, 1.0 end, generic_Hit}, -- Corroded Skeleton Key
+	[71586] = {1.0, 10, function() return 24600, 1.0 end, generic_Hit}, -- Corroded Skeleton Key
 	[36481] = {1.0, 4, function() return 100000, 1.0 end, generic_Hit}, -- Phaseshift Bulwark
 	[57350] = {1.0, 6, function() return 1500, 1.0 end, generic_Hit}, -- Darkmoon Card: Illusion
 	[17252] = {1.0, 1800, function() return 500, 1.0 end, generic_Hit}, -- Mark of the Dragon Lord
@@ -2623,7 +2655,7 @@ Core.Effects = {
 	[319996] = {1.0, 6, paladin_TTG_Absorb284, generic_Hit}, -- enchant ttg 3
 	[320110] = {1.0, 6, paladin_TTG_Absorb284, generic_Hit}, -- enchant ttg 2
 	[320221] = {1.0, 6, paladin_TTG_Absorb284, generic_Hit}, -- enchant ttg 1
-
+	[320439] = {1.0, 10, race_Panda_AbsorbOnCreate, generic_Hit}, -- race pandaren absorb
 }
 
 Core.AreaTriggers = {

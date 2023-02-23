@@ -17,7 +17,7 @@
 ## Author: Barsoom, Bunny67, Zidras, DBM-Frostmourne contributors, original DBM team, fixes for sirus Stekolnyu, Waini, fxpw
 ## Version: 9.2.62
 
-X-Website: https://github.com/Waini4/DBM_For_Sirus  #todo fxpw
+X-Website: https://github.com/Waini4/DBM_For_Sirus
 
 # Pre-pre-core loads
 AddFunctions.lua
