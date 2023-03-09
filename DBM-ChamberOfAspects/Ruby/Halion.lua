@@ -20,39 +20,54 @@ mod:RegisterEventsInCombat(
 	"UNIT_HEALTH"
 )
 
+-- Общее типо
+local berserkTimer					= mod:NewBerserkTimer(480)
+
+mod:AddBoolOption("AnnounceAlternatePhase", true, "announce")
+
+mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(1)..": "..L.PhysicalRealm)
+
 local warnPhase2Soon				= mod:NewPrePhaseAnnounce(2)
-local warnPhase3Soon				= mod:NewPrePhaseAnnounce(3)
-local warnPhase2					= mod:NewPhaseAnnounce(2)
-local warnPhase3					= mod:NewPhaseAnnounce(3)
-local warningShadowConsumption		= mod:NewTargetAnnounce(74792, 4)
+local warningFieryBreath			= mod:NewSpellAnnounce(74526, 2, nil, "Tank|Healer")
 local warningFieryCombustion		= mod:NewTargetAnnounce(74562, 4)
 local warningMeteor					= mod:NewSpellAnnounce(74648, 3)
-local warningShadowBreath			= mod:NewSpellAnnounce(75954, 2, nil, "Tank|Healer")
-local warningFieryBreath			= mod:NewSpellAnnounce(74526, 2, nil, "Tank|Healer")
-local warningTwilightCutter			= mod:NewAnnounce("TwilightCutterCast", 2, 77844)
 
-local specWarnShadowConsumption		= mod:NewSpecialWarningRun(74792, nil, nil, nil, 4, 2)
-local yellShadowconsumption			= mod:NewYell(74792)
 local specWarnFieryCombustion		= mod:NewSpecialWarningRun(74562, nil, nil, nil, 4, 2)
-local yellFieryCombustion			= mod:NewYell(74562)
 local specWarnMeteorStrike			= mod:NewSpecialWarningMove(75952, nil, nil, nil, 1, 2)
-local specWarnTwilightCutter		= mod:NewSpecialWarningSpell(77844, nil, nil, nil, 3, 2)
 
-local timerShadowConsumptionCD		= mod:NewNextTimer(25, 74792, nil, nil, nil, 3)
+local yellFieryCombustion			= mod:NewYell(74562)
+
 local timerFieryConsumptionCD		= mod:NewNextTimer(25, 74562, nil, nil, nil, 3)
 local timerMeteorCD					= mod:NewNextTimer(40, 74648, nil, nil, nil, 3)
 local timerMeteorCast				= mod:NewCastTimer(7, 74648)--7-8 seconds from boss yell the meteor impacts.
+local timerFieryBreathCD			= mod:NewCDTimer(19, 74526, nil, "Tank|Healer", nil, 5)--But unique icons are nice pertaining to phase you're in ;)
+
+-- Stage Two - Twilight Realm (75%)
+local twilightRealmName = DBM:GetSpellInfo(74807)
+mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(2)..": "..twilightRealmName)
+
+local warnPhase3Soon				= mod:NewPrePhaseAnnounce(3)
+local warnPhase2					= mod:NewPhaseAnnounce(2)
+local warningShadowBreath			= mod:NewSpellAnnounce(75954, 2, nil, "Tank|Healer")
+local warningTwilightCutter			= mod:NewAnnounce("TwilightCutterCast", 2, 77844)
+local warningShadowConsumption		= mod:NewTargetAnnounce(74792, 4)
+
+local specWarnShadowConsumption		= mod:NewSpecialWarningRun(74792, nil, nil, nil, 4, 2)
+local specWarnTwilightCutter		= mod:NewSpecialWarningSpell(77844, nil, nil, nil, 3, 2)
+
+local yellShadowconsumption			= mod:NewYell(74792)
+
+local timerShadowConsumptionCD		= mod:NewNextTimer(25, 74792, nil, nil, nil, 3)
 local timerTwilightCutterCast		= mod:NewCastTimer(5, 77844)
 local timerTwilightCutter			= mod:NewBuffActiveTimer(10, 77844, nil, nil, nil, 6)
 local timerTwilightCutterCD			= mod:NewNextTimer(20, 77844, nil, nil, nil, 6)
 local timerShadowBreathCD			= mod:NewCDTimer(19, 75954, nil, "Tank|Healer", nil, 5)--Same as debuff timers, same CD, can be merged into 1.
-local timerFieryBreathCD			= mod:NewCDTimer(19, 74526, nil, "Tank|Healer", nil, 5)--But unique icons are nice pertaining to phase you're in ;)
 
-local berserkTimer					= mod:NewBerserkTimer(480)
-
-mod:AddBoolOption("AnnounceAlternatePhase", true, "announce")
 mod:AddBoolOption("WhisperOnConsumption", false, "announce")
 mod:AddBoolOption("SetIconOnConsumption", true)
+
+-- Stage Three - Corporeality (50%)
+local warnPhase3					= mod:NewPhaseAnnounce(3)
 
 local warned_preP2 = false
 local warned_preP3 = false
