@@ -8,6 +8,7 @@ local CL = DBM_COMMON_L
 mod:SetRevision("20220609123000") -- fxpw check 20220609123000
 
 mod:SetCreatureID(21213)
+
 mod:RegisterCombat("yell", L.YellPull)
 mod:SetUsedIcons(4, 5, 6, 7, 8)
 
@@ -19,7 +20,7 @@ mod:RegisterEventsInCombat(
 	"CHAT_MSG_RAID_BOSS_EMOTE",
 	"UNIT_HEALTH"
 )
-mod:SetModelID(20739)
+
 local warnMurlocksSoon = mod:NewAnnounce("WarnMurlocksSoon", 3, "Interface\\Icons\\INV_Misc_MonsterHead_02")
 local warnGraves       = mod:NewTargetAnnounce(37850, 3)
 local warnGlobes       = mod:NewAnnounce("WarnGlobes", 3)
