@@ -13,6 +13,7 @@ mod:RegisterEvents(
 	"SPELL_SUMMON 29962 37051 37052 37053",
 	"UNIT_DIED"
 )
+mod:AddTimerLine(DBM_CORE_L.NORMAL_MODE)
 
 local warningFlameCast  = mod:NewCastAnnounce(30004, 4)
 local warningArcaneCast = mod:NewCastAnnounce(29973, 4)
@@ -26,7 +27,7 @@ local specWarnDontMove = mod:NewSpecialWarning("DBM_ARAN_DO_NOT_MOVE")
 local specWarnArcane   = mod:NewSpecialWarningRun(29973)
 local specWarnBlizzard = mod:NewSpecialWarningMove(29951)
 
-local timerSpecial         = mod:NewTimer(30, "timerSpecial", "Interface\\Icons\\INV_Enchant_EssenceMagicLarge")
+local timerSpecial         = mod:NewTimer(30, "TimerSpecialHeroic", "Interface\\Icons\\INV_Enchant_EssenceMagicLarge")
 local timerFlameCast       = mod:NewCastTimer(5, 30004)
 local timerArcaneExplosion = mod:NewCastTimer(10, 29973)
 local timerBlizzadCast     = mod:NewCastTimer(3.7, 29969)
@@ -35,11 +36,15 @@ local timerBlizzad         = mod:NewBuffActiveTimer(40, 29951)
 local timerElementals      = mod:NewBuffActiveTimer(90, 37053)
 local timerChains          = mod:NewTargetTimer(10, 29991)
 
-local timerSpecialHeroic = mod:NewTimer(43, "TimerSpecialHeroic", "Interface\\Icons\\INV_Enchant_EssenceMagicLarge")
+mod:AddTimerLine(DBM_CORE_L.HEROIC_MODE)
+
+local warnFreeze         = mod:NewAnnounce("WarnFreeze", 4, 305328)
+
 local specWarnWinter     = mod:NewSpecialWarningRun(305329)
 local specWarnFreeze     = mod:NewSpecialWarning("SpecWarnFreeze")
+
 local timerFreeze        = mod:NewTargetTimer(30, 305328)
-local warnFreeze         = mod:NewAnnounce("WarnFreeze", 4, 305328)
+local timerSpecialHeroic = mod:NewTimer(43, "TimerSpecialHeroic", "Interface\\Icons\\INV_Enchant_EssenceMagicLarge")
 
 local berserkTimer = mod:NewBerserkTimer(900)
 
