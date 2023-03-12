@@ -38,16 +38,15 @@ L:SetWarningLocalization{
 }
 
 L:SetTimerLocalization{
-	Phase2						= "Фаза 2",
-	Dance						= "Танцы",
-	Spree						= "Череда"
+	Phase2						= "Фаза 2"
 }
 
 L:SetOptionLocalization{
 	DBM_MOROES_VANISH_FADED		= "Показывать предупреждение о ванише Мороуза",
 	WarnPhase2Soon				= "Предупреждать о приближении второй фазы",
 	WarnDeathMark				= LDB.AUTO_ANNOUNCE_OPTIONS.you:format(305470, GetSpellInfo(305470) or "unknown"),
-	Phase2						= "Отсчитывать время до второй фазы."
+	Phase2						= "Отсчитывать время до второй фазы.",
+	MarkIcon					= "Устанавливать метки на цели заклинания $spell:305470"
 }
 
 L:SetMiscLocalization{

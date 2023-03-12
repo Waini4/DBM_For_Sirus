@@ -20,7 +20,7 @@ local warningBanishSoon = mod:NewAnnounce("DBM_NS_WARN_BANISH_SOON", 2, "Interfa
 local warningPortal     = mod:NewAnnounce("warningPortal", 3, "Interface\\Icons\\Spell_Arcane_PortalIronForge")
 local warningBanish     = mod:NewAnnounce("warningBanish", 3, "Interface\\Icons\\Spell_Shadow_Cripple")
 local warningBreathCast = mod:NewCastAnnounce(38523, 2)
-local warningVoid       = mod:NewSpellAnnounce(37063, 3)
+local warningVoid       = mod:NewSpellAnnounce(30533, 3)
 
 local specWarnVoid 		= mod:NewSpecialWarningMove(30533, nil, nil, 2, 4, 2)
 

@@ -66,7 +66,7 @@ local timerGroundCD     = mod:NewCDTimer(20, 305271, nil, nil, nil, 3)	-- Свя
 local WarnGround = mod:NewTargetNoFilterAnnounce(305271, nil, nil, nil, 3, 3)
 local specWarnGround = mod:NewSpecialWarningYou(305271, nil, nil, nil, 3, 2)
 
-local soundGroundOnYou				= mod:NewSoundYou(72762)
+local soundGroundOnYou				= mod:NewSoundYou(305271)
 
 mod.vb.ground = true
 

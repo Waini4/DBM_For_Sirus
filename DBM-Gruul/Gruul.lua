@@ -11,19 +11,23 @@ mod:RegisterEvents(
 	"SPELL_AURA_APPLIED 305201 305204 36297 36240",
 	"SPELL_AURA_REMOVED 305201"
 )
+mod:AddTimerLine(DBM_CORE_L.NORMAL_MODE)
+
+local specWarnRock                  = mod:NewSpecialWarningMove(36240)
 
 local timerEarthStrikeCD            = mod:NewCDTimer(133, 33525)
 local timerEchoCD                   = mod:NewCDTimer(18, 36297)
 local timerRockCD                   = mod:NewCDTimer(30, 36240)
-local specWarnRock                  = mod:NewSpecialWarningMove(36240)
 
-local timerHandCD                   = mod:NewCDTimer(29, 305188)
-local timerHateStrike		    = mod:NewCDTimer(6, 305197)
-local timerStunningBlow		    = mod:NewCDTimer(20, 305183)
-local timerHandStrike               = mod:NewTimer(7,"Strike", 305188)
-local timerFurnaceActive            = mod:NewTimer(8,"TimerFurnaceActive", 305201)
-local timerFurnaceInactive          = mod:NewTimer(43,"TimerFurnaceInactive", 305201)
-local timerBurnedFlesh              = mod:NewTimer(20,"TimerBurnedFlesh", 305204)
+mod:AddTimerLine(DBM_CORE_L.HEROIC_MODE)
+
+local timerHandCD                   = mod:NewCDTimer(29, 305188)-- Руки(Зов камня)
+local timerHateStrike		    = mod:NewCDTimer(6, 305197)-- Удар ненависти
+local timerStunningBlow		    = mod:NewCDTimer(20, 305183)-- Ошеломляющий удар
+local timerHandStrike               = mod:NewTimer(7,"Strike", 305188)	-- руки закроются через/Хлопок
+local timerFurnaceActive            = mod:NewTimer(8,"TimerFurnaceActive", 305201)-- время активности печи
+local timerFurnaceInactive          = mod:NewTimer(43,"TimerFurnaceInactive", 305201)-- время неактивности печи
+local timerBurnedFlesh              = mod:NewTimer(20,"TimerBurnedFlesh", 305204)-- Обожженная плоть
 
 local rockCounter = 1
 

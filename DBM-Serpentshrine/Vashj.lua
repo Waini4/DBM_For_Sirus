@@ -1,6 +1,3 @@
----------------------------------------------
----------------------------------------------
-
 local mod = DBM:NewMod("Vashj", "DBM-Serpentshrine")
 local L   = mod:GetLocalizedStrings()
 
@@ -10,7 +7,7 @@ mod:SetRevision("20220609123000") -- fxpw check 20220609123000
 mod:SetCreatureID(21212)
 mod:RegisterCombat("combat", 21212)
 mod:SetUsedIcons(7, 8)
-mod:SetModelID(20748)
+mod:SetModelID(21212)
 
 mod:RegisterEventsInCombat(
 	"CHAT_MSG_MONSTER_YELL",
@@ -26,6 +23,8 @@ mod:RegisterEventsInCombat(
 	"SPELL_SUMMON 310635 310657"
 )
 
+mod:AddTimerLine(L.Normal)
+
 local warnCore      = mod:NewAnnounce("WarnCore", 3, 38132)
 local warnCharge    = mod:NewTargetAnnounce(38280, 4)
 local warnPhase     = mod:NewAnnounce("WarnPhase", 1)
@@ -35,14 +34,15 @@ local specWarnCore   = mod:NewSpecialWarningYou(38132)
 local specWarnCharge = mod:NewSpecialWarningRun(38280)
 
 local timerStrider   = mod:NewTimer(45, "Strider", "Interface\\Icons\\INV_Misc_Fish_13", nil, nil, 1)
-local timerElemental = mod:NewTimer(45, "TaintedElemental", "Interface\\Icons\\Spell_Nature_ElementalShields", nil, nil,
-	1)
+local timerElemental = mod:NewTimer(45, "TaintedElemental", "Interface\\Icons\\Spell_Nature_ElementalShields", nil, nil, 1)
 local timerNaga      = mod:NewTimer(45, "Naga", "Interface\\Icons\\INV_Misc_MonsterHead_02", nil, nil, 1)
 local timerCharge    = mod:NewTargetTimer(20, 38280, nil, nil, nil, 4)
+
 local berserkTimer   = mod:NewBerserkTimer(600)
 
 --------------------------------Героик--------------------------------
 
+mod:AddTimerLine(L.Heroic)
 
 local warnStaticAnger = mod:NewTargetAnnounce(310636, 3) -- Статический заряд
 local warnElemAnonce  = mod:NewSoonAnnounce(310635, 1) -- Скоро призыв элементалей хм
@@ -79,9 +79,6 @@ local StaticTargets = {}
 local StaticIcons = 8
 
 do
-	-- local function sort_by_group(v1, v2)
-	-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
-	-- end
 	function mod:StaticAngerIcons() -- метки и анонс целей статического заряда
 		if DBM:GetRaidRank() >= 0 then
 			table.sort(StaticTargets, function(v1, v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
@@ -127,6 +124,13 @@ function mod:NextElem()
 	self:ScheduleMethod(45, "NextElemAnonce")
 end
 
+function mod:NextElemental()
+	timerElemental:Start()
+	self:UnscheduleMethod("NextElemental")
+	self:ScheduleMethod(45, "NextElemental")
+
+end
+
 function mod:NextElemAnonce()
 	warnElemAnonce:Show()
 	warned_elem = false
@@ -135,6 +139,12 @@ end
 function mod:ElementalSoon()
 	ti = true
 	warnElemental:Show()
+end
+
+function mod:UNIT_TARGET()
+	if ti then
+		self:TaintedIcon()
+	end
 end
 
 function mod:SWING_DAMAGE(sourceGUID, sourceName, _, destGUID)
@@ -166,23 +176,11 @@ function mod:OnCombatStart(delay)
 	if mod:IsDifficulty("heroic25") then
 		DBM.RangeCheck:Show(20)
 		timerElemCD:Start(10)
-		timerStaticAngerCD:Start()
+		timerStaticAngerCD:Start(-delay)
 	else -- Обычка
 		berserkTimer:Start()
 	end
 end
-
--- function mod:OnCombatEnd(wipe)
--- 	DBM:FireCustomEvent("DBM_EncounterEnd", 21212, "Lady Vashj", wipe)
--- 	warned_elem = false
--- 	warned_preP1 = false
--- 	warned_preP2 = false
--- 	warned_preP3 = false
--- 	warned_preP4 = false
--- 	DBM.RangeCheck:Hide()
--- end
-
-
 
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
@@ -290,6 +288,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		timerStrider:Start()
 		timerElemental:Start()
 		timerNaga:Start()
+		self:ScheduleMethod(45, "NextElemental")
 		self:ScheduleMethod(45, "NextStrider")
 		self:ScheduleMethod(30, "NextNaga")
 		self:ScheduleMethod(42, "ElementalSoon")
@@ -298,17 +297,18 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		timerStrider:Cancel()
 		timerElemental:Cancel()
 		timerNaga:Cancel()
+		self:UnscheduleMethod("NextElemental")
 		self:UnscheduleMethod("NextStrider")
 		self:UnscheduleMethod("NextNaga")
 	end
 end
 
-function mod:UNIT_DIED(args)
-	if args.destName == L.TaintedElemental then
-		timerElemental:Start()
-		self:ScheduleMethod(45, "ElementalSoon")
-	end
-end
+-- function mod:UNIT_DIED(args)
+-- 	if args.destName == L.TaintedElemental then
+-- 		timerElemental:Start()
+-- 		self:ScheduleMethod(45, "ElementalSoon")
+-- 	end
+-- end
 
 function mod:UNIT_HEALTH(uId)
 	if self:GetUnitCreatureId(uId) == 21212 then
@@ -347,16 +347,11 @@ function mod:UNIT_HEALTH(uId)
 
 end
 
-function mod:UNIT_TARGET()
-	if ti then
-		self:TaintedIcon()
-	end
-end
-
 function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 21212, "Lady Vashj", wipe)
 	self:UnscheduleMethod("NextStrider")
 	self:UnscheduleMethod("NextNaga")
 	self:UnscheduleMethod("ElementalSoon")
+	self:UnscheduleMethod("NextElemental")
 	DBM.RangeCheck:Hide()
 end
