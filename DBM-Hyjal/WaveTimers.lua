@@ -3,7 +3,7 @@ local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20210605153940")
 mod:SetUsedIcons(7, 8)
-mod:SetUsedIcons(4,5,6,7, 8)
+mod:SetUsedIcons(4, 5, 6, 7, 8)
 mod:RegisterEvents(
 	"GOSSIP_SHOW",
 	"QUEST_PROGRESS",
@@ -11,28 +11,28 @@ mod:RegisterEvents(
 	"UNIT_DIED",
 	"UPDATE_WORLD_STATES",
 	"UNIT_TARGET",
-	"SPELL_AURA_APPLIED 319232",
-	"SPELL_AURA_REMOVED 319232",
+	"SPELL_AURA_APPLIED 319232 319502 319503",
+	"SPELL_AURA_REMOVED 319232 319502 319503",
 	"COMBAT_LOG_EVENT_UNFILTERED"
-	-- "SWING_DAMAGE",
-	-- "SWING_MISSED"
+-- "SWING_DAMAGE",
+-- "SWING_MISSED"
 )
-mod.noStatistics = true
+mod.noStatistics            = true
 
-local warnWave        	= mod:NewAnnounce("WarnWave", 1)
-local warnBrandofHorror = mod:NewTargetNoFilterAnnounce(319502)
-local warnCannibalize 	= mod:NewSpellAnnounce(31538, 2)
+local warnWave              = mod:NewAnnounce("WarnWave", 1)
+local warnBrandofHorror     = mod:NewTargetNoFilterAnnounce(319502)
+local warnCannibalize       = mod:NewSpellAnnounce(31538, 2)
 
-local specWarnSlimeFinal 	= mod:NewSpecialWarningMoveAway(319236, nil, nil, nil, 4, 2)
+local specWarnSlimeFinal    = mod:NewSpecialWarningMoveAway(319236, nil, nil, nil, 4, 2)
 local specWarnBrandofHorror = mod:NewSpecialWarningMoveAway(319502, nil, nil, nil, 4, 2)
-local specWarnSlime     	= mod:NewSpecialWarningDodge(319230, nil, nil, nil, 1, 2)
-local specWarnSlimeNear  	= mod:NewSpecialWarningClose(319230, nil, nil, nil, 1, 2)
-local yellSlime         	= mod:NewYell(319230)
-local yellBrandofHorror		= mod:NewYell(319502)
-local yellBrandofHorrorFade	= mod:NewShortFadesYell(319502)
+local specWarnSlime         = mod:NewSpecialWarningDodge(319230, nil, nil, nil, 1, 2)
+local specWarnSlimeNear     = mod:NewSpecialWarningClose(319230, nil, nil, nil, 1, 2)
+local yellSlime             = mod:NewYell(319230)
+local yellBrandofHorror     = mod:NewYell(319502)
+local yellBrandofHorrorFade = mod:NewShortFadesYell(319502)
 -- local specWarnSuicide              = mod:NewSpecialWarningGTFO(319236, nil, nil, nil, 1, 5)
 
-local timerWave = mod:NewTimer(125, "TimerWave", nil, nil, nil, 1)
+local timerWave             = mod:NewTimer(125, "TimerWave", nil, nil, nil, 1)
 
 mod:AddSetIconOption("SetIconOnSlime", 319230, true, false, { 7, 8 })
 mod:AddBoolOption("SetNecromancerIcon")
@@ -47,7 +47,7 @@ local bossNames = {
 	[3] = L.Kazrogal,
 	[4] = L.Azgalor
 }
-mod.frameForPudge = CreateFrame("Frame",nil,UIParent)
+mod.frameForPudge = CreateFrame("Frame", nil, UIParent)
 mod.frameForPudge.Scan = false
 mod.vb.NecromancerIcon = 6
 mod.vb.IsEventsRegisterd = false
@@ -84,7 +84,6 @@ function mod:Slime(targetname)
 	end
 end
 
-
 function mod:GOSSIP_SHOW()
 	if GetRealZoneText() ~= L.HyjalZoneName then return end
 	local target = UnitName("target")
@@ -120,7 +119,6 @@ function mod:UPDATE_WORLD_STATES()
 		currentWave = 0
 	end
 	self:WaveFunction(currentWave)
-
 end
 
 function mod:OnSync(msg, arg)
@@ -146,7 +144,7 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	if args.spellId == 31538 then
 		warnCannibalize:Show()
-	elseif args:IsSpellID(319502) then
+	elseif args:IsSpellID(319502, 319503) then
 		warnBrandofHorror:Show(args.destName)
 		if args:IsPlayer() then
 			specWarnBrandofHorror:Show()
@@ -159,11 +157,12 @@ end
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(319232) then
 		self:BossTargetScanner(50640, "Slime", 0.05, 6)
-	elseif args:IsSpellID(319502) then
-		elseif args:IsPlayer() then
-			yellBrandofHorrorFade:Cancel()
+	elseif args:IsSpellID(319502, 319503) then
+	elseif args:IsPlayer() then
+		yellBrandofHorrorFade:Cancel()
 	end
 end
+
 function mod:WaveFunction(currentWave)
 	local timer = 0
 	currentWave = tonumber(currentWave)
@@ -187,7 +186,7 @@ function mod:WaveFunction(currentWave)
 					warnWave:Show(L.WarnWave_3:format(currentWave, 4, L.Fiend, 3, L.Necromancer, 1, L.Pudge2))
 				end
 			end
-		-- if boss == 0 or boss == 1 or boss == 2 then
+			-- if boss == 0 or boss == 1 or boss == 2 then
 		elseif boss == 1 or boss == 2 then
 			timer = 180
 			if currentWave == 5 then
@@ -220,8 +219,8 @@ function mod:WaveFunction(currentWave)
 				elseif currentWave == 5 then
 					warnWave:Show(L.WarnWave_3:format(currentWave, 6, L.Ghoul, 4, L.Banshee, 2, L.Necromancer))
 				end
-			-- else
-			-- 	warnWave:Show(L.WarnWave_0:format(currentWave))
+				-- else
+				-- 	warnWave:Show(L.WarnWave_0:format(currentWave))
 			end
 			self:SendSync("boss", boss)
 		elseif boss == 3 or boss == 4 then
@@ -233,7 +232,8 @@ function mod:WaveFunction(currentWave)
 			end
 			if self.Options.DetailedWave and boss == 3 then
 				if currentWave == 1 then
-					warnWave:Show(L.WarnWave_4:format(currentWave, 4, L.Ghoul, 4, L.Abomination, 2, L.Necromancer, 2, L.Banshee))
+					warnWave:Show(L.WarnWave_4:format(currentWave, 4, L.Ghoul, 4, L.Abomination, 2, L.Necromancer, 2,
+						L.Banshee))
 				elseif currentWave == 2 then
 					warnWave:Show(L.WarnWave_2:format(currentWave, 4, L.Ghoul, 10, L.Gargoyle))
 				elseif currentWave == 3 then
@@ -255,24 +255,23 @@ function mod:WaveFunction(currentWave)
 				elseif currentWave == 5 then
 					warnWave:Show(L.WarnWave_3:format(currentWave, 4, L.Abomination, 4, L.Necromancer, 6, L.Stalker))
 				end
-		-- 	else
-		-- 		warnWave:Show(L.WarnWave_0:format(currentWave))
+				-- 	else
+				-- 		warnWave:Show(L.WarnWave_0:format(currentWave))
 			end
 			self:SendSync("boss", boss)
 		end
 		timerWave:Start(timer)
 		lastWave = currentWave
-	-- elseif lastWave > currentWave then
-	-- 	if lastWave == 5 then
-	-- 		warnWave:Show(bossNames[boss])
-	-- 	end
-	-- 	timerWave:Cancel()
-	-- 	lastWave = currentWave
-	-- elseif UnitIsDeadOrGhost("player") then
-	-- 	timerWave:Cancel()
+		-- elseif lastWave > currentWave then
+		-- 	if lastWave == 5 then
+		-- 		warnWave:Show(bossNames[boss])
+		-- 	end
+		-- 	timerWave:Cancel()
+		-- 	lastWave = currentWave
+		-- elseif UnitIsDeadOrGhost("player") then
+		-- 	timerWave:Cancel()
 	end
 end
-
 
 function mod:UNIT_TARGET()
 	if self.Options.SetNecromancerIcon then
@@ -286,10 +285,11 @@ function mod:UNIT_TARGET()
 		end
 	end
 end
+
 local upd = 0
 
 mod.frameForPudge:Show()
-mod.frameForPudge:SetScript("OnUpdate", function(self,up)
+mod.frameForPudge:SetScript("OnUpdate", function(self, up)
 	if self.Scan then
 		upd = upd + up
 		if upd > 0.7 then
@@ -298,12 +298,12 @@ mod.frameForPudge:SetScript("OnUpdate", function(self,up)
 				local name = UnitName(unit)
 				if name == L.Pudge1 then
 					-- if UnitName(unit) == name then
-						local hp = UnitHealth(unit) / UnitHealthMax(unit) * 100
-						if hp and hp > 1 and hp < 15  then
-							if mod:AntiSpam(3,1) then
-								specWarnSlimeFinal:Show()
-							end
+					local hp = UnitHealth(unit) / UnitHealthMax(unit) * 100
+					if hp and hp > 1 and hp < 15 then
+						if mod:AntiSpam(3, 1) then
+							specWarnSlimeFinal:Show()
 						end
+					end
 					-- end
 				end
 			end

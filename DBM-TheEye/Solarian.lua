@@ -24,7 +24,7 @@ mod:RegisterEventsInCombat(
 	-- "SPELL_DISPEL",
 	"SPELL_CAST_START 308562 308558 308585 308576",
 	-- "SPELL_CAST_SUCCESS",
-	"SPELL_AURA_REMOVED 42783",
+	"SPELL_AURA_REMOVED 308548 308544 308563 42783",
 	"SPELL_AURA_APPLIED 308548 308544 308563 42783",
 	"SPELL_AURA_APPLIED_DOSE 308548 308544 308563 42783",
 	-- "SWING_DAMAGE",
@@ -33,26 +33,26 @@ mod:RegisterEventsInCombat(
 )
 --------------------------нормал--------------------------
 
-local warnWrathN   = mod:NewTargetAnnounce(42783, 4)
-local warnAddsSoon = mod:NewSpecialWarningAdds(55342, nil, nil, nil, 1, 2)
+local warnWrathN        = mod:NewTargetAnnounce(42783, 4)
+local warnAddsSoon      = mod:NewSpecialWarningAdds(55342, nil, nil, nil, 1, 2)
 
-local specWarnWrathN = mod:NewSpecialWarningRun(42783, nil, nil, nil, 1, 2)
+local specWarnWrathN    = mod:NewSpecialWarningRun(42783, nil, nil, nil, 1, 2)
 
-local timerAdds       = mod:NewTimer(60, "TimerAdds", 55342, "RemoveEnrage", nil, 5, nil, CL.ENRAGE_ICON)
-local timerPriestsN   = mod:NewTimer(14, "TimerPriests", 47788, "SpellCaster", nil, 5, nil, CL.HEALER_ICON)
-local timerWrathN     = mod:NewTargetTimer(6, 42783, nil, "RemoveEnrage", nil, 5, nil, CL.ENRAGE_ICON, nil, 1, 5)
-local timerNextWrathN = mod:NewCDTimer(21, 42783, nil, "RemoveEnrage", nil, 5, nil, CL.ENRAGE_ICON)
+local timerAdds         = mod:NewTimer(60, "TimerAdds", 55342, "RemoveEnrage", nil, 5, nil, CL.ENRAGE_ICON)
+local timerPriestsN     = mod:NewTimer(14, "TimerPriests", 47788, "SpellCaster", nil, 5, nil, CL.HEALER_ICON)
+local timerWrathN       = mod:NewTargetTimer(6, 42783, nil, "RemoveEnrage", nil, 5, nil, CL.ENRAGE_ICON, nil, 1, 5)
+local timerNextWrathN   = mod:NewCDTimer(21, 42783, nil, "RemoveEnrage", nil, 5, nil, CL.ENRAGE_ICON)
 
 --------------------------героик--------------------------
 
-local warnRing      = mod:NewSoonAnnounce(308563, 3) -- ослепляющее кольцо
+local warnRing          = mod:NewSoonAnnounce(308563, 3) -- ослепляющее кольцо
 -- local warnPhase2Soon = mod:NewPrePhaseAnnounce(2)
-local warnPhase2    = mod:NewPhaseAnnounce(2)
-local warnKol       = mod:NewTargetAnnounce(308563, 2) -- Кольцо
-local warnFlashVoid = mod:NewSoonAnnounce(308585, 3)
+local warnPhase2        = mod:NewPhaseAnnounce(2)
+local warnKol           = mod:NewTargetAnnounce(308563, 2) -- Кольцо
+local warnFlashVoid     = mod:NewSoonAnnounce(308585, 3)
 
-local specWarnHelp      = mod:NewSpecialWarningAdds(308559, nil, nil, nil, 1, 2) -- Послушники
-local specWarnDebaf     = mod:NewSpecialWarningRun(308544, nil, nil, nil, 3, 4) -- Дебаф 1я фаза
+local specWarnHelp      = mod:NewSpecialWarningAdds(308559, nil, nil, nil, 1, 2)     -- Послушники
+local specWarnDebaf     = mod:NewSpecialWarningRun(308544, nil, nil, nil, 3, 4)      -- Дебаф 1я фаза
 local specWarnFlashVoid = mod:NewSpecialWarningLookAway(308585, nil, nil, nil, 2, 2) -- фир 2 фаза
 local yellWrathH        = mod:NewYell(308548)
 local yellWrathHOb      = mod:NewYell(42783)
@@ -218,7 +218,6 @@ function mod:SPELL_AURA_REMOVED(args)
 			DBM.Nameplate:Hide(args.destGUID, 308548)
 		end
 	end
-
 end
 
 function mod:PriestHIcon() -- хм

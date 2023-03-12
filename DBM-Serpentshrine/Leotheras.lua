@@ -17,6 +17,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 37676 310510 310508 310503 310487 310521 310514",
 	"UNIT_HEALTH",
 	"SPELL_AURA_APPLIED 37640 37676 310480 310502 310502 310521 310496 310497 310514",
+	"SPELL_AURA_APPLIED_DOSE 37640 37676 310480 310502 310502 310521 310496 310497 310514",
 	"SPELL_AURA_REMOVED 37676",
 	"SPELL_HEAL",
 	"SPELL_PERIODIC_HEAL"
@@ -41,13 +42,13 @@ local berserkTimer     = mod:NewBerserkTimer(360)
 
 local warnRass       = mod:NewStackAnnounce(310480, 5, nil, "Tank") -- Рассеченая душа
 local warnKogti      = mod:NewStackAnnounce(310502, 5, nil, "Tank") -- Когти
-local warnNat        = mod:NewTargetAnnounce(310478, 3) -- Натиск
-local warnChardg     = mod:NewTargetAnnounce(310481, 3) -- Рывок
-local warnPepels     = mod:NewTargetAnnounce(310514, 3) -- Испепеление
-local warnKlei       = mod:NewTargetAnnounce(310496, 4) -- Клеймо
-local warnMeta       = mod:NewSpellAnnounce(310484, 3) --Мета
-local warnPepel      = mod:NewSpellAnnounce(310514, 3) --пепел
-local warnVsp        = mod:NewStackAnnounce(310521, 5) --Вспышка
+local warnNat        = mod:NewTargetAnnounce(310478, 3)             -- Натиск
+local warnChardg     = mod:NewTargetAnnounce(310481, 3)             -- Рывок
+local warnPepels     = mod:NewTargetAnnounce(310514, 3)             -- Испепеление
+local warnKlei       = mod:NewTargetAnnounce(310496, 4)             -- Клеймо
+local warnMeta       = mod:NewSpellAnnounce(310484, 3)              --Мета
+local warnPepel      = mod:NewSpellAnnounce(310514, 3)              --пепел
+local warnVsp        = mod:NewStackAnnounce(310521, 5)              --Вспышка
 local warnPhase2Soon = mod:NewPrePhaseAnnounce(2)
 local warnPhase2     = mod:NewPhaseAnnounce(2)
 local yellKlei       = mod:NewYell(310496)
@@ -66,14 +67,14 @@ local specWarnPepely  = mod:NewSpecialWarningYou(310514, nil, nil, nil, 1, 4)
 
 local timerRass       = mod:NewTargetTimer(40, 310480, nil, "Tank", nil, 5, nil, CL.TANK_ICON) -- Рассеченая душа
 local timerKogti      = mod:NewTargetTimer(40, 310502, nil, "Tank", nil, 5, nil, CL.TANK_ICON) -- Когти
-local timerVsp        = mod:NewTargetTimer(60, 310521, nil, nil, nil, 5, nil, CL.TANK_ICON) -- Когти
-local timerKlei       = mod:NewTargetTimer(30, 310497, nil, nil, nil, 3) -- Клеймо
-local timerAnigCast   = mod:NewCastTimer(10, 310508, nil, nil, nil, 2) -- Аниг
-local timerVzgCast    = mod:NewCastTimer(5, 310516, nil, nil, nil, 2) -- Взгляд
-local timerChardgCast = mod:NewCastTimer(3, 310481, nil, nil, nil, 3) -- Рывок
-local timerMetaCast   = mod:NewCastTimer(3, 310484, nil, nil, nil, 3) -- Мета
-local timerNatCast    = mod:NewCastTimer(3, 310478, nil, nil, nil, 3) -- Натиск
-local timerPepelCast  = mod:NewCastTimer(3, 310514, nil, nil, nil, 3) -- Испепел
+local timerVsp        = mod:NewTargetTimer(60, 310521, nil, nil, nil, 5, nil, CL.TANK_ICON)    -- Когти
+local timerKlei       = mod:NewTargetTimer(30, 310497, nil, nil, nil, 3)                       -- Клеймо
+local timerAnigCast   = mod:NewCastTimer(10, 310508, nil, nil, nil, 2)                         -- Аниг
+local timerVzgCast    = mod:NewCastTimer(5, 310516, nil, nil, nil, 2)                          -- Взгляд
+local timerChardgCast = mod:NewCastTimer(3, 310481, nil, nil, nil, 3)                          -- Рывок
+local timerMetaCast   = mod:NewCastTimer(3, 310484, nil, nil, nil, 3)                          -- Мета
+local timerNatCast    = mod:NewCastTimer(3, 310478, nil, nil, nil, 3)                          -- Натиск
+local timerPepelCast  = mod:NewCastTimer(3, 310514, nil, nil, nil, 3)                          -- Испепел
 
 
 mod:AddSetIconOption("SetIconOnDemonTargets", 37676, true, true, { 5, 6, 7, 8 })
@@ -258,7 +259,8 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.KleiIcon then
 			self:SetIcon(args.destName, 8, 30)
 			timerKlei:Start(args.destName)
-		elseif args:IsPlayer() then
+		end
+		if args:IsPlayer() then
 			specWarnKlei:Show()
 			yellKlei:Yell()
 			yellKleiFade:Countdown(spellId)
