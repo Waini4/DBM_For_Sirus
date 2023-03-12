@@ -26,7 +26,7 @@ local warnOverloadFel      = mod:NewTargetAnnounce(317666, 2) --Перегруз
 local warnShocking         = mod:NewSpellAnnounce(317673, 3)  --Сотрясающий удар
 local warnMagic            = mod:NewTargetAnnounce(317675, 1) --Извергающаяся магия
 
-local specShockingMoveAway = mod:NewSpecialWarningMoveAway(317673, nil, "Melee", nil, 4, 1)
+local specShockingMoveAway = mod:NewSpecialWarningMoveAway(317673, "Melee", nil, nil, 4, 1)
 local specWarnFelYou       = mod:NewSpecialWarningYou(317666, nil, nil, nil, 4, 1)
 local specWarnFelMoveTo    = mod:NewSpecialWarningMoveTo(317666, nil, nil, nil, 3, 1)
 local specWarnDarkYou      = mod:NewSpecialWarningYou(317662, nil, nil, nil, 4, 1)
