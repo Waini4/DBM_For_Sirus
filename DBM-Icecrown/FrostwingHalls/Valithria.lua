@@ -122,7 +122,7 @@ function mod:StartAbomTimer()
 end
 
 function mod:OnCombatStart(delay)
-	DBM:FireCustomEvent("DBM_EncounterStart", 36789, "Valithria")
+	DBM:FireCustomEvent("DBM_EncounterStart", 36789, "Valithria Dreamwalker")
 	if self:IsHeroic() then
 		berserkTimer:Start(-delay)
 	end
