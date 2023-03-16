@@ -31,12 +31,9 @@ local timerPierceCD    = mod:NewCDTimer(10, 305464, nil, nil, nil, 5, nil, CL.TA
 local timerWoundCD     = mod:NewCDTimer(10, 305463, nil, nil, nil, 5, nil, CL.TANK_ICON)
 local timerDeathMark   = mod:NewTargetTimer(7, 305470, nil, nil, nil, 5, nil, CL.HEALER_ICON) -- метка
 local timerDeathMarkCD = mod:NewCDTimer(25, 305470, nil, nil, nil, 3, nil, CL.HEALER_ICON) -- метка
-local timerPhase2      = mod:NewTimer(180, "Phase2", 40810, nil, nil, 6)
-local timerDanceCD     = mod:NewCDTimer(20, "Dance", 305472, nil, nil, nil, 7) -- танец
-local timerSpreeCD     = mod:NewCDTimer(85, "Spree", 305461, nil, nil, 6) -- череда
--- local timerSpreeCDTest			= mod:NewCDTimer(85, 305461, nil, nil, 6) -- череда тестовая
-
--- local warnSound					= mod:NewSoundAnnounce()
+local timerPhase2      = mod:NewPhaseTimer(180)
+local timerDanceCD     = mod:NewCDTimer(20, 305472, nil, nil, nil, 7) -- танец
+local timerSpreeCD     = mod:NewCDTimer(85, 305461, nil, nil, 6) -- череда
 
 local berserkTimer = mod:NewBerserkTimer(525)
 

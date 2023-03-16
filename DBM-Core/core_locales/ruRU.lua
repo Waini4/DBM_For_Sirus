@@ -669,13 +669,15 @@ L.WORLD_BUFFS.zgHeartYojamba = "Начинайте ритуал, слуги мо
 L.WORLD_BUFFS.rendHead       = "Самозванец Ренд Чернорук мертв!"
 
 --Retail Globals
-L.RAID_INFO_WORLD_BOSS = "Босс вне подземелья"
-L.SCENARIO_STAGE       = "%d-й этап"
-L.HARD_MODE            = "Сложный режим" -- 17220
-L.NORMAL_MODE10        = "Нормальный (10) режим"
-L.NORMAL_MODE25        = "Нормальный (25) режим"
-L.HEROIC_MODE10        = "Героический (10) режим"
-L.HEROIC_MODE25        = "Героический (25) режим"
+L.RAID_INFO_WORLD_BOSS	= "Босс вне подземелья"
+L.SCENARIO_STAGE		= "%d-й этап"
+L.NORMAL_MODE			= "Обычный режим"
+L.HEROIC_MODE			= "Героический режим"
+L.HARD_MODE				= "Сложный режим" -- 17220
+L.NORMAL_MODE10			= "Нормальный (10) режим"
+L.NORMAL_MODE25			= "Нормальный (25) режим"
+L.HEROIC_MODE10			= "Героический (10) режим"
+L.HEROIC_MODE25			= "Героический (25) режим"
 
 
 --some ru locs

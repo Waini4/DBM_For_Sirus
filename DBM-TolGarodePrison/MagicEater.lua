@@ -9,7 +9,7 @@ mod:SetUsedIcons(6, 7, 8)
 mod:RegisterCombat("combat", 84017)
 
 mod:RegisterEvents(
-	"SPELL_CAST_START 317673 317674",
+	"SPELL_CAST_START 317673 317674 317743",
 	"SPELL_AURA_APPLIED 317641 317645 317681 317683 317662 317666 317650 317653",
 	"SPELL_AURA_REMOVED 317662 317666",
 	"SPELL_SUMMON 317685",
@@ -18,37 +18,38 @@ mod:RegisterEvents(
 
 --SPELL_AURA_APPLIED,317664,"Колодец Тьмы",0x20,DEBUFF
 --SPELL_AURA_APPLIED,317668,"Очаг Скверны",0x4,DEBUFF
-local warnActivationDark = mod:NewSpellAnnounce(317650, 3) --Активация: Тьма
-local warnShelling       = mod:NewSpellAnnounce(317685, 3) --Активация: Скверна
-local warnActivationFel  = mod:NewSpellAnnounce(317653, 3)
-local warnOverloadDark   = mod:NewTargetAnnounce(317662, 2) --Перегрузка метки Тьмы
-local warnOverloadFel    = mod:NewTargetAnnounce(317666, 2) --Перегрузка метки Скверны
-local warnShocking       = mod:NewSpellAnnounce(317673, 3) --Сотрясающий удар
-local warnMagic          = mod:NewTargetAnnounce(317675, 1) --Извергающаяся магия
+local warnActivationDark   = mod:NewSpellAnnounce(317650, 3)  --Активация: Тьма
+local warnShelling         = mod:NewSpellAnnounce(317685, 3)  --Активация: Скверна
+local warnActivationFel    = mod:NewSpellAnnounce(317653, 3)
+local warnOverloadDark     = mod:NewTargetAnnounce(317662, 2) --Перегрузка метки Тьмы
+local warnOverloadFel      = mod:NewTargetAnnounce(317666, 2) --Перегрузка метки Скверны
+local warnShocking         = mod:NewSpellAnnounce(317673, 3)  --Сотрясающий удар
+local warnMagic            = mod:NewTargetAnnounce(317675, 1) --Извергающаяся магия
 
-local specWarnFelYou     = mod:NewSpecialWarningYou(317666, nil, nil, nil, 4, 1)
-local specWarnFelMoveTo  = mod:NewSpecialWarningMoveTo(317666, nil, nil, nil, 3, 1)
-local specWarnDarkYou    = mod:NewSpecialWarningYou(317662, nil, nil, nil, 4, 1)
-local specWarnDarkMoveTo = mod:NewSpecialWarningMoveTo(317662, nil, nil, nil, 3, 1)
-local specWarnEnveloping = mod:NewSpecialWarningKeepMove(317641, nil, nil, nil, 1, 1) --Окутывающая Тьма
-local specWarnSpilling   = mod:NewSpecialWarningStopMove(317645, nil, nil, nil, 1, 1) --Разливающаяся Скверна
-local specWarnShadow     = mod:NewSpecialWarningCast(317674, nil, nil, nil, 2, 2) --Воющие тени
-local specWarnShelling   = mod:NewSpecialWarningDodge(317685, nil, nil, nil, 1, 1) --Шквальный обстрел
+local specShockingMoveAway = mod:NewSpecialWarningMoveAway(317673, "Melee", nil, nil, 4, 1)
+local specWarnFelYou       = mod:NewSpecialWarningYou(317666, nil, nil, nil, 4, 1)
+local specWarnFelMoveTo    = mod:NewSpecialWarningMoveTo(317666, nil, nil, nil, 3, 1)
+local specWarnDarkYou      = mod:NewSpecialWarningYou(317662, nil, nil, nil, 4, 1)
+local specWarnDarkMoveTo   = mod:NewSpecialWarningMoveTo(317662, nil, nil, nil, 3, 1)
+local specWarnEnveloping   = mod:NewSpecialWarningKeepMove(317641, nil, nil, nil, 1, 1) --Окутывающая Тьма
+local specWarnSpilling     = mod:NewSpecialWarningStopMove(317645, nil, nil, nil, 1, 1) --Разливающаяся Скверна
+local specWarnShadow       = mod:NewSpecialWarningCast(317674, nil, nil, nil, 2, 2)     --Воющие тени
+local specWarnShelling     = mod:NewSpecialWarningDodge(317685, nil, nil, nil, 1, 1)    --Шквальный обстрел
 
-local timerShockingCD   = mod:NewCDTimer(35, 317673, nil, nil, nil, 3) --Сотрясающий удар
-local timerDarkCD       = mod:NewCDTimer(20, 317650, nil, nil, nil, 4) --Активация: Тьма
-local timerFelCD        = mod:NewCDTimer(20, 317653, nil, nil, nil, 4) --Активация: Скверна
-local timerShadowCD     = mod:NewCDTimer(39, 317674, nil, nil, nil, 2) --Воющие тени
-local timerMagicCD      = mod:NewCDTimer(50, 317675, nil, "Tank", nil, 5) --Извергающаяся магия
-local timerOverloadDark = mod:NewBuffActiveTimer(8, 317650, nil, nil, nil, 7) --Перегрузка метки Тьмы
-local timerOverloadFel  = mod:NewBuffActiveTimer(8, 317653, nil, nil, nil, 7) --Перегрузка метки Скверны
-local timerShellingCast = mod:NewCastTimer(2, 317685, nil, nil, nil, 7) --Шквальный обстрел
-local timerShellingCD   = mod:NewCDTimer(83, 317685, nil, nil, nil, 7) --Шквальный обстрел
+local timerShockingCD      = mod:NewCDTimer(35, 317673, nil, nil, nil, 3)               --Сотрясающий удар
+local timerDarkCD          = mod:NewCDTimer(20, 317650, nil, nil, nil, 4)               --Активация: Тьма
+local timerFelCD           = mod:NewCDTimer(20, 317653, nil, nil, nil, 4)               --Активация: Скверна
+local timerShadowCD        = mod:NewCDTimer(39, 317674, nil, nil, nil, 2)               --Воющие тени
+local timerMagicCD         = mod:NewCDTimer(50, 317675, nil, "Tank", nil, 5)            --Извергающаяся магия
+local timerOverloadDark    = mod:NewBuffActiveTimer(8, 317650, nil, nil, nil, 7)        --Перегрузка метки Тьмы
+local timerOverloadFel     = mod:NewBuffActiveTimer(8, 317653, nil, nil, nil, 7)        --Перегрузка метки Скверны
+local timerShellingCast    = mod:NewCastTimer(2, 317685, nil, nil, nil, 7)              --Шквальный обстрел
+local timerShellingCD      = mod:NewCDTimer(83, 317685, nil, nil, nil, 7)               --Шквальный обстрел
 
-local DarkTargets = {}
-local FelTargets = {}
-local DarkIcons = 8
-local FelIcons = 8
+local DarkTargets          = {}
+local FelTargets           = {}
+local DarkIcons            = 8
+local FelIcons             = 8
 
 
 mod:AddSetIconOption("SetIconOnDarkTargets", 317662, true, true, { 6, 7, 8 })
@@ -104,7 +105,6 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, mob)
 		self.vb.FelIcons = 8
 	end
 end]]
-
 --[[
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 84017, "MagicEater")
@@ -117,7 +117,6 @@ function mod:OnCombatStart(delay)
 		self.vb.FelIcons = 8
 	end
 end]]
-
 function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 84017, "MagicEater", wipe)
 	timerShockingCD:Stop()
@@ -127,7 +126,8 @@ function mod:OnCombatEnd(wipe)
 end
 
 function mod:SPELL_CAST_START(args)
-	if args:IsSpellID(317673) then --Сотрясающий удар
+	if args:IsSpellID(317673, 317743) then --Сотрясающий удар
+		specShockingMoveAway:Show()
 		warnShocking:Show()
 		timerShockingCD:Start()
 	elseif args:IsSpellID(317674) then --Воющие тени

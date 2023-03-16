@@ -211,7 +211,7 @@ end
 -- mod:SetStage(0)
 function mod:OnCombatStart(delay)
 	self:SetStage(1)
-	DBM:FireCustomEvent("DBM_EncounterStart", 36855, "Deathwhisper")
+	DBM:FireCustomEvent("DBM_EncounterStart", 36855, "Lady Deathwhisper")
 	if self.Options.ShieldHealthFrame then
 		DBM.BossHealth:Show(L.name)
 		DBM.BossHealth:AddBoss(36855, L.name)
@@ -242,7 +242,7 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 36855, "Deathwhisper",wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 36855, "Lady Deathwhisper",wipe)
 	DBM.BossHealth:Clear()
 	self:UnscheduleMethod("UnW")
 	self:UnscheduleMethod("EqW")

@@ -1,7 +1,7 @@
 local mod = DBM:NewMod("KaelThas", "DBM-TheEye")
 local L   = mod:GetLocalizedStrings()
 
-local CL = DBM_COMMON_L
+local CL  = DBM_COMMON_L
 mod:SetRevision("20220609123000") -- fxpw check 20220609123000
 
 mod:SetCreatureID(19622)
@@ -27,9 +27,6 @@ mod:RegisterEvents(
 -- 	"SPELL_AURA_APPLIED 308732 308741 308750 308756	308797 36797",
 -- 	"SPELL_AURA_APPLIED_DOSE 308732 308741 308750 308756 308797 36797"
 )]]
-
-
-
 local warnPhase           = mod:NewAnnounce("WarnPhase", 1)
 local warnNextAdd         = mod:NewAnnounce("WarnNextAdd", 2)
 local warnTalaTarget      = mod:NewAnnounce("WarnTalaTarget", 4)
@@ -42,41 +39,41 @@ local warnMCSoon          = mod:NewSoonAnnounce(36797, 2)
 local warnMC              = mod:NewTargetAnnounce(36797, 3)
 local warnGravitySoon     = mod:NewSoonAnnounce(35941, 2)
 
-local specWarnTalaTarget = mod:NewSpecialWarning("SpecWarnTalaTarget")
+local specWarnTalaTarget  = mod:NewSpecialWarning("SpecWarnTalaTarget")
 -- local specWarnFlameStrike   = mod:NewSpecialWarningMove(36731)
 
-local timerNextAdd       = mod:NewTimer(30, "TimerNextAdd", "Interface\\Icons\\Spell_Nature_WispSplode", nil, nil, 2)
-local timerPhase3        = mod:NewTimer(123, "TimerPhase3", "Interface\\Icons\\Spell_Shadow_AnimateDead", nil, nil, 2)
-local timerPhase4        = mod:NewTimer(180, "TimerPhase4", 34753, nil, nil, 2)
-local timerKeltacCD      = mod:NewTimer(32, "Keltac", 2457, nil, nil, 2)
-local timerTalaTarget    = mod:NewTimer(8.5, "TimerTalaTarget", "Interface\\Icons\\Spell_Fire_BurningSpeed")
-local timerRoarCD        = mod:NewCDTimer(31, 40636, nil, nil, nil, 3)
-local timerConflagrateCD = mod:NewCDTimer(20, 37018, nil, nil, nil, 3)
-local timerBombCD        = mod:NewCDTimer(25, 37036, nil, nil, nil, 3)
-local timerFlameStrike   = mod:NewCDTimer(35, 36731, nil, nil, nil, 3)
+local timerNextAdd        = mod:NewTimer(30, "TimerNextAdd", "Interface\\Icons\\Spell_Nature_WispSplode", nil, nil, 2)
+local timerPhase3         = mod:NewTimer(123, "TimerPhase3", "Interface\\Icons\\Spell_Shadow_AnimateDead", nil, nil, 2)
+local timerPhase4         = mod:NewTimer(180, "TimerPhase4", 34753, nil, nil, 2)
+local timerKeltacCD       = mod:NewTimer(32, "Keltac", 2457, nil, nil, 2)
+local timerTalaTarget     = mod:NewTimer(8.5, "TimerTalaTarget", "Interface\\Icons\\Spell_Fire_BurningSpeed")
+local timerRoarCD         = mod:NewCDTimer(31, 40636, nil, nil, nil, 3)
+local timerConflagrateCD  = mod:NewCDTimer(20, 37018, nil, nil, nil, 3)
+local timerBombCD         = mod:NewCDTimer(25, 37036, nil, nil, nil, 3)
+local timerFlameStrike    = mod:NewCDTimer(35, 36731, nil, nil, nil, 3)
 
-local timerBarrierCD = mod:NewCDTimer(70, 36815, nil, nil, nil, 3)
-local timerPhoenixCD = mod:NewCDTimer(45, 36723, nil, nil, nil, 1, nil, CL.DAMAGE_ICON)
-local timerMCCD      = mod:NewCDTimer(70, 36797, nil, nil, nil, 3)
+local timerBarrierCD      = mod:NewCDTimer(70, 36815, nil, nil, nil, 3)
+local timerPhoenixCD      = mod:NewCDTimer(45, 36723, nil, nil, nil, 1, nil, CL.DAMAGE_ICON)
+local timerMCCD           = mod:NewCDTimer(70, 36797, nil, nil, nil, 3)
 
-local timerGravity   = mod:NewBuffFadesTimer(32.5, 35941, nil, nil, nil, 4, nil, CL.DEADLY_ICON, nil, 2, 5) --- хм
-local timerGravityCD = mod:NewCDTimer(90, 35941, nil, nil, nil, 4, nil, CL.DEADLY_ICON, nil, 2, 4) -- обычка
+local timerGravity        = mod:NewBuffFadesTimer(32.5, 35941, nil, nil, nil, 4, nil, CL.DEADLY_ICON, nil, 2, 5) --- хм
+local timerGravityCD      = mod:NewCDTimer(90, 35941, nil, nil, nil, 4, nil, CL.DEADLY_ICON, nil, 2, 4)     -- обычка
 
 --об
-local warnAvenger     = mod:NewTargetAnnounce(308743, 4)
-local specAvenger     = mod:NewSpecialWarningYou(308743)
-local specwarnVzriv   = mod:NewSpecialWarningYou(308797, nil, nil, nil, 4, 5)
-local specAvengerNear = mod:NewSpecialWarning("|cff71d5ff|Hspell:308743|hЩит мстителя|h|r около вас - Стоп каст!")
-local warnFurious     = mod:NewStackAnnounce(308732, 2, nil, "Tank|Healer") -- яростный удар
-local warnJustice     = mod:NewStackAnnounce(308741, 2, nil, "Tank|Healer") -- правосудие тьмы
-local warnIsc         = mod:NewStackAnnounce(308756, 2, nil, "Tank|Healer") -- Искрящий
-local warnShadow      = mod:NewSpellAnnounce(308742, 2) -- освященеи тенью (лужа)
-local warnBomb        = mod:NewTargetAnnounce(308750, 2) -- бомба
-local warnVzriv       = mod:NewTargetAnnounce(308797, 2) -- лужа
-local yellvzriv       = mod:NewYell(308797)
+local warnAvenger         = mod:NewTargetAnnounce(308743, 4)
+local specAvenger         = mod:NewSpecialWarningYou(308743)
+local specwarnVzriv       = mod:NewSpecialWarningYou(308797, nil, nil, nil, 4, 5)
+local specAvengerNear     = mod:NewSpecialWarning("|cff71d5ff|Hspell:308743|hЩит мстителя|h|r около вас - Стоп каст!")
+local warnFurious         = mod:NewStackAnnounce(308732, 2, nil, "Tank|Healer") -- яростный удар
+local warnJustice         = mod:NewStackAnnounce(308741, 2, nil, "Tank|Healer") -- правосудие тьмы
+local warnIsc             = mod:NewStackAnnounce(308756, 2, nil, "Tank|Healer") -- Искрящий
+local warnShadow          = mod:NewSpellAnnounce(308742, 2)                 -- освященеи тенью (лужа)
+local warnBomb            = mod:NewTargetAnnounce(308750, 2)                -- бомба
+local warnVzriv           = mod:NewTargetAnnounce(308797, 2)                -- лужа
+local yellvzriv           = mod:NewYell(308797)
 
-local specWarnBomb = mod:NewSpecialWarningClose(308750)
-local specWarnCata = mod:NewSpecialWarningRun(308790)
+local specWarnBomb        = mod:NewSpecialWarningClose(308750)
+local specWarnCata        = mod:NewSpecialWarningRun(308790)
 
 
 local timerFuriousCD  = mod:NewCDTimer(7, 308732, nil, "Tank|Healer", nil, 5, nil, CL.TANK_ICON)
@@ -93,7 +90,7 @@ local timerCataCast   = mod:NewCastTimer(8, 308790, nil, nil, nil, 2)
 local timerVzrivCD    = mod:NewCDTimer(115, 308797, nil, nil, nil, 3)
 local timerVzrivCast  = mod:NewCastTimer(5, 308797, nil, nil, nil, 3)
 local timerGravityH   = mod:NewCDTimer(63, 35941, "Interface\\Icons\\Spell_Magic_FeatherFall", nil, nil, 6, nil,
-	CL.DEADLY_ICON) -- хм
+	CL.DEADLY_ICON)                                                                       -- хм
 local timerGravityHCD = mod:NewCDTimer(150, 35941, nil, nil, nil, 6, nil, CL.DEADLY_ICON) -- хм
 local timerAvengerS   = mod:NewCDTimer(22, 308743, nil, nil, nil, 3)
 
@@ -273,7 +270,6 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 			warnMCSoon:Cancel()
 			timerGravityCD:Start()
 			warnGravitySoon:Schedule(85)
-
 		end
 	end
 end
@@ -434,7 +430,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			if self.Options.SayBomb then
 				SendChatMessage(format("{череп}|cff71d5ff|Hspell:308750|h[Живая бомба ужаса]|h|r{череп}НА МНЕ{череп}")
-					, "SAY")
+				, "SAY")
 			end
 		else
 			local uId = DBM:GetRaidUnitId(args.destName)

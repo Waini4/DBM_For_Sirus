@@ -14,15 +14,23 @@ mod:RegisterEventsInCombat(
 
 local isDispeller = select(2, UnitClass("player")) == "PRIEST" or select(2, UnitClass("player")) == "SHAMAN" or select(2, UnitClass("player")) == "MAGE"
 
+mod:AddTimerLine(DBM_CORE_L.NORMAL_MODE)
+
+local specWarnMelee                  = mod:NewSpecialWarningMove(33238, "Melee")
+
 local timerWhirlCD                   = mod:NewCDTimer(55, 33238)
 local timerWhirl                     = mod:NewTimer(15, "TimerWhirl", 33238)
 local timerIntimidateCD              = mod:NewCDTimer(16, 16508)
-local specWarnMelee                  = mod:NewSpecialWarningMove(33238, "Melee")
+
+mod:AddTimerLine(DBM_CORE_L.HEROIC_MODE)
+
+local warnMight                      = mod:NewAnnounce("WarnMight", 2)
+
+local specWarnShield                 = mod:NewSpecialWarningDispel(33054 or 305247, isDispeller)
+local specWarnKickCleanse            = mod:NewSpecialWarning("KickNow", "-Melee")
+
 local timerMight                     = mod:NewTargetTimer(60, 305216, "timerActive")
 local timerMightCD                   = mod:NewCDTimer(65, 305216)
-local specWarnShield                 = mod:NewSpecialWarningDispel(305247, isDispeller)
-local specWarnKickCleanse            = mod:NewSpecialWarning("KickNow", "-Melee")
-local warnMight                      = mod:NewAnnounce("WarnMight", 2)
 
 mod:AddBoolOption("WarnMight",true)
 mod:AddBoolOption("AnnounceToChat",false)

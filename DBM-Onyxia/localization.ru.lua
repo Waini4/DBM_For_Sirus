@@ -8,15 +8,15 @@ local L
 L = DBM:GetModLocalization("Onyxia")
 
 L:SetGeneralLocalization({
-	name = "Ониксия"
+	name					= "Ониксия"
 })
 
 L:SetWarningLocalization({
-	WarnWhelpsSoon		= "Скоро дракончики Ониксии"
+	WarnWhelpsSoon			= "Скоро дракончики Ониксии"
 })
 
 L:SetTimerLocalization({
-	TimerWhelps	= "Вызов дракончиков Ониксии"
+	TimerWhelps				= "Вызов дракончиков Ониксии"
 })
 
 L:SetOptionLocalization({
@@ -26,7 +26,8 @@ L:SetOptionLocalization({
 })
 
 L:SetMiscLocalization({
-	YellPull = "Вот это сюрприз. Обычно, чтобы найти обед, мне приходится покидать логово.",
-	YellP2 = "Эта бессмысленная возня вгоняет меня в тоску. Я сожгу вас всех!",
-	YellP3 = "Похоже, вам требуется преподать еще один урок, смертные!"
+	YellPull				= "Вот это сюрприз. Обычно, чтобы найти обед, мне приходится покидать логово.",
+	YellP2					= "Эта бессмысленная возня вгоняет меня в тоску. Я сожгу вас всех!",
+	YellP3					= "Похоже, вам требуется преподать еще один урок, смертные!",
+	Achievement				= "Достижения"
 })

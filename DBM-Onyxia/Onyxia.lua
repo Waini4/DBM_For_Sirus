@@ -17,37 +17,46 @@ mod:RegisterEventsInCombat(
 	"UNIT_DIED",
 	"UNIT_HEALTH boss1"
 )
+mod:AddTimerLine(L.Achievement)
 
-local warnWhelpsSoon		= mod:NewAnnounce("WarnWhelpsSoon", 1, 69004)
-local warnWingBuffet		= mod:NewSpellAnnounce(18500, 2, nil, "Tank")
-local warnKnockAway			= mod:NewTargetNoFilterAnnounce(19633, 2, nil, false)
-local warnPhase2			= mod:NewPhaseAnnounce(2)
-local warnFireball			= mod:NewTargetNoFilterAnnounce(18392, 2, nil, false)
-local warnPhase3			= mod:NewPhaseAnnounce(3)
+local timerAchieve			= mod:NewAchievementTimer(300, 4405)
+local timerAchieveWhelps	= mod:NewAchievementTimer(10, 4406)
+
+mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(1)..": 100% – 66%")
+
 local warnPhase2Soon		= mod:NewPrePhaseAnnounce(2)
+local warnWingBuffet		= mod:NewSpellAnnounce(18500, 2, nil, "Tank")
+
+local timerNextFlameBreath	= mod:NewCDTimer(13.3, 18435, nil, "Tank", 2, 5)--13.3-20 Breath she does on ground in frontal cone.
+
+mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(2)..": 65% – 40%")
+
+local warnPhase2			= mod:NewPhaseAnnounce(2)
 local warnPhase3Soon		= mod:NewPrePhaseAnnounce(3)
+local warnFireball			= mod:NewTargetNoFilterAnnounce(18392, 2, nil, false)
+local warnWhelpsSoon		= mod:NewAnnounce("WarnWhelpsSoon", 1, 69004)
+local warnKnockAway			= mod:NewTargetNoFilterAnnounce(19633, 2, nil, false)
 
 --local preWarnDeepBreath     = mod:NewSoonAnnounce(17086, 2)--Experimental, if it is off please let me know.
 local specWarnBreath		= mod:NewSpecialWarningSpell(18584, nil, nil, nil, 2, 2)
-local specWarnBellowingRoar	= mod:NewSpecialWarningSpell(18431, nil, nil, nil, 2, 2)
 local yellFireball			= mod:NewYell(18392)
 local specWarnBlastNova		= mod:NewSpecialWarningRun(68958, "Melee", nil, nil, 4, 2)
 local specWarnAdds			= mod:NewSpecialWarningAdds(68959, "-Healer", nil, nil, 1, 2)
 
-local timerNextFlameBreath	= mod:NewCDTimer(13.3, 18435, nil, "Tank", 2, 5)--13.3-20 Breath she does on ground in frontal cone.
 local timerNextDeepBreath	= mod:NewCDTimer(35, 18584, nil, nil, nil, 3)--Range from 35-60seconds in between based on where she moves to.
 local timerBreath			= mod:NewCastTimer(8, 18584, nil, nil, nil, 3)
 local timerWhelps			= mod:NewTimer(105, "TimerWhelps", 10697, nil, nil, 1)
-local timerBigAddCD			= mod:NewAddsTimer(44.9, 68959, nil, "-Healer")
-local timerAchieve			= mod:NewAchievementTimer(300, 4405)
-local timerAchieveWhelps	= mod:NewAchievementTimer(10, 4406)
+local timerBigAddCD			= mod:NewNextTimer(44.9, 68959, nil, "-Healer", nil, 1, 10697) -- Ignite Weapon for Onyxian Lair Guard
 
--- mod:AddBoolOption("SoundWTF3", false, "sound")
+mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(3)..": 40% – 0%")
+
+local warnPhase3			= mod:NewPhaseAnnounce(3)
+local specWarnBellowingRoar	= mod:NewSpecialWarningSpell(18431, nil, nil, nil, 2, 2)
 
 mod.vb.warned_preP2 = false
 mod.vb.warned_preP3 = false
 mod.vb.whelpsCount = 0
--- mod:SetStage(0)
+
 function mod:OnCombatStart(delay)
 	self:SetStage(1)
 	self.vb.whelpsCount = 0
