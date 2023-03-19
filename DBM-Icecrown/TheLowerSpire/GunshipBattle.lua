@@ -65,7 +65,7 @@ local function Adds(self)
 end
 
 function mod:OnCombatStart(delay)
-	DBM:FireCustomEvent("DBM_EncounterStart", creationId, "GunshipBattle")
+	DBM:FireCustomEvent("DBM_EncounterStart", creationId, "Icecrown Gunship Battle")
 	DBM.BossHealth:Clear()
 	timerAdds:Start(15-delay) --First adds might come early or late so timer should be taken as a proximity only.
 	warnAddsSoon:Schedule(10)

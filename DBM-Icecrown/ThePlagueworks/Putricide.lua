@@ -111,7 +111,7 @@ mod.vb.warned_preP2 = false
 mod.vb.warned_preP3 = false
 
 function mod:OnCombatStart(delay)
-	DBM:FireCustomEvent("DBM_EncounterStart", 36678, "Putricide")
+	DBM:FireCustomEvent("DBM_EncounterStart", 36678, "Professor Putricide")
 	self:SetStage(1)
 	berserkTimer:Start(-delay)
 	timerSlimePuddleCD:Start(10-delay)
@@ -129,7 +129,7 @@ function mod:OnCombatStart(delay)
 	end
 end
 function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 36678, "Putricide",wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 36678, "Professor Putricide",wipe)
 end
 -- This does not work on Warmane - boss never swaps targets to throw malleable (last checked on 14/07/2021)
 --[[function mod:MalleableGooTarget(targetname, uId)

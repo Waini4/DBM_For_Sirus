@@ -79,7 +79,7 @@ local function warnBoilingBloodTargets(self)
 end
 
 function mod:OnCombatStart(delay)
-	DBM:FireCustomEvent("DBM_EncounterStart", 37813, "Deathbringer")
+	DBM:FireCustomEvent("DBM_EncounterStart", 37813, "Deathbringer Saurfang")
 	if self.Options.RunePowerFrame then
 		DBM.BossHealth:Show(L.name)
 		DBM.BossHealth:AddBoss(37813, L.name)
@@ -109,7 +109,7 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 37813, "Deathbringer",wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 37813, "Deathbringer Saurfang",wipe)
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end

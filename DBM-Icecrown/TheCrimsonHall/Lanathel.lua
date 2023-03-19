@@ -71,7 +71,7 @@ local function warnPactTargets(self)
 end
 
 function mod:OnCombatStart(delay)
-	DBM:FireCustomEvent("DBM_EncounterStart", 37955, "Lanathel")
+	DBM:FireCustomEvent("DBM_EncounterStart", 37955, "Blood-Queen Lana'thel")
 	berserkTimer:Start(-delay)
 	timerFirstBite:Start(-delay)
 	timerNextPactDarkfallen:Start(15-delay)
@@ -97,7 +97,7 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 37955, "Lanathel",wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 37955, "Blood-Queen Lana'thel",wipe)
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end
