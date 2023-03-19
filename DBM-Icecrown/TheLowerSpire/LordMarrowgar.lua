@@ -26,8 +26,8 @@ local specWarnColdflame		= mod:NewSpecialWarningMove(69146, nil, nil, nil, 1, 2)
 local specWarnWhirlwind		= mod:NewSpecialWarningRun(69076, nil, nil, nil, 4, 2)
 
 local timerBoneSpike		= mod:NewCDTimer(18, 69057, nil, nil, nil, 1, nil, DBM_COMMON_L.DAMAGE_ICON)
-local timerWhirlwindCD		= mod:NewCDTimer(30, 69076, nil, nil, nil, 2, nil, DBM_COMMON_L.MYTHIC_ICON)
-local timerWhirlwind		= mod:NewBuffActiveTimer(20, 69076, nil, nil, nil, 6)
+local timerWhirlwindCD		= mod:NewCDTimer(20, 69076, nil, nil, nil, 2, nil, DBM_COMMON_L.MYTHIC_ICON)
+local timerWhirlwind		= mod:NewBuffActiveTimer(30, 69076, nil, nil, nil, 6)
 local timerBoned			= mod:NewAchievementTimer(8, 4610)
 local timerBoneSpikeUp		= mod:NewCastTimer(69057)
 local timerWhirlwindStart	= mod:NewCastTimer(69076)
@@ -57,8 +57,9 @@ function mod:SPELL_AURA_APPLIED(args)
 	if args.spellId == 69076 then						-- Bone Storm (Whirlwind)
 		specWarnWhirlwind:Show()
 		specWarnWhirlwind:Play("justrun")
-		if self:IsHeroic() then
-			timerWhirlwind:Show(37)			--36-38 on HC
+		if mod:IsDifficulty("heroic10") or mod:IsDifficulty("normal10") then
+		-- if self:IsHeroic() then
+			timerWhirlwind:Show(20)			--20 on heroic 10
 		else
 			timerWhirlwind:Show()			--30 on Norm
 			timerBoneSpike:Cancel()						-- He doesn't do Bone Spike Graveyard during Bone Storm on normal
