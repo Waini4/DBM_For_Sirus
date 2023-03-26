@@ -91,6 +91,7 @@ local warned_preP1 = false
 local warned_preP2 = false
 local PepelTargets = {}
 local KleiIcons = 8
+local PowerTr = false
 
 do
 	-- local function sort_by_group(v1, v2)
@@ -156,6 +157,7 @@ do
 	function clearPepelTarget(guid, name)
 		incinerateTarget[guid] = nil
 		healed[guid] = nil
+		PowerTr = true
 		updatePepelTargets()
 	end
 
@@ -163,6 +165,29 @@ do
 		table.wipe(incinerateTarget)
 		table.wipe(incinerateTarget)
 		updatePepelTargets()
+	end
+end
+
+do -- add the additional Rune Power Bar
+	local last = 0
+	local function getPowerPercent()
+		local guid = UnitGUID("focus")
+		if mod:GetCIDFromGUID(guid) == 21215 then
+			last = math.floor(UnitPower("focus") / UnitPowerMax("focus") * 100)
+			return last
+		end
+		for i = 0, GetNumRaidMembers(), 1 do
+			local unitId = ((i == 0) and "target") or ("raid" .. i .. "target")
+			guid = UnitGUID(unitId)
+			if mod:GetCIDFromGUID(guid) == 21215 then
+				last = math.floor(UnitPower(unitId) / UnitPowerMax(unitId) * 100)
+				return last
+			end
+		end
+		return last
+	end
+	function mod:CreateBossRPFrame()
+		DBM.BossHealth:AddBoss(getPowerPercent, L.Power)
 	end
 end
 
@@ -195,6 +220,7 @@ function mod:OnCombatStart()
 	self:SetStage(1)
 	if mod:IsDifficulty("heroic25") then
 		self.vb.PepelCount = 0
+		self:ScheduleMethod(0.5, "CreateBossRPFrame")
 		if self.Options.PepelShieldFrame then
 			DBM.BossHealth:Show(L.name)
 			DBM.BossHealth:AddBoss(21215, L.name)
@@ -282,6 +308,10 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.PepelShieldFrame then
 			setPepelTarget(args.destGUID, args.destName)
 			self:Schedule(12, clearPepelTarget, args.destGUID, args.destName)
+		end
+		if PowerTr then
+			PowerTr = false
+			self:ScheduleMethod(0.5, "CreateBossRPFrame")
 		end
 	end
 end
