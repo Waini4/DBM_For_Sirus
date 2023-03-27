@@ -30,8 +30,10 @@ local warnPhase3				= mod:NewPhaseAnnounce(3)
 
 -- обычка --
 mod:AddTimerLine(L.Normal)
-local timerShakeCD				= mod:NewCDTimer(55, 55101, nil, nil, nil, 3) -- Сотрясение
+-- local timerShakeCD				= mod:NewCDTimer(55, 55101, nil, nil, nil, 3) -- Сотрясение
+local timerTilting				= mod:NewCDTimer(30, 302060, nil, nil, nil, 3)	--откидывание, id не его.
 
+mod:AddInfoFrameOption(44032, true)
 -- героик --
 mod:AddTimerLine(L.Heroic)
 local warningNovaCast       	= mod:NewCastAnnounce(305129, 10) -- Вспышка скверны
@@ -51,8 +53,11 @@ local pullWarned = true
 mod.vb.warned_preP2 = false
 mod.vb.warned_preP3 = false
 local cub = 1
-local shake = 1
+-- local shake = 1
 
+
+
+local MgDebuff = DBM:GetSpellInfoNew(44032)
 local handTargets = {}
 local targetShattered
 
@@ -68,6 +73,13 @@ local function UpdateTimer(timer, time)
 	end
 end
 
+function mod:NextTilting()
+	timerTilting:Start()
+	self:UnscheduleMethod("NextTilting")
+	self:ScheduleMethod(49, "NextTilting")
+
+end
+
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 17257, "Magtheridon")
 	self:SetStage(1)
@@ -75,8 +87,10 @@ function mod:OnCombatStart(delay)
 		timerNovaCD:Start()
 		timerHandOfMagtCD:Start()
 		timerDevastatingStrikeCD:Start()
-	elseif self:IsNormal() then
+	else
 		timerNovaCD:Start(67)
+		timerTilting:Start()
+		self:ScheduleMethod(50, "NextTilting")
 	end
 	cub = 2
 	self.vb.warned_preP2 = false
@@ -87,13 +101,13 @@ end
 function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 17257, "Magtheridon", wipe)
 	cub = 1
-	shake = 1
+	-- shake = 1
 	pullWarned = true
 end
 
 local cubsTimers = {
 	[2] = 74,
-	[3] = 67,
+	[3] = 72,
 	[4] = 67,	-- пока не пойму сколько секунд дает каждая из абилок - это гадание на картах таро. Ведь сирусовский дифф желает лучшего
 	[5] = 74,
 	[6] = 70,
@@ -133,20 +147,20 @@ function mod:SPELL_DAMAGE(_, _, _, _, _, destFlags, spellId) -- слакер п�
 	end
 end
 
-local shakeCDTimers = {
-	[1] = 55,
-	[2] = 29.4,
-	[3] = 23,
-	[4] = 50,
-	[5] = 55,
-	[6] = 55
-}
+-- local shakeCDTimers = {
+-- 	[1] = 55,
+-- 	[2] = 29.4,
+-- 	[3] = 23,
+-- 	[4] = 50,
+-- 	[5] = 55,
+-- 	[6] = 55
+-- }
 
 function mod:SPELL_CAST_SUCCESS(args)
-	if args:IsSpellID(30572) then -- Сотрясение оказывается разные таймера
-		timerShakeCD:Start(shake < 7 and shakeCDTimers[shake] or 55)
-		shake = shake + 1
-	elseif args:IsSpellID(305166) then
+	-- if args:IsSpellID(30572) then -- Сотрясение оказывается разные таймера
+	-- 	timerShakeCD:Start(shake < 7 and shakeCDTimers[shake] or 55)
+	-- 	shake = shake + 1
+	if args:IsSpellID(305166) then
 		handTargets[#handTargets + 1] = args.destName
 		if #handTargets >= 3 then
 			warnHandOfMagt:Show(table.concat(handTargets, ">, <"))
@@ -157,10 +171,14 @@ function mod:SPELL_CAST_SUCCESS(args)
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(305131) and args:IsPlayer() then -- возможно уберу в будущем пишет в чат если на тебе печать
+	if args:IsSpellID(305131) and args:IsPlayer() then
 		specWarnHandOfMagt:Show()
 	elseif args:IsSpellID(305135) then
 		timerShatteredArmor:Start(args.destName)
+	elseif args:IsSpellID(44032) then
+		if self.Options.InfoFrame then
+			DBM.InfoFrame:SetHeader(MgDebuff)
+		end
 	end
 end
 
@@ -185,7 +203,7 @@ function mod:UNIT_HEALTH(uId)
 				self:SetStage(3)
 				warnPhase3:Show()
 				-- self:NewPhaseAnnounce(3)
-				timerShakeCD:Start(10)
+				-- timerShakeCD:Start(10)
 			end
 		end
 	end
