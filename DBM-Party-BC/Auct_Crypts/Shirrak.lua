@@ -21,7 +21,7 @@ local warnFocusFire				= mod:NewTargetAnnounce(32300, 3)
 local specWarnFocusFire			= mod:NewSpecialWarningDodge(32300, nil, nil, nil, 1, 2)
 local timerSuppressionCD		= mod:NewCDTimer(3.3, 32264, nil, nil, nil, 1, 2)
 local timerBiteCD		        = mod:NewCDTimer(10, 39382, nil, nil, nil, 1, 2)
-local timerFireCD		        = mod:NewCDTimer(15, 42075, nil, nil, nil, 1, 2)
+local timerFireCD		        = mod:NewCDTimer(15, 32300, nil, nil, nil, 1, 2)
 local timerAttractionCD	        = mod:NewCDTimer(30, 32265, nil, nil, nil, 1, 2)
 -- local specWarnFire          	= mod:NewSpecialWarningYou(42075)
 
