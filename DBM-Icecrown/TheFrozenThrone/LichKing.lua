@@ -29,6 +29,8 @@ mod:RegisterEventsInCombat(
 --	"UNIT_SPELLCAST_SUCCEEDED"
 )
 
+local MyRealm = select(4, DBM:GetMyPlayerInfo())
+
 -- General
 local timerCombatStart		= mod:NewCombatTimer(55)
 local berserkTimer			= mod:NewBerserkTimer(900)
@@ -125,7 +127,7 @@ local timerHarvestSoul	 	= mod:NewTargetTimer(6, 68980)
 local timerHarvestSoulCD	= mod:NewNextTimer(75, 68980, nil, nil, nil, 6)
 local timerVileSpirit 		= mod:NewNextTimer(30.5, 70498, nil, nil, nil, 1)
 local timerRestoreSoul 		= mod:NewCastTimer(40, 73650, nil, nil, nil, 6)
-local timerRoleplay			= mod:NewTimer(97, "TimerRoleplay", 72350, nil, nil, 6)
+local timerRoleplay			= mod:NewTimer(MyRealm == 4 and 97 or 162, "TimerRoleplay", 72350, nil, nil, 6)
 
 mod:AddSetIconOption("HarvestSoulIcon", 68980, false, false, {6})
 
