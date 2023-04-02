@@ -568,8 +568,7 @@ local UnitDetailedThreatSituation = UnitDetailedThreatSituation
 local UnitIsPartyLeader, UnitIsRaidOfficer = UnitIsPartyLeader, UnitIsRaidOfficer
 local PlaySoundFile, PlaySound = PlaySoundFile, PlaySound
 local GetMapInfo, GetCurrentMapDungeonLevel, DungeonUsesTerrainMap, GetPlayerMapPosition, SetMapToCurrentZone =
-	GetMapInfo
-	, GetCurrentMapDungeonLevel, DungeonUsesTerrainMap, GetPlayerMapPosition, SetMapToCurrentZone
+	GetMapInfo, GetCurrentMapDungeonLevel, DungeonUsesTerrainMap, GetPlayerMapPosition, SetMapToCurrentZone
 
 local SendAddonMessage = SendAddonMessage
 

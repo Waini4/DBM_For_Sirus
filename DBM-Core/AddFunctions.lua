@@ -13,6 +13,18 @@ local GetNumRaidMembers = GetNumRaidMembers
 -- 		end
 -- 	end
 -- end
+function GetRealmNumber()
+	local serverName = GetRealmName():gsub(" Prx 1", ""):gsub(" Prx 2", "")
+	local playerRealm = serverName:match("x4") and 4 or
+						serverName:match("x5") and 5 or
+						serverName:match("x2") and 2
+	return playerRealm
+end
+local debug = false
+if not _G.CHAT_SPAM_CHARNOTFOUND and debug then
+    _G.CHAT_SPAM_CHARNOTFOUND = true
+    ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", function(self, event, msg, ...) return msg:match('Персонаж по имени "([^_]+)" в игре не найден') end)
+end
 
 function IsInGroup()
 	return GetNumPartyMembers() > 0 or GetNumRaidMembers() > 0
