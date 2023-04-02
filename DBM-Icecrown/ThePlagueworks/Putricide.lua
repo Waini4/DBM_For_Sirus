@@ -23,7 +23,7 @@ mod:RegisterEventsInCombat(
 local myRealm = select(3, DBM:GetMyPlayerInfo())
 
 -- General
-local berserkTimer					= mod:NewBerserkTimer((myRealm == "Lordaeron" or myRealm == "Frostmourne") and 480 or 600)
+local berserkTimer					= mod:NewBerserkTimer(600)
 
 -- buffs from "Drink Me"
 local timerMutatedSlash				= mod:NewTargetTimer(20, 70542, nil, false, nil, 5, nil, DBM_COMMON_L.TANK_ICON)

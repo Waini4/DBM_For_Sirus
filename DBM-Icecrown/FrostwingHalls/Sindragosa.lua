@@ -19,10 +19,10 @@ mod:RegisterEventsInCombat(
 )
 
 local strupper = strupper
-local myRealm = select(3, DBM:GetMyPlayerInfo())
+local myRealm = select(4, DBM:GetMyPlayerInfo())
 
 -- General
-local berserkTimer				= mod:NewBerserkTimer((myRealm == "Lordaeron" or myRealm == "Frostmourne") and 420 or 600)
+local berserkTimer				= mod:NewBerserkTimer(600)
 
 mod:AddBoolOption("RangeFrame", true) -- keep as BoolOption since the localization offers important information regarding boss ability and player debuff behaviour
 mod:AddBoolOption("ClearIconsOnAirphase", true)

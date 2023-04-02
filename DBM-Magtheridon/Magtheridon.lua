@@ -18,7 +18,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_DAMAGE"
 )
 
-local myPomoi5 = select(3, DBM:GetMyPlayerInfo()) == "Sirus x5 - 3.3.5a+"
+local myPomoi5 = select(4, DBM:GetMyPlayerInfo()) == 5
 
 -- общее --
 mod:AddTimerLine(L.General)

@@ -29,7 +29,7 @@ mod:RegisterEventsInCombat(
 	"UNIT_SPELLCAST_SUCCEEDED boss1 boss2 boss3"
 )
 
-local myRealm = select(3, DBM:GetMyPlayerInfo())
+-- local myRealm = select(4, DBM:GetMyPlayerInfo())
 
 -- General
 local warnTargetSwitch			= mod:NewAnnounce("WarnTargetSwitch", 3, 70952)
@@ -37,7 +37,7 @@ local warnTargetSwitchSoon		= mod:NewAnnounce("WarnTargetSwitchSoon", 2, 70952)
 
 local timerCombatStart			= mod:NewCombatTimer(29) -- Roleplay for first pull
 local timerTargetSwitch			= mod:NewTimer(47, "TimerTargetSwitch", 70952)	-- every 46-47seconds
-local berserkTimer				= mod:NewBerserkTimer((myRealm == "Lordaeron" or myRealm == "Frostmourne") and 360 or 600)
+local berserkTimer				= mod:NewBerserkTimer(600)
 
 mod:AddRangeFrameOption("12")
 mod:AddBoolOption("ActivePrinceIcon", false)

@@ -2295,7 +2295,7 @@ do
 	end
 
 	function DBM:GetMyPlayerInfo()
-		return playerName, playerLevel, playerRealm
+		return playerName, playerLevel, playerRealm, GetRealmNumber()
 	end
 
 	function DBM:GetUnitFullName(uId)
