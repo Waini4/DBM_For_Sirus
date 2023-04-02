@@ -32,6 +32,7 @@ ignore = {
 	"131/IsInGroup",	-- Unused global variable
 	"131/GetNumSubgroupMembers",	-- Unused global variable
 	"131/GetNumGroupMembers",	-- Unused global variable
+	"131/GetRealmNumber",	-- Unused global variable
 	"314", -- Value of a field in a table literal is unused
 	"42.", -- Shadowing a local variable, an argument, a loop variable.
 	"11./SLASH_.*", -- Setting an undefined (Slash handler) global variable

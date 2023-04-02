@@ -20,6 +20,7 @@ function GetRealmNumber()
 						serverName:match("x2") and 2
 	return playerRealm
 end
+
 local debug = false
 if not _G.CHAT_SPAM_CHARNOTFOUND and debug then
     _G.CHAT_SPAM_CHARNOTFOUND = true
