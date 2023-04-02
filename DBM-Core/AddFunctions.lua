@@ -14,7 +14,7 @@ local GetNumRaidMembers = GetNumRaidMembers
 -- 	end
 -- end
 function GetRealmNumber()
-	local serverName = GetRealmName():gsub(" Prx 1", ""):gsub(" Prx 2", "")
+	local serverName = GetCVar("realmName")
 	local playerRealm = serverName:match("x4") and 4 or
 						serverName:match("x5") and 5 or
 						serverName:match("x2") and 2
