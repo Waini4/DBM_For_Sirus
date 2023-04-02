@@ -3645,7 +3645,7 @@ do
 		end
 		local name = DBM:GetFullPlayerNameByGUID(iconSetPerson[optionName]) or CL.UNKNOWN
 		DBM:Debug(name .. L.WasSelectedFor .. optionName, 2)
-		DBM:AddMsg(name .. L.WasSelectedFor .. optionName)
+		-- DBM:AddMsg(name .. L.WasSelectedFor .. optionName)
 	end
 
 	syncHandlers["DBMv4-Kill"] = function(_, cId)
