@@ -81,9 +81,9 @@ local function currentFullDate()
 end
 
 DBM = {
-	Revision = parseCurseDate("2023" .. "03" .. "27" .. "20" .. "00" .. "00"),
+	Revision = parseCurseDate("2023" .. "04" .. "05" .. "18" .. "00" .. "00"),
 	DisplayVersion = GetAddOnMetadata(_addonname, "Version"), -- the string that is shown as version
-	ReleaseRevision = releaseDate(2023, 03, 12, 20, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	ReleaseRevision = releaseDate(2023, 04, 05, 20, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 
 local fakeBWVersion = 7558
@@ -3759,7 +3759,7 @@ do
 				threshold = floor(threshold)
 				dummyMod2 = DBM:NewMod("BreakTimerCountdownDummy")
 				DBM:GetModLocalization("BreakTimerCountdownDummy"):SetGeneralLocalization { name = L
-				.MINIMAP_TOOLTIP_HEADER }
+					.MINIMAP_TOOLTIP_HEADER }
 				dummyMod2.text = dummyMod2:NewAnnounce("%s", 1, "Interface\\Icons\\SPELL_HOLY_BORROWEDTIME")
 				dummyMod2.timer = dummyMod2:NewTimer(20, L.TIMER_BREAK, "Interface\\Icons\\SPELL_HOLY_BORROWEDTIME", nil,
 					nil, 0, nil
@@ -8114,7 +8114,7 @@ function DBM:GetBossHPByGUID(guid)
 		if bossHealth[guid] and (UnitHealth(uId) == 0 and not UnitIsDead(uId)) then
 			return bossHealth[guid], uId,
 				UnitName(uId)
-		end           --Return last non 0 value if value is 0, since it's last valid value we had.
+		end --Return last non 0 value if value is 0, since it's last valid value we had.
 		local hp = UnitHealth(uId) / UnitHealthMax(uId) * 100
 		bossHealth[guid] = hp
 		return hp, uId, UnitName(uId)
@@ -8926,7 +8926,7 @@ do
 	--This object disables sounds, it's almost always used in combation with a countdown timer. Even if not a countdown, its a text only spam not a sound spam
 	function bossModPrototype:NewCountdownAnnounce(spellId, color, icon, optionDefault, optionName, castTime, preWarnTime,
 												   _
-		, noFilter)                                    -- spellId, color, icon, optionDefault, optionName, castTime, preWarnTime, soundOption, noFilter
+		, noFilter) -- spellId, color, icon, optionDefault, optionName, castTime, preWarnTime, soundOption, noFilter
 		return newAnnounce(self, "countdown", spellId, color or 4, icon, optionDefault, optionName, castTime, preWarnTime,
 			0,
 			noFilter)
@@ -10473,7 +10473,9 @@ do
 						end
 					end
 					if self.lastCast and not newPhase then                                             --We have a GetTime() on last cast and it's not affected by a phase change
-						local timeLastCast = GetTime() - self.lastCast                                 --Get time between current cast and last cast
+						local timeLastCast = GetTime() -
+							self
+							.lastCast                                                                  --Get time between current cast and last cast
 						if timeLastCast > 5 then                                                       --Prevent infinite loop cpu hang. Plus anything shorter than 5 seconds doesn't need a timer
 							if not self.lowestSeenCast or (self.lowestSeenCast and self.lowestSeenCast > timeLastCast) then --Always use lowest seen cast for a timer
 								self.lowestSeenCast = timeLastCast

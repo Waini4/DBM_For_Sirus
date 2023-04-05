@@ -40,7 +40,7 @@ local timerMarkCD                   = mod:NewNextCountTimer(24, 318818, nil, nil
 local timerBurningSoulCD            = mod:NewNextCountTimer(20, 318828, nil, "RemoveMagic", nil, 3, nil, CL.HEALER_ICON)
 local timerHorrorflamesCD           = mod:NewNextCountTimer(16, 318824, nil, nil, nil, 3)
 local timerUnstableAbyssalsCD       = mod:NewNextCountTimer(90, 318825, "Падение Абиссалов", nil, nil, 4
-	, nil, CL.DEADLY_ICON)
+, nil, CL.DEADLY_ICON)
 local timerInfernalStrikeCD         = mod:NewNextTimer(9, 318823, nil, "Tank|Healer", nil, 4, nil, CL.TANK_ICON)
 local timerunstoppableonslaughtBuff = mod:NewBuffActiveTimer(25, 318822, nil, "HasInterrupt", nil, 4, nil,
 	CL.INTERRUPT_ICON)
@@ -212,7 +212,7 @@ function mod:UNIT_HEALTH(uId)
 			timerMutilationlCD:Start()
 			timerFallofFilthCD:Start(16.5, self.vb.BurningCount)
 			timerFatalBlowofFilthCD:Start(15)
-		elseif hp < 33 and stage == 3 then
+		elseif hp < 33 and stage == 2 then -- -_-
 			self.vb.AbyssalsCount = 0
 			self:SetStage(3)
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(3))
