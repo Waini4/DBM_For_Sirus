@@ -81,7 +81,7 @@ local function currentFullDate()
 end
 
 DBM = {
-	Revision = parseCurseDate("2023" .. "04" .. "05" .. "18" .. "00" .. "00"),
+	Revision = parseCurseDate("2023" .. "04" .. "05" .. "20" .. "00" .. "00"),
 	DisplayVersion = GetAddOnMetadata(_addonname, "Version"), -- the string that is shown as version
 	ReleaseRevision = releaseDate(2023, 04, 05, 20, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
@@ -422,7 +422,7 @@ local newerVersionPerson, cSyncSender, iconSetRevision, iconSetPerson, loadcIds,
 	, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
 -- False variables
 local voiceSessionDisabled, statusGuildDisabled, statusWhisperDisabled, targetEventsRegistered, combatInitialized, healthCombatInitialized, watchFrameRestore, bossuIdFound, timerRequestInProgress, encounterInProgress =
-		false, false, false, false, false, false, false, false, false, false
+	false, false, false, false, false, false, false, false, false, false
 -- Nil variables
 local currentSpecID, currentSpecName, currentSpecGroup, pformat, loadOptions, checkWipe, checkBossHealth, checkCustomBossHealth, fireEvent, LastInstanceType, breakTimerStart, AddMsg, delayedFunction, handleSync, savedDifficulty, difficultyText, difficultyIndex, encounterDifficulty, encounterDifficultyText, encounterDifficultyIndex
 -- 0 variables
@@ -10474,7 +10474,7 @@ do
 							newPhase = true
 						end
 					end
-					if self.lastCast and not newPhase then                                             --We have a GetTime() on last cast and it's not affected by a phase change
+					if self.lastCast and not newPhase then --We have a GetTime() on last cast and it's not affected by a phase change
 						local timeLastCast = GetTime() -
 							self
 							.lastCast                                                                  --Get time between current cast and last cast
