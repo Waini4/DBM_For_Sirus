@@ -422,8 +422,7 @@ local newerVersionPerson, cSyncSender, iconSetRevision, iconSetPerson, loadcIds,
 	, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
 -- False variables
 local voiceSessionDisabled, statusGuildDisabled, statusWhisperDisabled, targetEventsRegistered, combatInitialized, healthCombatInitialized, watchFrameRestore, bossuIdFound, timerRequestInProgress, encounterInProgress =
-	false
-	, false, false, false, false, false, false, false, false, false
+		false, false, false, false, false, false, false, false, false, false
 -- Nil variables
 local currentSpecID, currentSpecName, currentSpecGroup, pformat, loadOptions, checkWipe, checkBossHealth, checkCustomBossHealth, fireEvent, LastInstanceType, breakTimerStart, AddMsg, delayedFunction, handleSync, savedDifficulty, difficultyText, difficultyIndex, encounterDifficulty, encounterDifficultyText, encounterDifficultyIndex
 -- 0 variables
@@ -4418,7 +4417,8 @@ do
 		if not ver or ver ~= "8" then return end                                                          --Ignore old versions
 		if lastBossEngage[modId .. realm] and (GetTime() - lastBossEngage[modId .. realm] < 30) then return end --We recently got a sync about this boss on this realm, so do nothing.
 		lastBossEngage[modId .. realm] = GetTime()
-		if realm == playerRealm and DBM.Options.WorldBossAlert and not mod.InCombat then
+		local mod = DBM:GetModByName(modId)
+		if realm == playerRealm and DBM.Options.WorldBossAlert and mod and not mod.InCombat then
 			modId = tonumber(modId) --If it fails to convert into number, this makes it nil
 			local bossName = modId and DBM:GetModLocalization(modId).general.name or name or CL.UNKNOWN
 			DBM:AddMsg(L.WORLDBOSS_ENGAGED:format(bossName, floor(health), sender))
@@ -4429,7 +4429,8 @@ do
 		if not ver or ver ~= "8" then return end --Ignore old versions
 		if lastBossDefeat[modId .. realm] and (GetTime() - lastBossDefeat[modId .. realm] < 30) then return end
 		lastBossDefeat[modId .. realm] = GetTime()
-		if realm == playerRealm and DBM.Options.WorldBossAlert and not mod.InCombat then
+		local mod = DBM:GetModByName(modId)
+		if realm == playerRealm and DBM.Options.WorldBossAlert and mod and not mod.InCombat then
 			modId = tonumber(modId) --If it fails to convert into number, this makes it nil
 			local bossName = modId and DBM:GetModLocalization(modId).general.name or name or CL.UNKNOWN
 			DBM:AddMsg(L.WORLDBOSS_DEFEATED:format(bossName, sender))
@@ -4483,7 +4484,8 @@ do
 		if not ver or ver ~= "8" then return end --Ignore old versions
 		if lastBossDefeat[modId .. realm] and (GetTime() - lastBossDefeat[modId .. realm] < 30) then return end
 		lastBossDefeat[modId .. realm] = GetTime()
-		if realm == playerRealm and DBM.Options.WorldBossAlert and not mod.InCombat then
+		local mod = DBM:GetModByName(modId)
+		if realm == playerRealm and DBM.Options.WorldBossAlert and mod and not mod.InCombat then
 			local toonName = sender or CL.UNKNOWN
 			modId = tonumber(modId) --If it fails to convert into number, this makes it nil
 			local bossName = modId and DBM:GetModLocalization(modId).general.name or name or CL.UNKNOWN
