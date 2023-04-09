@@ -317,6 +317,11 @@ L:SetGeneralLocalization({
 	name 		= "Принц Шаффар"
 })
 
+L:SetTimerLocalization({
+	TimerEtherealOrb		= "Маяк появится через",
+	TimerEtherealSpawn		= "Ученик появится через"
+})
+
 -----------
 --  Yor  --
 -----------
