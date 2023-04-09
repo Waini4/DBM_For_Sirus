@@ -22,7 +22,7 @@ mod:RegisterEventsInCombat(
 
 local canShadowmeld = select(2, UnitRace("player")) == "NightElf"
 local canVanish = select(2, UnitClass("player")) == "ROGUE"
--- local myRealm = select(3, DBM:GetMyPlayerInfo())
+local myRealm = select(4, DBM:GetMyPlayerInfo())
 
 -- General
 local timerCombatStart		= mod:NewCombatTimer(42.3)
@@ -90,7 +90,11 @@ function mod:OnCombatStart(delay)
 	else
 		enrageTimer:Start(360-delay)
 	end
-	timerCallBloodBeast:Start(40-delay)
+	if myRealm == 4 then
+		timerCallBloodBeast:Start(30-delay)
+	else
+		timerCallBloodBeast:Start(40-delay)
+	end
 	warnAddsSoon:Schedule(30-delay)
 	timerBloodNova:Start(-delay)
 	timerRuneofBlood:Start(19.5-delay)

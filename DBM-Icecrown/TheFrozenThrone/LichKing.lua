@@ -401,7 +401,11 @@ function mod:SPELL_CAST_START(args)
 		self:SetWipeTime(190) --Change min wipe time mid battle to force dbm to keep module loaded for this long out of combat roleplay, hopefully without breaking mod.
 		self:Stop()
 		self:ClearIcons()
-		timerRoleplay:Start()
+		if mod:IsDifficulty("heroic25") then
+			timerRoleplay:Start(162)
+		else
+			timerRoleplay:Start()
+		end
 	elseif args:IsSpellID(69242, 73800, 73801, 73802) then -- Soul Shriek Raging spirits
 		timerSoulShriekCD:Start(args.sourceGUID)
 	end

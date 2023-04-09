@@ -27,7 +27,7 @@ local berserkTimer					= mod:NewBerserkTimer(600)
 
 mod:RemoveOption("HealthFrame")
 mod:AddBoolOption("ShieldHealthFrame", false, "misc")
-mod:AddBoolOption("RemoveDruidBuff", false, "misc")
+mod:AddBoolOption("RemoveDruidBuff", true, "misc")
 
 -- Adds
 mod:AddTimerLine(DBM_COMMON_L.ADDS)
@@ -151,10 +151,10 @@ function mod:EqW()
 end
 
 function mod:RemoveBuffs() -- Spell is removed based on name so no longer need SpellID for each rank
-	CancelUnitBuff("player", (GetSpellInfo(48469)))		-- Mark of the Wild
-	CancelUnitBuff("player", (GetSpellInfo(48470)))		-- Gift of the Wild
-	CancelUnitBuff("player", (GetSpellInfo(69381)))		-- Drums of the Wild
-	CancelUnitBuff("player", (GetSpellInfo(48170)))		-- Prayer of Shadow Protection
+	CancelUnitBuff("player", (GetSpellInfo(48469)))		-- Знак дикой природы(таргетная)
+	CancelUnitBuff("player", (GetSpellInfo(48470)))		-- Дар дикой природы(массовая лапка)
+	CancelUnitBuff("player", (GetSpellInfo(69381)))		-- Дар дикой природы(барабаны)
+	-- CancelUnitBuff("player", (GetSpellInfo(48170)))	-- Молитва защиты от темной магии(зачем ?)
 end
 
 local function showDominateMindWarning(self)
