@@ -25,19 +25,23 @@ local warnPhase               = mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil
 local specWarnSoulAbduction   = mod:NewSpecialWarningMoveTo(319917, nil, nil, nil, 2, 4)
 local specWarnMarkofLegion    = mod:NewSpecialWarningYou(319907, nil, nil, nil, 4, 2)
 local specWarnHarassment      = mod:NewSpecialWarningMoveAway(319931, nil, nil, nil, 4, 4)
+local specWarnGeyser          = mod:NewSpecialWarningGTFO(319922, nil, nil, nil, 1, 2)
 
 -- 10/20 19:48:32.669  SPELL_CAST_START,0xF130004630000052,"Архимонд",0xa48,0x0000000000000000,nil,0x80000000,319910,"Пламя Рока",0x8
-local markOfRockCD            = mod:NewCDTimer(40, 319910, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1) -- Пламя рока кд
-local markOfLegDur            = mod:NewTargetTimer(10, 319907, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON) -- метка легиона
-local sosCD                   = mod:NewCDTimer(40, 319917, nil, nil, nil, 3) -- состалка кд
-local markOfLegCD             = mod:NewCDTimer(22, 319907, nil, nil, nil, 2) -- метка легиона кд
-local ShadowGeyserCD          = mod:NewCDTimer(20, 319922, nil, nil, nil, 4)
-local perstCD                 = mod:NewNextTimer(8, 319906, nil, "Tank", nil, 4, nil, DBM_COMMON_L.TANK_ICON) -- перст кд
+local markOfRockCD            = mod:NewCDCountTimer(40, 319910, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1) -- Пламя рока кд
+local markOfLegDur            = mod:NewTargetTimer(10, 319907, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON)          -- метка легиона
+local sosCD                   = mod:NewCDTimer(40, 319917, nil, nil, nil, 3)                                             -- состалка кд
+local markOfLegCD             = mod:NewCDTimer(22, 319907, nil, nil, nil, 2)                                             -- метка легиона кд
+local ShadowGeyserCD          = mod:NewCDTimer(20, 319922, nil, nil, nil, 4)                                             -- Гейзер
+local ShadowGeyserBoom        = mod:NewTimer(6, "Boom", 319922, nil, nil, 1, nil, DBM_COMMON_L.TANK_ICON)
+local perstCD                 = mod:NewNextTimer(8, 319906, nil, "Tank", nil, 4, nil, DBM_COMMON_L.TANK_ICON)            -- перст кд
 local StageTimer              = mod:NewPhaseTimer(120, nil, "Фаза: %d", nil, nil, 4)
+local AddsTimer               = mod:NewNextTimer(70, 319915, nil, "-Healer", nil, 1, nil, DBM_COMMON_L.DAMAGE_ICON)
 local berserkTimer            = mod:NewBerserkTimer(600)
 local yellMark                = mod:NewYell(319907)
 local yellMarkFade            = mod:NewShortFadesYell(319907)
 local yellHaras               = mod:NewYell(319931)
+local markOfRockBuffFade      = mod:NewBuffFadesTimer(20, 319931)
 
 
 mod:AddNamePlateOption("markOfLegPlate", 319907, true)
@@ -63,10 +67,13 @@ function mod:OnCombatStart(delay)
 	warned_F2 = false
 	perstCD:Start(16)
 	markOfLegCD:Start()
-	markOfRockCD:Start(40)
+	AddsTimer:Start(22) --нужно посмотреть логи мб каст есть
+	AddsTimer:Schedule(22)
+	markOfRockCD:Start(40, self.vb.FlameCount)
 	StageTimer:Start(nil, 2)
 	self.vb.markLegion = 8
 	self.vb.markSos = 5
+	self.vb.FlameCount = 0
 	berserkTimer:Start()
 end
 
@@ -86,13 +93,18 @@ function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(perstCD.spellId) then
 		perstCD:Start()
 	elseif args:IsSpellID(markOfRockCD.spellId) then
-		markOfRockCD:Start()
+		self.vb.FlameCount = self.vb.FlameCount + 1
+		markOfRockCD:Start(nil, self.vb.FlameCount + 1)
+		markOfRockBuffFade:Schedule(2)
 	elseif args:IsSpellID(sosCD.spellId) then
 		sosCD:Start()
-	elseif args:IsSpellID(319922) then -- 2 фаза
+	elseif args:IsSpellID(319922) then -- 3 фаза
 		ShadowGeyserCD:Start()
+		ShadowGeyserBoom:Schedule(1)
+		specWarnGeyser:Show(args.spellName)
 	elseif not warned_F1 and args:IsSpellID(319920) then
 		self:SetStage(2)
+		markOfRockCD:Stop()
 		warned_F1 = true
 		warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(2))
 	end
@@ -118,6 +130,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		warnLeg:Show(args.destName)
 	elseif args:IsSpellID(319917) then
+		SoulTargets[#SoulTargets + 1] = args.destName
 		warnSoulAbductionTarget:Show(table.concat(SoulTargets, "<, >"))
 		if args:IsPlayer() then
 			specWarnSoulAbduction:Show("Беги в воду!")
@@ -134,6 +147,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		table.wipe(SoulTargets)
 	elseif args:IsSpellID(319931) then
+		HarasmTargets[#HarasmTargets + 1] = args.destName
 		warnHarassmentTarget:Show(table.concat(HarasmTargets, "<, >"))
 		if args:IsPlayer() then
 			specWarnHarassment:Show()
@@ -157,7 +171,9 @@ function mod:SPELL_AURA_REMOVED(args)
 		if DBM:CanUseNameplateIcons() and self.Options.markOfLegPlate then
 			DBM.Nameplate:Hide(args.destGUID, 319907)
 		end
-		self:RemoveIcon(args.destName)
+		if self.Options.SetIconOnLegTarget then
+			self:RemoveIcon(args.destName)
+		end
 	elseif args:IsSpellID(319917) then
 		if self.Options.SetIconOnSos then
 			self:RemoveIcon(args.destName)
@@ -191,7 +207,11 @@ function mod:UNIT_HEALTH(uId)
 		if not warned_F2 and hp < 50 then
 			warned_F2 = true
 			self:SetStage(3)
-			-- if self.Options.AnnounceVoicePhase then
+			ShadowGeyserCD:Start()
+			AddsTimer:Start(120)
+
+			-- 8.48 2 add 9.38
+			-- if self.Options.AnnounceVoicePhase then 7.22
 			-- 	DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\3phaseTrall.mp3")
 			-- end
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(3))

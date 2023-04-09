@@ -21,8 +21,8 @@ function GetRealmNumber()
 	return playerRealm
 end
 
-local debug = false
-if not _G.CHAT_SPAM_CHARNOTFOUND and debug then
+-- local debug = false
+if not _G.CHAT_SPAM_CHARNOTFOUND then
     _G.CHAT_SPAM_CHARNOTFOUND = true
     ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", function(self, event, msg, ...) return msg:match('Персонаж по имени "([^_]+)" в игре не найден') end)
 end

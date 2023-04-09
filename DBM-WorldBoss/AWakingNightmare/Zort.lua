@@ -10,12 +10,12 @@ mod:RegisterCombat("combat", 50702)
 mod:RegisterEvents(
 	"SPELL_CAST_START 307829 307820 307818 307817 308520 307852 308512 307845",
 	"SPELL_CAST_SUCCESS 308520 307834 318956",
-	"SPELL_AURA_APPLIED 307815 307839 307842 308512 308517 308620 308515 307834 307833",
-	"SPELL_AURA_APPLIED_DOSE 307815 307839 307842 308512 308517 308620 308515 307834 307833",
+	"SPELL_AURA_APPLIED 307815 307839 307842 308512 307861 308517 308620 308515 307834 307833",
+	"SPELL_AURA_APPLIED_DOSE 307815 307839 307842 308512 308517 307861 308620 308515 307834 307833",
 	-- "UNIT_TARGET",
 	-- "SPELL_DAMAGE",
 	-- "SPELL_PERIODIC_DAMAGE",
-	"SPELL_AURA_REMOVED 307839 308516 308517 318956",
+	"SPELL_AURA_REMOVED 307839 308516 308517 318956 307861",
 	"SPELL_INTERRUPT 307829"
 -- "SPELL_CAST_FAILED"
 -- "UNIT_HEALTH"
@@ -33,6 +33,7 @@ mod:AddTimerLine(L.name)
 -- local warnPhase4              = mod:NewPhaseAnnounce(4)
 --local warnPech							= mod:NewTargetAnnounce(307814, 2)
 local warnFlame               = mod:NewTargetAnnounce(307839, 2)
+local warnFlame2              = mod:NewTargetAnnounce(307861, 2)
 local warnSveaz               = mod:NewTargetAnnounce(308620, 3)
 --local warnkik							= mod:NewCastAnnounce(307829, 2)
 --local warnShkval						= mod:NewCastAnnounce(307821, 3)
@@ -42,7 +43,8 @@ local warnInternalbgPre       = mod:NewPreWarnAnnounce(307833, 5, nil, nil, "Tan
 local specWarnBreathNightmare = mod:NewSpecialWarningDispel(308512, "RemoveDisease", nil, nil, 1, 6)
 
 local specWarnRazrsveaz       = mod:NewSpecialWarning("KnopSv", 3)
-local specCowardice           = mod:NewSpecialWarning("|cff71d5ff|Hspell:307834|hПечать: Трусость|h|r Бей босcа - Держи радиус 6 метров!"
+local specCowardice           = mod:NewSpecialWarning(
+	"|cff71d5ff|Hspell:307834|hПечать: Трусость|h|r Бей босcа - Держи радиус 6 метров!"
 	, 3)
 -- local specwarnHp1             = mod:NewSpecialWarning("Hp1", 3)
 -- local specwarnHp2             = mod:NewSpecialWarning("Hp2", 3)
@@ -56,17 +58,19 @@ local specWarnFlame2          = mod:NewSpecialWarningMoveAway(307861, nil, nil, 
 local specWarnSveaz           = mod:NewSpecialWarningYou(308620, nil, nil, nil, 3, 2)
 local yellFlame               = mod:NewYell(307839) --Огонь
 local yellFlameFade           = mod:NewShortFadesYell(307839)
+local yellFlame2              = mod:NewYell(307861) --Огонь
+local yellFlameFade2          = mod:NewShortFadesYell(307861)
 local yellCastsvFade          = mod:NewShortFadesYell(308520)
 
-local timerInternalbleeding = mod:NewCDTimer(26, 307833)
-local timerSveazi           = mod:NewCDTimer(28, 308620, nil, nil, nil, 2)
-local timerkik              = mod:NewCDTimer(15, 307829, nil, nil, nil, 3)
-local timerShkval           = mod:NewCDTimer(20, 307821, nil, nil, nil, 3)
-local timerCowardice        = mod:NewCDTimer(33, 307834)
+local timerInternalbleeding   = mod:NewCDTimer(26, 307833)
+local timerSveazi             = mod:NewCDTimer(28, 308620, nil, nil, nil, 2)
+local timerkik                = mod:NewCDTimer(15, 307829, nil, nil, nil, 3)
+local timerShkval             = mod:NewCDTimer(20, 307821, nil, nil, nil, 3)
+local timerCowardice          = mod:NewCDTimer(33, 307834)
 -- local timerFlame            = mod:NewCDTimer(15, 307839)
-local timerBreathNightmare  = mod:NewCDTimer(42, 308512, nil, nil, nil, 1, nil, nil, nil, 1)
-local timerAmonstrousblow   = mod:NewCDTimer(15, 307845)
-local timerCDChep           = mod:NewCDTimer(6, 308520)
+local timerBreathNightmare    = mod:NewCDTimer(42, 308512, nil, nil, nil, 1, nil, nil, nil, 1)
+local timerAmonstrousblow     = mod:NewCDTimer(15, 307845)
+local timerCDChep             = mod:NewCDTimer(6, 308520)
 
 mod:AddTimerLine(DBM_COMMON_L.ADDS)
 local warnPriziv  = mod:NewCastAnnounce(307852, 3)
@@ -108,6 +112,10 @@ end
 
 local function warnFlameTargets(self)
 	warnFlame:Show(table.concat(FlameTargets, "<, >"))
+	table.wipe(FlameTargets)
+end
+local function warnFlameTargets2(self)
+	warnFlame2:Show(table.concat(FlameTargets, "<, >"))
 	table.wipe(FlameTargets)
 end
 
@@ -205,8 +213,23 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(308512) and self:AntiSpam(3) then
 		specWarnBreathNightmare:Show()
 	elseif args:IsSpellID(307861) then
+		FlameTargets[#FlameTargets + 1] = args.destName
+		if self.Options.SetIconOnFlameTarget and self.vb.FlameIcons > 0 then
+			self:SetIcon(args.destName, self.vb.FlameIcons, 10)
+		end
+		if self.Options.Nameplate1 then
+			DBM.Nameplate:Show(args.destGUID, 307839)
+		end
+		self.vb.FlameIcons = self.vb.FlameIcons - 1
+		self:Unschedule(warnFlameTargets2)
+		self:Schedule(0.3, warnFlameTargets2, self)
 		if args:IsPlayer() then
 			specWarnFlame2:Show()
+			yellFlame2:Yell()
+			yellFlameFade2:Countdown(307861)
+			if self.Options.RangeFrame then
+				DBM.RangeCheck:Show(20)
+			end
 		end
 	elseif args:IsSpellID(308517, 308620, 308515) then
 		SveazTargets[#SveazTargets + 1] = args.destName
@@ -236,7 +259,7 @@ end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 function mod:SPELL_AURA_REMOVED(args)
-	if args:IsSpellID(307839) then
+	if args:IsSpellID(307839, 307861) then
 		self.vb.FlameIcons = 2
 		if self.Options.SetIconOnFlameTarget then
 			self:SetSortedIcon("roster", args.destName, 7, 8)
@@ -272,17 +295,17 @@ function mod:UNIT_HEALTH()
 		if stage == 1 then
 			local hp = DBM:GetBossHPByUnitID("boss3") -- чудовищная
 			if hp and hp <= 1 then
-				self:NextStage() -- stage == 2
+				self:NextStage()             -- stage == 2
 			end
 		elseif stage == 2 then
 			local hp = DBM:GetBossHPByUnitID("boss2") -- лик
 			if hp and hp <= 1 then
-				self:NextStage() -- stage == 3
+				self:NextStage()             -- stage == 3
 			end
 		elseif stage == 3 then
 			local hp = DBM:GetBossHPByUnitID("boss4") -- щупальце плеть
-			if hp and  hp <= 1 then
-				self:NextStage() -- stage == 4
+			if hp and hp <= 1 then
+				self:NextStage()             -- stage == 4
 			end
 		elseif stage == 4 then
 			if UnitExists("boss2") then
