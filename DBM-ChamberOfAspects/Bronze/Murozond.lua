@@ -118,7 +118,7 @@ end
 
 function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 50612, "Murozond", wipe)
-	DBM.BossHealth:Clear()
+	-- DBM.BossHealth:Clear()
 	DistortionWave:Stop()
 	SummoningtheTimeless:Stop()
 	BreathofInfinity:Stop()

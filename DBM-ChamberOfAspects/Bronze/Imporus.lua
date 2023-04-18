@@ -73,7 +73,7 @@ end
 
 function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 50608, "Imporus", wipe)
-	DBM.BossHealth:Clear()
+	-- DBM.BossHealth:Clear()
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end
