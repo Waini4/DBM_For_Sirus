@@ -9,7 +9,7 @@ mod:RegisterCombat("combat", 18831)
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 305221",
 	"SPELL_CAST_SUCCESS 16508",
-	"SPELL_AURA_APPLIED 305216 305247 33238"
+	"SPELL_AURA_APPLIED 305216 305247 33238 33054"
 )
 
 local isDispeller = select(2, UnitClass("player")) == "PRIEST" or select(2, UnitClass("player")) == "SHAMAN" or select(2, UnitClass("player")) == "MAGE"
@@ -38,7 +38,7 @@ mod:AddBoolOption("AnnounceToChat",false)
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 18831, "High King Maulgar")
 	if mod:IsDifficulty("heroic25") then
-		timerMight:Start(5)
+		timerMightCD:Start(5)
 	end
 end
 
@@ -49,8 +49,6 @@ end
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(305221) then
 		specWarnKickCleanse:Show(args.spellName)
---	elseif args:IsSpellID(305231) then
-
 	end
 end
 
@@ -74,7 +72,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.AnnounceToChat then
 			SendChatMessage((activeIcon and ("{rt" .. activeIcon .. "} ") or "") .. args.destName .. " активен", "RAID")
 		end
-	elseif args:IsSpellID(305247) then
+	elseif args:IsSpellID(305247) or args:IsSpellID(33054)then
 		specWarnShield:Show()
 	elseif args:IsSpellID(33238) then
 		timerWhirlCD:Start()

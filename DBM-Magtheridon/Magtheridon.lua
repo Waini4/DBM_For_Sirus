@@ -13,7 +13,7 @@ mod:RegisterEvents(
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 305158 305159 305160 305134 30616 30510",
 	"SPELL_CAST_SUCCESS 30572 305166 30510",
-	"SPELL_AURA_APPLIED 305131 305135",
+	"SPELL_AURA_APPLIED 305131 305135 44032",
 	"UNIT_HEALTH",
 	"SPELL_DAMAGE"
 )
@@ -30,7 +30,6 @@ local warnPhase3				= mod:NewPhaseAnnounce(3)
 
 -- обычка --
 mod:AddTimerLine(L.Normal)
--- local timerShakeCD				= mod:NewCDTimer(55, 55101, nil, nil, nil, 3) -- Сотрясение
 local timerTilting				= mod:NewCDTimer(30, 302060, nil, nil, nil, 3)	--откидывание, id не его.
 
 mod:AddInfoFrameOption(44032, true)

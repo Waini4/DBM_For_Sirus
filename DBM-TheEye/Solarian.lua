@@ -312,6 +312,7 @@ function mod:UNIT_HEALTH(uId)
 				timerAdds:Cancel()
 			elseif DBM:GetBossHPByUnitID(uId) <= 20 and self:IsDifficulty("normal25") then
 				self:SetStage(2)
+				timerPriestsN:Cancel()
 			end
 		elseif self:GetStage() == 0 then
 			self:SetStage(1)

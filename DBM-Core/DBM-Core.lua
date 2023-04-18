@@ -5306,7 +5306,8 @@ do
 		cSyncSender = {}
 		cSyncReceived = 0
 		if not checkEntry(inCombat, mod) then
-			-- - HACK: гарантирует, что мы не обнаружим ложное притяжение, если событие сработает снова, когда босс умрет ...
+			-- HACK: гарантирует, что мы не обнаружим ложного срабатывания, если событие сработает снова, когда босс умрет... (переводил узбек)
+			if not mod.Options.Enabled then return end
 			if mod.lastKillTime and GetTime() - mod.lastKillTime < 10 then return end
 			if not mod.combatInfo then return end
 			if mod.combatInfo.noCombatInVehicle and UnitInVehicle("player") then -- HACK
