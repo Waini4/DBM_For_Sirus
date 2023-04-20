@@ -1,7 +1,7 @@
 local mod = DBM:NewMod("Elonus", "DBM-ChamberOfAspects", 3)
 local L   = mod:GetLocalizedStrings()
 
-local CL = DBM_COMMON_L
+local CL  = DBM_COMMON_L
 mod:SetRevision("20220609123000") -- fxpw check 20220609123000
 
 mod:SetCreatureID(50609, 50610)
@@ -13,7 +13,8 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 312214 312211 312210 312204 317156",
 	-- "SPELL_CAST_SUCCESS",
 	"SPELL_AURA_APPLIED 312206 317158 317160 312208 312204 317156 317155 312213 317163 317165 317161 312209",
-	"SPELL_AURA_APPLIED_DOSE 312206 317158 317160 312208 312204 317156 317155 312213 317163 317165 317161 312209",
+	--"SPELL_AURA_APPLIED_DOSE 312206 317158 317160 312208 312204 317156 317155 312213 317163 317165 317161 312209",
+	"SPELL_AURA_REFRESH 3312206 317158 317160 312208 312204 317156 317155 312213 317163 317165 317161 312209",
 	-- "UNIT_TARGET",
 	"SPELL_DAMAGE",
 	"SPELL_PERIODIC_DAMAGE",
@@ -24,22 +25,22 @@ mod:RegisterEventsInCombat(
 
 mod:AddTimerLine(L.name)
 
-local warnArcanePunishment = mod:NewStackAnnounce(317155, 5, nil, "Tank")
+local warnArcanePunishment           = mod:NewStackAnnounce(317155, 5, nil, "Tank")
 
-local specWarnArcanePunishment   = mod:NewSpecialWarningTaunt(317155, "Tank", nil, nil, 1, 2)
-local specWarnReplicaSpawnedSoon = mod:NewSpecialWarning("WarningReplicaSpawnedSoon", 312211, nil, nil, 1, 6) -- Перефаза
+local specWarnArcanePunishment       = mod:NewSpecialWarningTaunt(317155, "Tank", nil, nil, 1, 2)
+local specWarnReplicaSpawnedSoon     = mod:NewSpecialWarning("WarningReplicaSpawnedSoon", 312211, nil, nil, 1, 6) -- Перефаза
 -- local specWarnReturnSoon					= mod:NewSpecialWarning("WarnirnReturnSoon", 312214, nil, nil, 1, 6)
 
-local ArcanePunishmentStack = mod:NewBuffActiveTimer(30, 317155, nil, "Tank", nil, 5, nil, CL.TANK_ICON)
+local ArcanePunishmentStack          = mod:NewBuffActiveTimer(30, 317155, nil, "Tank", nil, 5, nil, CL.TANK_ICON)
 
-local warned_CopSoon = false
-local warned_Cop = false
+local warned_CopSoon                 = false
+local warned_Cop                     = false
 
 ------------------------------OB---------------------------------------------
-local warnTemporalCascade = mod:NewTargetAnnounce(312206, 4)
-local warnReverseCascade  = mod:NewTargetAnnounce(312208, 3)
-local warnReplicaSpawned  = mod:NewAnnounce("WarningReplicaSpawned", 3, 312211, "-Healer") --Временные линии(копии)
-local warnPowerWordErase  = mod:NewTargetAnnounce(312204, 4) --Слово силы: Стереть
+local warnTemporalCascade            = mod:NewTargetAnnounce(312206, 4)
+local warnReverseCascade             = mod:NewTargetAnnounce(312208, 3)
+local warnReplicaSpawned             = mod:NewAnnounce("WarningReplicaSpawned", 3, 312211, "-Healer") --Временные линии(копии)
+local warnPowerWordErase             = mod:NewTargetAnnounce(312204, 4)                               --Слово силы: Стереть
 
 --local specPowerWordErase					= mod:NewSpecialWarningDispel(312204, "Healer", nil, nil, 1, 2)
 local specWarnResonantScream         = mod:NewSpecialWarningCast(312210, "SpellCaster", nil, 2, 2, 2) --Резонирующий крик(кик)
@@ -52,13 +53,13 @@ local yellReverseCascade             = mod:NewYell(312208)
 local yellTemporalCascadeFade        = mod:NewShortFadesYell(312206)
 local yellReverseCascadeFade         = mod:NewShortFadesYell(312208)
 
-local EraseCount          = mod:NewCDCountTimer(60, 312204, nil, nil, nil, 4, nil, CL.HEALER_ICON) --Слово силы: Стереть
-local ResonantScream      = mod:NewCDTimer(12, 312210, nil, "SpellCaster", nil, 1, nil, nil, nil, 1) --Резонирующий крик(кик)
-local ReplicCount         = mod:NewCDCountTimer(120, 312211, nil, nil, nil, 2, nil, CL.IMPORTANT_ICON) --Временные линии(копии)
-local ReturnCount         = mod:NewCDCountTimer(120, 312214, nil, nil, nil, 2) --Возврат
-local TemporalCascade     = mod:NewCDTimer(20, 312206, nil, nil, nil, 3, nil, CL.DEADLY_ICON) --Темпоральный каскад
-local TemporalCascadeBuff = mod:NewBuffFadesTimer(10, 312206, nil, nil, nil, 6, nil, CL.DEADLY_ICON) --Темпоральный каскад
-local ReverseCascadeBuff  = mod:NewBuffFadesTimer(10, 312208, nil, nil, nil, 6, nil, CL.DEADLY_ICON) --Обратный каскад
+local EraseCount                     = mod:NewCDCountTimer(60, 312204, nil, nil, nil, 4, nil, CL.HEALER_ICON)     --Слово силы: Стереть
+local ResonantScream                 = mod:NewCDTimer(12, 312210, nil, "SpellCaster", nil, 1, nil, nil, nil, 1)   --Резонирующий крик(кик)
+local ReplicCount                    = mod:NewCDCountTimer(120, 312211, nil, nil, nil, 2, nil, CL.IMPORTANT_ICON) --Временные линии(копии)
+local ReturnCount                    = mod:NewCDCountTimer(120, 312214, nil, nil, nil, 2)                         --Возврат
+local TemporalCascade                = mod:NewCDTimer(20, 312206, nil, nil, nil, 3, nil, CL.DEADLY_ICON)          --Темпоральный каскад
+local TemporalCascadeBuff            = mod:NewBuffFadesTimer(10, 312206, nil, nil, nil, 6, nil, CL.DEADLY_ICON)   --Темпоральный каскад
+local ReverseCascadeBuff             = mod:NewBuffFadesTimer(10, 312208, nil, nil, nil, 6, nil, CL.DEADLY_ICON)   --Обратный каскад
 
 mod:AddSetIconOption("SetIconTempCascIcon", 312206, true, false, { 7, 8 })
 mod:AddSetIconOption("SetIconOnRevCascTargets", 312208, true, false, { 1, 2, 3, 4, 5, 6 })
@@ -273,7 +274,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	end
 end
 
-mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
+mod.SPELL_AURA_REFRESH = mod.SPELL_AURA_APPLIED
 
 -- function mod:SPELL_CAST_SUCCESS(args)
 -- 	local spellId = args.spellId

@@ -218,8 +218,8 @@ function mod:UNIT_HEALTH(uId)
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(3))
 			timerMutilationlCD:Stop()
 			timerFallofFilthCD:Stop()
-			timerUnstableAbyssalsCD:Start(17) -- ????? походу меняли таймер
-			self:Schedule(17, Abyssals, self)
+			timerUnstableAbyssalsCD:Start(20)
+			self:Schedule(20, Abyssals, self)
 			timerHorrorflamesCD:Start(10) -- ~~~~~~
 			specwarnAbbasSoon:Schedule(8)
 		end

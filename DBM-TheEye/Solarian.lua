@@ -296,7 +296,11 @@ function mod:SWING_DAMAGE(sourceGUID, sourceName, sourceFlags, destGUID, destNam
 end
 
 mod.SWING_MISSED = mod.SWING_DAMAGE
+
+local stage
 function mod:UNIT_HEALTH(uId)
+	local hp = self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) or nil
+	stage = self:GetStage()
 	-- if self:GetStage() and not warned_preP1 and self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHPByUnitID(uId) <= 33 and self:IsDifficulty("normal25") then
 	-- 	warned_preP1 = true
 	-- 	warnPhase2Soon:Show()
@@ -304,18 +308,13 @@ function mod:UNIT_HEALTH(uId)
 	-- 	warned_preP2 = true
 	-- 	warnPhase2:Show()
 	-- 	timerAdds:Cancel()
-	if self:GetUnitCreatureId(uId) == 18805 then
-		if self:GetStage() == 1 then
-			if DBM:GetBossHPByUnitID(uId) <= 40 and self:IsDifficulty("heroic25") then
-				DBM.Arrow:Hide()
-				self:SetStage(2)
-				timerAdds:Cancel()
-			elseif DBM:GetBossHPByUnitID(uId) <= 20 and self:IsDifficulty("normal25") then
-				self:SetStage(2)
-				timerPriestsN:Cancel()
-			end
-		elseif self:GetStage() == 0 then
-			self:SetStage(1)
+	if hp and stage then
+		if hp < 40 and self:IsDifficulty("heroic25") and stage == 1 then
+			DBM.Arrow:Hide()
+			self:SetStage(2)
+			timerAdds:Cancel()
+		elseif hp < 20 and self:IsDifficulty("normal25") and stage == 1 then
+			self:SetStage(2)
 		end
 	end
 	-- elseif self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 40 and self:IsDifficulty("heroic25") and self:GetStage() and self:GetStage() == 1 then -- TODO: 2 фаза для хма, может багаться получается?

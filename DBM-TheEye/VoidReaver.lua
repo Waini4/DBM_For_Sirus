@@ -4,7 +4,7 @@
 local mod = DBM:NewMod("VoidReaver", "DBM-TheEye", 1)
 local L   = mod:GetLocalizedStrings()
 
-local CL = DBM_COMMON_L
+local CL  = DBM_COMMON_L
 mod:SetRevision("20220609123000") -- fxpw check 20220609123000
 
 mod:SetCreatureID(19516)
@@ -17,7 +17,8 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS 25778 34162",
 	"SPELL_AURA_REMOVED 308471",
 	"SPELL_AURA_APPLIED 308465 308473 308471 308467",
-	"SPELL_AURA_APPLIED_DOSE 308465 308473 308471 308467",
+	--"SPELL_AURA_APPLIED_DOSE 308465 308473 308471 308467", Test
+	"SPELL_AURA_REFRESH 308465 308473 308471 308467",
 	"UNIT_HEALTH"
 
 
@@ -28,26 +29,26 @@ local timerNextPounding  = mod:NewCDTimer(14, 34162, nil, nil, nil, 1)
 local timerNextKnockback = mod:NewCDTimer(20, 25778, nil, "Healer", nil, 5, CL.HEALER_ICON)
 ------героик------
 
-local warnPhase1 = mod:NewAnnounce("Phase1", 2) -- Фаза пониженного урона
-local warnPhase2 = mod:NewAnnounce("Phase2", 2) -- Фаза повышенного урона
+local warnPhase1         = mod:NewAnnounce("Phase1", 2)     -- Фаза пониженного урона
+local warnPhase2         = mod:NewAnnounce("Phase2", 2)     -- Фаза повышенного урона
 --local warnKnockback				= mod:NewSoonAnnounce(308470, 2, nil, "Tank|Healer|RemoveEnrage")  -- тяжкий удар
-local warnMagnet = mod:NewTargetAnnounce(308467, 4) -- Сфера магнетизм
-local warnSign   = mod:NewTargetAnnounce(308471, 4) -- Знак
+local warnMagnet         = mod:NewTargetAnnounce(308467, 4) -- Сфера магнетизм
+local warnSign           = mod:NewTargetAnnounce(308471, 4) -- Знак
 
 --local warnSpawnOrbs				= mod:NewAnnounce("SpawnOrbs", 2)
 --local warnScope					= mod:NewSoonAnnounce(308984, 2, nil, "Tank|Healer|RemoveEnrage")  -- Сферы
 --local warnBah					= mod:NewAnnounce("Bah", 2)  -- Сферы
 
-local specWarnSign   = mod:NewSpecialWarningRun(308471, nil, nil, nil, 3, 4) -- Знак
-local specWarnMagnet = mod:NewSpecialWarningRun(308467, nil, nil, nil, 1, 4) -- Магнетизм
-local yellSign       = mod:NewYell(308471)
-local yellSignFades  = mod:NewShortFadesYell(308471)
+local specWarnSign       = mod:NewSpecialWarningRun(308471, nil, nil, nil, 3, 4) -- Знак
+local specWarnMagnet     = mod:NewSpecialWarningRun(308467, nil, nil, nil, 1, 4) -- Магнетизм
+local yellSign           = mod:NewYell(308471)
+local yellSignFades      = mod:NewShortFadesYell(308471)
 
 
 local timerOrbCD    = mod:NewCDTimer(30, 308466, nil, nil, nil, 3, nil, CL.DEADLY_ICON) -- Таймер чародейской сферы
 local timerLoadCD   = mod:NewCDTimer(60, 308465, nil, nil, nil, 1, nil, CL.ENRAGE_ICON) -- Таймер 1 фазы
 local timerReloadCD = mod:NewCDTimer(60, 308474, nil, nil, nil, 2, nil, CL.DAMAGE_ICON) -- Таймер 2 фазы
-local timerSignCD   = mod:NewCDTimer(16, 308471, nil, nil, nil, 7) -- Знак
+local timerSignCD   = mod:NewCDTimer(16, 308471, nil, nil, nil, 7)                      -- Знак
 
 
 local berserkTimer = mod:NewBerserkTimer(360)
@@ -172,7 +173,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerOrbCD:Start()
 		self:UnscheduleMethod("Magnet")
 		self:ScheduleMethod(0.1, "Magnet")
-
 	end
 end
 
@@ -200,4 +200,4 @@ function mod:UNIT_HEALTH(uId)
 	end
 end
 
-mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
+mod.SPELL_AURA_REFRESH = mod.SPELL_AURA_APPLIED
