@@ -70,6 +70,7 @@ function mod:OnCombatEnd(wipe)
 	timerCDCreat:Stop()
 	warnDistruptSoon:Cancel()
 	timerCDDistrupt:Stop()
+	timerzemio:Stop()
 end
 
 function mod:SPELL_CAST_START(args)
