@@ -106,7 +106,7 @@ end
 
 local cubsTimers = {
 	[2] = 74,
-	[3] = 72,
+	[3] = 74,
 	[4] = 67,	-- пока не пойму сколько секунд дает каждая из абилок - это гадание на картах таро. Ведь сирусовский дифф желает лучшего
 	[5] = 74,
 	[6] = 70,
@@ -156,9 +156,6 @@ end
 -- }
 
 function mod:SPELL_CAST_SUCCESS(args)
-	-- if args:IsSpellID(30572) then -- Сотрясение оказывается разные таймера
-	-- 	timerShakeCD:Start(shake < 7 and shakeCDTimers[shake] or 55)
-	-- 	shake = shake + 1
 	if args:IsSpellID(305166) then
 		handTargets[#handTargets + 1] = args.destName
 		if #handTargets >= 3 then
@@ -177,6 +174,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(44032) then
 		if self.Options.InfoFrame then
 			DBM.InfoFrame:SetHeader(MgDebuff)
+			DBM.InfoFrame:Show(16, "playerdebuffremaining", MgDebuff, 3)
 		end
 	end
 end
@@ -196,13 +194,10 @@ function mod:UNIT_HEALTH(uId)
 			 if  not self.vb.warned_preP2 and DBM:GetBossHP(17257) <= 33 then
 				self.vb.warned_preP2 = true
 				warnPhase3Soon:Show()
-				-- self:NewPrePhaseAnnounce(3)
 			elseif not self.vb.warned_preP3 and DBM:GetBossHP(17257) <= 30 then
 				self.vb.warned_preP3 = true
 				self:SetStage(3)
 				warnPhase3:Show()
-				-- self:NewPhaseAnnounce(3)
-				-- timerShakeCD:Start(10)
 			end
 		end
 	end
@@ -210,12 +205,6 @@ end
 
 function mod:CHAT_MSG_MONSTER_YELL(msg) -- идею взял с бс гер вайни --обновление таймера в случае потолка
 	if msg == L.YellPhase2 then
-		-- if timerNovaCD:GetRemaining() then
-		-- 	local elapsed, total = timerNovaCD:GetTime()
-		-- 	local extend = total - elapsed
-		-- 	timerNovaCD:Stop()
-		-- 	timerNovaCD:Update(0, 10 + extend)
-		-- end
 		UpdateTimer(timerNovaCD,10)
 	elseif msg == L.YellPhase1 then -- попытка словить активацию магика
 		if self:IsHeroic() then
