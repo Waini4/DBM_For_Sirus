@@ -174,7 +174,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(44032) then
 		if self.Options.InfoFrame then
 			DBM.InfoFrame:SetHeader(MgDebuff)
-			DBM.InfoFrame:Show(16, "playerdebuffremaining", MgDebuff, 3)
+			DBM.InfoFrame:Show(16, "playerdebuffremaining", MgDebuff, 5)
 		end
 	end
 end
