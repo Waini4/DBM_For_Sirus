@@ -107,6 +107,10 @@ function mod:OnCombatStart(delay)
 	specwarnAbbasSoon:Schedule(59)
 	timerUnstableAbyssalsCD:Start(60, self.vb.AbyssalsCount)
 	self:Schedule(60, Abyssals, self)
+	if self.Options.InfoFrame and not DBM.InfoFrame:IsShown() then
+		DBM.InfoFrame:SetHeader(MarkBuff)
+		DBM.InfoFrame:Show(25, "playerpower", 50, 0)
+	end
 end
 
 function mod:OnCombatEnd(wipe)
@@ -166,10 +170,6 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(318819) then
 		warnMark:Show(args.destName)
-		if self.Options.InfoFrame and not DBM.InfoFrame:IsShown() then
-			DBM.InfoFrame:SetHeader(args.spellName)
-			DBM.InfoFrame:Show(10, "playerdebuffremaining", 318819)
-		end
 	elseif args:IsSpellID(318839) and self:AntiSpam(2) then
 		specWarnMutilation:Show(args.destName)
 		timerMutilationlCD:Start()

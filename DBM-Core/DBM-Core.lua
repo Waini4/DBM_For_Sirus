@@ -81,9 +81,9 @@ local function currentFullDate()
 end
 
 DBM = {
-	Revision = parseCurseDate("2023" .. "04" .. "20" .. "19" .. "00" .. "00"),
+	Revision = parseCurseDate("2023" .. "05" .. "04" .. "12" .. "00" .. "00"),
 	DisplayVersion = GetAddOnMetadata(_addonname, "Version"), -- the string that is shown as version
-	ReleaseRevision = releaseDate(2023, 04, 20, 19, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	ReleaseRevision = releaseDate(2023, 05, 04, 12, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 
 local fakeBWVersion = 7558
@@ -906,7 +906,7 @@ do
 			else
 				DBM:AddMsg((
 					"DBM core 844 event or spellid is nil ->" .. ((spellId and "s ") or "nil") .. (("  ->" .. event and "e ") or "nil")
-					))
+				))
 			end
 		end
 
@@ -1079,8 +1079,8 @@ do
 				end
 				if #mods == 0 or
 					(
-					match and event:sub(0, 5) == "UNIT_" and event:sub(0, -10) ~= "_UNFILTERED" and event ~= "UNIT_DIED" and
-					event ~= "UNIT_DESTROYED") then -- unit events have their own reference count
+						match and event:sub(0, 5) == "UNIT_" and event:sub(0, -10) ~= "_UNFILTERED" and event ~= "UNIT_DIED" and
+						event ~= "UNIT_DESTROYED") then -- unit events have their own reference count
 					unregisterUEvent(self, event)
 				end
 				if #mods == 0 then
@@ -1150,8 +1150,8 @@ do
 					end
 					if #mods == 0 or
 						(
-						match and event:sub(0, 5) == "UNIT_" and event:sub(0, -10) ~= "_UNFILTERED" and event ~= "UNIT_DIED" and
-						event ~= "UNIT_DESTROYED") then
+							match and event:sub(0, 5) == "UNIT_" and event:sub(0, -10) ~= "_UNFILTERED" and event ~= "UNIT_DIED" and
+							event ~= "UNIT_DESTROYED") then
 						unregisterUEvent(self, event)
 						DBM:Debug("unregisterUEvent for unit event " .. event .. " unregistered", 3)
 					end
@@ -2599,8 +2599,8 @@ function DBM:LoadModOptions(modId, inCombat, first)
 					if mod.DefaultOptions[option] == nil and
 						not
 						(
-						option:find("talent") or option:find("FastestClear") or option:find("CVAR") or option:find("RestoreSetting") or
-						option:find("Permanent")) then                                        -- added Permanent for mod options that I want to keep between sessions e.g. Frame positions
+							option:find("talent") or option:find("FastestClear") or option:find("CVAR") or option:find("RestoreSetting") or
+							option:find("Permanent")) then                                    -- added Permanent for mod options that I want to keep between sessions e.g. Frame positions
 						savedOptions[id][profileNum][option] = nil
 					elseif mod.DefaultOptions[option] and (type(mod.DefaultOptions[option]) == "table") then --recover broken dropdown option
 						if savedOptions[id][profileNum][option] and (type(savedOptions[id][profileNum][option]) == "boolean") then
@@ -3155,7 +3155,7 @@ end
 --------------------------------
 do
 	local modAdvertisementShown = false
-	local classicZones = { [718] = true,[767] = true,[756] = true,[697] = true }
+	local classicZones = { [718] = true, [767] = true, [756] = true, [697] = true }
 	local bcZones = {
 		[797] = true,
 		[776] = true,
@@ -3177,7 +3177,7 @@ do
 		[530] = true,
 		[533] = true
 	}
-	local pvpZones = { [402] = true,[444] = true,[462] = true,[483] = true,[513] = true,[541] = true }
+	local pvpZones = { [402] = true, [444] = true, [462] = true, [483] = true, [513] = true, [541] = true }
 	local oldDungeons = {
 		[689] = true,
 		[705] = true,
@@ -5587,7 +5587,7 @@ do
 					for _, v in ipairs(combat) do
 						if v.mod.Options.Enabled and not v.mod.disableHealthCombat
 							and v.type:find("combat") and (v.multiMobPullDetection and checkEntry(v.multiMobPullDetection, cId)
-							or v.mob == cId) and not (#inCombat > 0 and v.noMultiBoss) then
+								or v.mob == cId) and not (#inCombat > 0 and v.noMultiBoss) then
 							if v.mod.noFriendlyEngagement and UnitIsFriend("player", uId) then return end
 							-- Delay set, > 97% = 0.5 (consider as normal pulling), max dealy limited to 20s.
 							self:StartCombat(v.mod, health > 97 and 0.5 or mmin(GetTime() - lastCombatStarted, 20),
@@ -5649,8 +5649,8 @@ do
 			end
 			if encounterDifficulty and encounterDifficultyText and encounterDifficultyIndex and
 				(
-				encounterDifficulty ~= savedDifficulty or encounterDifficultyText ~= difficultyText or
-				encounterDifficultyIndex ~= difficultyIndex) then
+					encounterDifficulty ~= savedDifficulty or encounterDifficultyText ~= difficultyText or
+					encounterDifficultyIndex ~= difficultyIndex) then
 				savedDifficulty, difficultyText, difficultyIndex = encounterDifficulty, encounterDifficultyText,
 					encounterDifficultyIndex
 			end
@@ -6862,7 +6862,7 @@ do
 		if DBM.Options.SpamBlockBossWhispers then
 			return #inCombat > 0 and
 				(
-				msg == "status" or msg:sub(1, chatPrefix:len()) == chatPrefix or msg:sub(1, chatPrefixShort:len()) == chatPrefixShort
+					msg == "status" or msg:sub(1, chatPrefix:len()) == chatPrefix or msg:sub(1, chatPrefixShort:len()) == chatPrefixShort
 				), ...
 		else
 			return msg == "status" and #inCombat > 0, ...
@@ -7507,9 +7507,9 @@ function bossModPrototype:CheckInterruptFilter(sourceGUID, force, checkCooldown,
 	end
 	if requireCooldown and
 		(
-		UnitIsDeadOrGhost("player") or (GetSpellCooldown(6552)) ~= 0 or (GetSpellCooldown(47528)) ~= 0 or
-		(GetSpellCooldown(2139)) ~= 0 or (GetSpellCooldown(1766)) ~= 0 or (GetSpellCooldown(49377)) ~= 0 or
-		(GetSpellCooldown(15487)) ~= 0 or (GetSpellCooldown(57994)) ~= 0) then
+			UnitIsDeadOrGhost("player") or (GetSpellCooldown(6552)) ~= 0 or (GetSpellCooldown(47528)) ~= 0 or
+			(GetSpellCooldown(2139)) ~= 0 or (GetSpellCooldown(1766)) ~= 0 or (GetSpellCooldown(49377)) ~= 0 or
+			(GetSpellCooldown(15487)) ~= 0 or (GetSpellCooldown(57994)) ~= 0) then
 		InterruptAvailable = false --checkCooldown check requested and player has no spell that can interrupt available (or is dead)
 	end
 	local unitID = (UnitGUID("target") == sourceGUID) and "target" or (UnitGUID("focus") == sourceGUID) and "focus" or
@@ -8556,8 +8556,8 @@ do
 			if DBM.Options.DontShowBossAnnounces then return end -- don't show the announces if the spam filter option is set
 			if DBM.Options.DontShowTargetAnnouncements and
 				(
-				self.announceType == "target" or self.announceType == "targetdistance" or self.announceType == "targetcount" or
-				self.announceType == "targetcountdistance")
+					self.announceType == "target" or self.announceType == "targetdistance" or self.announceType == "targetcount" or
+					self.announceType == "targetcountdistance")
 				and not self.noFilter then
 				return
 			end --don't show announces that are generic target announces
@@ -8672,8 +8672,8 @@ do
 		if DBM.Options.DontShowBossAnnounces then return end -- don't show the announces if the spam filter option is set
 		if DBM.Options.DontShowTargetAnnouncements and
 			(
-			self.announceType == "target" or self.announceType == "targetdistance" or self.announceType == "targetcount" or
-			self.announceType == "targetcountdistance")
+				self.announceType == "target" or self.announceType == "targetdistance" or self.announceType == "targetcount" or
+				self.announceType == "targetcountdistance")
 			and not self.noFilter then
 			return
 		end --don't show announces that are generic target announces
@@ -8711,8 +8711,8 @@ do
 		local always = DBM.Options.AlwaysPlayVoice
 		if DBM.Options.DontShowTargetAnnouncements and
 			(
-			self.announceType == "target" or self.announceType == "targetdistance" or self.announceType == "targetcount" or
-			self.announceType == "targetcountdistance")
+				self.announceType == "target" or self.announceType == "targetdistance" or self.announceType == "targetcount" or
+				self.announceType == "targetcountdistance")
 			and not self.noFilter and not always then
 			return
 		end --don't show announces that are generic target announces
@@ -9943,9 +9943,9 @@ do
 		local seticon
 		if texture then
 			seticon = (
-				type(texture) == "string" and texture:match("ej%d+") and
-				select(4, DBM:EJ_GetSectionInfo(string.sub(texture, 3))) ~= "" and
-				select(4, DBM:EJ_GetSectionInfo(string.sub(texture, 3)))) or
+					type(texture) == "string" and texture:match("ej%d+") and
+					select(4, DBM:EJ_GetSectionInfo(string.sub(texture, 3))) ~= "" and
+					select(4, DBM:EJ_GetSectionInfo(string.sub(texture, 3)))) or
 				(type(texture) == "number" and GetSpellTexture(texture)) or nil
 		end
 		local obj = setmetatable(
@@ -11720,8 +11720,8 @@ function bossModPrototype:SetOptionCategory(name, cat, optionType)
 	if self.addon and not self.addon.oldOptions and DBM.Options.GroupOptionsBySpell and self.groupSpells[name] and
 		not
 		(
-		optionType == "gtfo" or optionType == "adds" or optionType == "addscustom" or optionType:find("stage") or
-		cat == "icon" and DBM.Options.GroupOptionsExcludeIcon) then
+			optionType == "gtfo" or optionType == "adds" or optionType == "addscustom" or optionType:find("stage") or
+			cat == "icon" and DBM.Options.GroupOptionsExcludeIcon) then
 		local sSpell = self.groupSpells[name]
 		if not self.groupOptions[sSpell] then
 			self.groupOptions[sSpell] = {}

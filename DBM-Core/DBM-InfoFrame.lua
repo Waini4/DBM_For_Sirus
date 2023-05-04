@@ -8,11 +8,16 @@ DBM.InfoFrame = {}
 -------------------
 local DBM = DBM
 local L = DBM_CORE_L
-local UnitClass, GetTime, GetPartyAssignment, UnitGroupRolesAssigned, GetRaidTargetIndex, UnitExists, UnitName, UnitHealth, UnitPower, UnitPowerMax, UnitIsDeadOrGhost, UnitThreatSituation, UnitIsUnit, UIDropDownMenu_CreateInfo, UIDropDownMenu_AddButton = UnitClass, GetTime, GetPartyAssignment, UnitGroupRolesAssigned, GetRaidTargetIndex, UnitExists, UnitName, UnitHealth, UnitPower, UnitPowerMax, UnitIsDeadOrGhost, UnitThreatSituation, UnitIsUnit, UIDropDownMenu_CreateInfo, UIDropDownMenu_AddButton
-local error, tostring, type, pairs, ipairs, select, tonumber, tsort, twipe, mfloor, mmax, mmin, mrandom, schar, ssplit = error, tostring, type, pairs, ipairs, select, tonumber, table.sort, table.wipe, math.floor, math.max, math.min, math.random, string.char, string.split
+local UnitClass, GetTime, GetPartyAssignment, UnitGroupRolesAssigned, GetRaidTargetIndex, UnitExists, UnitName, UnitHealth, UnitPower, UnitPowerMax, UnitIsDeadOrGhost, UnitThreatSituation, UnitIsUnit, UIDropDownMenu_CreateInfo, UIDropDownMenu_AddButton =
+	UnitClass, GetTime, GetPartyAssignment, UnitGroupRolesAssigned, GetRaidTargetIndex, UnitExists, UnitName, UnitHealth,
+	UnitPower, UnitPowerMax, UnitIsDeadOrGhost, UnitThreatSituation, UnitIsUnit, UIDropDownMenu_CreateInfo,
+	UIDropDownMenu_AddButton
+local error, tostring, type, pairs, ipairs, select, tonumber, tsort, twipe, mfloor, mmax, mmin, mrandom, schar, ssplit =
+	error, tostring, type, pairs, ipairs, select, tonumber, table.sort, table.wipe, math.floor, math.max, math.min,
+	math.random, string.char, string.split
 local ADDITIONAL_POWER_BAR_INDEX = ADDITIONAL_POWER_BAR_INDEX or 0
 local NORMAL_FONT_COLOR, SPELL_FAILED_OUT_OF_RANGE = NORMAL_FONT_COLOR, SPELL_FAILED_OUT_OF_RANGE
-local RAID_CLASS_COLORS = _G["CUSTOM_CLASS_COLORS"] or RAID_CLASS_COLORS-- for Phanx' Class Colors
+local RAID_CLASS_COLORS = _G["CUSTOM_CLASS_COLORS"] or RAID_CLASS_COLORS -- for Phanx' Class Colors
 
 --Hard code STANDARD_TEXT_FONT since skinning mods like to taint it (or worse, set it to nil, wtf?)
 local standardFont
@@ -34,7 +39,7 @@ end
 local infoFrame = DBM.InfoFrame
 local frame, initializeDropdown, currentEvent, createFrame
 local maxLines, modLines, maxCols, modCols, prevLines = 5, 5, 1, 1, 0
-local sortMethod = 1--1 Default, 2 SortAsc, 3 GroupId
+local sortMethod = 1 --1 Default, 2 SortAsc, 3 GroupId
 local lines, sortedLines, icons, value = {}, {}, {}, {}
 local playerName = UnitName("player")
 local AceTimer = LibStub("AceTimer-3.0")
@@ -233,12 +238,13 @@ function createFrame()
 	frame:Hide()
 	frame:SetFrameStrata("DIALOG")
 	frame.backdropInfo = {
-		bgFile		= "Interface\\DialogFrame\\UI-DialogBox-Background", -- 131071
-		tile		= true,
-		tileSize	= 16
+		bgFile   = "Interface\\DialogFrame\\UI-DialogBox-Background", -- 131071
+		tile     = true,
+		tileSize = 16
 	}
 	frame:SetBackdrop(frame.backdropInfo)
-	frame:SetPoint(DBM.Options.InfoFramePoint, UIParent, DBM.Options.InfoFramePoint, DBM.Options.InfoFrameX, DBM.Options.InfoFrameY)
+	frame:SetPoint(DBM.Options.InfoFramePoint, UIParent, DBM.Options.InfoFramePoint, DBM.Options.InfoFrameX,
+		DBM.Options.InfoFrameY)
 	frame:SetSize(10, 10)
 	frame:SetClampedToScreen(true)
 	frame:EnableMouse(true)
@@ -335,7 +341,8 @@ local function updateNamesortLines()
 		v(sortedLines)
 	end
 end
-]]--
+]]
+--
 
 local function updateLinesCustomSort(sortFunc)
 	twipe(sortedLines)
@@ -357,7 +364,8 @@ local function updateIcons()
 			icons[DBM:GetUnitFullName(uId)] = ("|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_%d:0|t"):format(icon)
 		end
 		if icon2 and icon2 <= 8 then
-			icons[DBM:GetUnitFullName(uId .. "target")] = ("|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_%d:0|t"):format(icon2)
+			icons[DBM:GetUnitFullName(uId .. "target")] = ("|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_%d:0|t")
+				:format(icon2)
 		end
 	end
 	for i = 1, 5 do
@@ -389,9 +397,15 @@ local function updatePlayerPower()
 	-- Value 5 is sorting method, handled in show handler
 	for uId in DBM:GetGroupMembers() do
 		if not spellFilter or not DBM:UnitDebuff(uId, spellFilter) then
-			local maxPower = UnitPowerMax(uId, powerType)
-			if maxPower ~= 0 and not UnitIsDeadOrGhost(uId) and UnitPower(uId, powerType) / UnitPowerMax(uId, powerType) * 100 >= threshold then
-				lines[DBM:GetUnitFullName(uId)] = UnitPower(uId, powerType)
+			local currentPower, maxPower = UnitPower(uId, powerType), UnitPowerMax(uId, powerType)
+			if maxPower ~= 0 and not UnitIsDeadOrGhost(uId) and UnitPower(uId, powerType) / UnitPowerMax(uId, powerType) * 100 then
+				if maxPower and maxPower > 0 then
+					local percent = currentPower / maxPower * 100
+					if percent <= threshold then
+						lines[DBM:GetUnitFullName(uId)] = mfloor(percent) .. "%"
+					end
+				end
+				--lines[DBM:GetUnitFullName(uId)] = UnitPower(uId, powerType)
 			end
 		end
 	end
@@ -409,7 +423,8 @@ local function updateEnemyPower()
 	local specificUnit = value[3]
 	if powerType then -- Only do power type defined
 		if specificUnit then
-			specificUnit = UnitExists(specificUnit) or DBM:GetUnitIDFromGUID(specificUnit)--unitID already passed or GUID we convert into unitID
+			specificUnit = UnitExists(specificUnit) or
+				DBM:GetUnitIDFromGUID(specificUnit) --unitID already passed or GUID we convert into unitID
 			if UnitExists(specificUnit) then
 				local currentPower, maxPower = UnitPower(specificUnit, powerType), UnitPowerMax(specificUnit, powerType)
 				if maxPower and maxPower > 0 then
@@ -433,7 +448,8 @@ local function updateEnemyPower()
 		end
 	else -- Check primary power type and alternate power types together. This should only be used if BOTH power types exist on same boss
 		if specificUnit then
-			specificUnit = UnitExists(specificUnit) or DBM:GetUnitIDFromGUID(specificUnit)--unitID already passed or GUID we convert into unitID
+			specificUnit = UnitExists(specificUnit) or
+				DBM:GetUnitIDFromGUID(specificUnit) --unitID already passed or GUID we convert into unitID
 			if UnitExists(specificUnit) then
 				-- Primary Power
 				local currentPower, maxPower = UnitPower(specificUnit), UnitPowerMax(specificUnit)
@@ -444,7 +460,8 @@ local function updateEnemyPower()
 					end
 				end
 				-- Alternate Power
-				local currentAltPower, maxAltPower = UnitPower(specificUnit, ADDITIONAL_POWER_BAR_INDEX), UnitPowerMax(specificUnit, ADDITIONAL_POWER_BAR_INDEX)
+				local currentAltPower, maxAltPower = UnitPower(specificUnit, ADDITIONAL_POWER_BAR_INDEX),
+					UnitPowerMax(specificUnit, ADDITIONAL_POWER_BAR_INDEX)
 				if maxAltPower and maxAltPower > 0 then
 					if currentAltPower / maxAltPower * 100 >= threshold then
 						lines[UnitName(specificUnit)] = L.INFOFRAME_ALT .. currentAltPower
@@ -462,7 +479,8 @@ local function updateEnemyPower()
 					end
 				end
 				-- Alternate Power
-				local currentAltPower, maxAltPower = UnitPower(uId, ADDITIONAL_POWER_BAR_INDEX), UnitPowerMax(uId, ADDITIONAL_POWER_BAR_INDEX)
+				local currentAltPower, maxAltPower = UnitPower(uId, ADDITIONAL_POWER_BAR_INDEX),
+					UnitPowerMax(uId, ADDITIONAL_POWER_BAR_INDEX)
 				if maxAltPower and maxAltPower > 0 then
 					if currentAltPower / maxAltPower * 100 >= threshold then
 						lines[UnitName(uId)] = L.INFOFRAME_ALT .. currentAltPower
@@ -482,12 +500,13 @@ local function updateEnemyAbsorb()
 	local totalAbsorb = value[2]
 	local specificUnit = value[3]
 	if specificUnit then
-		specificUnit = UnitExists(specificUnit) or DBM:GetUnitIDFromGUID(specificUnit)--unitID already passed or GUID we convert into unitID
+		specificUnit = UnitExists(specificUnit) or
+			DBM:GetUnitIDFromGUID(specificUnit) --unitID already passed or GUID we convert into unitID
 		if UnitExists(specificUnit) then
 			local absorbAmount
 			if spellInput then -- Get specific spell absorb
 				absorbAmount = SpecializedAbsorbs:UnitEffect(UnitGUID(specificUnit), spellInput)
-			else -- Get all of them
+			else      -- Get all of them
 				absorbAmount = SpecializedAbsorbs:UnitTotal(UnitGUID(specificUnit))
 			end
 			if absorbAmount and absorbAmount > 0 then
@@ -498,14 +517,14 @@ local function updateEnemyAbsorb()
 				end
 			end
 		end
-	else--Generic absorbs for bosses. Not to be mistaken for updateMultiEnemyAbsorb, which supports checking multiple units that might or might not be bosses
+	else --Generic absorbs for bosses. Not to be mistaken for updateMultiEnemyAbsorb, which supports checking multiple units that might or might not be bosses
 		for i = 1, 5 do
 			local uId = "boss" .. i
 			if UnitExists(uId) then
 				local absorbAmount
 				if spellInput then -- Get specific spell absorb
 					absorbAmount = SpecializedAbsorbs:UnitEffect(UnitGUID(uId), spellInput)
-				else -- Get all of them
+				else   -- Get all of them
 					absorbAmount = SpecializedAbsorbs:UnitTotal(UnitGUID(uId))
 				end
 				if absorbAmount and absorbAmount > 0 then
@@ -529,10 +548,10 @@ local function updateMultiEnemyAbsorb()
 	twipe(lines)
 	local spellInput = value[1]
 	local totalAbsorb = value[2]
-	local guidTable = value[3]--Multi target by table
+	local guidTable = value[3] --Multi target by table
 	local guidTracked = {}
 	for i = 1, 10 do
-		if #guidTable == #guidTracked then--Stop searching, found everything we're looking for.
+		if #guidTable == #guidTracked then --Stop searching, found everything we're looking for.
 			break
 		end
 		local uId = "boss" .. i
@@ -543,7 +562,7 @@ local function updateMultiEnemyAbsorb()
 				local absorbAmount
 				if spellInput then -- Get specific spell absorb
 					absorbAmount = SpecializedAbsorbs:UnitEffect(targetGUID, spellInput)
-				else -- Get all of them
+				else   -- Get all of them
 					absorbAmount = SpecializedAbsorbs:UnitTotal(targetGUID)
 				end
 				if absorbAmount and absorbAmount > 0 then
@@ -556,8 +575,8 @@ local function updateMultiEnemyAbsorb()
 			end
 		end
 	end
-	for unitId in DBM:GetGroupMembers() do--Do not use self on this function, because self might be bossModPrototype
-		if #guidTable == #guidTracked then--Stop searching, found everything we're looking for.
+	for unitId in DBM:GetGroupMembers() do --Do not use self on this function, because self might be bossModPrototype
+		if #guidTable == #guidTracked then --Stop searching, found everything we're looking for.
 			break
 		end
 		local uId = unitId .. "target"
@@ -567,7 +586,7 @@ local function updateMultiEnemyAbsorb()
 			local absorbAmount
 			if spellInput then -- Get specific spell absorb
 				absorbAmount = SpecializedAbsorbs:UnitEffect(UnitGUID(uId), spellInput)
-			else -- Get all of them
+			else      -- Get all of them
 				absorbAmount = SpecializedAbsorbs:UnitTotal(UnitGUID(uId))
 			end
 			if absorbAmount and absorbAmount > 0 then
@@ -593,7 +612,7 @@ local function updateAllAbsorb()
 			local absorbAmount
 			if spellInput then -- Get specific spell absorb
 				absorbAmount = SpecializedAbsorbs:UnitEffect(UnitGUID(uId), spellInput)
-			else -- Get all of them
+			else      -- Get all of them
 				absorbAmount = SpecializedAbsorbs:UnitTotal(UnitGUID(uId))
 			end
 			if absorbAmount and absorbAmount > 0 then
@@ -629,7 +648,7 @@ local function updatePlayerAbsorb()
 		local absorbAmount
 		if spellInput then -- Get specific spell absorb
 			absorbAmount = SpecializedAbsorbs:UnitEffect(UnitGUID(uId), spellInput)
-		else--Not even spell input given, this is a very generic infoframe
+		else         --Not even spell input given, this is a very generic infoframe
 			absorbAmount = SpecializedAbsorbs:UnitTotal(UnitGUID(uId))
 		end
 		if absorbAmount and absorbAmount > 0 then
@@ -704,7 +723,7 @@ local function updatePlayerDebuffRemaining()
 		local expires = select(6, DBM:UnitDebuffNew(uId, spellInput))
 		if expires then
 			if expires == 0 then
-				lines[DBM:GetUnitFullName(uId)] = 9000--Force sorting the unknowns under the ones we do know.
+				lines[DBM:GetUnitFullName(uId)] = 9000 --Force sorting the unknowns under the ones we do know.
 			else
 				local debuffTime = expires - GetTime()
 				lines[DBM:GetUnitFullName(uId)] = mfloor(debuffTime)
@@ -723,7 +742,7 @@ local function updatePlayerBuffRemaining()
 		local expires = select(6, DBM:UnitBuffNew(uId, spellInput))
 		if expires then
 			if expires == 0 then
-				lines[DBM:GetUnitFullName(uId)] = 9000--Force sorting the unknowns under the ones we do know.
+				lines[DBM:GetUnitFullName(uId)] = 9000 --Force sorting the unknowns under the ones we do know.
 			else
 				local debuffTime = expires - GetTime()
 				lines[DBM:GetUnitFullName(uId)] = mfloor(debuffTime)
@@ -743,7 +762,7 @@ local function updateReverseBadPlayerDebuffs()
 	for uId in DBM:GetGroupMembers() do
 		if tankIgnored and (UnitGroupRolesAssigned(uId) == "TANK" or GetPartyAssignment("MAINTANK", uId, 1)) then
 		else
-			if not DBM:UnitDebuff(uId, spellInput) and not UnitIsDeadOrGhost(uId) and not DBM:UnitBuff(uId, 27827) then--27827 Spirit of Redemption. This particular info frame wants to ignore this
+			if not DBM:UnitDebuff(uId, spellInput) and not UnitIsDeadOrGhost(uId) and not DBM:UnitBuff(uId, 27827) then --27827 Spirit of Redemption. This particular info frame wants to ignore this
 				lines[DBM:GetUnitFullName(uId)] = ""
 			end
 		end
@@ -768,6 +787,7 @@ end
 local function updatePlayerDebuffStacks()
 	twipe(lines)
 	local spellInput = value[1]
+	local StackCount = value[2]
 	for uId in DBM:GetGroupMembers() do
 		local spellName, _, count = DBM:UnitDebuffNew(uId, spellInput)
 		if spellName and count then
@@ -967,7 +987,8 @@ local function onUpdate(frame, table)
 		local extra, extraName = ssplit("*", leftText) -- Find just unit name, if extra info had to be added to make unique
 		local icon = icons[extraName or leftText] and icons[extraName or leftText] .. leftText
 		if friendlyEvents[currentEvent] then
-			local unitId = DBM:GetRaidUnitId(DBM:GetUnitFullName(extraName or leftText)) or "player"--Prevent nil logical error
+			local unitId = DBM:GetRaidUnitId(DBM:GetUnitFullName(extraName or leftText)) or
+				"player" --Prevent nil logical error
 			if unitId and UnitExists(unitId) then
 				local _, class = UnitClass(unitId)
 				if class then
@@ -975,40 +996,46 @@ local function onUpdate(frame, table)
 					if DBM.Options.StripServerName then -- StripServerName option is checked here, even though it's checked in GetShortServerName function, because we have to apply custom 3rd column hack reconstruction
 						local shortName = DBM:GetShortServerName(extraName or leftText)
 						if extraName then -- 3 column hack is present, we need to reconstruct leftText with shortened name
-							leftText = extra.."*"..shortName
-						else -- LeftText is name, just replace it with shortname
+							leftText = extra .. "*" .. shortName
+						else             -- LeftText is name, just replace it with shortname
 							leftText = shortName
 						end
 					end
 				end
 				linesShown = linesShown + 1
-				if unitId and UnitIsUnit(unitId, "player") then -- It's player.
-					if currentEvent == "health" or currentEvent == "playerpower" or currentEvent == "playerabsorb" or currentEvent == "playerbuff" or currentEvent == "playergooddebuff" or currentEvent == "playerbaddebuff" or currentEvent == "playerdebuffremaining" or currentEvent == "playerdebuffstacks" or currentEvent == "playerbuffremaining" or currentEvent == "playertargets" or currentEvent == "playeraggro" then--Red
+				if unitId and UnitIsUnit(unitId, "player") then                                                                                                                                                                                                                                                                                                                                                     -- It's player.
+					if currentEvent == "health" or currentEvent == "playerpower" or currentEvent == "playerabsorb" or currentEvent == "playerbuff" or currentEvent == "playergooddebuff" or currentEvent == "playerbaddebuff" or currentEvent == "playerdebuffremaining" or currentEvent == "playerdebuffstacks" or currentEvent == "playerbuffremaining" or currentEvent == "playertargets" or currentEvent == "playeraggro" then --Red
 						infoFrame:SetLine(linesShown, icon or leftText, rightText, 255, 0, 0, 255, 255, 255)
-					else -- Green
+					else                                                                                                                                                                                                                                                                                                                                                                                            -- Green
 						infoFrame:SetLine(linesShown, icon or leftText, rightText, 0, 255, 0, 255, 255, 255)
 					end
 				else -- It's not player, do nothing special with it. Ordinary class colored text.
 					if currentEvent == "playerdebuffremaining" or currentEvent == "playerbuffremaining" then
 						local numberValue = tonumber(rightText)
 						if numberValue < 6 then
-							infoFrame:SetLine(linesShown, icon or leftText, rightText, color.r, color.g, color.b, 255, 0, 0)--Red
+							infoFrame:SetLine(linesShown, icon or leftText, rightText, color.r, color.g, color.b, 255, 0,
+								0) --Red
 						elseif numberValue < 11 then
-							infoFrame:SetLine(linesShown, icon or leftText, rightText, color.r, color.g, color.b, 255, 127.5, 0)--Orange
+							infoFrame:SetLine(linesShown, icon or leftText, rightText, color.r, color.g, color.b, 255,
+								127.5, 0) --Orange
 						else
 							if numberValue == 9000 then -- Out of range players
-								infoFrame:SetLine(linesShown, icon or leftText, SPELL_FAILED_OUT_OF_RANGE, color.r, color.g, color.b, 255, 0, 0)--Red
+								infoFrame:SetLine(linesShown, icon or leftText, SPELL_FAILED_OUT_OF_RANGE, color.r,
+									color.g, color.b, 255, 0, 0) --Red
 							else
-								infoFrame:SetLine(linesShown, icon or leftText, rightText, color.r, color.g, color.b, 255, 255, 255)--White
+								infoFrame:SetLine(linesShown, icon or leftText, rightText, color.r, color.g, color.b, 255,
+									255, 255) --White
 							end
 						end
 					else
-						infoFrame:SetLine(linesShown, icon or leftText, rightText, color.r, color.g, color.b, 255, 255, 255)
+						infoFrame:SetLine(linesShown, icon or leftText, rightText, color.r, color.g, color.b, 255, 255,
+							255)
 					end
 				end
 			end
 		else
-			local color2 = NORMAL_FONT_COLOR -- Only custom into frames will have chance of putting player names on right side
+			local color2 =
+				NORMAL_FONT_COLOR -- Only custom into frames will have chance of putting player names on right side
 			local unitId = DBM:GetRaidUnitId(DBM:GetUnitFullName(extraName or leftText))
 			local unitId2 = DBM:GetRaidUnitId(DBM:GetUnitFullName(rightText))
 			-- Class color names in custom functions too, IF unitID exists
@@ -1016,11 +1043,11 @@ local function onUpdate(frame, table)
 				local _, class = UnitClass(unitId)
 				if class then
 					color = RAID_CLASS_COLORS[class]
-					if DBM.Options.StripServerName then--StripServerName option is checked here, even though it's checked in GetShortServerName function, because we have to apply custom 3rd column hack reconstruction
+					if DBM.Options.StripServerName then --StripServerName option is checked here, even though it's checked in GetShortServerName function, because we have to apply custom 3rd column hack reconstruction
 						local shortName = DBM:GetShortServerName(extraName or leftText)
 						if extraName then -- 3 column hack is present, we need to reconstruct leftText with shortened name
-							leftText = extra.."*"..shortName
-						else -- LeftText is name, just replace it with shortname
+							leftText = extra .. "*" .. shortName
+						else             -- LeftText is name, just replace it with shortname
 							leftText = shortName
 						end
 					end
@@ -1037,7 +1064,8 @@ local function onUpdate(frame, table)
 				end
 			end
 			linesShown = linesShown + 1
-			infoFrame:SetLine(linesShown, icon or leftText, rightText, color.r, color.g, color.b, color2.r, color2.g, color2.b)
+			infoFrame:SetLine(linesShown, icon or leftText, rightText, color.r, color.g, color.b, color2.r, color2.g,
+				color2.b)
 		end
 	end
 	local maxWidth1, maxWidth2, linesPerRow = {}, {}, 5
@@ -1121,8 +1149,8 @@ function infoFrame:Show(modMaxLines, event, ...)
 			error("DBM-InfoFrame: byspellid method must use spellId", 2)
 			return
 		end
-	-- If spellId is given as value one and it's not a byspellid event, convert to spellname
-	-- This also allows spell name to be given by mod, since value 1 verifies it's a number
+		-- If spellId is given as value one and it's not a byspellid event, convert to spellname
+		-- This also allows spell name to be given by mod, since value 1 verifies it's a number
 	elseif type(value[1]) == "number" and event ~= "health" and event ~= "function" and event ~= "table" and event ~= "playertargets" and event ~= "playeraggro" and event ~= "playerpower" and event ~= "enemypower" and event ~= "test" and event ~= "test2" then
 		-- Outside of "byspellid" functions, typical frames will still use spell NAME matching not spellID.
 		-- This just determines if we convert the spell input to a spell Name, if a spellId was provided for a non byspellid infoframe
@@ -1214,7 +1242,7 @@ function infoFrame:AlignLine(lineNum, linesPerRow)
 	local size = DBM.Options.InfoFrameFontSize
 	local line = frame.lines[lineNum]
 	line:SetJustifyH(lineNum % 2 == 0 and "RIGHT" or "LEFT")
-	if lineNum == 1 then -- 1st entry left
+	if lineNum == 1 then  -- 1st entry left
 		line:SetPoint("TOPLEFT", frame, "TOPLEFT", size / 2, -(size / 2))
 	elseif lineNum == 2 then -- 1st entry right
 		line:SetPoint("TOPLEFT", frame.lines[1], "TOPRIGHT", size / 2, 0)
@@ -1223,7 +1251,7 @@ function infoFrame:AlignLine(lineNum, linesPerRow)
 			line:SetPoint("TOPLEFT", frame.lines[lineNum - linesPerRow + 1], "TOPRIGHT", size, 0)
 		elseif lineNum % 2 == 0 then -- Column 2-x, Right entry
 			line:SetPoint("TOPLEFT", frame.lines[lineNum - 1], "TOPRIGHT", size / 2, 0)
-		else -- Column 2-x, Left entry
+		else                         -- Column 2-x, Left entry
 			line:SetPoint("TOPLEFT", frame.lines[lineNum - 2], "LEFT", 0, -(size / 2))
 		end
 	end
