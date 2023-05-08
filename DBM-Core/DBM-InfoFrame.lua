@@ -392,21 +392,20 @@ local function updatePlayerPower()
 	twipe(lines)
 	local threshold = value[1]
 	local powerType = value[2]
-	local spellFilter = value[3]
+	local spellInput = value[3]
 	-- Value 4 is the noUpdate handler
 	-- Value 5 is sorting method, handled in show handler
 	for uId in DBM:GetGroupMembers() do
-		if not spellFilter or not DBM:UnitDebuff(uId, spellFilter) then
-			local currentPower, maxPower = UnitPower(uId, powerType), UnitPowerMax(uId, powerType)
-			if maxPower ~= 0 and not UnitIsDeadOrGhost(uId) and UnitPower(uId, powerType) / UnitPowerMax(uId, powerType) * 100 then
-				if maxPower and maxPower > 0 then
-					local percent = currentPower / maxPower * 100
-					if percent <= threshold then
-						lines[DBM:GetUnitFullName(uId)] = mfloor(percent) .. "%"
-					end
+		--local Deb = select(DBM:UnitDebuff(uId, spellInput))
+		local currentPower, maxPower = UnitPower(uId, powerType), UnitPowerMax(uId, powerType)
+		if maxPower ~= 0 and not UnitIsDeadOrGhost(uId) and UnitPower(uId, powerType) / UnitPowerMax(uId, powerType) * 100 then
+			if maxPower and maxPower > 0 then
+				local percent = currentPower / maxPower * 100
+				if percent <= threshold and DBM:UnitDebuff(uId, spellInput) then
+					lines[DBM:GetUnitFullName(uId)] = mfloor(percent) .. "%"
 				end
-				--lines[DBM:GetUnitFullName(uId)] = UnitPower(uId, powerType)
 			end
+			--lines[DBM:GetUnitFullName(uId)] = UnitPower(uId, powerType)
 		end
 	end
 	if DBM.Options.InfoFrameShowSelf and not lines[playerName] and UnitPower("player", powerType) > 0 then
