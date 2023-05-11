@@ -82,9 +82,9 @@ end
 local function Vapors(self)
 	self.vb.vaporsCount = self.vb.vaporsCount + 1
 	timerSaroniteVapors:Start(nil, self.vb.vaporsCount + 1)
-	self:Schedule(30, Vapors, self)
-	warnSaroniteVapor:Schedule(28)
+	self:Schedule(34, Vapors, self)
 	warnSaroniteVapor:Schedule(30)
+	warnSaroniteVapor:Schedule(33)
 end
 
 function mod:OnCombatStart(delay)
@@ -161,16 +161,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 			specWarnLifeLeechYou:Play("runout")
 			yellLifeLeech:Yell()
 		else
-			local uId = DBM:GetRaidUnitId(args.destName)
-			if uId then
-				local inRange = CheckInteractDistance(uId, 2)
-				if inRange then
-					specWarnLifeLeechNear:Show(args.destName)
-					specWarnLifeLeechNear:Play("runaway")
-				else
-					warnLeechLife:Show(args.destName)
-				end
-			end
+			warnLeechLife:Show(args.destName)
 		end
 	elseif spellId == 63364 then
 		specWarnAnimus:Show()
