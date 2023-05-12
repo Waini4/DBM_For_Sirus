@@ -64,7 +64,8 @@ L:SetTimerLocalization({
 })
 
 L:SetOptionLocalization({
-	AnnounceFails         = "Объявлять игроков, потерпевших неудачу в Огненной стене и Расщелине тьмы<br/>(требуются права лидера или помощника)",
+	AnnounceFails         =
+	"Объявлять игроков, потерпевших неудачу в Огненной стене и Расщелине тьмы<br/>(требуются права лидера или помощника)",
 	TimerTenebron         = "Отсчет времени до прибытия Тенеброна",
 	TimerShadron          = "Отсчет времени до прибытия Шадрона",
 	TimerVesperon         = "Отсчет времени до прибытия Весперона",
@@ -164,35 +165,35 @@ L:SetGeneralLocalization({
 })
 
 L:SetWarningLocalization({
-	WarnPhase2Soon    		= "Скоро фаза 2",
-	WarnPhase3Soon    		= "Скоро фаза 3",
-	TwilightCutterCast		= "Применение заклинания Лезвие сумерек: 5 сек"
+	WarnPhase2Soon     = "Скоро фаза 2",
+	WarnPhase3Soon     = "Скоро фаза 3",
+	TwilightCutterCast = "Применение заклинания Лезвие сумерек: 5 сек"
 })
 
 L:SetOptionLocalization({
-	WarnPhase2Soon        	= "Предупреждать заранее о фазе 2 (на ~79%)",
-	WarnPhase3Soon        	= "Предупреждать заранее о фазе 3 (на ~54%)",
-	TwilightCutterCast    	= "Предупреждать о применении заклинания $spell:77844",
-	AnnounceAlternatePhase	= "Показывать предупреждения и таймеры для обоих миров",
-	SoundOnConsumption    	= "Звуковой сигнал при $spell:74562 и $spell:74792", --We use localized text for these functions
-	SetIconOnConsumption  	= "Устанавливать метки на цели заклинаний $spell:74562 и\n$spell:74792", --So we can use single functions for both versions of spell.
-	YellOnConsumption     	= "Кричать, когда $spell:74562 или $spell:74792 на вас",
-	WhisperOnConsumption  	= "Шепот целям заклинаний $spell:74562 и $spell:74792"
+	WarnPhase2Soon         = "Предупреждать заранее о фазе 2 (на ~79%)",
+	WarnPhase3Soon         = "Предупреждать заранее о фазе 3 (на ~54%)",
+	TwilightCutterCast     = "Предупреждать о применении заклинания $spell:77844",
+	AnnounceAlternatePhase = "Показывать предупреждения и таймеры для обоих миров",
+	SoundOnConsumption     = "Звуковой сигнал при $spell:74562 и $spell:74792", --We use localized text for these functions
+	SetIconOnConsumption   = "Устанавливать метки на цели заклинаний $spell:74562 и\n$spell:74792", --So we can use single functions for both versions of spell.
+	YellOnConsumption      = "Кричать, когда $spell:74562 или $spell:74792 на вас",
+	WhisperOnConsumption   = "Шепот целям заклинаний $spell:74562 и $spell:74792"
 })
 
 L:SetMiscLocalization({
-	NormalHalion      		= "Физический Халион",
-	TwilightHalion    		= "Сумеречный Халион",
-	MeteorCast        		= "Небеса в огне!",
-	Phase2            		= "В мире сумерек вы найдете лишь страдания! Входите, если посмеете!",
-	Phase3            		= "Я есть свет и я есть тьма! Трепещите, ничтожные, перед посланником Смертокрыла!",
-	twilightcutter    		= "Во вращающихся сферах пульсирует темная энергия!",
-	YellCombustion    		= "Пылающий огонь на мне!",
-	WhisperCombustion 		= "Пылающий огонь на вас! Бегите к стене!",
-	YellConsumption   		= "Пожирание души на мне!",
-	WhisperConsumption		= "Пожирание души на вас! Бегите к стене!",
-	Kill              		= "Это ваша последняя победа. Насладитесь сполна ее вкусом. Ибо когда вернется мой господин, этот мир сгинет в огне!",
-	PhysicalRealm			= "Физический мир"
+	NormalHalion       = "Физический Халион",
+	TwilightHalion     = "Сумеречный Халион",
+	MeteorCast         = "Небеса в огне!",
+	Phase2             = "В мире сумерек вы найдете лишь страдания! Входите, если посмеете!",
+	Phase3             = "Я есть свет и я есть тьма! Трепещите, ничтожные, перед посланником Смертокрыла!",
+	twilightcutter     = "Во вращающихся сферах пульсирует темная энергия!",
+	YellCombustion     = "Пылающий огонь на мне!",
+	WhisperCombustion  = "Пылающий огонь на вас! Бегите к стене!",
+	YellConsumption    = "Пожирание души на мне!",
+	WhisperConsumption = "Пожирание души на вас! Бегите к стене!",
+	Kill               =
+	"Это ваша последняя победа. Насладитесь сполна ее вкусом. Ибо когда вернется мой господин, этот мир сгинет в огне!"
 })
 -- Импорус
 L = DBM:GetModLocalization("Imporus")
@@ -245,7 +246,7 @@ L:SetOptionLocalization {
 	WarningReplicaSpawned = "Предупреждение о появлении копии Элонуса",
 	RangeFrame            = "Показывать окно проверки дистанции (8м)",
 	TempCascIcon          = DBML.AUTO_ICONS_OPTION_TARGETS:format(312206),
-	BossHealthFrame       = "Показывать здоровье босса"
+	BossShieldFrame       = "Щит Босса и его копии."
 }
 
 L:SetMiscLocalization {
@@ -290,5 +291,8 @@ L:SetOptionLocalization {
 
 L:SetMiscLocalization {
 	FearOn = "Фир на: %s",
-	Fear   = "Кто попал под Фир (в этом бою): %s"
+	Fear   = "Кто попал под Фир (в этом бою): %s",
+	Ref1   = "Следите за своими чарами..",
+	Ref2   = "То что меня не убивает.. вполне может убить вас.",
+	Ref3   = "Успеете ли среагировать?.."
 }

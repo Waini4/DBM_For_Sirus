@@ -17,6 +17,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED_DOSE 313122 313115 313129 313130 317260 313119 317256",
 	-- "UNIT_DIED",
 	"SPELL_AURA_REMOVED 313122 317262",
+	"CHAT_MSG_MONSTER_YELL",
 	"UNIT_HEALTH"
 )
 
@@ -118,7 +119,6 @@ end
 
 function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 50612, "Murozond", wipe)
-	DBM.BossHealth:Clear()
 	DistortionWave:Stop()
 	SummoningtheTimeless:Stop()
 	BreathofInfinity:Stop()
@@ -337,10 +337,13 @@ end
 function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.Ref1 or msg:find(L.Ref1) then
 		ReflectSpellsCD:Start(21)
+		print("1")
 	elseif msg == L.Ref2 or msg:find(L.Ref2) then
 		ReflectSpellsCD:Start(24)
+		print("2")
 	elseif msg == L.Ref3 or msg:find(L.Ref3) then
 		ReflectSpellsCD:Start(25)
+		print("3")
 	end
 end
 
