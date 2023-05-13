@@ -62,6 +62,8 @@ mod:AddBoolOption("AnnounceExplosive", false)
 mod:AddBoolOption("RangeFrame")
 --mod:AddBoolOption("Knop")
 
+local myRealm = select(4, DBM:GetMyPlayerInfo())
+
 mod.vb.phase = 1
 local ExplosiveTargets = {}
 local ExplosiveIcons = 8
@@ -257,8 +259,13 @@ end
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(306464) then
+		if myRealm == 4 then
+		timerArcaneStormCD:Start(52)
+		warnArcaneStormSoon:Schedule(42)
+		else
 		timerArcaneStormCD:Start()
 		warnArcaneStormSoon:Schedule(62)
+		end
 	elseif args:IsSpellID(306549) then
 		timerIceWrathCD:Start()
 	end
