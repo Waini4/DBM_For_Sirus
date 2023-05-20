@@ -288,6 +288,25 @@ L.INFOFRAME_ALT          = "Alt:" --Alternate Power
 L.LFG_INVITE = "Приглашение в подземелье"
 L.PHASE      = "%d-я фаза"
 
+L["Test Bar"]				="Тест Бар"
+L["Adds"]					="Адды"
+L["Evil Debuff"]			="Плохой дебаф"
+L["Important Interrupt"]	="Важное Прерывание"
+L["Boom!"]					="БУУМ!"
+L["Handle your Role"]		="Выполни свою роль"
+L["Next Stage"]				="Следующая фаза"
+L["Custom User Bar"]		="кастомный Бар"
+L["Test-mode started..."]	="Тест-мод запущен..."
+L["Test-mode finished!"]	="Тест-мод завершен!"
+L["Boom in 10 sec!"]		="Взрыв через 10 сек!"
+L["Pew Pew Laser Owl!"]		="Пиу Пиу Лазерная Сова!"
+L["Pew Pew Laser Owl"]		="Пиу Пиу Лазерная Сова"
+L["Evil Spell in 5 sec!"]	="Плохой Спелл через 5 сек!"
+L["Evil Spell!"]			="Плохой Спелл!"
+L["Test bar expired!"]		="Тест Бар истекает!"
+L["Fear!"]					="Страх!"
+L["Boom!"]					="БУУМ!"
+
 L.SLASHCMD_HELP = {
 	"Доступные команды:",
 	"-----------------",
