@@ -1216,19 +1216,13 @@ do
 		if not DBT_AllPersistentOptions[DBM_UsedProfile] then
 			DBT_AllPersistentOptions[DBM_UsedProfile] = {}
 		end
-		DBT_AllPersistentOptions[DBM_UsedProfile]["DBM"] = self.DefaultOptions
+		local skin = self.Options.Skin
+		DBT_AllPersistentOptions[DBM_UsedProfile][skin] = self.DefaultOptions
 		self.Options = self.DefaultOptions
-		self:SetOption("Skin", "") -- Forces an UpdateBars and ApplyStyle
+		self:SetOption("Skin", skin) -- Forces an UpdateBars and ApplyStyle
 	end
 
 	function DBT:GetSkins()
 		return skins
 	end
 end
-
-
-
-
-
-
-
