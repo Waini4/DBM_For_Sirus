@@ -66,7 +66,7 @@ local timerChainsofShadow		= mod:NewTargetTimer(10, 70645, nil, false, nil, 3)
 local timerConflag				= mod:NewTargetTimer(10, 71785, nil, false, nil, 3)
 local timerBanish				= mod:NewTargetTimer(6, 71298, nil, false, nil, 3)
 --валька
---local timerSpear				= mod:NewCastTimer(20, 71443) --todo создать отдельного "Босса" 
+--local timerSpear				= mod:NewCastTimer(20, 71443) --todo создать отдельного "Босса"
 
 mod:RemoveOption("HealthFrame")
 --Lower Spire
