@@ -11,7 +11,7 @@ mod:RegisterCombat("combat", 50612)
 
 
 mod:RegisterEventsInCombat(
-	"SPELL_CAST_START 313116 313120 313118 313122 317252 317253 317255 317262",
+	"SPELL_CAST_START 313116 313120 313118 313122 317252 317253 317255 317262 313115",
 	"SPELL_CAST_SUCCESS 317259 313122",
 	"SPELL_AURA_APPLIED 313122 313115 313129 313130 317260 317256 313119",
 	"SPELL_AURA_APPLIED_DOSE 313122 313115 313129 313130 317260 313119 317256",
@@ -147,6 +147,8 @@ function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
 	if spellId == 313116 then
 		DistortionWave:Start()
+	elseif spellId == 313115 then
+		BreathofInfinity:Start()
 	elseif spellId == 313120 then
 		if mod:IsDifficulty("heroic25") then
 			SummoningtheTimeless:Start(90)
