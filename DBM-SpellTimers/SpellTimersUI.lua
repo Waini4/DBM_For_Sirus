@@ -26,7 +26,7 @@
 --    * Share Alike. If you alter, transform, or build upon this work, you may distribute the resulting work only under the same or similar license to this one.
 --
 
-local Revision = ("$Revision: 55 $"):sub(12, -3)
+local Revision = ("$Revision: 56 $"):sub(12, -3)
 
 local default_bartext = "%spell: %player"
 -- local default_bartextwtarget = "%spell: %player on %target"	-- Added by Florin Patan
@@ -38,21 +38,21 @@ local default_settings = {
 	own_bargroup = false,
 	show_portal = true,
 	spells = {
-		{ spell = 6346, bartext = default_bartext, cooldown = 180 }, -- Priest: Fear Ward
+		{ spell = 6346, bartext = "%spell по %player", cooldown = 180 }, -- Priest: Fear Ward
 		{ spell = 1161, bartext = default_bartext, cooldown = 180 }, -- Warrior: Challenging Shout (AE Taunt)
-		{ spell = 871, bartext = "%spell on %player", cooldown = 12 }, -- Warrior: Shieldwall Duration (for Healers to see how long cooldown runs)
-		{ spell = 12975, bartext = "%spell on %player", cooldown = 20 }, -- Warrior: Last Stand Duration (for Healers to see how long cooldown runs)
-		{ spell = 48792, bartext = "%spell on %player", cooldown = 12 }, -- Death Knight: Icebound Fortitude Duration (for Healers to see how long cooldown runs)
-		{ spell = 498, bartext = "%spell on %player", cooldown = 12 }, -- Paladin: Divine Protection Duration (for Healers to see how long cooldown runs)
+		{ spell = 871, bartext = "%spell по %player", cooldown = 12 }, -- Warrior: Shieldwall Duration (for Healers to see how long cooldown runs)
+		{ spell = 12975, bartext = "%spell по %player", cooldown = 20 }, -- Warrior: Last Stand Duration (for Healers to see how long cooldown runs)
+		{ spell = 48792, bartext = "%spell по %player", cooldown = 12 }, -- Death Knight: Icebound Fortitude Duration (for Healers to see how long cooldown runs)
+		{ spell = 498, bartext = "%spell по %player", cooldown = 12 }, -- Paladin: Divine Protection Duration (for Healers to see how long cooldown runs)
 		{ spell = 61336, bartext = "%spell on %player", cooldown = 20 }, -- Druid: Survival Instincts Duration (for Healers to see how long cooldown runs)
-		{ spell = 48477, bartext = default_bartext, cooldown = 600 }, -- Druid: Rebirth (Rank 7)
-		{ spell = 29166, bartext = default_bartext, cooldown = 180 }, -- Druid: Innervate
+		{ spell = 48477, bartext = "%spell по %player", cooldown = 600 }, -- Druid: Rebirth (Rank 7)
+		{ spell = 29166, bartext = "%spell по %player", cooldown = 180 }, -- Druid: Innervate
 		{ spell = 5209, bartext = default_bartext, cooldown = 180 }, -- Druid: Challenging Roar (AE Taunt)
-		{ spell = 33206, bartext = "%spell on %target", cooldown = 8 }, -- Priest: Pain Suppression Duration (for Healers to see how long cooldown runs)
-		{ spell = 6940, bartext = "%spell on %target", cooldown = 12 }, -- Paladin: Hand of Sacrifice Duration (for Healers to see how long cooldown runs)
+		{ spell = 33206, bartext = "%spell по %target", cooldown = 8 }, -- Priest: Pain Suppression Duration (for Healers to see how long cooldown runs)
+		{ spell = 6940, bartext = "%spell по %target", cooldown = 12 }, -- Paladin: Hand of Sacrifice Duration (for Healers to see how long cooldown runs)
 		{ spell = 64205, bartext = default_bartext, cooldown = 10 }, -- Paladin: Divine Sacrifice Duration (for Healers to see how long cooldown runs)
-		{ spell = 34477, bartext = default_bartext, cooldown = 30 }, -- Hunter: Missdirect
-		{ spell = 57934, bartext = default_bartext, cooldown = 30 }, -- Rogue: Tricks of the Trade
+		{ spell = 34477, bartext = "%spell по %target", cooldown = 30 }, -- Hunter: Missdirect
+		{ spell = 57934, bartext = "%spell по %target", cooldown = 30 }, -- Rogue: Tricks of the Trade
 		{ spell = 32182, bartext = default_bartext, cooldown = 300 }, -- Shaman: Heroism (alliance)
 		{ spell = 2825, bartext = default_bartext, cooldown = 300 }, -- Shaman: Bloodlust (horde)
 		{ spell = 20608, bartext = default_bartext, cooldown = 1800 }, -- Shaman: Reincarnation
