@@ -35,7 +35,7 @@ mod:RegisterEventsInCombat(
 local warnTargetSwitch			= mod:NewAnnounce("WarnTargetSwitch", 3, 70952)
 local warnTargetSwitchSoon		= mod:NewAnnounce("WarnTargetSwitchSoon", 2, 70952)
 
-local timerCombatStart			= mod:NewCombatTimer(29) -- Roleplay for first pull
+local timerCombatStart			= mod:NewCombatTimer(22) -- Roleplay for first pull
 local timerTargetSwitch			= mod:NewTimer(47, "TimerTargetSwitch", 70952)	-- every 46-47seconds
 local berserkTimer				= mod:NewBerserkTimer(600)
 

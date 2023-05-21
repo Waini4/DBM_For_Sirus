@@ -82,7 +82,7 @@ local specWarnPyromancer = mod:NewSpecialWarningYou(305382, nil, nil, nil, 1, 3)
 local timerGrievingFireCD = mod:NewCDTimer(13, 305375, nil, nil, nil, 2)
 local timerPyroCD         = mod:NewCDTimer(90, 305380, nil, nil, nil, 3)
 local timerConflCD        = mod:NewCDTimer(30, 305377, nil, nil, nil, 3, nil, CL.TANK_ICON)
-local timerNightbane      = mod:NewTimer(34, "timerNightbane", "Interface\\Icons\\Ability_Mount_Undeadhorse", nil, nil, 6)
+local timerNightbane      = mod:NewTimer(29, "timerNightbane", "Interface\\Icons\\Ability_Mount_Undeadhorse", nil, nil, 6)
 
 
 local pyromancerTargets = {}
