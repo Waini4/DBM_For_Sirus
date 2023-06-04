@@ -38,10 +38,13 @@ local warnAddsSoon      = mod:NewSpecialWarningAdds(55342, nil, nil, nil, 1, 2)
 
 local specWarnWrathN    = mod:NewSpecialWarningRun(42783, nil, nil, nil, 1, 2)
 
-local timerAdds         = mod:NewTimer(60, "TimerAdds", 55342, "RemoveEnrage", nil, 5, nil, CL.ENRAGE_ICON)
-local timerPriestsN     = mod:NewTimer(14, "TimerPriests", 47788, "SpellCaster", nil, 5, nil, CL.HEALER_ICON)
-local timerWrathN       = mod:NewTargetTimer(6, 42783, nil, "RemoveEnrage", nil, 5, nil, CL.ENRAGE_ICON, nil, 1, 5)
-local timerNextWrathN   = mod:NewCDTimer(21, 42783, nil, "RemoveEnrage", nil, 5, nil, CL.ENRAGE_ICON)
+local yellWrathHOb      = mod:NewYell(42783)
+local yellWrathHObFades = mod:NewShortFadesYell(42783)
+
+local timerAdds         = mod:NewTimer(60, "TimerAdds", 55342, nil, 5, nil, CL.ENRAGE_ICON)
+local timerPriestsN     = mod:NewTimer(15, "TimerPriests", 47788, "SpellCaster", nil, nil, 1, CL.HEALER_ICON)
+local timerWrathN       = mod:NewTargetTimer(6, 42783, nil, nil, 5, nil, CL.ENRAGE_ICON, nil, 1, 5)
+local timerNextWrathN   = mod:NewCDTimer(21, 42783, nil, nil, 5, nil, CL.ENRAGE_ICON)
 
 --------------------------героик--------------------------
 
@@ -54,11 +57,9 @@ local warnFlashVoid     = mod:NewSoonAnnounce(308585, 3)
 local specWarnHelp      = mod:NewSpecialWarningAdds(308559, nil, nil, nil, 1, 2)     -- Послушники
 local specWarnDebaf     = mod:NewSpecialWarningRun(308544, nil, nil, nil, 3, 4)      -- Дебаф 1я фаза
 local specWarnFlashVoid = mod:NewSpecialWarningLookAway(308585, nil, nil, nil, 2, 2) -- фир 2 фаза
-local yellWrathH        = mod:NewYell(308548)
-local yellWrathHOb      = mod:NewYell(42783)
-local yellWrathHFades   = mod:NewShortFadesYell(308548)
-local yellWrathHObFades = mod:NewShortFadesYell(42783)
 
+local yellWrathH        = mod:NewYell(308548)
+local yellWrathHFades   = mod:NewShortFadesYell(308548)
 
 local timerRing       = mod:NewCDTimer(20, 308562, nil, nil, nil, 1, nil, CL.ENRAGE_ICON)
 local timerNextHelp   = mod:NewCDTimer(40, 308558, nil, nil, nil, 3, nil, CL.TANK_ICON)
@@ -315,6 +316,7 @@ function mod:UNIT_HEALTH(uId)
 			timerAdds:Cancel()
 		elseif hp < 20 and self:IsDifficulty("normal25") and stage == 1 then
 			self:SetStage(2)
+			timerAdds:Cancel()
 		end
 	end
 	-- elseif self:GetUnitCreatureId(uId) == 18805 and DBM:GetBossHP(18805) <= 40 and self:IsDifficulty("heroic25") and self:GetStage() and self:GetStage() == 1 then -- TODO: 2 фаза для хма, может багаться получается?

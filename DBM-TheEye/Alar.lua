@@ -20,6 +20,7 @@ mod:RegisterEvents(
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS 34229 35181 308640",
 	"SPELL_CAST_START 34342 46599 308638 308987 308633 308671 308663 308664 308665 308667",
+	"SPELL_HEAL 34342",
 	"UNIT_HEALTH"
 )
 
@@ -110,6 +111,16 @@ function mod:Platform()
 	self:ScheduleMethod(36, "Platform")
 end
 
+function mod:SPELL_HEAL(_, _, _, _, _, _, spellId)	-- 2 фаза обычки
+	if spellId == 34342 then
+		self:SetStage(2)
+		specWarnPhase2:Show()
+		berserkTimerN:Start(480)
+		timerNextBomb:Start(30) -- пока на вскидку
+		timerNextPlat:Cancel()
+	end
+end
+
 function mod:SPELL_CAST_SUCCESS(args)
 	local spellId = args.spellId
 	if spellId == 34229 then
@@ -177,10 +188,10 @@ function mod:SPELL_CAST_START(args)
 end
 
 function mod:UNIT_HEALTH(uId)
-	if not warned_preP1 and self:GetUnitCreatureId(uId) == 19514 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.07 then
+		if not warned_preP1 and self:GetUnitCreatureId(uId) == 19514 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.07 then
 		warned_preP1 = true
 		specWarnPhase2Soon:Show()
-	end
+		end
 end
 
 ---------------------------перья--------------------
