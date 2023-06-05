@@ -13,8 +13,8 @@ mod:RegisterCombat("combat", 50612)
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 313116 313120 313118 313122 317252 317253 317255 317262 313115",
 	"SPELL_CAST_SUCCESS 317259 313122",
-	"SPELL_AURA_APPLIED 313122 313115 313129 313130 317260 317256 313119",
-	"SPELL_AURA_APPLIED_DOSE 313122 313115 313129 313130 317260 313119 317256",
+	"SPELL_AURA_APPLIED 313122 313115 313129 313130 317260 317256 313119 317262",
+	"SPELL_AURA_APPLIED_DOSE 313122 313115 313129 313130 317260 313119 317256 317262",
 	-- "UNIT_DIED",
 	"SPELL_AURA_REMOVED 313122 317262",
 	"CHAT_MSG_MONSTER_YELL",
@@ -49,7 +49,7 @@ local specWarnTimeTrapGTFO  = mod:NewSpecialWarningGTFO(317260, nil, nil, nil, 3
 
 --local SummoningtheTimelessHM 	= mod:NewCDTimer(90, 313120, nil, nil, nil, 2) -- призыв аддов
 local DistortionWaveHM      = mod:NewCDTimer(40, 317253, nil, nil, nil, 5, nil, CL.HEALER_ICON)                           -- Волна искажений
-local timerReflectBuff      = mod:NewBuffActiveTimer(5, 317262, nil, nil, nil, 2)                                         --отражение
+local timerReflectBuff      = mod:NewBuffActiveTimer(4, 317262, nil, nil, nil, 2)                                         --отражение
 local TimeTrapCD            = mod:NewCDTimer(30, 317259, nil, nil, nil, 3)                                                -- Ловушка времени
 local BreathofInfinityHm    = mod:NewCDTimer(15, 317252, nil, "Tank", nil, 5, nil, CL.TANK_ICON)                          -- танк дабаф хм
 local ReflectSpellsCD       = mod:NewCDTimer(20, 317262, nil, "SpellCaster|-Healer", nil, 3, nil, CL.DEADLY_ICON, nil, 1) -- Отражение заклинаний
@@ -315,6 +315,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 end
 
 function mod:SPELL_AURA_REMOVED(args)
+	local Randd = math.random(20, 25) -- (-_-)
 	local spellId = args.spellId
 	local cid = self:GetCIDFromGUID(args.destGUID)
 	if spellId == 313122 then
@@ -331,20 +332,24 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 	end
 	---------HM------------
-	--[[if spellId == 317262 then
-		--ReflectSpellsCD:Start()
-	end]]
+	if spellId == 317262 then
+		ReflectSpellsCD:Start(Randd)
+	end
 end
 
+--[[
 function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.Ref1 or msg:find(L.Ref1) then
 		ReflectSpellsCD:Start(21)
+		print("1")
 	elseif msg == L.Ref2 or msg:find(L.Ref2) then
-		ReflectSpellsCD:Start(24)
+		ReflectSpellsCD:Start(27)
+		print("2")
 	elseif msg == L.Ref3 or msg:find(L.Ref3) then
-		ReflectSpellsCD:Start(25)
+		ReflectSpellsCD:Start(27)
+		print("3")
 	end
-end
+end]]
 
 function mod:UNIT_HEALTH(uId)
 	if self:IsStage(1) and not warned_preP1 and self:GetUnitCreatureId(uId) == 50612 and ((DBM:GetBossHPByUnitID(uId) % 25) < 3) then

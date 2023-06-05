@@ -39,13 +39,13 @@ local warned_Cop                     = false
 ------------------------------OB---------------------------------------------
 local warnTemporalCascade            = mod:NewTargetAnnounce(312206, 4)
 local warnReverseCascade             = mod:NewTargetAnnounce(312208, 3)
-local warnReplicaSpawned             = mod:NewAnnounce("WarningReplicaSpawned", 3, 312211, "-Healer") --Временные линии(копии)
-local warnPowerWordErase             = mod:NewTargetAnnounce(312204, 4)                               --Слово силы: Стереть
+local warnReplicaSpawned             = mod:NewAnnounce("WarningReplicaSpawned", 3, 312211, "Dps") --Временные линии(копии)
+local warnPowerWordErase             = mod:NewTargetAnnounce(312204, 4)                           --Слово силы: Стереть
 
 --local specPowerWordErase					= mod:NewSpecialWarningDispel(312204, "Healer", nil, nil, 1, 2)
 local specWarnResonantScream         = mod:NewSpecialWarningCast(312210, "SpellCaster", nil, 2, 2, 2) --Резонирующий крик(кик)
 local specWarnReturnInterrupt        = mod:NewSpecialWarningInterrupt(312214, "HasInterrupt", nil, 2, 1, 2)
-local specWarnReturn                 = mod:NewSpecialWarningSwitch(312214, "-Healer", nil, nil, 1, 2)
+local specWarnReturn                 = mod:NewSpecialWarningSwitch(312214, "Dps", nil, nil, 1, 2)
 local specWarnTemporalCascadeYou     = mod:NewSpecialWarningYou(312206, nil, nil, nil, 3, 2)
 local specWarnReverseCascadeMoveAway = mod:NewSpecialWarningMoveAway(312208, nil, nil, nil, 4, 3)
 local yellTemporalCascade            = mod:NewYell(312206) --317158
