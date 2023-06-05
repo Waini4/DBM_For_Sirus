@@ -279,7 +279,7 @@ L:SetMiscLocalization({
 	Update2	= "прибывает из",
 	BattleStart	= "итва началась",
 	LavaChange	= "осточная стрелка",
-	TopChange	= "ападная стрелка",
+	TopChange	= "еверная стрелка",
 	["Top - Down"] = "TopDown",
 	["Top - Up"] = "TopUp",
 	["Middle"] = "Middle",
