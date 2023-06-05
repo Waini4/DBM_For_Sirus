@@ -1,7 +1,7 @@
 local mod		= DBM:NewMod("z611", "DBM-PvP", 2)
 local L			= mod:GetLocalizedStrings()
 
-mod:SetRevision("20200405141240")
+mod:SetRevision("2022".."06".."06".."00".."00".."00")
 mod:SetZone(DBM_DISABLE_ZONE_DETECTION)
 
 mod:RegisterEvents(
