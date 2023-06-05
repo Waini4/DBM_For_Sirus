@@ -40,21 +40,21 @@ local default_settings = {
 	own_bargroup = false,
 	show_portal = true,
 	spells = {
-		{ spell = 6346, bartext =	L["%spell on %player"], cooldown = 180 }, -- Priest: Fear Ward
+		{ spell = 6346, bartext =	L["%spell: %player on %target"], cooldown = 180 }, -- Priest: Fear Ward
 		{ spell = 1161, bartext =	default_bartext, cooldown = 180 }, -- Warrior: Challenging Shout (AE Taunt)
 		{ spell = 871, bartext =	L["%spell on %player"], cooldown = 12 }, -- Warrior: Shieldwall Duration (for Healers to see how long cooldown runs)
 		{ spell = 12975, bartext =	L["%spell on %player"], cooldown = 20 }, -- Warrior: Last Stand Duration (for Healers to see how long cooldown runs)
 		{ spell = 48792, bartext =	L["%spell on %player"], cooldown = 12 }, -- Death Knight: Icebound Fortitude Duration (for Healers to see how long cooldown runs)
 		{ spell = 498, bartext =	L["%spell on %player"], cooldown = 12 }, -- Paladin: Divine Protection Duration (for Healers to see how long cooldown runs)
 		{ spell = 61336, bartext =	L["%spell on %player"], cooldown = 20 }, -- Druid: Survival Instincts Duration (for Healers to see how long cooldown runs)
-		{ spell = 48477, bartext =	L["%spell on %player"], cooldown = 600 }, -- Druid: Rebirth (Rank 7)
-		{ spell = 29166, bartext =	L["%spell on %player"], cooldown = 180 }, -- Druid: Innervate
+		{ spell = 48477, bartext =	L["%spell: %player on %target"], cooldown = 600 }, -- Druid: Rebirth (Rank 7)
+		{ spell = 29166, bartext =	L["%spell: %player on %target"], cooldown = 180 }, -- Druid: Innervate
 		{ spell = 5209, bartext =	default_bartext, cooldown = 180 }, -- Druid: Challenging Roar (AE Taunt)
 		{ spell = 33206, bartext =	L["%spell on %target"], cooldown = 8 }, -- Priest: Pain Suppression Duration (for Healers to see how long cooldown runs)
 		{ spell = 6940, bartext =	L["%spell on %target"], cooldown = 12 }, -- Paladin: Hand of Sacrifice Duration (for Healers to see how long cooldown runs)
 		{ spell = 64205, bartext =	default_bartext, cooldown = 10 }, -- Paladin: Divine Sacrifice Duration (for Healers to see how long cooldown runs)
-		{ spell = 34477, bartext =	L["%spell on %target"], cooldown = 30 }, -- Hunter: Missdirect
-		{ spell = 57934, bartext =	L["%spell on %target"], cooldown = 30 }, -- Rogue: Tricks of the Trade
+		{ spell = 34477, bartext =	L["%spell: %player on %target"], cooldown = 30 }, -- Hunter: Missdirect
+		{ spell = 57934, bartext =	L["%spell: %player on %target"], cooldown = 30 }, -- Rogue: Tricks of the Trade
 		{ spell = 32182, bartext =	default_bartext, cooldown = 300 }, -- Shaman: Heroism (alliance)
 		{ spell = 2825, bartext =	default_bartext, cooldown = 300 }, -- Shaman: Bloodlust (horde)
 		{ spell = 20608, bartext =	default_bartext, cooldown = 1800 }, -- Shaman: Reincarnation

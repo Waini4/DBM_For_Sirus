@@ -24,3 +24,4 @@ L.RecoveryMove           = "Перетащите (Осн бар восст. за
 L.BigSmoke               = "Перетащите (Восст. заклинаний < 12c)"
 L["%spell on %player"]	 = "%spell на %player"
 L["%spell on %target"]	 = "%spell по %target"
+L["%spell: %player on %target"] = "%spell: %player по %target"
