@@ -7058,11 +7058,11 @@ function DBM:InCombat()
 	return #inCombat > 0
 end
 
-local FlashWindow = FlashWindow
+local FlashWindow = FlashClientIcon
 function DBM:FlashClientIcon(checkAddon)
 	if not FlashWindow then return end -- Check for FlashClient exe patch
 	-- Check for addon via argument to prevent double API call from both DBM and FlashWindow since it would negate the icon flashing
-	if checkAddon and IsAddOnLoaded("FlashWindow") then return end
+	-- if checkAddon and IsAddOnLoaded("FlashWindow") then return end
 
 	if self:AntiSpam(5, "FLASH") then
 		FlashWindow()

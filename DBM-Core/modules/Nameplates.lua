@@ -55,7 +55,6 @@ do
 		local icon = DBMNameplateFrame:CreateTexture(nil,'BACKGROUND',nil,0)
 		icon:SetSize(DBM.Options.NPAuraSize, DBM.Options.NPAuraSize)
 		icon:SetTexCoord(0.1,0.9,0.1,0.9)
-		-- print("da")
 		icon:Hide()
 
 		tinsert(frame.iconsDBM,icon)

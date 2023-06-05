@@ -262,16 +262,29 @@ L:SetGeneralLocalization({
 })
 
 L:SetTimerLocalization({
-	TimerCart	= "Восстановление вагонетки"
+	TimerRespawn	= "Восстановление вагонетки",
+	TimerCart		= "%s"
 })
 
 L:SetOptionLocalization({
-	TimerCart	= "Отсчет времени до восстановления вагонетки"
+	TimerRespawn	= "Отсчет времени до восстановления вагонетки",
+	TimerCart		= "Таймер захвата повозки"
 })
 
 L:SetMiscLocalization({
+
+	Arrived	= "прибыв",
 	Capture		= "захватил",
-	Capture2	= "захватила"
+	Update1	= "контроль над вагонеткой",
+	Update2	= "прибывает из",
+	BattleStart	= "итва началась",
+	LavaChange	= "осточная стрелка",
+	TopChange	= "ападная стрелка",
+	["Top - Down"] = "TopDown",
+	["Top - Up"] = "TopUp",
+	["Middle"] = "Middle",
+	["Lava - Down"] = "LavaDown",
+	["Lava - Up"] = "LavaUp",
 })
 
 --------------------------
