@@ -116,17 +116,17 @@ local function GetDistance(x1, y1, x2, y2)
 	return sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
 end
 
-function ClearCartCache()
-	local time = GetTime()
-	for i, cart in pairs(carts) do
-		if cart.dir ~= 0 and times[cart.dir] + cart.spawn + 2 > time then
-			if GetDistance(cart.x, cart.y, caps[cart.dir].x, caps[cart.dir].y) < 3 then
-				cartTimer:Stop(names[cart.dir])
-				tremove(carts, i)
-			end
-		end
-	end
-end
+-- function ClearCartCache()
+-- 	local time = GetTime()
+-- 	for i, cart in pairs(carts) do
+-- 		if cart.dir ~= 0 and times[cart.dir] + cart.spawn + 2 > time then
+-- 			if GetDistance(cart.x, cart.y, caps[cart.dir].x, caps[cart.dir].y) < 3 then
+-- 				cartTimer:Stop(names[cart.dir])
+-- 				tremove(carts, i)
+-- 			end
+-- 		end
+-- 	end
+-- end
 
 -- local function PointToLineDist(a, b, x, y)
 -- 	return (a * x + b - y) / (sqrt(a ^ 2 + 1))

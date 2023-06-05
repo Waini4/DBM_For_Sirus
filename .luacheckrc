@@ -164,6 +164,7 @@ globals = {
 	"DBM_SBT",
 
 	-- Sirus
+	"FlashClientIcon",
 	"AnimationsToggle_STARTNUMBERS",
 	"TimerTracker",
 	"TimerTracker_OnEvent",
