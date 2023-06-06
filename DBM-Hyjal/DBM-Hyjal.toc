@@ -27,12 +27,12 @@
 ## X-DBM-Mod-LoadZone-ruRU: Вершина Хиджала
 
 localization.en.lua
-localization.de.lua
-localization.cn.lua
-localization.tw.lua
+# localization.de.lua
+# localization.cn.lua
+# localization.tw.lua
 localization.ru.lua
-localization.es.lua
-localization.kr.lua
+# localization.es.lua
+# localization.kr.lua
 
 RageWinterchill.lua
 Anetheron.lua
