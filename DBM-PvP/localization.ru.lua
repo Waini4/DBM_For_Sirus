@@ -280,11 +280,11 @@ L:SetMiscLocalization({
 	BattleStart	= "итва началась",
 	LavaChange	= "осточная стрелка",
 	TopChange	= "еверная стрелка",
-	["Top - Down"] = "TopDown",
-	["Top - Up"] = "TopUp",
-	["Middle"] = "Middle",
-	["Lava - Down"] = "LavaDown",
-	["Lava - Up"] = "LavaUp",
+	["Top - Down"] = "Левая-низ",
+	["Top - Up"] = "Левая-верх",
+	["Middle"] = "Средняя",
+	["Lava - Down"] = "Лава-низ",
+	["Lava - Up"] = "Лава-верх",
 })
 
 --------------------------

@@ -27,13 +27,13 @@ local topDown = true
 local cartRespawn = mod:NewTimer(14.5, "TimerRespawn", "Interface\\Icons\\INV_Misc_PocketWatch_01") -- interface/icons/inv_misc_pocketwatch_01.blp
 
 local times = { 181, 234, 129, 97, 153 }
-local caps = {
-	{ x = 22.848, y = 42.823 },    -- top down
-	{ x = 76.517, y = 21.757 },    -- top up
-	{ x = 41.281, y = 48.239 },    -- middle
-	{ x = 69.326, y = 70.632 },    -- lava down
-	{ x = 76.517, y = 21.757 },    -- lava up
-}
+-- local caps = {
+-- 	{ x = 22.848, y = 42.823 },    -- left down
+-- 	{ x = 76.517, y = 21.757 },    -- left up
+-- 	{ x = 41.281, y = 48.239 },    -- middle
+-- 	{ x = 69.326, y = 70.632 },    -- lava down
+-- 	{ x = 76.517, y = 21.757 },    -- lava up
+-- }
 local names = {
 	L["Top - Down"],
 	L["Top - Up"],
@@ -247,13 +247,13 @@ end
 
 
 function mod:UpdateCarByIndex(index)
+	if not battleStart then return end
 	local cart = carts[index]
-	if not cart.spawn then
-		cart.spawn = GetTime()
-	end
 	mod:UpdateCartsInfo()
 	if not cartTimer:IsStarted(names[cart.dir]) then -- Prevent duplicate cart timers.
-
+		if not cart.spawn then
+			cart.spawn = GetTime()
+		end
 		cartTimer:Start(cart.spawn + times[cart.dir] - GetTime(), names[cart.dir])
 	else
 		cartTimer:Stop(cart.spawn + times[cart.dir] - GetTime(), names[cart.dir])
@@ -261,6 +261,7 @@ function mod:UpdateCarByIndex(index)
 	end
 end
 function mod:UpdateCartsInfo()
+	if not battleStart then return end
 	for i = 1, GetNumBattlefieldVehicles() do
 		local x, y, nameRu , _ , nameSide  =  GetBattlefieldVehicleInfo(i)
 		if x and y and nameSide then
@@ -311,6 +312,7 @@ function mod:UpdateCartsInfoTicker()
 end
 
 function mod:UpdateCartsTime()
+	if not battleStart then return end
 	self:UnscheduleMethod("UpdateCartsTime")
 	local f,s,t = false, false, false
 	for ic = 1, GetNumBattlefieldVehicles() do
