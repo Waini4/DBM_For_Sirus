@@ -43,7 +43,7 @@ local names = {
 }
 local cartTimer	= mod:NewTimer(14.5, "TimerCart", "Interface\\Icons\\Spell_Frost_FrostShock") -- Interface\\icons\\spell_misc_hellifrepvphonorholdfavor.blp
 
-local isHooked = false
+local battleStart = false
 
 function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg)
 	-- print(msg)
@@ -65,6 +65,7 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg)
 	elseif msg:find(L.BattleStart) then
 		lavaDown = true
 		topDown = true
+		battleStart = true
 		-- self:ScheduleMethod(5, "UpdateCartsInfoTicker")
 		for i = 1,3 do
 			local x, y,nameRu = GetBattlefieldVehicleInfo(i)
@@ -361,12 +362,15 @@ function mod:OnInitialize()
 		mod.updFrame:SetScript("OnUpdate",function(self,elaps)
 			if self.lastUpd - GetTime() + 5 < 0 then
 				self.lastUpd = GetTime()
-				mod:UpdateCartsInfoTicker()
+				if battleStart then
+					mod:UpdateCartsInfoTicker()
+				end
 			end
 		end)
 		-- cartCount = 0
 	elseif bgzone then
 		bgzone = false
+		battleStart = false
 		mod.updFrame:SetScript("OnUpdate",function()
 
 		end)
