@@ -248,9 +248,12 @@ end
 
 function mod:UpdateCarByIndex(index)
 	local cart = carts[index]
-
+	if not cart.spawn then
+		cart.spawn = GetTime()
+	end
 	mod:UpdateCartsInfo()
 	if not cartTimer:IsStarted(names[cart.dir]) then -- Prevent duplicate cart timers.
+
 		cartTimer:Start(cart.spawn + times[cart.dir] - GetTime(), names[cart.dir])
 	else
 		cartTimer:Stop(cart.spawn + times[cart.dir] - GetTime(), names[cart.dir])
