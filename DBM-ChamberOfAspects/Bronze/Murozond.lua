@@ -315,7 +315,6 @@ function mod:SPELL_CAST_SUCCESS(args)
 end
 
 function mod:SPELL_AURA_REMOVED(args)
-	local Randd = math.random(20, 25) -- (-_-)
 	local spellId = args.spellId
 	local cid = self:GetCIDFromGUID(args.destGUID)
 	if spellId == 313122 then
@@ -332,24 +331,21 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 	end
 	---------HM------------
-	if spellId == 317262 then
-		ReflectSpellsCD:Start(Randd)
-	end
+--[[	if spellId == 317262 then
+		ReflectSpellsCD:Start()
+	end]]
 end
 
---[[
+
 function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.Ref1 or msg:find(L.Ref1) then
-		ReflectSpellsCD:Start(21)
-		print("1")
+		ReflectSpellsCD:Start(23)
 	elseif msg == L.Ref2 or msg:find(L.Ref2) then
-		ReflectSpellsCD:Start(27)
-		print("2")
+		ReflectSpellsCD:Start(26)
 	elseif msg == L.Ref3 or msg:find(L.Ref3) then
 		ReflectSpellsCD:Start(27)
-		print("3")
 	end
-end]]
+end
 
 function mod:UNIT_HEALTH(uId)
 	if self:IsStage(1) and not warned_preP1 and self:GetUnitCreatureId(uId) == 50612 and ((DBM:GetBossHPByUnitID(uId) % 25) < 3) then

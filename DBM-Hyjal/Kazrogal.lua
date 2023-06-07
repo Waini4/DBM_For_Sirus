@@ -9,7 +9,7 @@ mod:RegisterCombat("combat")
 mod:SetUsedIcons(6, 7, 8)
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 318818 318824 318823 318834 318833",
-	"SPELL_CAST_SUCCESS 318828 318825 318826",
+	"SPELL_CAST_SUCCESS 318828 318825 318826 318839",
 	"SPELL_AURA_APPLIED 318819 318825 318845 318822 318828 318839",
 	--"SPELL_AURA_REFRESH ",
 	"SPELL_AURA_REMOVED 318822",
@@ -23,27 +23,21 @@ local warn2phaseSoon = mod:NewPrePhaseAnnounce(2, nil, nil, nil, nil, nil, 2)
 local warnPhase      = mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2)
 
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(1))
-local warnMark             = mod:NewTargetNoFilterAnnounce(318819, 3)
-local warnInfernalStrike   = mod:NewCastAnnounce(318823, 4, 1.5)
-local warnFatalBlowofFilth = mod:NewCastAnnounce(318833, 4, 1.5)
-
+local warnMark                      = mod:NewTargetNoFilterAnnounce(318819, 3)
+local warnInfernalStrike            = mod:NewCastAnnounce(318823, 4, 1.5)
+local warnFatalBlowofFilth          = mod:NewCastAnnounce(318833, 4, 1.5)
 
 local specwarnAbbasSoon             = mod:NewSpecialWarningSoon(318825, nil, nil, nil, 1, 3)
 local specWarnBurningSoul           = mod:NewSpecialWarningDispel(318828, "RemoveMagic", nil, nil, 1, 3)
 local specWarnHorrorflames          = mod:NewSpecialWarningInterrupt(318822, "HasInterrupt", nil, nil, 1, 2)
-local specWarnUnstoppableOnslaught  = mod:NewSpecialWarning(
-	"|cff71d5ff|Hspell:318822|hНеудержимый натиск|h|r Закончился можно сбивать касты!"
-	, "HasInterrupt")
+local specWarnUnstoppableOnslaught  = mod:NewSpecialWarning("|cff71d5ff|Hspell:318822|hНеудержимый натиск|h|r Закончился можно сбивать касты!","HasInterrupt")
 local specWarnGTFO                  = mod:NewSpecialWarningGTFO(318825, nil, nil, nil, 4, 8)
-
 local timerMarkCD                   = mod:NewNextCountTimer(24, 318818, nil, nil, nil, 2, nil, CL.IMPORTANT_ICON)
 local timerBurningSoulCD            = mod:NewNextCountTimer(20, 318828, nil, "RemoveMagic", nil, 3, nil, CL.HEALER_ICON)
 local timerHorrorflamesCD           = mod:NewNextCountTimer(16, 318824, nil, nil, nil, 3)
-local timerUnstableAbyssalsCD       = mod:NewNextCountTimer(90, 318825, "Падение Абиссалов", nil, nil, 4
-, nil, CL.DEADLY_ICON)
+local timerUnstableAbyssalsCD    	  = mod:NewNextCountTimer(90, 318825, "Падение Абиссалов", nil, nil, 4, nil, CL.DEADLY_ICON)
 local timerInfernalStrikeCD         = mod:NewNextTimer(9, 318823, nil, "Tank|Healer", nil, 4, nil, CL.TANK_ICON)
-local timerunstoppableonslaughtBuff = mod:NewBuffActiveTimer(25, 318822, nil, "HasInterrupt", nil, 4, nil,
-	CL.INTERRUPT_ICON)
+local timerunstoppableonslaughtBuff = mod:NewBuffActiveTimer(25, 318822, nil, "HasInterrupt", nil, 4, nil, CL.INTERRUPT_ICON) --ad
 local timerFatalBlowofFilthCD       = mod:NewNextTimer(17, 318833, nil, "Tank|Healer", nil, 4, nil, CL.TANK_ICON)
 
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(2))
@@ -164,6 +158,8 @@ function mod:SPELL_CAST_SUCCESS(args)
 		timerUnstableAbyssalsCD:Start(20, self.vb.AbyssalsCount + 1)
 		specwarnAbbasSoon:Schedule(16)
 		specwarnAbbasSoon:Schedule(19)]]
+	elseif args:IsSpellID(318839) then
+		timerMutilationlCD:Start()
 	end
 end
 
@@ -172,7 +168,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnMark:Show(args.destName)
 	elseif args:IsSpellID(318839) and self:AntiSpam(2) then
 		specWarnMutilation:Show(args.destName)
-		timerMutilationlCD:Start()
+		--timerMutilationlCD:Start()
 	elseif args:IsSpellID(318825) and self:AntiSpam(4) then
 		specWarnGTFO:Show(args.spellName)
 	elseif args:IsSpellID(318822) and not kik then
