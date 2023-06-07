@@ -81,10 +81,10 @@ end
 
 local function Vapors(self)
 	self.vb.vaporsCount = self.vb.vaporsCount + 1
-	timerSaroniteVapors:Start(nil, self.vb.vaporsCount + 1)
-	self:Schedule(34, Vapors, self)
+	timerSaroniteVapors:Start(34, self.vb.vaporsCount + 1)
 	warnSaroniteVapor:Schedule(30)
 	warnSaroniteVapor:Schedule(33)
+	self:Schedule(34, Vapors, self)
 end
 
 function mod:OnCombatStart(delay)
