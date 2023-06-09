@@ -102,6 +102,9 @@ function mod:OnCombatEnd(wipe)
 	cub = 1
 	-- shake = 1
 	pullWarned = true
+	if self.Options.InfoFrame then
+		DBM.InfoFrame:Hide()
+	end
 end
 
 local cubsTimers = {
