@@ -3,7 +3,7 @@
 ------------------------------------------------------------------------
 local _,ns = ...
 local Compat = ns.Compat
-local MAJOR, MINOR = "SpecializedAbsorbs-1.0", 8
+local MAJOR, MINOR = "SpecializedAbsorbs-1.0", 9
 local lib, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 local Core
@@ -1678,6 +1678,7 @@ local lastPalAbsorbTable = {}
 -- lastPalAbsorbTable[guid][1] = last update
 -- lastPalAbsorbTable[guid][2] = count
 local palPokrovBuff = {}
+local palT4GodsHandBuff = {}
 local function Tanks_CLEU(self,...)
 	-- local whoGUID = ...
 	-- time event whoguid whoname whoflag targetguid targetname targetflag spellid spellname
@@ -1729,12 +1730,16 @@ local function Tanks_CLEU(self,...)
         end
 	elseif csarm[subevent3] and spellid10 == 308125 then
 		lastDkAbsorbTable[whoguid4] = 0
-	elseif sh[subevent3] and (spellid10 == 48782) then -- ttg 16% свет небес
-		local absorb = spelldmg13 * 0.16
-		palPokrovBuff[whoguid4] = absorb
-	elseif sh[subevent3] and (spellid10 == 48785) then -- ttg 8% вспышка света
-		local absorb = spelldmg13 * 0.08
-		palPokrovBuff[whoguid4] = absorb
+	elseif sh[subevent3] then
+		if (spellid10 == 48782) then -- ttg 16% свет небес
+			local absorb = spelldmg13 * 0.16
+			palPokrovBuff[whoguid4] = absorb
+		elseif (spellid10 == 48785) then -- ttg 8% вспышка света
+			local absorb = spelldmg13 * 0.08
+			palPokrovBuff[whoguid4] = absorb
+		elseif (spellid10 == 48821) then
+			palT4GodsHandBuff[whoguid4] = spelldmg13 * 0.75
+		end
 	end
 	-- end
 
@@ -1991,8 +1996,9 @@ local function paladin_OnTalentUpdate()
 	playerScaling[1] = 1 + (t * 0.1)
 	lib.ScheduleScalingBroadcast()
 end
+
 local absorbPalPokrov = 0
-local function paladin_TTG_Absorb284(srcGUID, srcName, dstGUID, dstName, spellid, destEffects)
+local function paladin_TTG_Absorb(srcGUID, srcName, dstGUID, dstName, spellid, destEffects)
 
 	absorbPalPokrov = 0
 	if spellid == 319738 then --4
@@ -2005,6 +2011,10 @@ local function paladin_TTG_Absorb284(srcGUID, srcName, dstGUID, dstName, spellid
 		absorbPalPokrov = (palPokrovBuff[srcGUID] >= 480 and 480) or palPokrovBuff[srcGUID]
 	end
 	return absorbPalPokrov,1.0
+end
+
+local function paladin_T4GodsHand(srcGUID, srcName, dstGUID, dstName, spellid, destEffects)
+	return palT4GodsHandBuff[srcGUID], 1.0
 end
 
 function OnEnableClass.PALADIN()
@@ -2058,6 +2068,14 @@ local function priest_PowerWordShield_Create(srcGUID, srcName, dstGUID, dstName,
 	sourceScaling[spellid] = sourceScaling[spellid] or priest_defaultScaling[spellid]
 	if sourceScaling[spellid] then
 		return floor((sourceScaling[spellid][1] + sp * sourceScaling[spellid][2]) * ZONE_MODIFIER), min(quality1, quality2)
+	end
+end
+
+local function priest_PowerWordShieldT4_Create(srcGUID, srcName, dstGUID, dstName, spellid, destEffects)
+	local _, sp, quality1, sourceScaling, quality2 = UnitStatsAndScaling(srcGUID, 0.1, priest_defaultScaling, 0.1)
+	sourceScaling[spellid] = sourceScaling[spellid] or priest_defaultScaling[spellid]
+	if sourceScaling[spellid] then
+		return floor((1250 + sp * 0.2) * ZONE_MODIFIER), min(quality1, quality2)
 	end
 end
 
@@ -2481,6 +2499,7 @@ local mage_FrostWard_Entry = {2.0, 30, generic_SpellScalingByTable_Create, mage_
 local mage_IceBarrier_Entry = {1.0, 60, mage_IceBarrier_Create, generic_Hit}
 local mage_ManaShield_Entry = {1.0, 60, generic_SpellScalingByTable_Create, generic_Hit, mage_Absorb_Spells, 0.8053}
 local priest_PWS_Entry = {1.0, 30, priest_PowerWordShield_Create, generic_Hit}
+local priest_PWS_EntryT4 = {1.0, 30, priest_PowerWordShieldT4_Create, generic_Hit}
 local warlock_Sacrifice_Entry = {1.0, 30, generic_ConstantByTable_Create, generic_Hit, warlock_Sacrifice_Spells}
 local warlock_ShadowWard_Entry = {2.0, 30, generic_SpellScalingByTable_Create, warlock_ShadowWard_Hit, warlock_ShadowWard_Spells, 0.8053}
 
@@ -2498,7 +2517,7 @@ Core.Effects = {
 	[52286] = {1.0, nil, function() return 0, 0.0 end, deathknight_WoN_Hit3}, -- Will of the Necropolis (Rank 3)
 
 	[62606] = {1.1, 10, druid_SavageDefense_Create, druid_SavageDefense_Hit}, -- Savage Defense
-	[319521] = {1.0, 10, druid_t6_SpellAbsorb_Create, druid_t6_SpellHit}, -- t6 absorb feral
+
 	[543] = mage_FireWard_Entry, -- Fire Ward (rank 1)
 	[8457] = mage_FireWard_Entry, -- Fire Ward (rank 2)
 	[8458] = mage_FireWard_Entry, -- Fire Ward (rank 3)
@@ -2531,6 +2550,7 @@ Core.Effects = {
 	[43019] = mage_ManaShield_Entry, --  Mana shield (rank 8)
 	[43020] = mage_ManaShield_Entry, --  Mana shield (rank 9)
 	[58597] = {1.0, 6, paladin_SacredShield_Create, generic_Hit}, -- Sacred Shield
+	[319166] = {1.0, 10, paladin_T4GodsHand, generic_Hit}, -- Paladin 4T4 God's Hand
 	[17] = priest_PWS_Entry, -- Power Word: Shield (rank 1)
 	[592] = priest_PWS_Entry, -- Power Word: Shield (rank 2)
 	[600] = priest_PWS_Entry, -- Power Word: Shield (rank 3)
@@ -2565,6 +2585,7 @@ Core.Effects = {
 	[47891] = warlock_ShadowWard_Entry, -- Shadow Ward (rank 5)
 	[64413] = {1.0, 8, items_Valanyr_Create, generic_Hit}, -- Val'anyr (spellid of the created absorb effect)
 	[60218] = {5.0, 10, function() return 4000, 1.0 end, items_EssenceOfGossamer_Hit}, -- Essence of Gossamer
+	[310738] = {1.0, 10, function() return 17400, 1.0 end, generic_Hit}, -- Argussian Compass (226 burning crusade sirus)
 	[71586] = {1.0, 10, function() return 24600, 1.0 end, generic_Hit}, -- Corroded Skeleton Key
 	[36481] = {1.0, 4, function() return 100000, 1.0 end, generic_Hit}, -- Phaseshift Bulwark
 	[57350] = {1.0, 6, function() return 1500, 1.0 end, generic_Hit}, -- Darkmoon Card: Illusion
@@ -2631,11 +2652,12 @@ Core.Effects = {
 	[65686] = {1.0, 0, function() return 0, 0.0 end, nil}, -- Twin Val'kyr: Light Essence
 	[65684] = {1.0, 0, function() return 0, 0.0 end, nil}, -- Twin Val'kyr: Dark Essence
 
+	[55277] =  {1.0, 0, function() return 1084*4, 1.0 end, generic_Hit}, --shaman totem pvp
 	--t4 priest dcp
-	[305082] = priest_PWS_Entry, -- Power Word: Shield (rank 14) t4 increase
+	[305082] = priest_PWS_EntryT4, -- Power Word: Shield (rank 14) t4 increase
 	--t5 abilities
 	[308143] = priest_PWS_Entry, -- Power Word: Shield (rank 15)
-
+	[319521] = {1.0, 10, druid_t6_SpellAbsorb_Create, druid_t6_SpellHit}, -- t6 absorb feral
 	[308125] = {1.0, 10, deathknight_T52FrostTankOnCreate, generic_Hit}, --t5 fdk tank
 	[319552] = {1.0, 2, deathknight_T62FrostTankOnCreate, generic_Hit}, --t6 fdk tank
 
@@ -2651,11 +2673,28 @@ Core.Effects = {
 	[315529] = {1.0, 10, function() return 3660, 1.0 end, generic_Hit}, -- расколотое солнце
 
 	[317911] = {1.0, 10, function() return 722, 1.0 end, generic_Hit}, -- духовный барьер
-	[319738] = {1.0, 6, paladin_TTG_Absorb284, generic_Hit}, -- enchant ttg 4
-	[319996] = {1.0, 6, paladin_TTG_Absorb284, generic_Hit}, -- enchant ttg 3
-	[320110] = {1.0, 6, paladin_TTG_Absorb284, generic_Hit}, -- enchant ttg 2
-	[320221] = {1.0, 6, paladin_TTG_Absorb284, generic_Hit}, -- enchant ttg 1
+	[319738] = {1.0, 6, paladin_TTG_Absorb, generic_Hit}, -- enchant ttg 4
+	[319996] = {1.0, 6, paladin_TTG_Absorb, generic_Hit}, -- enchant ttg 3
+	[320110] = {1.0, 6, paladin_TTG_Absorb, generic_Hit}, -- enchant ttg 2
+	[320221] = {1.0, 6, paladin_TTG_Absorb, generic_Hit}, -- enchant ttg 1
+	[319795] = {1.0, 5, function() return 3235, 1.0 end, generic_Hit}, -- tg priest
+	[320059] = {1.0, 5, function() return 2587, 1.0 end, generic_Hit}, -- tg priest
+	[320173] = {1.0, 5, function() return 1940, 1.0 end, generic_Hit}, -- tg priest
+	[320284] = {1.0, 5, function() return 1213, 1.0 end, generic_Hit}, -- tg priest
 	[320439] = {1.0, 10, race_Panda_AbsorbOnCreate, generic_Hit}, -- race pandaren absorb
+
+	--[[todos
+	[319797] = 10,
+	[320061] = 10,
+	[320175] = 10,
+	[320286] = 10,
+
+	[315521] = 10,
+	[315523] = 10,
+	[315525] = 10,
+	[315527] = 10,
+
+	]]--
 }
 
 Core.AreaTriggers = {
