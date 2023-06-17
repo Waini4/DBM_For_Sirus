@@ -42,6 +42,7 @@ local timerNextCharge  = mod:NewCDTimer(20, 35412)
 local timerNextBomb    = mod:NewCDTimer(46, 35181)
 
 local berserkTimerN = mod:NewBerserkTimer(360)
+local berserkTimerN2 = mod:NewBerserkTimer(480)
 
 -- Heroic
 local specWarnPhase2Soon    = mod:NewSpecialWarning("WarnPhase2Soon", 1) -- Вторая фаза
@@ -115,7 +116,8 @@ function mod:SPELL_HEAL(_, _, _, _, _, _, spellId)	-- 2 фаза обычки
 	if spellId == 34342 then
 		self:SetStage(2)
 		specWarnPhase2:Show()
-		berserkTimerN:Start(480)
+		berserkTimerN:Cancel()
+		berserkTimerN2:Start()
 		timerNextBomb:Start(30) -- пока на вскидку
 		timerNextPlat:Cancel()
 	end
