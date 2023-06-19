@@ -294,7 +294,6 @@ function DBM_GUI:ShowHide(forceshow)
 		end
 	end
 end
-
 local catbutton, lastButton, addSpacer
 local function addOptions(mod, catpanel, v)
 	if v == DBM_OPTION_SPACER then
