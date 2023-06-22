@@ -7009,19 +7009,20 @@ do
 		testSpecialWarning3:ScheduleVoice(60, "defensive")
 	end
 end
-
-DBT:SetAnnounceHook(function(bar)
-	local prefix
-	if bar.color and bar.color.r == 1 and bar.color.g == 0 and bar.color.b == 0 then
-		prefix = L.HORDE or FACTION_HORDE
-	elseif bar.color and bar.color.r == 0 and bar.color.g == 0 and bar.color.b == 1 then
-		prefix = L.ALLIANCE or FACTION_ALLIANCE
-	end
-	if prefix then
-		return ("%s: %s  %d:%02d"):format(prefix, _G[bar.frame:GetName() .. "BarName"]:GetText(), floor(bar.timer / 60),
-			bar.timer % 60)
-	end
-end)
+if DBT then
+	DBT:SetAnnounceHook(function(bar)
+		local prefix
+		if bar.color and bar.color.r == 1 and bar.color.g == 0 and bar.color.b == 0 then
+			prefix = L.HORDE or FACTION_HORDE
+		elseif bar.color and bar.color.r == 0 and bar.color.g == 0 and bar.color.b == 1 then
+			prefix = L.ALLIANCE or FACTION_ALLIANCE
+		end
+		if prefix then
+			return ("%s: %s  %d:%02d"):format(prefix, _G[bar.frame:GetName() .. "BarName"]:GetText(), floor(bar.timer / 60),
+				bar.timer % 60)
+		end
+	end)
+end
 
 if DBTST then
 	DBTST:SetAnnounceHook(function(bar)
