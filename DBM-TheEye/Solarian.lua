@@ -42,8 +42,8 @@ local yellWrathHOb      = mod:NewYell(42783)
 local yellWrathHObFades = mod:NewShortFadesYell(42783)
 
 local timerAdds         = mod:NewTimer(60, "TimerAdds", 55342, nil, 5, nil, CL.ENRAGE_ICON)
-local timerPriestsN     = mod:NewTimer(15, "TimerPriests", 47788, "SpellCaster", nil, nil, 1, CL.HEALER_ICON)
-local timerWrathN       = mod:NewTargetTimer(6, 42783, nil, nil, 5, nil, CL.ENRAGE_ICON, nil, 1, 5)
+local timerPriestsN     = mod:NewTimer(15, "TimerPriests", 47788, nil, nil, 1, CL.HEALER_ICON)
+local timerWrathN       = mod:NewTargetTimer(6, 42783, nil, nil, nil, 5, nil, CL.ENRAGE_ICON)
 local timerNextWrathN   = mod:NewCDTimer(21, 42783, nil, nil, 5, nil, CL.ENRAGE_ICON)
 
 --------------------------героик--------------------------
