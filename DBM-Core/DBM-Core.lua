@@ -6478,6 +6478,19 @@ function DBM:UNIT_DIED(args)
 	end
 end
 
+function DBM:Capitalize(str)
+	local firstByte = str:byte(1, 1)
+	local numBytes = 1
+	if firstByte >= 0xF0 then -- firstByte & 0b11110000
+		numBytes = 4
+	elseif firstByte >= 0xE0 then -- firstByte & 0b11100000
+		numBytes = 3
+	elseif firstByte >= 0xC0 then  -- firstByte & 0b11000000
+		numBytes = 2
+	end
+	return str:sub(1, numBytes):upper()..str:sub(numBytes + 1):lower()
+end
+
 DBM.UNIT_DESTROYED = DBM.UNIT_DIED
 
 ----------------------
