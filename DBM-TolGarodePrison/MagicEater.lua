@@ -2,14 +2,14 @@ local mod = DBM:NewMod("MagicEater", "DBM-TolGarodePrison")
 -- local L   = mod:GetLocalizedStrings()
 -- local CL  = DBM_COMMON_L
 
-mod:SetRevision("20210501000000") -- fxpw check 20220609123000
+mod:SetRevision("2023".."07".."14".."000000")
 mod:SetCreatureID(84017)
 mod:SetUsedIcons(6, 7, 8)
 
 mod:RegisterCombat("combat", 84017)
 
 mod:RegisterEvents(
-	"SPELL_CAST_START 317673 317674 317743",
+	"SPELL_CAST_START 317673 317674 317743 317657 317660 317741 317742",
 	"SPELL_AURA_APPLIED 317641 317645 317681 317683 317662 317666 317650 317653",
 	"SPELL_AURA_REMOVED 317662 317666",
 	"SPELL_SUMMON 317685",
@@ -25,6 +25,8 @@ local warnOverloadDark     = mod:NewTargetAnnounce(317662, 2) --Перегруз
 local warnOverloadFel      = mod:NewTargetAnnounce(317666, 2) --Перегрузка метки Скверны
 local warnShocking         = mod:NewSpellAnnounce(317673, 3)  --Сотрясающий удар
 local warnMagic            = mod:NewTargetAnnounce(317675, 1) --Извергающаяся магия
+local warnFlashDark        = mod:NewSpellAnnounce(317657, 2)  --Вспышкa Тьмы 
+local warnFlashFel         = mod:NewSpellAnnounce(317660, 2)  --Вспышкa Скверны 
 
 local specShockingMoveAway = mod:NewSpecialWarningMoveAway(317673, "Melee", nil, nil, 4, 1)
 local specWarnFelYou       = mod:NewSpecialWarningYou(317666, nil, nil, nil, 4, 1)
@@ -45,6 +47,8 @@ local timerOverloadDark    = mod:NewBuffActiveTimer(8, 317650, nil, nil, nil, 7)
 local timerOverloadFel     = mod:NewBuffActiveTimer(8, 317653, nil, nil, nil, 7)        --Перегрузка метки Скверны
 local timerShellingCast    = mod:NewCastTimer(2, 317685, nil, nil, nil, 7)              --Шквальный обстрел
 local timerShellingCD      = mod:NewCDTimer(83, 317685, nil, nil, nil, 7)               --Шквальный обстрел
+local timerDarkFlashCD     = mod:NewCDTimer(32, 317657, nil, nil, nil, 7)               --Вспышкa Тьмы
+local timerFelFlashCD      = mod:NewCDTimer(32, 317660, nil, nil, nil, 7)               --Вспышкa Скверны 
 
 local DarkTargets          = {}
 local FelTargets           = {}
@@ -85,6 +89,8 @@ f:SetScript("OnEvent", function()
 			timerShellingCD:Start(60)
 			timerMagicCD:Start(49)
 			timerDarkCD:Start()
+            timerDarkFlashCD:Start()
+            timerFelFlashCD:Start()
 			DarkIcons = 8
 			FelIcons = 8
 		end
@@ -122,6 +128,8 @@ function mod:OnCombatEnd(wipe)
 	timerShockingCD:Stop()
 	timerShadowCD:Stop()
 	timerMagicCD:Stop()
+    timerDarkFlashCD:Stop()
+    timerFelFlashCD:Stop()
 	DBM.RangeCheck:Hide()
 end
 
@@ -136,6 +144,12 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(317685) then --Воющие тени
 		warnShelling:Show()
 		timerShellingCast:Start()
+    elseif args:IsSpellID(317657, 317741) then --Вспышкa Тьмы
+        warnFlashDark:Show()
+        timerFelFlashCD:Start()
+    elseif args:IsSpellID(317660, 317742) then --Вспышкa Скверны
+        warnFlashFel:Show()
+        timerDarkFlashCD:Start()
 	end
 end
 
