@@ -25,8 +25,8 @@ local warnOverloadDark     = mod:NewTargetAnnounce(317662, 2) --Перегруз
 local warnOverloadFel      = mod:NewTargetAnnounce(317666, 2) --Перегрузка метки Скверны
 local warnShocking         = mod:NewSpellAnnounce(317673, 3)  --Сотрясающий удар
 local warnMagic            = mod:NewTargetAnnounce(317675, 1) --Извергающаяся магия
-local warnFlashDark        = mod:NewSpellAnnounce(317657, 2)  --Вспышкa Тьмы 
-local warnFlashFel         = mod:NewSpellAnnounce(317660, 2)  --Вспышкa Скверны 
+local warnFlashDark        = mod:NewSpellAnnounce(317657, 2)  --Вспышкa Тьмы
+local warnFlashFel         = mod:NewSpellAnnounce(317660, 2)  --Вспышкa Скверны
 
 local specShockingMoveAway = mod:NewSpecialWarningMoveAway(317673, "Melee", nil, nil, 4, 1)
 local specWarnFelYou       = mod:NewSpecialWarningYou(317666, nil, nil, nil, 4, 1)
@@ -48,7 +48,7 @@ local timerOverloadFel     = mod:NewBuffActiveTimer(8, 317653, nil, nil, nil, 7)
 local timerShellingCast    = mod:NewCastTimer(2, 317685, nil, nil, nil, 7)              --Шквальный обстрел
 local timerShellingCD      = mod:NewCDTimer(83, 317685, nil, nil, nil, 7)               --Шквальный обстрел
 local timerDarkFlashCD     = mod:NewCDTimer(32, 317657, nil, nil, nil, 7)               --Вспышкa Тьмы
-local timerFelFlashCD      = mod:NewCDTimer(32, 317660, nil, nil, nil, 7)               --Вспышкa Скверны 
+local timerFelFlashCD      = mod:NewCDTimer(32, 317660, nil, nil, nil, 7)               --Вспышкa Скверны
 
 local DarkTargets          = {}
 local FelTargets           = {}

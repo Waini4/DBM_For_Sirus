@@ -153,7 +153,7 @@ do
 	end
 
 	mod:RegisterOnUpdateHandler(function(self)
-		if self.Options.ElementalIcons and (DBM:GetRaidRank() > 0 and not iconsSet == 4) then
+		if self.Options.ElementalIcons and (DBM:GetRaidRank() > 0 and (not iconsSet == 4)) then
 			for i = 1, GetNumRaidMembers() do
 				local uId = "raid" .. i .. "target"
 				local guid = UnitGUID(uId)
