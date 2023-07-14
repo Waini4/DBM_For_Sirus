@@ -153,14 +153,16 @@ do
 	end
 
 	mod:RegisterOnUpdateHandler(function(self)
-		if self.Options.ElementalIcons and (DBM:GetRaidRank() > 0 and (not iconsSet == 4)) then
+		if self.Options.ElementalIcons and (DBM:GetRaidRank() > 0 and (iconsSet ~= 4)) then
 			for i = 1, GetNumRaidMembers() do
 				local uId = "raid" .. i .. "target"
 				local guid = UnitGUID(uId)
-				if beastIcon[guid] then
-					SetRaidTarget(uId, elementalIcon[guid])
-					iconsSet = iconsSet + 1
-					elementalIcon[guid] = nil
+				if guid then
+					if beastIcon[guid] then
+						SetRaidTarget(uId, elementalIcon[guid])
+						iconsSet = iconsSet + 1
+						elementalIcon[guid] = nil
+					end
 				end
 			end
 		end
