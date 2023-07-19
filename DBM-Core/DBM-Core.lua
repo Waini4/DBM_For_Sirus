@@ -81,9 +81,9 @@ local function currentFullDate()
 end
 
 DBM = {
-	Revision = parseCurseDate("2023" .. "07" .. "12" .. "18" .. "00" .. "00"),
+	Revision = parseCurseDate("2023" .. "07" .. "20" .. "00" .. "20" .. "00"),
 	DisplayVersion = GetAddOnMetadata(_addonname, "Version"), -- the string that is shown as version
-	ReleaseRevision = releaseDate(2023, 07, 12, 18, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	ReleaseRevision = releaseDate(2023, 07, 20, 00, 20, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 
 local fakeBWVersion = 7558
@@ -154,6 +154,7 @@ DBM.DefaultOptions = {
 	VPReplacesCustom = false,
 	AlwaysPlayVoice = false,
 	VPDontMuteSounds = false,
+	Memes = false,
 	EventSoundVictory2 = "Interface\\AddOns\\DBM-Core\\sounds\\Victory\\SmoothMcGroove_Fanfare.ogg",
 	EventSoundWipe = "None",
 	EventSoundPullTimer = "None",
@@ -1598,6 +1599,7 @@ do
 				"UNIT_HEALTH mouseover target focus player",
 				"CHAT_MSG_WHISPER",
 				"CHAT_MSG_BN_WHISPER",
+				"CHAT_MSG_RAID_WARNING",
 				"CHAT_MSG_MONSTER_YELL",
 				"CHAT_MSG_MONSTER_EMOTE",
 				"CHAT_MSG_MONSTER_SAY",
@@ -3150,6 +3152,14 @@ function DBM:UPDATE_BATTLEFIELD_STATUS(queueID)
 	end
 end
 
+--[[
+function DBM:CHAT_MSG_RAID_WARNING(text, sender, ...)
+	if DBM.Options.Memes and text == L.ANNOUNCE_PULL:format(1, sender) then
+		self:PlaySoundFile(memFileStart:format(soundStart[math.random(#soundStart)]))
+		print(soundStart)
+	end
+end
+]]
 --------------------------------
 --  Load Boss Mods on Demand  --
 --------------------------------
@@ -5524,12 +5534,14 @@ do
 					self:AddMsg(L.BIGWIGS_ICON_CONFLICT)                                                         --Warn that one of them should be turned off to prevent conflict (which they turn off is obviously up to raid leaders preference, dbm accepts either or turned off to stop this alert)
 				end
 				if self.Options.EventSoundEngage2 and self.Options.EventSoundEngage2 ~= "" and
-					self.Options.EventSoundEngage2 ~= "None" then
+					self.Options.EventSoundEngage2 ~= "None" and not self.Options.Memes then
 					self:PlaySoundFile(self.Options.EventSoundEngage2, nil, true)
+				else
+					self:PlaySoundFile(memFileStart:format(soundStart[math.random(#soundStart)]))
 				end
 				if self.Options.EventSoundMusic and self.Options.EventSoundMusic ~= "None" and self.Options.EventSoundMusic ~= "" and
 					not (self.Options.EventMusicMythicFilter and (savedDifficulty == "mythic" or savedDifficulty == "challenge")) and
-					not mod.noStatistics then
+					not mod.noStatistics then -- // TODO Выпилить на будущее
 					fireEvent("DBM_MusicStart", "BossEncounter")
 					if not self.Options.RestoreSettingMusic then
 						self.Options.RestoreSettingMusic = tonumber(GetCVar("Sound_EnableMusic")) or 1
@@ -5672,6 +5684,10 @@ do
 				end
 				local totalPulls = mod.stats[statVarTable[savedDifficulty] .. "Pulls"]
 				local totalKills = mod.stats[statVarTable[savedDifficulty] .. "Kills"]
+				if self.Options.Memes then --Waini
+					self:PlaySoundFile(memFileDefeat:format(soundDefeat[math.random(#soundDefeat)]))
+					--DBM:Debug(soundDefeat, 3)
+				end
 				if thisTime < 30 then -- Normally, one attempt will last at least 30 sec.
 					totalPulls = totalPulls - 1
 					mod.stats[statVarTable[savedDifficulty] .. "Pulls"] = totalPulls
@@ -5689,14 +5705,14 @@ do
 							self:Schedule(1.5, delayedGCSync, modId, difficultyIndex, name, strFromTime(thisTime), wipeHP)
 						end
 					end
-					if self.Options.EventSoundWipe and self.Options.EventSoundWipe ~= "None" and self.Options.EventSoundWipe ~= "" then
+					if self.Options.EventSoundWipe and self.Options.EventSoundWipe ~= "None" and self.Options.EventSoundWipe ~= "" and not self.Options.Memes then
 						if self.Options.EventSoundWipe == "Random" then
 							local defeatSounds = DBM:GetDefeatSounds()
 							if #defeatSounds >= 3 then
 								self:PlaySoundFile(defeatSounds[random(3, #defeatSounds)].value)
 							end
 						else
-							self:PlaySoundFile(self.Options.EventSoundWipe, nil, true)
+								self:PlaySoundFile(self.Options.EventSoundWipe, nil, true)
 						end
 					end
 				end
@@ -6254,7 +6270,7 @@ do
 
 	function DBM:ValidateSound(path, log, ignoreCustom)
 		-- Ignore built-in sounds
-		if string.find(path:lower(), "^sound[\\/]+") then -- type(path) == "number" removed since it's not supported in WotLK
+		if string.find(path:lower(), ("^sound[\\/]+" or "^sounds[\\/]+")) then -- type(path) == "number" removed since it's not supported in WotLK
 			return true
 		end
 		-- Validate LibSharedMedia
@@ -6481,14 +6497,14 @@ end
 function DBM:Capitalize(str)
 	local firstByte = str:byte(1, 1)
 	local numBytes = 1
-	if firstByte >= 0xF0 then -- firstByte & 0b11110000
+	if firstByte >= 0xF0 then  -- firstByte & 0b11110000
 		numBytes = 4
 	elseif firstByte >= 0xE0 then -- firstByte & 0b11100000
 		numBytes = 3
-	elseif firstByte >= 0xC0 then  -- firstByte & 0b11000000
+	elseif firstByte >= 0xC0 then -- firstByte & 0b11000000
 		numBytes = 2
 	end
-	return str:sub(1, numBytes):upper()..str:sub(numBytes + 1):lower()
+	return str:sub(1, numBytes):upper() .. str:sub(numBytes + 1):lower()
 end
 
 DBM.UNIT_DESTROYED = DBM.UNIT_DIED
@@ -7031,7 +7047,8 @@ if DBT then
 			prefix = L.ALLIANCE or FACTION_ALLIANCE
 		end
 		if prefix then
-			return ("%s: %s  %d:%02d"):format(prefix, _G[bar.frame:GetName() .. "BarName"]:GetText(), floor(bar.timer / 60),
+			return ("%s: %s  %d:%02d"):format(prefix, _G[bar.frame:GetName() .. "BarName"]:GetText(),
+				floor(bar.timer / 60),
 				bar.timer % 60)
 		end
 	end)
@@ -10305,6 +10322,9 @@ do
 
 	function DBM:PlaySpecialWarningSound(soundId, force)
 		local sound
+		if self.Options.Memes and soundId == 4 then
+			sound = memFileRun:format(soundRun[math.random(#soundRun)])
+		else
 		if not force and self:IsTrivial() and self.Options.DontPlayTrivialSpecialWarningSound then
 			sound = self.Options.RaidWarningSound
 		else
@@ -10312,6 +10332,7 @@ do
 				["SpecialWarningSound" .. (soundId == 1 and "" or soundId)] or
 				soundId or self.Options.SpecialWarningSound
 		end
+	end
 		self:PlaySoundFile(sound, nil, true)
 	end
 

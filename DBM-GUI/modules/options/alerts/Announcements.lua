@@ -38,7 +38,7 @@ local FontDropDown = raidwarnoptions:CreateDropdown(L.FontType, Fonts, "DBM", "W
 	DBM:UpdateWarningOptions()
 	DBM:AddWarning(CL.MOVE_WARNING_MESSAGE)
 end)
-FontDropDown:SetPoint("TOPLEFT", check6, "BOTTOMLEFT", 0, -10)
+FontDropDown:SetPoint("TOPLEFT", check6, "BOTTOMLEFT", 0, -20)
 
 -- RaidWarn Font Style
 local FontStyles = {
@@ -82,7 +82,7 @@ FontShadow:SetScript("OnClick", function()
 	DBM:UpdateWarningOptions()
 	DBM:AddWarning(CL.MOVE_WARNING_MESSAGE)
 end)
-FontShadow:SetPoint("LEFT", FontStyleDropDown, "RIGHT", 35, 0)
+FontShadow:SetPoint("LEFT", FontStyleDropDown, "RIGHT", 0, 3)
 
 -- RaidWarn Sound
 local Sounds = DBM_GUI:MixinSharedMedia3("sound", {
@@ -230,5 +230,5 @@ UpdateColorFrames(color2, color2text, color2reset, 2)
 UpdateColorFrames(color3, color3text, color3reset, 3)
 UpdateColorFrames(color4, color4text, color4reset, 4)
 
-local infotext = raidwarncolors:CreateText(L.InfoRaidWarning, 380, false, GameFontNormalSmall, "LEFT", 0)
+local infotext = raidwarncolors:CreateText(L.InfoRaidWarning, 500, false, GameFontNormalSmall, "LEFT", 0)
 infotext:SetPoint("BOTTOMLEFT", raidwarncolors.frame, "BOTTOMLEFT", 10, 10)

@@ -29,7 +29,7 @@ local VictorySoundDropdown2 = eventSoundsGeneralArea:CreateDropdown(L.EventWipeS
 		DBM:PlaySoundFile(value)
 	end
 end, 180)
-VictorySoundDropdown2:SetPoint("LEFT", VictorySoundDropdown, "RIGHT", 45, 0)
+VictorySoundDropdown2:SetPoint("LEFT", VictorySoundDropdown, "RIGHT", 110, 0)
 
 local useCombined = DBM.Options.EventSoundMusicCombined
 local DungeonMusicDropDown = eventSoundsGeneralArea:CreateDropdown(L.EventDungeonMusic, useCombined and DBM:GetMusic() or DBM:GetDungeonMusic(), "DBM", "EventSoundDungeonBGM", function(value)
@@ -95,7 +95,7 @@ local EngageSoundDropdown = eventSoundsGeneralArea:CreateDropdown(L.EventEngageS
 	DBM.Options.EventSoundEngage2 = value
 	DBM:PlaySoundFile(DBM.Options.EventSoundEngage2)
 end, 180)
-EngageSoundDropdown:SetPoint("LEFT", PullTimerSoundDropdown, "RIGHT", 45, 0)
+EngageSoundDropdown:SetPoint("LEFT", PullTimerSoundDropdown, "RIGHT", 110, 0)
 
 local eventSoundsExtrasArea	= eventSoundsPanel:CreateArea(L.Area_EventSoundsExtras)
 eventSoundsExtrasArea:CreateCheckButton(L.EventMusicCombined, true, nil, "EventSoundMusicCombined")

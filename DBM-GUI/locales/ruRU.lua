@@ -171,6 +171,7 @@ L.ThickOutline				= "Толстый контур"
 L.MonochromeOutline			= "Монохромный контур"
 L.MonochromeThickOutline	= "Монохромный толстый контур"
 L.RaidWarnSound				= "Звук рейд-предупреждения"
+L.Memes                     = "Мемные звуки|cffff1919(РАНДОМ)|r на боссах. |cffff1919(Присутствует мат!).|r Важно при включении данной кнопки, заменяются звуки - |cFF73C2FBВступления в бой, Вайп, и заменяется функция (Беги малышка беги)|r"
 
 -- Tab: Generalwarnings
 L.Tab_GeneralMessages		= "Общие сообщения"
