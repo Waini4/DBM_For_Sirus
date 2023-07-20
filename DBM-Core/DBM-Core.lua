@@ -81,9 +81,9 @@ local function currentFullDate()
 end
 
 DBM = {
-	Revision = parseCurseDate("2023" .. "07" .. "20" .. "00" .. "20" .. "00"),
+	Revision = parseCurseDate("2023" .. "07" .. "20" .. "19" .. "12" .. "00"),
 	DisplayVersion = GetAddOnMetadata(_addonname, "Version"), -- the string that is shown as version
-	ReleaseRevision = releaseDate(2023, 07, 20, 00, 20, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	ReleaseRevision = releaseDate(2023, 07, 20, 19, 12, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 
 local fakeBWVersion = 7558
@@ -5534,9 +5534,10 @@ do
 					self:AddMsg(L.BIGWIGS_ICON_CONFLICT)                                                         --Warn that one of them should be turned off to prevent conflict (which they turn off is obviously up to raid leaders preference, dbm accepts either or turned off to stop this alert)
 				end
 				if self.Options.EventSoundEngage2 and self.Options.EventSoundEngage2 ~= "" and
-					self.Options.EventSoundEngage2 ~= "None" and not self.Options.Memes then
+					self.Options.EventSoundEngage2 ~= "None" then
 					self:PlaySoundFile(self.Options.EventSoundEngage2, nil, true)
-				else
+				end
+				if self.Options.Memes then
 					self:PlaySoundFile(memFileStart:format(soundStart[math.random(#soundStart)]))
 				end
 				if self.Options.EventSoundMusic and self.Options.EventSoundMusic ~= "None" and self.Options.EventSoundMusic ~= "" and
