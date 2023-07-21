@@ -68,11 +68,11 @@ local specWarnCurseTorpor			= mod:NewSpecialWarningYou(71237, nil, nil, nil, 1, 
 local specWarnTouchInsignificance	= mod:NewSpecialWarningStack(71204, nil, 3, nil, nil, 1, 6)
 local specWarnFrostbolt				= mod:NewSpecialWarningInterrupt(72007, "HasInterrupt", nil, 2, 1, 2)
 local specWarnVengefulShade			= mod:NewSpecialWarning("SpecWarnVengefulShade", true, nil, nil, nil, 1, 2, nil, 71426, 71426)
-
+local warnVengefulShade             = mod:NewTargetAnnounce(71426, 3)
 local timerSummonSpiritCD			= mod:NewCDTimer(10, 71426, nil, true, 2)
 local timerFrostboltCast			= mod:NewCastTimer(2, 72007, nil, "HasInterrupt")
 local timerTouchInsignificance		= mod:NewTargetTimer(30, 71204, nil, "Tank|Healer", nil, 5)
-
+local yellVengefulShade             = mod:NewYell(71426)
 local soundWarnSpirit				= mod:NewSound(71426)
 
 local dominateMindTargets = {}
@@ -102,6 +102,7 @@ mod:AddMiscLine(L.EqUneqLineDescription)
 mod:AddBoolOption("EqUneqWeapons", mod:IsDps(), nil, selfWarnMissingSet)
 mod:AddBoolOption("EqUneqTimer", false)
 mod:AddBoolOption("BlockWeapons", false)
+mod:AddBoolOption("AnnounceVengefulShadeTargets", true)
 
 local function selfSchedWarnMissingSet(self)
 	if self.Options.EqUneqWeapons and self:IsHeroic() and not self:IsEquipmentSetAvailable("pve") then
@@ -403,12 +404,39 @@ function mod:SPELL_INTERRUPT(args)
 		timerFrostboltCast:Cancel()
 	end
 end
+local excludeTargets = {}
 
+function mod:ShadeTargets()
+    local shadeTargets = {}
+    for i = 1, GetNumRaidMembers() do
+        if UnitThreatSituation("raid" .. i) and UnitThreatSituation("raid" .. i) >= 2 and not excludeTargets[UnitName("raid" .. i) or ""] then
+            shadeTargets[#shadeTargets + 1] = UnitName("raid" .. i)
+            if UnitIsUnit("player", "raid" .. i) then
+                -- self:PlaySound("surprise")
+                specWarnVengefulShade:Show()
+                yellVengefulShade:Yell()
+            end
+        end
+    end
+    if #shadeTargets > 0 then
+        warnVengefulShade:Show(table.concat(shadeTargets, "<, >"))
+    end
+    table.wipe(shadeTargets)
+    table.wipe(excludeTargets)
+end
 function mod:SPELL_SUMMON(args)
 	if args.spellId == 71426 and self:AntiSpam(5, 1) then -- Summon Vengeful Shade
 		warnSummonSpirit:Show()
 		timerSummonSpiritCD:Start()
 		soundWarnSpirit:Play("Interface\\AddOns\\DBM-Core\\sounds\\RaidAbilities\\spirits.mp3")
+		if self.Options.AnnounceVengefulShadeTargets then
+            for i = 1, GetNumRaidMembers() do
+                if UnitThreatSituation("raid" .. i) and UnitThreatSituation("raid" .. i) >= 2 then
+                    excludeTargets[UnitName("raid" .. i)] = true
+                end
+            end
+            self:ScheduleMethod(0.2, "ShadeTargets")
+        end
 	end
 end
 
