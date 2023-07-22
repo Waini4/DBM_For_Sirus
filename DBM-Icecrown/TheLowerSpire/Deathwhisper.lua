@@ -12,9 +12,9 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_REMOVED 70842 71289",
 	"SPELL_CAST_START 71420 72007 72501 72502 70900 70901 72499 72500 72497 72496",
 	"SPELL_CAST_SUCCESS 71289",
-	"SPELL_INTERRUPT",
+	"SPELL_INTERRUPT 71420 72007 72501 72502",
 	"SPELL_SUMMON 71426",
-	"SWING_DAMAGE",
+	-- "SWING_DAMAGE",
 	"CHAT_MSG_MONSTER_YELL",
 	"UNIT_TARGET"
 )
@@ -240,11 +240,18 @@ function mod:OnCombatStart(delay)
 		DBM.InfoFrame:SetHeader(shieldName)
 		DBM.InfoFrame:Show(1, "enemypower", 2)
 	end
+	self:RegisterShortTermEvents(
+		-- "SPELL_DAMAGE", -- unfiltered for DBM arrow
+		-- "SPELL_MISSED", -- unfiltered for DBM arrow
+		"SWING_DAMAGE"
+		-- "SWING_MISSED"
+	)
 end
 
 function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 36855, "Lady Deathwhisper",wipe)
 	DBM.BossHealth:Clear()
+	self:UnregisterShortTermEvents()
 	self:UnscheduleMethod("UnW")
 	self:UnscheduleMethod("EqW")
 	if self.Options.InfoFrame then
