@@ -39,6 +39,8 @@ local timerAchieve             = mod:NewAchievementTimer(205, 2937)
 
 mod:AddSetIconOption("SetIconOnLightBombTarget", 312941, true, true, { 7 })
 mod:AddSetIconOption("SetIconOnGravityBombTarget", 64234, true, true, { 8 })
+mod:AddNamePlateOption("LightBombPlate", 312941, true)
+mod:AddNamePlateOption("GravityBombPlate", 312943, true)
 mod:AddRangeFrameOption(12, nil, true)
 
 function mod:OnCombatStart(delay)
@@ -82,6 +84,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		warnLightBomb:Show(args.destName)
 		timerLightBomb:Start(args.destName)
+		if DBM:CanUseNameplateIcons() and self.Options.LightBombPlate then
+			DBM.Nameplate:Show(args.destGUID, 312941)
+		end
 	elseif args:IsSpellID(63024, 64234, 312590, 312943) then
 		if args:IsPlayer() then
 			specWarnGravityBomb:Show()
@@ -97,6 +102,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		warnGravityBomb:Show(args.destName)
 		timerGravityBomb:Start(args.destName)
+		if DBM:CanUseNameplateIcons() and self.Options.GravityBombPlate then
+			DBM.Nameplate:Show(args.destGUID, 312943)
+		end
 	elseif args:IsSpellID(312945, 63849) then
 		timerHeart:Start()
 	end
@@ -114,12 +122,18 @@ function mod:SPELL_AURA_REMOVED(args)
 		if args:IsPlayer() then
 			yellLightBombFades:Cancel()
 		end
+		if DBM:CanUseNameplateIcons() and self.Options.LightBombPlate then
+			DBM.Nameplate:Hide(args.destGUID, 312941)
+		end
 	elseif args:IsSpellID(63024, 64234, 312590, 312943) then -- Грави бомба
 		if args:IsPlayer() then
 			DBM.RangeCheck:Hide()
 		end
 		if self.Options.SetIconOnGravityBombTarget then
 			self:RemoveIcon(args.destName)
+		end
+		if DBM:CanUseNameplateIcons() and self.Options.GravityBombPlate then
+			DBM.Nameplate:Hide(args.destGUID, 312943)
 		end
 		if args:IsPlayer() then
 			yellGravityBombFades:Cancel()
