@@ -45,7 +45,6 @@ end)
 mod:AddBoolOption("FrameUpwards", false, nil, function()
 	mod:ChangeFrameOrientation()
 end)
-mod:AddButton(L.FrameGUIMoveMe, function() mod:CreateFrame() end, nil, 130, 20)
 
 -- Stage One
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(1))
@@ -151,6 +150,7 @@ local timerSoulShriekCD		= mod:NewCDTimer(12, 69242, nil, nil, nil, 1)
 mod:AddRangeFrameOption(8, 72133)
 mod:AddSetIconOption("RagingSpiritIcon", 69200, false, true, {7})
 mod:AddBoolOption("DefileArrow")
+mod:AddButton(L.FrameGUIMoveMe, function() mod:CreateFrame() end, nil, 130, 20)
 
 local warnedAchievement = false
 mod.vb.warned_preP2 = false
