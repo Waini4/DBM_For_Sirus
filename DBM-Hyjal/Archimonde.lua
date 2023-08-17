@@ -104,6 +104,9 @@ function mod:SPELL_CAST_START(args)
 		specWarnGeyser:Show(args.spellName)
 	elseif not warned_F1 and args:IsSpellID(319920) then
 		self:SetStage(2)
+		if DBM:CanUseNameplateIcons() and self.Options.HarassmentPlate then
+			DBM.Nameplate:Hide(args.destGUID, 319931)
+		end
 		markOfRockCD:Stop()
 		warned_F1 = true
 		warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(2))

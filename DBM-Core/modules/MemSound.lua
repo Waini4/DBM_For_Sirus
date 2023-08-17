@@ -59,4 +59,5 @@ soundRun = {
     "surprise",
     "tobecon",
     "tolik",
+    "sebi",
 }

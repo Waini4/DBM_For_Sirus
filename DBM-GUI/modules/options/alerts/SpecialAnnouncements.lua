@@ -159,6 +159,7 @@ local sounds = DBM_GUI:MixinSharedMedia3("sound", {
 	{ text = "PvP Flag",                value = "Sound\\Spells\\PVPFlagTaken.wav" },
 	{ text = "Void Reaver: Marked",     value = "Sound\\Creature\\VoidReaver\\TEMPEST_VoidRvr_Aggro01.wav" },
 	{ text = "Yogg Saron: Laugh",       value = "Sound\\Creature\\YoggSaron\\UR_YoggSaron_Slay01.wav" },
+	{ text = "Паша техник",       		value = "Interface\\AddOns\\DBM-Core\\sounds\\Meme\\sebi.ogg" },
 })
 
 
