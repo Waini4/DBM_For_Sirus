@@ -167,6 +167,7 @@ local specRoleTable = {
 		["SpellCaster"] = true,
 	},
 	[250] = {	--Blood DK
+		["Dps"] = true,
 		["Tank"] = true,
 		["Melee"] = true,
 		["Physical"] = true,

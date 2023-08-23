@@ -150,6 +150,7 @@ local timerSoulShriekCD		= mod:NewCDTimer(12, 69242, nil, nil, nil, 1)
 mod:AddRangeFrameOption(8, 72133)
 mod:AddSetIconOption("RagingSpiritIcon", 69200, false, true, {7})
 mod:AddBoolOption("DefileArrow")
+mod:AddNamePlateOption("Nameplate1", 70337, true)
 mod:AddButton(L.FrameGUIMoveMe, function() mod:CreateFrame() end, nil, 130, 20)
 
 local warnedAchievement = false
@@ -425,6 +426,9 @@ function mod:SPELL_CAST_SUCCESS(args)
 		if self.Options.NecroticPlagueIcon then
 			self:SetIcon(lastPlague, 5, 5)
 		end
+		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+			DBM.Nameplate:Show(args.destGUID, 70337)
+		end
 	elseif args:IsSpellID(69409, 73797, 73798, 73799) then -- Soul reaper (MT debuff)
 		timerSoulreaperCD:Cancel()
 		warnSoulreaper:Show(args.destName)
@@ -488,6 +492,9 @@ function mod:SPELL_DISPEL(args)
 	if type(extraSpellId) == "number" and (extraSpellId == 70337 or extraSpellId == 73912 or extraSpellId == 73913 or extraSpellId == 73914 or extraSpellId == 70338 or extraSpellId == 73785 or extraSpellId == 73786 or extraSpellId == 73787) then
 		if self.Options.NecroticPlagueIcon then
 			self:RemoveIcon(args.destName)
+		end
+		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+			DBM.Nameplate:Hide(args.destGUID, 70337)
 		end
 	end
 end

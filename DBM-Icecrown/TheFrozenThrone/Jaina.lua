@@ -14,7 +14,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS 306516",
 	"SPELL_AURA_APPLIED 306464 306495 306487 306502 306535 306523 306524 306455 306504",
 	"SPELL_AURA_APPLIED_DOSE 306464 306495 306487 306502 306535 306523 306524 306455 306504",
-	"SPELL_AURA_REMOVED 306464 306549"
+	"SPELL_AURA_REMOVED 306464 306549 306502 306487"
 	-- "CHAT_MSG_MONSTER_YELL"
 )
 local timerCombatStart		= mod:NewTimer(54, "TimerCombatStart", 2457, nil, nil, 6)
@@ -60,6 +60,8 @@ local berserkTimer			= mod:NewBerserkTimer(1802)
 mod:AddSetIconOption("SetIconOnExplosiveTargets", 306487, true, true, {3, 4, 5, 6, 7, 8})
 mod:AddBoolOption("AnnounceExplosive", false)
 mod:AddBoolOption("RangeFrame")
+mod:AddNamePlateOption("Nameplate1", 306487, true)
+mod:AddNamePlateOption("Nameplate2", 306502, true)
 --mod:AddBoolOption("Knop")
 
 local myRealm = select(4, DBM:GetMyPlayerInfo())
@@ -197,6 +199,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnExplosive:Show()
 		end
+		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+			DBM.Nameplate:Show(args.destGUID, 306487)
+		end
 		self:ScheduleMethod(0.1, "SetExplosiveIcons")
 	elseif args:IsSpellID(306502) then -- дикое пламя
 		if args:IsPlayer() then
@@ -214,6 +219,9 @@ function mod:SPELL_AURA_APPLIED(args)
 					specWarnWildFlameNear:Show()
 				end
 			end
+		end
+		if DBM:CanUseNameplateIcons() and self.Options.Nameplate2 then
+			DBM.Nameplate:Show(args.destGUID, 306502)
 		end
 		wildFlameTargets[#wildFlameTargets + 1] = args.destName
 		self:UnscheduleMethod("WildFlame")
@@ -268,6 +276,14 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 	elseif args:IsSpellID(306549) then
 		timerIceWrathCD:Start()
+	elseif args:IsSpellID(306502) then
+		if DBM:CanUseNameplateIcons() and self.Options.Nameplate2 then
+			DBM.Nameplate:Hide(args.destGUID, 306502)
+		end
+	elseif args:IsSpellID(306487) then
+		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+			DBM.Nameplate:Hide(args.destGUID, 306487)
+		end
 	end
 end
 
