@@ -26,7 +26,7 @@ local specWarnColdflame		= mod:NewSpecialWarningMove(69146, nil, nil, nil, 1, 2)
 local specWarnWhirlwind		= mod:NewSpecialWarningRun(69076, nil, nil, nil, 4, 2)
 
 local timerBoneSpike		= mod:NewCDTimer(18, 69057, nil, nil, nil, 1, nil, DBM_COMMON_L.DAMAGE_ICON)
-local timerWhirlwindCD		= mod:NewCDTimer(30, 69076, nil, nil, nil, 2, nil, DBM_COMMON_L.MYTHIC_ICON)
+local timerWhirlwindCD		= mod:NewCDTimer(90, 69076, nil, nil, nil, 2, nil, DBM_COMMON_L.MYTHIC_ICON)
 local timerWhirlwind		= mod:NewBuffActiveTimer(30, 69076, nil, nil, nil, 6)
 local timerBoned			= mod:NewAchievementTimer(8, 4610)
 local timerBoneSpikeUp		= mod:NewCastTimer(69057)
@@ -54,17 +54,21 @@ function mod:OnCombatEnd(wipe)
 	DBM.BossHealth:Clear()
 end
 function mod:SPELL_AURA_APPLIED(args)
-	if args.spellId == 69076 then						-- Bone Storm (Whirlwind)
-		specWarnWhirlwind:Show()
-		specWarnWhirlwind:Play("justrun")
-		if mod:IsDifficulty("heroic10") or mod:IsDifficulty("normal10") then
-		-- if self:IsHeroic() then
-			timerWhirlwind:Show(20)			--20 on heroic 10
-		else
-			timerWhirlwind:Show()			--30 on Norm
-			timerBoneSpike:Cancel()						-- He doesn't do Bone Spike Graveyard during Bone Storm on normal
-		end
-	end
+	if args:IsSpellID(69076) then                         
+        specWarnWhirlwind:Show()
+        timerWhirlwindCD:Start()
+        preWarnWhirlwind:Schedule(85)
+        if mod:IsDifficulty("heroic10", "heroic25") then
+            timerWhirlwind:Start(30)                        -- Approx 30seconds on heroic
+        elseif mod:IsDifficulty("normal25") then
+            timerWhirlwind:Start(30)
+            timerBoneSpike:Cancel()
+        else
+            timerWhirlwind:Start()                        -- Approx 20seconds on normal.
+            timerBoneSpike:Cancel()                        -- He doesn't do Bone Spike Graveyard during Bone Storm on normal
+        end
+    end
+
 end
 
 function mod:SPELL_AURA_REMOVED(args)
@@ -74,12 +78,10 @@ function mod:SPELL_AURA_REMOVED(args)
 			self:RemoveIcon(args.destName)
 		end
 	elseif spellId == 69076 then
-		timerWhirlwind:Cancel()
-		timerWhirlwindCD:Start()
-		preWarnWhirlwind:Schedule(25)
-		if self:IsNormal() then
-			timerBoneSpike:Start(15)					-- He will do Bone Spike Graveyard 15 seconds after whirlwind ends on normal
-		end
+		if mod:IsDifficulty("normal10") or mod:IsDifficulty("normal25") then
+            timerBoneSpike:Start(15)            -- He will do Bone Spike Graveyard 15 seconds after whirlwind ends on normal
+        end
+
 	end
 end
 
@@ -90,8 +92,6 @@ function mod:SPELL_CAST_START(args)
 		timerBoneSpikeUp:Start()
 		soundBoneSpike:Play("Interface\\AddOns\\DBM-Core\\sounds\\RaidAbilities\\Bone_Spike_cast.mp3")
 	elseif args.spellId == 69076 then
-		timerWhirlwindCD:Cancel()
-		timerWhirlwindStart:Start()
 		soundBoneStorm:Play("Interface\\AddOns\\DBM-Core\\sounds\\RaidAbilities\\Bone_Storm_cast.mp3")
 	end
 end
