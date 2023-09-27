@@ -11,7 +11,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED_DOSE 71204",
 	"SPELL_AURA_REMOVED 70842 71289",
 	"SPELL_CAST_START 71420 72007 72501 72502 70900 70901 72499 72500 72497 72496",
-	"SPELL_CAST_SUCCESS 71289",
+	"SPELL_CAST_SUCCESS 71289 72908 72905 72906 72907",
 	"SPELL_INTERRUPT 71420 72007 72501 72502",
 	"SPELL_SUMMON 71426",
 	-- "SWING_DAMAGE",
@@ -74,6 +74,7 @@ local timerFrostboltCast			= mod:NewCastTimer(2, 72007, nil, "HasInterrupt")
 local timerTouchInsignificance		= mod:NewTargetTimer(30, 71204, nil, "Tank|Healer", nil, 5)
 local yellVengefulShade             = mod:NewYell(71426)
 local soundWarnSpirit				= mod:NewSound(71426)
+local timerFrostboltVolleyCD        = mod:NewCDTimer(20, 72908)
 
 local dominateMindTargets = {}
 mod.vb.dominateMindIcon = 6
@@ -330,6 +331,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		warnPhase2:Show()
 		warnPhase2:Play("ptwo")
 		timerSummonSpiritCD:Start(12)
+		timerFrostboltVolleyCD:Start()
 		timerAdds:Cancel()
 		warnAddsSoon:Cancel()
 		self:Unschedule(addsTimer)
@@ -398,6 +400,8 @@ function mod:SPELL_CAST_SUCCESS(args)
 		else
 			self:Schedule(0.9, showDominateMindWarning, self)
 		end
+	elseif args.IsSpellID(72908,72905,72906,72907) then
+		timerFrostboltVolleyCD:Start()
 	end
 end
 local extraSpellIds = {
