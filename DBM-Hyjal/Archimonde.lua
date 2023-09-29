@@ -23,7 +23,7 @@ local warnHarassmentTarget    = mod:NewTargetAnnounce(319931, 1)
 local warnPhase               = mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2)
 
 local specWarnSoulAbduction   = mod:NewSpecialWarningMoveTo(319917, nil, nil, nil, 2, 4)
-local specWarnMarkofLegion    = mod:NewSpecialWarningYou(319907, nil, nil, nil, 4, 2)
+local specWarnMarkofLegion    = mod:NewSpecialWarningYou(319907, nil, nil, nil, 2, 2)
 local specWarnHarassment      = mod:NewSpecialWarningMoveAway(319931, nil, nil, nil, 4, 4)
 local specWarnGeyser          = mod:NewSpecialWarningGTFO(319922, nil, nil, nil, 1, 2)
 

@@ -62,6 +62,7 @@ mod:AddSetIconOption("SetIconOnFrostBeacon", 70126, true, false, {3, 4, 5, 6, 7,
 mod:AddSetIconOption("SetIconOnUnchainedMagic", 69762, true, false, {2, 3, 4, 5, 6, 7})
 mod:AddBoolOption("AnnounceFrostBeaconIcons", false, "announce", nil, nil, nil, 70126)
 mod:AddBoolOption("AssignWarnDirectionsCount", true, nil, nil, nil, nil, 70126)
+mod:AddNamePlateOption("FrostBeacon", 70126, true)
 
 -- Stage Two
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(2))
@@ -245,6 +246,9 @@ function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
 	if spellId == 70126 then
 		beaconTargets[#beaconTargets + 1] = args.destName
+		if DBM:CanUseNameplateIcons() and self.Options.FrostBeacon then
+			DBM.Nameplate:Show(args.destGUID, 70126)
+		end
 		if args:IsPlayer() then
 			playerBeaconed = true
 			-- Beacon Direction snippet
@@ -365,6 +369,9 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 	elseif spellId == 70126 then
 		self.vb.activeBeacons = false
+		if DBM:CanUseNameplateIcons() and self.Options.FrostBeacon then
+			DBM.Nameplate:Hide(args.destGUID, 70126)
+		end
 	elseif spellId == 70106 then	--Chilled to the bone (melee)
 		if args:IsPlayer() then
 			timerChilledtotheBone:Cancel()
