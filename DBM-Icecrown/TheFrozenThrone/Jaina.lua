@@ -199,7 +199,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnExplosive:Show()
 		end
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+		if self.Options.Nameplate1 then
 			DBM.Nameplate:Show(args.destGUID, 306487)
 		end
 		self:ScheduleMethod(0.1, "SetExplosiveIcons")
@@ -220,7 +220,7 @@ function mod:SPELL_AURA_APPLIED(args)
 				end
 			end
 		end
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate2 then
+		if self.Options.Nameplate2 then
 			DBM.Nameplate:Show(args.destGUID, 306502)
 		end
 		wildFlameTargets[#wildFlameTargets + 1] = args.destName
@@ -277,11 +277,11 @@ function mod:SPELL_AURA_REMOVED(args)
 	elseif args:IsSpellID(306549) then
 		timerIceWrathCD:Start()
 	elseif args:IsSpellID(306502) then
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate2 then
+		if self.Options.Nameplate2 then
 			DBM.Nameplate:Hide(args.destGUID, 306502)
 		end
 	elseif args:IsSpellID(306487) then
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+		if self.Options.Nameplate1 then
 			DBM.Nameplate:Hide(args.destGUID, 306487)
 		end
 	end

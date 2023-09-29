@@ -426,7 +426,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 		if self.Options.NecroticPlagueIcon then
 			self:SetIcon(lastPlague, 5, 5)
 		end
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+		if self.Options.Nameplate1 then
 			DBM.Nameplate:Show(args.destGUID, 70337)
 		end
 	elseif args:IsSpellID(69409, 73797, 73798, 73799) then -- Soul reaper (MT debuff)
@@ -493,7 +493,7 @@ function mod:SPELL_DISPEL(args)
 		if self.Options.NecroticPlagueIcon then
 			self:RemoveIcon(args.destName)
 		end
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+		if self.Options.Nameplate1 then
 			DBM.Nameplate:Hide(args.destGUID, 70337)
 		end
 	end

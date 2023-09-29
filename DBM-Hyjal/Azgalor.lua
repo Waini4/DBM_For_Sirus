@@ -121,7 +121,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnFlameofFilthYou:Show()
 			timerFlameofFilthBuff:Start()
 		end
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+		if self.Options.Nameplate1 then
 			DBM.Nameplate:Show(args.destGUID, 320374)
 		end
 		if self.Options.SetIconFlameTargets then
@@ -137,7 +137,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			self:SetIcon(args.destName, self.vb.MarkIcon)
 		end
 		warnMarkofRock:Show(args.destName)
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate2 then
+		if self.Options.Nameplate2 then
 			DBM.Nameplate:Show(args.destGUID, 319029)
 		end
 		if args:IsPlayer() then
@@ -159,7 +159,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconFlameTargets then
 			self:RemoveIcon(args.destName)
 		end
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate1 then
+		if self.Options.Nameplate1 then
 			DBM.Nameplate:Hide(args.destGUID, 320374)
 		end
 	elseif args:IsSpellID(319029) then
@@ -167,7 +167,7 @@ function mod:SPELL_AURA_REMOVED(args)
 			self:RemoveIcon(args.destName)
 			self.vb.MarkIcon = 8
 		end
-		if DBM:CanUseNameplateIcons() and self.Options.Nameplate2 then
+		if self.Options.Nameplate2 then
 			DBM.Nameplate:Hide(args.destGUID, 319029)
 		end
 		if args:IsPlayer() then

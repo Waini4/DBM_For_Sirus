@@ -84,7 +84,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		warnLightBomb:Show(args.destName)
 		timerLightBomb:Start(args.destName)
-		if DBM:CanUseNameplateIcons() and self.Options.LightBombPlate then
+		if self.Options.LightBombPlate then
 			DBM.Nameplate:Show(args.destGUID, 312941)
 		end
 	elseif args:IsSpellID(63024, 64234, 312590, 312943) then
@@ -102,7 +102,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		warnGravityBomb:Show(args.destName)
 		timerGravityBomb:Start(args.destName)
-		if DBM:CanUseNameplateIcons() and self.Options.GravityBombPlate then
+		if self.Options.GravityBombPlate then
 			DBM.Nameplate:Show(args.destGUID, 312943)
 		end
 	elseif args:IsSpellID(312945, 63849) then
@@ -122,7 +122,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		if args:IsPlayer() then
 			yellLightBombFades:Cancel()
 		end
-		if DBM:CanUseNameplateIcons() and self.Options.LightBombPlate then
+		if self.Options.LightBombPlate then
 			DBM.Nameplate:Hide(args.destGUID, 312941)
 		end
 	elseif args:IsSpellID(63024, 64234, 312590, 312943) then -- Грави бомба
@@ -132,7 +132,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnGravityBombTarget then
 			self:RemoveIcon(args.destName)
 		end
-		if DBM:CanUseNameplateIcons() and self.Options.GravityBombPlate then
+		if self.Options.GravityBombPlate then
 			DBM.Nameplate:Hide(args.destGUID, 312943)
 		end
 		if args:IsPlayer() then
