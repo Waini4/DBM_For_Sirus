@@ -45,6 +45,7 @@ local timerFusionPunchActive	= mod:NewTargetTimer(4,312769, nil, nil, nil, 5, ni
 local warnOverwhelmingPower		= mod:NewTargetAnnounce(312772, 2)
 local timerOverwhelmingPower	= mod:NewTargetTimer(25, 312772, nil, nil, nil, 5, nil, CL.TANK_ICON)
 local warnStaticDisruption		= mod:NewTargetAnnounce(312770, 3)
+local timerStaticDisruption		= mod:NewNextTimer(20, 312770, nil,nil, nil, 5)
 mod:AddSetIconOption("SetIconOnOverwhelmingPower", 61888, false, false, {8})
 mod:AddSetIconOption("SetIconOnStaticDisruption", 312770, false, false, {1, 2, 3, 4, 5, 6, 7})
 
@@ -178,6 +179,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			self:SetIcon(args.destName, disruptIcon, 20)
 			disruptIcon = disruptIcon - 1
 		end
+		timerStaticDisruption:Start()
 		self:Unschedule(warnStaticDisruptionTargets)
 		self:Schedule(0.3, warnStaticDisruptionTargets)
 	elseif args:IsSpellID(63483, 61915) then	-- LightningWhirl

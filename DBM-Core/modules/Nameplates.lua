@@ -19,20 +19,19 @@ local isElvUILoad = false
 if ElvUI then
 	E = unpack(ElvUI)
 	NP = E:GetModule("NamePlates")
-	isElvUILoad = true
+	if NP then
+		isElvUILoad = true
+	end
 end
 
 function DBM:CanUseNameplateIcons()
-	return isElvUILoad and DBM.Options.UseNPForElvUI or false
+	return (isElvUILoad and DBM.Options.UseNPForElvUI) or false
 end
-
-
--- if not isElvUILoad then return end
 
 -- globals
 DBM.Nameplate = {}
 -- locals
-local nameplateFrame = DBM.Nameplate
+
 local units = {}
 local num_units = 0
 
@@ -240,7 +239,7 @@ end
 -- end
 
 --isGUID: guid or name (bool)
-function nameplateFrame:Show(guid, spellId, duration, desaturate)
+function DBM.Nameplate:Show(guid, spellId, duration, desaturate)
 	if not DBM:CanUseNameplateIcons() then return end
 	-- if DBM.Options.DontShowNameplateIcons then return end
 	-- ignore player nameplate;
@@ -286,7 +285,7 @@ function nameplateFrame:Show(guid, spellId, duration, desaturate)
 end
 
 
-function nameplateFrame:Hide(guid, spellId, force)
+function DBM.Nameplate:Hide(guid, spellId, force)
 	if not DBM:CanUseNameplateIcons() then return end
 	local name, rank, currentTexture, castTime, minRange, maxRange, spellID = GetSpellInfo(spellId)
 	-- if self:SupportedNPMod() then
@@ -337,7 +336,7 @@ function nameplateFrame:Hide(guid, spellId, force)
 	end
 end
 
-function nameplateFrame:IsShown()
+function DBM.Nameplate:IsShown()
 	return DBMNameplateFrame and DBMNameplateFrame:IsShown()
 end
 

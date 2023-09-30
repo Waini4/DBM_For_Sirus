@@ -23,7 +23,7 @@ local warnHarassmentTarget    = mod:NewTargetAnnounce(319931, 1)
 local warnPhase               = mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2)
 
 local specWarnSoulAbduction   = mod:NewSpecialWarningMoveTo(319917, nil, nil, nil, 2, 4)
-local specWarnMarkofLegion    = mod:NewSpecialWarningYou(319907, nil, nil, nil, 4, 2)
+local specWarnMarkofLegion    = mod:NewSpecialWarningYou(319907, nil, nil, nil, 2, 2)
 local specWarnHarassment      = mod:NewSpecialWarningMoveAway(319931, nil, nil, nil, 4, 4)
 local specWarnGeyser          = mod:NewSpecialWarningGTFO(319922, nil, nil, nil, 1, 2)
 
@@ -104,7 +104,7 @@ function mod:SPELL_CAST_START(args)
 		specWarnGeyser:Show(args.spellName)
 	elseif not warned_F1 and args:IsSpellID(319920) then
 		self:SetStage(2)
-		if DBM:CanUseNameplateIcons() and self.Options.HarassmentPlate then
+		if self.Options.HarassmentPlate then
 			DBM.Nameplate:Hide(args.destGUID, 319931)
 		end
 		markOfRockCD:Stop()
@@ -116,7 +116,7 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(markOfLegDur.spellId) then
 		markOfLegDur:Start(args.destName)
-		if DBM:CanUseNameplateIcons() and self.Options.markOfLegPlate then
+		if self.Options.markOfLegPlate then
 			DBM.Nameplate:Show(args.destGUID, 319907)
 		end
 		if args:IsPlayer() then
@@ -138,7 +138,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnSoulAbduction:Show("Беги в воду!")
 		end
-		if DBM:CanUseNameplateIcons() and self.Options.SoulAbductionPlate then
+		if self.Options.SoulAbductionPlate then
 			DBM.Nameplate:Show(args.destGUID, 319917)
 		end
 		if self.Options.SetIconOnSos then
@@ -156,7 +156,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnHarassment:Show()
 			yellHaras:Yell()
 		end
-		if DBM:CanUseNameplateIcons() and self.Options.HarassmentPlate then
+		if self.Options.HarassmentPlate then
 			DBM.Nameplate:Show(args.destGUID, 319931)
 		end
 		table.wipe(HarasmTargets)
@@ -171,7 +171,7 @@ end
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(markOfLegCD.spellId) then
 		markOfLegCD:Start()
-		if DBM:CanUseNameplateIcons() and self.Options.markOfLegPlate then
+		if self.Options.markOfLegPlate then
 			DBM.Nameplate:Hide(args.destGUID, 319907)
 		end
 		if self.Options.SetIconOnLegTarget then
@@ -181,11 +181,11 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnSos then
 			self:RemoveIcon(args.destName)
 		end
-		if DBM:CanUseNameplateIcons() and self.Options.SoulAbductionPlate then
+		if self.Options.SoulAbductionPlate then
 			DBM.Nameplate:Hide(args.destGUID, 319917)
 		end
 	elseif args:IsSpellID(319931) then
-		if DBM:CanUseNameplateIcons() and self.Options.HarassmentPlate then
+		if self.Options.HarassmentPlate then
 			DBM.Nameplate:Hide(args.destGUID, 319931)
 		end
 		if args:IsPlayer() then
