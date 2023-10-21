@@ -13,6 +13,8 @@ mod:RegisterEventsInCombat(
 	"SPELL_DAMAGE 28375 54426"
 )
 
+local myRealm = select(4, DBM:GetMyPlayerInfo()) == 1
+
 --TODO, is it really necessary to use SPELL_DAMAGE here?
 --TODO, verify roar timer from naxx40.
 --TODO, verify decimate timer is actually accurate for wrath (it certainly wasn't for naxx 40)
@@ -25,14 +27,14 @@ local specWarnEnrage	= mod:NewSpecialWarningDispel(19451, "RemoveEnrage", nil, n
 
 local timerEnrage		= mod:NewBuffActiveTimer(8, 19451, nil, nil, nil, 5, nil, DBM_COMMON_L.ENRAGE_ICON)
 local timerRoarCD		= mod:NewCDTimer(19.4, 29685, nil, nil, nil, 2)--19.4-22.5
-local timerDecimate		= mod:NewCDTimer(104, 28374, nil, nil, nil, 2)
-local enrageTimer		= mod:NewBerserkTimer(420)
+local timerDecimate		= mod:NewCDTimer(myRealm and 90 or 104, 28374, nil, nil, nil, 2)
+local enrageTimer		= mod:NewBerserkTimer(myRealm and 600 or 480)
 
 function mod:OnCombatStart(delay)
 	timerRoarCD:Start(19.4 - delay)
-	enrageTimer:Start(420 - delay)
-	timerDecimate:Start(110 - delay)
-	warnDecimateSoon:Schedule(100 - delay)
+	enrageTimer:Start()
+	timerDecimate:Start()
+	warnDecimateSoon:Schedule(myRealm and 80 or 100)
 end
 
 function mod:SPELL_CAST_SUCCESS(args)

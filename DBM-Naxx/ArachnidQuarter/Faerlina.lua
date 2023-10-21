@@ -12,6 +12,8 @@ mod:RegisterEventsInCombat(
 	"UNIT_DIED"
 )
 
+local myRealm = select(4, DBM:GetMyPlayerInfo()) == 1
+
 local warnEmbraceActive		= mod:NewSpellAnnounce(28732, 1)
 local warnEmbraceExpire		= mod:NewAnnounce("WarningEmbraceExpire", 2, 28732, nil, nil, nil, 28732)
 local warnEmbraceExpired	= mod:NewFadesAnnounce(28732, 3)
@@ -28,7 +30,7 @@ local timerPoisonVolley		= mod:NewNextTimer(12, 54098, nil, nil, nil, 5)
 mod.vb.enraged = false
 
 function mod:OnCombatStart(delay)
-	timerEnrage:Start(-delay)
+	timerEnrage:Start(myRealm and 30 or 60)
 	warnEnrageSoon:Schedule(55 - delay)
 	timerPoisonVolley:Start(-delay)
 	self.vb.enraged = false

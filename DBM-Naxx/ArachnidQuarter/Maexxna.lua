@@ -10,6 +10,8 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS 29484 54125"
 )
 
+local myRealm = select(4, DBM:GetMyPlayerInfo()) == 1
+
 --TODO, verify nax40 web wrap timer
 local warnWebWrap		= mod:NewTargetNoFilterAnnounce(28622, 2)
 local warnWebSpraySoon	= mod:NewSoonAnnounce(29484, 1)
@@ -20,7 +22,7 @@ local warnSpidersNow	= mod:NewAnnounce("WarningSpidersNow", 4, 17332)
 local specWarnWebWrap	= mod:NewSpecialWarningSwitch(28622, "RangedDps", nil, nil, 1, 2)
 local yellWebWrap		= mod:NewYellMe(28622)
 
-local timerWebSpray		= mod:NewNextTimer(40, 29484, nil, nil, nil, 2)
+local timerWebSpray		= mod:NewNextTimer(myRealm and 15 or 40, 29484, nil, nil, nil, 2)
 local timerWebWrap		= mod:NewNextTimer(39.6, 28622, nil, "RangedDps|Healer", nil, 3)-- 39.593-40.885
 local timerSpider		= mod:NewTimer(30, "TimerSpider", 17332, nil, nil, 1)
 
@@ -66,7 +68,7 @@ end
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(29484, 54125) then -- Web Spray
 		warnWebSprayNow:Show()
-		warnWebSpraySoon:Schedule(35)
+		warnWebSpraySoon:Schedule(myRealm and 10 or 35)
 		timerWebSpray:Start()
 	end
 end
