@@ -42,7 +42,7 @@ private.DBMPrefix = DBMPrefix
 
 local L = DBM_CORE_L
 local CL = DBM_COMMON_L
-local GetAchievementInfo = C_AchievementManager._GetAchievementInfo
+-- local GetAchievementInfo = C_AchievementManager._GetAchievementInfo
 -------------------------------
 --  Globals/Default Options  --
 -------------------------------
@@ -81,9 +81,9 @@ local function currentFullDate()
 end
 
 DBM = {
-	Revision = parseCurseDate("2023" .. "09" .. "28" .. "19" .. "00" .. "00"),
+	Revision = parseCurseDate("2023" .. "10" .. "21" .. "23" .. "00" .. "00"),
 	DisplayVersion = GetAddOnMetadata(_addonname, "Version"), -- the string that is shown as version
-	ReleaseRevision = releaseDate(2023, 08, 23, 22, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	ReleaseRevision = releaseDate(2023, 10, 21, 23, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 
 local fakeBWVersion = 7558
@@ -11038,11 +11038,12 @@ do
 		end
 		local spellName, icon
 		local unparsedId = spellId
-		if timerType == "achievement" then
-			spellName = select(2, GetAchievementInfo(spellId))
-			icon = type(texture) == "number" and select(10, GetAchievementInfo(texture)) or texture or
-				spellId and select(10, GetAchievementInfo(spellId))
-		elseif timerType == "cdspecial" or timerType == "nextspecial" or timerType == "stage" then
+		-- if timerType == "achievement" then
+		-- 	spellName = select(2, GetAchievementInfo(spellId))
+		-- 	icon = type(texture) == "number" and select(10, GetAchievementInfo(texture)) or texture or
+		-- 		spellId and select(10, GetAchievementInfo(spellId))
+		-- elseif timerType == "cdspecial" or timerType == "nextspecial" or timerType == "stage" then
+		if timerType == "cdspecial" or timerType == "nextspecial" or timerType == "stage" then
 			icon = type(texture) == "number" and select(3, GetSpellInfo(texture)) or texture or
 				(type(spellId) == "number" and select(3, GetSpellInfo(spellId))) or
 				"Interface\\Icons\\Spell_Nature_WispSplode"
@@ -11240,11 +11241,11 @@ do
 		elseif spellId then
 			DBM:Debug(
 				"|cffff0000GetLocalizedTimerText fallback, this should not happen and is a bug. this fallback should be deleted if this message is never seen after async code is live|r")
-			if timerType == "achievement" then
-				spellName = select(2, GetAchievementInfo(spellId))
-			else
+			-- if timerType == "achievement" then
+			-- 	spellName = select(2, GetAchievementInfo(spellId))
+			-- else
 				spellName = DBM:GetSpellInfo(spellId)
-			end
+			-- end
 			--Name wasn't provided, but we succeeded in getting a name, generate one into object now for caching purposes
 			--This would really only happen if GetSpellInfo failed to return spell name on first attempt (which now happens in 9.0)
 			if spellName then

@@ -13,6 +13,8 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS 28240 28157 54364"
 )
 
+local myRealm = select(4, DBM:GetMyPlayerInfo()) == 1
+
 local warnInjection			= mod:NewTargetNoFilterAnnounce(28169, 2)
 local warnCloud				= mod:NewSpellAnnounce(28240, 2)
 local warnSlimeSprayNow		= mod:NewSpellAnnounce(54364, 2)
@@ -23,8 +25,8 @@ local yellInjection			= mod:NewYellMe(28169, nil, false)
 
 local timerInjection		= mod:NewTargetTimer(10, 28169, nil, nil, nil, 3)
 local timerCloud			= mod:NewNextTimer(15, 28240, nil, nil, nil, 5, nil, DBM_COMMON_L.TANK_ICON)
-local timerSlimeSpray		= mod:NewNextTimer(32, 54364, nil, nil, nil, 2)
-local enrageTimer			= mod:NewBerserkTimer(720)
+local timerSlimeSpray		= mod:NewNextTimer(myRealm and 20 or 32, 54364, nil, nil, nil, 2)
+local enrageTimer			= mod:NewBerserkTimer(myRealm and 600 or 720)
 
 mod:AddSetIconOption("SetIconOnInjectionTarget", 28169, false, false, {1, 2, 3, 4})
 
@@ -52,6 +54,7 @@ function mod:OnCombatStart(delay)
 	self.vb.slimeSprays = 1
 	table.wipe(mutateIcons)
 	enrageTimer:Start(-delay)
+	timerCloud:Start(myRealm and 14 or 15)
 	warnSlimeSpraySoon:Schedule(27)
 	timerSlimeSpray:Start()
 end
@@ -95,11 +98,11 @@ function mod:SPELL_CAST_SUCCESS(args)
 		warnSlimeSprayNow:Show()
 		self.vb.slimeSprays = self.vb.slimeSprays + 1
 		if self.vb.slimeSprays % 2 == 0 then -- every 2/4/6... spray short cd
-			warnSlimeSpraySoon:Schedule(26)
-			timerSlimeSpray:Start(31)
+			warnSlimeSpraySoon:Schedule(myRealm and 20 or 26)
+			timerSlimeSpray:Start(myRealm and 20 or 31)
 		else -- every 3/5/7... spray long cd
-			warnSlimeSpraySoon:Schedule(54)
-			timerSlimeSpray:Start(59)
+			warnSlimeSpraySoon:Schedule(myRealm and 20 or 54)
+			timerSlimeSpray:Start(myRealm and 20 or 59)
 		end
 	end
 end

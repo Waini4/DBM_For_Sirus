@@ -374,7 +374,7 @@ local function addOptions(mod, catpanel, v)
 		end
 	end
 end
-local GetAchievementInfo = C_AchievementManager._GetAchievementInfo
+-- local GetAchievementInfo = C_AchievementManager._GetAchievementInfo
 function DBM_GUI:CreateBossModPanel(mod)
 	if not mod.panel then
 		DBM:AddMsg("Couldn't create boss mod panel for " .. mod.localization.general.name)
@@ -434,9 +434,9 @@ function DBM_GUI:CreateBossModPanel(mod)
 					end
 				-- elseif spellID:find("^ej") then
 				-- 	title, desc, _, icon = DBM:EJ_GetSectionInfo(spellID:gsub("ej", ""))
-				elseif spellID:find("^at") then
-					spellID = spellID:gsub("at", "")
-					_, title, _, _, _, _, _, desc, _, icon = GetAchievementInfo(spellID)
+				-- elseif spellID:find("^at") then
+				-- 	spellID = spellID:gsub("at", "")
+				-- 	_, title, _, _, _, _, _, desc, _, icon = GetAchievementInfo(spellID)
 				else
 					title = spellID
 				end
