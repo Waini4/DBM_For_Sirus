@@ -19,7 +19,7 @@ mod:RegisterEventsInCombat(
 	"CHAT_MSG_RAID_BOSS_EMOTE",
 	"UNIT_HEALTH"
 )
-
+local serverNumber = select(4, DBM:GetMyPlayerInfo())
 -- Общее типо
 local berserkTimer					= mod:NewBerserkTimer(480)
 

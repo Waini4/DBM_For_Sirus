@@ -27,7 +27,7 @@
 ## X-DBM-Mod-Name-esES: JcJ
 ## X-DBM-Mod-Name-esMX: JcJ
 ## X-DBM-Mod-Sort: 1500
-## X-DBM-Mod-MapID: 462,444,402,541,483,513,861,611,916
+## X-DBM-Mod-MapID: 462,444,402,541,483,513,861,611,916,958
 ## X-DBM-Mod-MinCoreRevision: 20200524142133
 ## X-DBM-Mod-LoadZone: Blade's Edge Arena,Dalaran Arena,Nagrand Arena,Ruins of Lordaeron,The Ring of Valor
 ## X-DBM-Mod-LoadZone-deDE:Arena des Schergrats,Arena von Dalaran,Arena von Nagrand,Ruinen von Lordaeron,Der Ring der Ehre
@@ -54,6 +54,7 @@ localization.ru.lua
 Battlegrounds\Battlegrounds.lua
 Battlegrounds\Alterac.lua
 Battlegrounds\Arathi.lua
+Battlegrounds\ArathiWinter.lua
 Battlegrounds\Gilneas.lua
 Battlegrounds\EyeOfTheStorm.lua
 Battlegrounds\IsleOfConquest.lua
