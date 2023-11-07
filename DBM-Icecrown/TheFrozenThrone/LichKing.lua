@@ -390,7 +390,7 @@ function mod:SPELL_CAST_START(args)
 		warnDefileSoon:ScheduleVoice(27, "scatter")
 		timerDefileCD:Start()
 	elseif spellId == 73539 then -- Shadow Trap (Heroic)
-		if MyRealm == 5 then
+	--[[	if MyRealm == 5 then
 			self:ScheduleMethod(0.01, "TrapTarget")
 			self:ScheduleMethod(0.02, "TrapTarget")
 			self:ScheduleMethod(0.03, "TrapTarget")
@@ -401,9 +401,8 @@ function mod:SPELL_CAST_START(args)
 			self:ScheduleMethod(0.08, "TrapTarget")
 			self:ScheduleMethod(0.09, "TrapTarget")
 			self:ScheduleMethod(0.1, "TrapTarget")
-		else
-			self:BossTargetScanner(36597, "TrapTarget", 0.05, 1)
-		end
+		else]]
+			self:BossTargetScanner(36597, "TrapTarget", 0.01, 2)
 		timerTrapCD:Start()
 	elseif spellId == 73650 then -- Restore Soul (Heroic)
 		warnRestoreSoul:Show()
