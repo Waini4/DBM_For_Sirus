@@ -103,7 +103,7 @@ function mod:OnCombatStart(delay)
 	self:Schedule(60, Abyssals, self)
 	if self.Options.InfoFrame and not DBM.InfoFrame:IsShown() then
 		DBM.InfoFrame:SetHeader(MarkBuff)
-		DBM.InfoFrame:Show(10, "playerpower", 90, 0, 318819)
+		DBM.InfoFrame:Show(10, "playerpower", 70, 0, 318819)
 	end
 end
 

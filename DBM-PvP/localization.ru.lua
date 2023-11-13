@@ -112,6 +112,42 @@ L:SetOptionLocalization({
 	ShowAbBasesToWin		= "Отображать базы, которые необходимо захватить"
 })
 
+--------------------
+--  Arathi Basin Winter --
+--------------------
+L = DBM:GetModLocalization("z958")
+
+L:SetGeneralLocalization({
+	name = "Низина Арати Зима"
+})
+
+L:SetMiscLocalization({
+	BgStart60	= "Битва за Низину Арати начнется через минуту.",
+	BgStart30	= "Битва за Низину Арати начнется через 30 секунд.",
+	ZoneName	= "Зимняя Низина Арати",
+	ScoreExpr	= "(%d+)/1600",
+	Alliance	= "Альянса",
+	Horde		= "Орды",
+	WinBarText	= "Финал: %d - %d",
+	BasesToWin	= "Захвачено баз: %d",
+	Flag		= "Флаг"
+})
+
+L:SetTimerLocalization({
+	TimerStart	= "Битва начнется через",
+	TimerCap	= "%s"
+})
+
+L:SetOptionLocalization({
+	TimerStart				= "Отсчет времени до начала битвы",
+	TimerWin				= "Отсчет времени до победы",
+	TimerCap				= "Отсчет времени до захвата",
+	ShowAbEstimatedPoints	= "Отображать предполагаемые очки оставшиеся до победы/поражения",
+	ShowAbBasesToWin		= "Отображать базы, которые необходимо захватить"
+})
+
+
+
 ------------------------
 --  Eye of the Storm  --
 ------------------------

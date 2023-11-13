@@ -11,7 +11,7 @@ mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 74806 75954 75955 75956 74525 74526 74527 74528",
-	"SPELL_CAST_SUCCESS 74792 74562",
+	--"SPELL_CAST_SUCCESS 74792 74562",
 	"SPELL_AURA_APPLIED 74792 74562",
 	"SPELL_AURA_REMOVED 74792 74562",
 	"SPELL_DAMAGE 75952 75951 75950 75949 75948 75947 75483 75484 75485 75486",
@@ -19,7 +19,7 @@ mod:RegisterEventsInCombat(
 	"CHAT_MSG_RAID_BOSS_EMOTE",
 	"UNIT_HEALTH"
 )
-
+local serverNumber = select(4, DBM:GetMyPlayerInfo()) == 5
 -- Общее типо
 local berserkTimer					= mod:NewBerserkTimer(480)
 
@@ -59,8 +59,8 @@ local yellShadowconsumption			= mod:NewYell(74792)
 
 local timerShadowConsumptionCD		= mod:NewNextTimer(25, 74792, nil, nil, nil, 3)
 local timerTwilightCutterCast		= mod:NewCastTimer(5, 77844)
-local timerTwilightCutter			= mod:NewBuffActiveTimer(10, 77844, nil, nil, nil, 6)
-local timerTwilightCutterCD			= mod:NewNextTimer(20, 77844, nil, nil, nil, 6)
+local timerTwilightCutter			= mod:NewBuffActiveTimer(serverNumber and 9 or 10, 77844, nil, nil, nil, 6)
+local timerTwilightCutterCD			= mod:NewNextTimer(serverNumber and 15 or 20, 77844, nil, nil, nil, 6)
 local timerShadowBreathCD			= mod:NewCDTimer(19, 75954, nil, "Tank|Healer", nil, 5)--Same as debuff timers, same CD, can be merged into 1.
 
 mod:AddBoolOption("WhisperOnConsumption", false, "announce")
@@ -132,7 +132,7 @@ function mod:SPELL_CAST_START(args)
 	end
 end
 
-function mod:SPELL_CAST_SUCCESS(args)--We use spell cast success for debuff timers in case it gets resisted by a player we still get CD timer for next one
+--[[function mod:SPELL_CAST_SUCCESS(args)--We use spell cast success for debuff timers in case it gets resisted by a player we still get CD timer for next one
 	if args:IsSpellID(74792) then
 		if mod:IsDifficulty("heroic10") or mod:IsDifficulty("heroic25") then
 			timerShadowConsumptionCD:Start(20)
@@ -148,11 +148,8 @@ function mod:SPELL_CAST_SUCCESS(args)--We use spell cast success for debuff time
 		else
 			timerFieryConsumptionCD:Start()
 		end
-		if mod:LatencyCheck() then
-			self:SendSync("FieryCD")
-		end
 	end
-end
+end]]
 
 function mod:SPELL_AURA_APPLIED(args)--We don't use spell cast success for actual debuff on >player< warnings since it has a chance to be resisted.
 	if args:IsSpellID(74792) then
@@ -162,8 +159,14 @@ function mod:SPELL_AURA_APPLIED(args)--We don't use spell cast success for actua
 				SendChatMessage(L.WhisperConsumption, "WHISPER", "COMMON", args.destName)
 			end
 		end
+		if mod:IsDifficulty("heroic10") or mod:IsDifficulty("heroic25") then
+			timerShadowConsumptionCD:Start(20)
+		else
+			timerShadowConsumptionCD:Start()
+		end
 		if mod:LatencyCheck() then
 			self:SendSync("ShadowTarget", args.destName)
+			self:SendSync("ShadowCD")
 		end
 		if args:IsPlayer() then
 			specWarnShadowConsumption:Show()
@@ -174,6 +177,11 @@ function mod:SPELL_AURA_APPLIED(args)--We don't use spell cast success for actua
 			self:SetIcon(args.destName, 7)
 		end
 	elseif args:IsSpellID(74562) then
+		if mod:IsDifficulty("heroic10") or mod:IsDifficulty("heroic25") then
+			timerFieryConsumptionCD:Start(20)
+		else
+			timerFieryConsumptionCD:Start()
+		end
 		if not self.Options.AnnounceAlternatePhase then
 			warningFieryCombustion:Show(args.destName)
 			if DBM:GetRaidRank() >= 1 and self.Options.WhisperOnConsumption then
@@ -182,6 +190,7 @@ function mod:SPELL_AURA_APPLIED(args)--We don't use spell cast success for actua
 		end
 		if mod:LatencyCheck() then
 			self:SendSync("FieryTarget", args.destName)
+			self:SendSync("FieryCD")
 		end
 		if args:IsPlayer() then
 			specWarnFieryCombustion:Show()
@@ -281,7 +290,7 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg)
 			warningTwilightCutter:Show()
 			timerTwilightCutterCast:Start()
 			timerTwilightCutter:Schedule(5)--Delay it since it happens 5 seconds after the emote
-			timerTwilightCutterCD:Schedule(20)
+			timerTwilightCutterCD:Schedule(serverNumber and 15 or 20)
 		end
 		if mod:LatencyCheck() then
 			self:SendSync("TwilightCutter")
@@ -295,7 +304,7 @@ function mod:OnSync(msg, target)
 			warningTwilightCutter:Show()
 			timerTwilightCutterCast:Start()
 			timerTwilightCutter:Schedule(5)--Delay it since it happens 5 seconds after the emote
-			timerTwilightCutterCD:Schedule(20)
+			timerTwilightCutterCD:Schedule(serverNumber and 15 or 20)
 		end
 	elseif msg == "Meteor" then
 		if self.Options.AnnounceAlternatePhase then

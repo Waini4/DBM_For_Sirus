@@ -9,7 +9,7 @@ mod:RegisterCombat("combat", 99974, 15691)
 
 mod:RegisterEvents(
 	"SPELL_AURA_APPLIED 305309 305305",
-	"SPELL_AURA_REMOVED 305313 305309",
+	"SPELL_AURA_REMOVED 305313 305309 305305",
 	"SPELL_CAST_START 305296 305312",
 	-- "SPELL_INTERRUPT",
 	"CHAT_MSG_MONSTER_YELL"
@@ -77,6 +77,7 @@ local timerRunesBam       = mod:NewTimer(8, "TimerRunesBam", 305314, nil, nil, 2
 local unstableTargets = {}
 mod.vb.ter = true
 mod.vb.isinCombat = false
+mod:AddNamePlateOption("Nameplate1", 305305, true)
 
 
 function mod:OnCombatStart()
@@ -133,6 +134,10 @@ function mod:SPELL_AURA_REMOVED(args)
 				end
 			end
 		end
+	elseif args:IsSpellID(305305) then
+		if self.Options.Nameplate1 then
+			DBM.Nameplate:Hide(args.destGUID, 305305)
+		end
 	elseif args:IsSpellID(305309) then
 		for i = 1, 10 do
 			if UnitAura("raid" .. i, "Нестабильная энергия") then
@@ -149,6 +154,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerCondCD:Start()
 		if args:IsPlayer() then
 			specWarnCond:Show()
+		end
+		if self.Options.Nameplate1 then
+			DBM.Nameplate:Show(args.destGUID, 305305)
 		end
 	elseif args:IsSpellID(305309) then
 		for i = 1, 10 do
