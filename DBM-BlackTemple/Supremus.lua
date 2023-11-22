@@ -21,9 +21,8 @@ local berserkTimer		= mod:NewBerserkTimer(900)
 -- start fight 21 32 s=20
 local vozgoranie = mod:NewCDTimer(20, 322301) --SPELL_CAST_START (s)20 (1)36 (2)53
 local prizrachnii_obstrel = mod:NewCDTimer(20, 322297) --SPELL_CAST_START (s)20 (1)34 (2)51
-local potustoron_metka = mod:NewCDTimer(40, 322292) --SPELL_CAST_START (s)20 40 
+local potustoron_metka = mod:NewCDTimer(40, 322292) --SPELL_CAST_START (s)20 40
 local svyaz_udar = mod:NewCDTimer(20, 322294) --SPELL_CAST_START (s)0:20 (1)0:45 (2)1:04
-
 
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 322301 322297 322292 322294"
