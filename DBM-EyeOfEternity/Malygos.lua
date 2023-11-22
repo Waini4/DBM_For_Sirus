@@ -14,7 +14,7 @@ mod:RegisterEvents(
 
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 60936 57407",
-	"SPELL_CAST_START 57430 56505",
+	"SPELL_CAST_START 57430 56505 57428 57429",
 	"SPELL_CAST_SUCCESS 56105 57430",
 	"CHAT_MSG_RAID_BOSS_EMOTE",
 	"UNIT_SPELLCAST_SUCCEEDED boss1"
@@ -42,7 +42,7 @@ local timerVortexCD				= mod:NewNextTimer(60, 56105, nil, nil, nil, 2)
 local timerBreath				= mod:NewBuffActiveTimer(8, 56505, nil, nil, nil, 5) --lasts 5 seconds plus 3 sec cast.
 local timerBreathCD				= mod:NewCDTimer(59, 56505, nil, nil, nil, 2)
 local timerStaticFieldCD		= mod:NewCDTimer(12.5, 57430, nil, nil, nil, 3) --High 15-25 second variation
-local timerAchieve      		= mod:NewAchievementTimer(360, 1875)
+local timerAchieve      		= mod:NewAchievementTimer(360, "И ты не вечен")
 local timerIntermission 		= mod:NewPhaseTimer(22)
 --local timerAttackable 			= mod:NewTimer(24, "Malygos Wipes Debuffs") -- Not enough info nor locales on the code from previous contributor to know what this is intended for. Disabled for now
 
@@ -127,7 +127,7 @@ function mod:SPELL_CAST_START(args)
 		specWarnBreath:Play("findshield")
 		timerBreath:Start()
 		timerBreathCD:Start()
-	elseif spellId == 57430 then
+	elseif args:IsSpellID(57430) then
 		self:ScheduleMethod(0.1, "StaticFieldTarget")
 		--warnStaticField:Show()
 		timerStaticFieldCD:Start()

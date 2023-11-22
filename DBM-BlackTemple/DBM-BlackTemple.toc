@@ -13,13 +13,13 @@
 ## X-DBM-Mod: 1
 ## X-DBM-Mod-Type: RAID
 ## X-DBM-Mod-Category: BC
-## X-DBM-StatTypes: normal
+## X-DBM-StatTypes: normal,normal25
 ## X-DBM-Mod-MapID: 848
 ## X-DBM-Mod-Sort: 1002
 ## X-DBM-Mod-Name: Black Temple
 ## X-DBM-Mod-Name-zhCN: 黑暗神殿
 ## X-DBM-Mod-Name-ruRU: Черный храм
-## X-DBM-Mod-LoadZone-zhCN: 黑暗神殿
+## X-DBM-Mod-LoadZone-ruRU: Черный храм
 
 localization.en.lua
 localization.cn.lua
