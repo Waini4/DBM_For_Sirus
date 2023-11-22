@@ -71,16 +71,16 @@ function mod:OnCombatEnd()
 end
 
 function mod:SPELL_CAST_START(args)
-	if args:IsSpellID(kolossalnyi_udar.spellid) then
+	if args:IsSpellID(kolossalnyi_udar.spellId) then
 		kolossalnyi_udar:Start()
-	elseif args:IsSpellID(grohot_priliva.spellid) then
+	elseif args:IsSpellID(grohot_priliva.spellId) then
 		grohot_priliva:Start()
 	end
 end
 function mod:SPELL_CAST_SUCCESS(args)
-	if args:IsSpellID(vodyanoe_proklyatie.spellid) then
+	if args:IsSpellID(vodyanoe_proklyatie.spellId) then
 		vodyanoe_proklyatie:Start()
-	elseif args:IsSpellID(pronzayous_ship.spellid) then
+	elseif args:IsSpellID(pronzayous_ship.spellId) then
 		pronzayous_ship:Start()
 	end
 end

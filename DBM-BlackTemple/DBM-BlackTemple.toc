@@ -14,7 +14,7 @@
 ## X-DBM-Mod-Type: RAID
 ## X-DBM-Mod-Category: BC
 ## X-DBM-StatTypes: normal,normal25
-## X-DBM-Mod-MapID: 848
+## X-DBM-Mod-MapID: 797, 848
 ## X-DBM-Mod-Sort: 1002
 ## X-DBM-Mod-Name: Black Temple
 ## X-DBM-Mod-Name-zhCN: 黑暗神殿
