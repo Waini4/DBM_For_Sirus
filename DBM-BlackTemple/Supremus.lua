@@ -60,8 +60,9 @@ function mod:SPELL_CAST_START(args)
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	args:IsSpellID(322294)
-	warnStack:Show(args.destName, args.amount or 1)
+	if args:IsSpellID(322294) then
+		warnStack:Show(args.destName, args.amount or 1)
+	end
 end
 -- function mod:SPELL_CAST_SUCCESS(args)
 -- 	if args:IsSpellID(vodyanoe_proklyatie.spellid) then
