@@ -33,21 +33,21 @@ local warnNovaNormal			= mod:NewSoonAnnounce(30616, 4) -- Вспышка огн�
 local warnQuake					= mod:NewSpellAnnounce(30572, 3) -- сотрясение в нормале (откидывание)
 local warnDebris				= mod:NewSpellAnnounce(36449, 3) -- Потолок
 
-local specWarnNovaNormal        = mod:NewSpecialWarningSpell(30616, nil, nil, nil, 1, 2) 
+local specWarnNovaNormal 		= mod:NewSpecialWarningSpell(30616, nil, nil, nil, 1, 2) 
 
 mod:AddTimerLine(DBM_CORE_L.HEROIC_MODE)
 
 local timerNovaHeroicCD 		= mod:NewCDTimer(80, 305129, nil, nil, nil, 3) -- таймер вспышки скверны из героика
-local timerHandOfMagtCD			= mod:NewCDTimer(15, 305131, nil, "Spellcaster", nil, 3) -- печать магтеридона
+local timerHandOfMagtCD			= mod:NewCDTimer(15, 305131, nil, nil, nil, 3) -- печать магтеридона
 local timerDevastatingStrikeCD	= mod:NewCDTimer(15, 305134, nil, "Tank|Healer", nil, 1) -- сокрушительный удар
 local timerShatteredArmor		= mod:NewTargetTimer(30, 305135, nil, "Tank|Healer", nil, 1) -- дебаф сокрушнительного удара
 
 local warnNovaHeroic       		= mod:NewSoonAnnounce(305129, 10) -- Вспышка скверны
-local warnHandOfMagt        	= mod:NewYouAnnounce(305131, 1) -- Печать магтеридона
+local warnHandOfMagt        	= mod:NewSpellAnnounce(305131, 1) -- Печать магтеридона
 local warnDevastatingStrike 	= mod:NewSpellAnnounce(305134, 3, nil, "Tank|Healer") -- сокрушительный удар
 
 local specWarnNovaHeroic        = mod:NewSpecialWarningSpell(305129, nil, nil, nil, 1, 2) -- Вспышка скверны (скилл из героика)
-local specWarnHandOfMagt        = mod:NewSpecialWarningYou(305131, "Spellcaster", nil, nil, 1, 2) -- Печать магтеридона
+local specWarnHandOfMagt        = mod:NewSpecialWarningSpell(305131, nil, nil, nil, 1, 2) -- Печать магтеридона
 local specWarnDevastatingStrike = mod:NewSpecialWarningYou(305134, "Tank", nil, nil, nil, 1, 2) --Оповещение на экран о получении сокрушительного удара
 
 local berserkTimer				= mod:NewBerserkTimer(600)
@@ -118,13 +118,13 @@ function mod:OnCombatStart(delay)
 	if self:IsHeroic() then		
 		timerNovaHeroicCD:Start()
         timerHandOfMagtCD:Start()
-        timerDevastatingStrikeCD:Start()		
-	elseif self:IsNormal() then		
+        timerDevastatingStrikeCD:Start()
+	elseif self:IsNormal() then	
 		fakeQuake = false
 		self:Quake(30)
 		self:Nova()
 		berserkTimer:Start()
-	end	
+	end
 end
 
 function mod:CHAT_MSG_MONSTER_EMOTE(msg)
@@ -138,16 +138,16 @@ function mod:SPELL_CAST_START(args)
 		warnNovaHeroic:Show()
 		timerNovaHeroicCD:Start()
         specWarnNovaHeroic:Show(args.sourceName)
-        timerDevastatingStrikeCD:Start()      
+        timerDevastatingStrikeCD:Start()
     elseif args:IsSpellID(305134) then
         targetShattered = self:GetBossTarget(17257)
         warnDevastatingStrike:Show(targetShattered)
 		specWarnDevastatingStrike:Show(targetShattered)
-		timerDevastatingStrikeCD:Start()        
+		timerDevastatingStrikeCD:Start()
     elseif args:IsSpellID(30616) then
         specWarnNovaNormal:Show(args.sourceName)
         self:Nova()
-    end	
+    end
 end
 
 function mod:SPELL_DAMAGE(_, _, _, _, _, destFlags, spellId) -- слакер пишет в рейд что взорвал печать
@@ -212,25 +212,24 @@ function mod:UNIT_HEALTH(uId)
 	end
 end
 
-function mod:CHAT_MSG_MONSTER_YELL(msg) 
-	if msg == L.YellPhase2 then		
+function mod:CHAT_MSG_MONSTER_YELL(msg)
+	if msg == L.YellPhase2 then
         if self:IsNormal() then
 			warnDebris:Show()
 			timerDebris:Start()
 			self:ExtendNova(13)
 			self:ExtendQuake(13)
 		elseif self:IsHeroic() then
-			timerNovaHeroicCD:Cancel()	
+			timerNovaHeroicCD:Cancel()
 		end
 	end
 end
 
 function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 17257, "Magtheridon", wipe)	
+	DBM:FireCustomEvent("DBM_EncounterEnd", 17257, "Magtheridon", wipe)
 	self:UnscheduleMethod("Quake")
-	self:UnscheduleMethod("Nova")	
+	self:UnscheduleMethod("Nova")
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
-	end
-	timerPull:Cancel()
+	end	
 end
