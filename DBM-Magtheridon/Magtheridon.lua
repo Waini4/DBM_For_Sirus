@@ -33,7 +33,7 @@ local warnNovaNormal			= mod:NewSoonAnnounce(30616, 4) -- Вспышка огн�
 local warnQuake					= mod:NewSpellAnnounce(30572, 3) -- сотрясение в нормале (откидывание)
 local warnDebris				= mod:NewSpellAnnounce(36449, 3) -- Потолок
 
-local specWarnNovaNormal 		= mod:NewSpecialWarningSpell(30616, nil, nil, nil, 1, 2) 
+local specWarnNovaNormal 		= mod:NewSpecialWarningSpell(30616, nil, nil, nil, 1, 2)
 
 mod:AddTimerLine(DBM_CORE_L.HEROIC_MODE)
 
@@ -115,11 +115,11 @@ end
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 17257, "Magtheridon")
 	self:SetStage(1)
-	if self:IsHeroic() then		
+	if self:IsHeroic() then
 		timerNovaHeroicCD:Start()
         timerHandOfMagtCD:Start()
         timerDevastatingStrikeCD:Start()
-	elseif self:IsNormal() then	
+	elseif self:IsNormal() then
 		fakeQuake = false
 		self:Quake(30)
 		self:Nova()
@@ -231,5 +231,5 @@ function mod:OnCombatEnd(wipe)
 	self:UnscheduleMethod("Nova")
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
-	end	
+	end
 end
