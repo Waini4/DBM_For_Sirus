@@ -22,12 +22,14 @@ L:SetOptionLocalization{
 }
 
 L:SetMiscLocalization{
+	YellPullAcolytes 		= "Сдерживающая сила |3-1(%s) начинает ослабевать!",
 	YellPhase2 				= "Меня так просто не возьмешь! Пусть стены темницы содрогнутся... и падут!",
 	YellHand				= "Печать Магтеридона на мне!",
 	YellHandfail			= "Я взорвал Печать Магтеридона!",
 	YellPhase1				= "Я... свободен!",
 	Heroic					= "Героический режим",
 	Normal					= "Обычный режим",
+	Quake					= "Сотрясение",
 	General					= "Общее"
 }
 
