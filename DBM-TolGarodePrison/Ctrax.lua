@@ -54,6 +54,7 @@ mod.vb.CurseIcon = 7
 mod:AddInfoFrameOption(317579, false)
 mod:AddSetIconOption("SetIconOnMark", 317565, true, true, { 8 })
 mod:AddSetIconOption("SetIconOnCurse", 317594, true, true, { 4, 5, 6, 7 })
+mod:AddNamePlateOption("Nameplate1", 317594, true)
 
 local function CurseIcons(self)
 	table.wipe(CurseTargets)
@@ -149,6 +150,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.SetIconOnCurse and self.vb.CurseIcon > 0 then
 			self:SetIcon(args.destName, self.vb.CurseIcon)
 		end
+		if self.Options.Nameplate1 then
+			DBM.Nameplate:Show(args.destGUID, 317594)
+		end
 		warnAncientCurse:Show(args.destName)
 		timerAncientCurse:Start()
 		if args:IsPlayer() then
@@ -184,6 +188,9 @@ function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(317593, 317594, 317737, 317738) then --Древнее проклятие
 		if self.Options.SetIconOnCurse then
 			self:RemoveIcon(args.destName)
+		end
+		if self.Options.Nameplate1 then
+			DBM.Nameplate:Hide(args.destGUID, 317594)
 		end
 	elseif args:IsSpellID(317565) then --Метка Безликого
 		if self.Options.SetIconOnMark then

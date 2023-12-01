@@ -171,6 +171,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.SetIconOnDarkTargets and DarkIcons > 0 then
 			self:SetIcon(args.destName, DarkIcons)
 		end
+		if self.Options.Nameplate1 then
+			DBM.Nameplate:Show(args.destGUID, 317662)
+		end
 		if args:IsPlayer() then
 			specWarnDarkYou:Show()
 		elseif self:CheckNearby(20, args.destName) then
@@ -185,6 +188,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		FelTargets[#FelTargets + 1] = args.destName
 		if self.Options.SetIconOnFelTargets and FelIcons > 0 then
 			self:SetIcon(args.destName, FelIcons)
+		end
+		if self.Options.Nameplate2 then
+			DBM.Nameplate:Show(args.destGUID, 317666)
 		end
 		timerOverloadFel:Start(args.destName)
 		if args:IsPlayer() then
@@ -218,9 +224,15 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnDarkTargets then
 			self:RemoveIcon(args.destName)
 		end
+		if self.Options.Nameplate1 then
+			DBM.Nameplate:Hide(args.destGUID, 317662)
+		end
 	elseif args:IsSpellID(317666) then --Перегрузка метки Скверны
 		if self.Options.SetIconOnFelTargets then
 			self:RemoveIcon(args.destName)
+		end
+		if self.Options.Nameplate2 then
+			DBM.Nameplate:Hide(args.destGUID, 317666)
 		end
 	end
 end

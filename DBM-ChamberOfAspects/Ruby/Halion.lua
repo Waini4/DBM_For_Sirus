@@ -65,6 +65,8 @@ local timerShadowBreathCD			= mod:NewCDTimer(19, 75954, nil, "Tank|Healer", nil,
 
 mod:AddBoolOption("WhisperOnConsumption", false, "announce")
 mod:AddBoolOption("SetIconOnConsumption", true)
+mod:AddNamePlateOption("Nameplate1", 74562, true)
+mod:AddNamePlateOption("Nameplate2", 74792, true)
 
 -- Stage Three - Corporeality (50%)
 local warnPhase3					= mod:NewPhaseAnnounce(3)
@@ -173,6 +175,9 @@ function mod:SPELL_AURA_APPLIED(args)--We don't use spell cast success for actua
 			specWarnShadowConsumption:Play("runout")
 			yellShadowconsumption:Yell()
 		end
+		if self.Options.Nameplate1 then
+			DBM.Nameplate:Show(args.destGUID, 74792)
+		end
 		if self.Options.SetIconOnConsumption then
 			self:SetIcon(args.destName, 7)
 		end
@@ -181,6 +186,9 @@ function mod:SPELL_AURA_APPLIED(args)--We don't use spell cast success for actua
 			timerFieryConsumptionCD:Start(20)
 		else
 			timerFieryConsumptionCD:Start()
+		end
+		if self.Options.Nameplate2 then
+			DBM.Nameplate:Show(args.destGUID, 74562)
 		end
 		if not self.Options.AnnounceAlternatePhase then
 			warningFieryCombustion:Show(args.destName)
@@ -208,9 +216,15 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnConsumption then
 			self:RemoveIcon(args.destName)
 		end
+		if self.Options.Nameplate1 then
+			DBM.Nameplate:Hide(args.destGUID, 74792)
+		end
 	elseif args:IsSpellID(74562) then
 		if self.Options.SetIconOnConsumption then
 			self:RemoveIcon(args.destName)
+		end
+		if self.Options.Nameplate2 then
+			DBM.Nameplate:Hide(args.destGUID, 74562)
 		end
 	end
 end
