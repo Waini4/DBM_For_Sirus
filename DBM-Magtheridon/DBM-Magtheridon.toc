@@ -20,12 +20,6 @@
 ## X-DBM-Mod-LoadZone-zhCN: 玛瑟里顿的巢穴
 ## X-DBM-Mod-LoadZone-ruRU: Логово Магтеридона
 
-localization.en.lua
-# localization.de.lua
-# localization.es.lua
-# localization.tw.lua
-# localization.cn.lua
 localization.ru.lua
-# localization.kr.lua
 
 Magtheridon.lua
