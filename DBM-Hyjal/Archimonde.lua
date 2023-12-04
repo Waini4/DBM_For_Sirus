@@ -81,14 +81,6 @@ function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 17968, "Archimonde")
 end
 
--- local markOfRockDur				= mod:NewTargetTimer(30, 319910, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON)
--- local markOfLegDur				= mod:NewTargetTimer(30, 319907, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON)
--- 10/20 19:48:14.450  SPELL_AURA_APPLIED,0xF130004630000052,"Архимонд",0x10a48,0x000000000019EA63,"Аптеччка",0x512,319907,"Метка Легиона",0x20,DEBUFF
-
--- 10/20 19:48:44.783  SPELL_AURA_APPLIED,0x0000000000000000,nil,0x80000000,0x00000000000157DA,"Overdosen",0x514,319914,"Пламя Рока",0x4,DEBUFF
--- 10/20 19:48:44.783  SPELL_AURA_APPLIED,0x0000000000000000,nil,0x80000000,0x00000000000157DA,"Overdosen",0x514,319914,"Пламя Рока",0x4,DEBUFF
--- local timerFlameOfRockCD		= mod:NewCDTimer(41, 319914, nil, nil, nil, 2) -- пламя рока кд
-
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(perstCD.spellId) then
 		perstCD:Start()
@@ -163,11 +155,6 @@ function mod:SPELL_AURA_APPLIED(args)
 	end
 end
 
--- 10/20 19:48:46.750  SPELL_AURA_REMOVED,0xF130004630000052,"Архимонд",0xa48,0x00000000001A0EF0,"Antaras",0x514,319907,"Метка Легиона",0x20,DEBUFF
--- local markOfLegCD			 =  mod:NewCDTimer(22, 319907, nil, nil, nil, 2) -- метка легиона кд
-
--- 10/20 19:48:46.750  SPELL_AURA_REMOVED,0xF130004630000052,"Архимонд",0xa48,0x00000000001A0EF0,"Antaras",0x514,319907,"Метка Легиона",0x20,DEBUFF
--- local markOfLegVzrivCD		= mod:NewCDTimer(22, 319908, nil, nil, nil, 2) -- взрыв кд
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(markOfLegCD.spellId) then
 		markOfLegCD:Start()
@@ -194,29 +181,20 @@ function mod:SPELL_AURA_REMOVED(args)
 	end
 end
 
---40.5
--- SPELL_CAST_START,0xF130004630000052,"Архимонд",0x10a48,0x0000000000000000,nil,0x80000000,319906,"Перст гибели",0x20
--- 10/20 20:53:30.653  SPELL_CAST_START,0xF130004630000001,"Архимонд",0x10a48,0x0000000000000000,nil,0x80000000,319917,"Похищение души",0x20
 function mod:UNIT_HEALTH(uId)
 	local hp = self:GetUnitCreatureId(uId) == 17968 and DBM:GetBossHP(17968) or nil
 	if hp then
-		--[[if not warned_F1 and hp < 75 then
+		if not warned_F1 and hp < 70 then
 			self:SetStage(2)
 			warned_F1 = true
+			markOfRockCD:Stop()
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(2))
-			-- if self.Options.AnnounceVoicePhase then
-			-- 	DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\2phaseTrall.mp3")
-			-- end]]
+		end
 		if not warned_F2 and hp < 50 then
 			warned_F2 = true
 			self:SetStage(3)
 			ShadowGeyserCD:Start()
 			AddsTimer:Start(120)
-
-			-- 8.48 2 add 9.38
-			-- if self.Options.AnnounceVoicePhase then 7.22
-			-- 	DBM:PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\Ozvu4ka\\3phaseTrall.mp3")
-			-- end
 			warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(3))
 		end
 	end
