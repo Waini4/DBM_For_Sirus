@@ -12,8 +12,7 @@ mod:SetModelID(21212)
 mod:RegisterEventsInCombat(
 	"CHAT_MSG_MONSTER_YELL",
 	"SPELL_CAST_START",
-	"SPELL_CAST_SUCCESS",
-	"SPELL_AURA_APPLIED 38132 310636 310659",
+	"SPELL_AURA_APPLIED 310636 310659",
 	"UNIT_DIED",
 	"UNIT_TARGET",
 	"UNIT_HEALTH",
@@ -21,6 +20,12 @@ mod:RegisterEventsInCombat(
 	"CHAT_MSG_LOOT",
 	"SWING_DAMAGE",
 	"SPELL_SUMMON 310635 310657"
+)
+
+mod:RegisterEvents(
+	"SPELL_AURA_APPLIED 38132 38281",
+	"SPELL_CAST_SUCCESS 38280",
+	"SPELL_AURA_REMOVED 38281"
 )
 
 mod:AddTimerLine(L.Normal)
@@ -65,6 +70,8 @@ local timerElemCD               = mod:NewCDTimer(60, 310635, nil, nil, nil, 1) -
 
 mod:AddNamePlateOption("Nameplate1", 310636, true)
 mod:AddNamePlateOption("Nameplate2", 310659, true)
+mod:AddNamePlateOption("Nameplate3", 38280, true)
+
 mod:AddBoolOption("Elem")
 mod:AddSetIconOption("SetIconOnStaticTargets", 310636, true, true, { 7, 8 })
 mod:AddBoolOption("AnnounceStatic", false)
@@ -189,6 +196,10 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnCore:Show()
 		end
+	elseif args:IsSpellID(38281) then
+		if self.Options.Nameplate3 then
+			DBM.Nameplate:Show(args.destGUID, 38281)
+		end
 	elseif spellId == 310636 then -- хм заряд
 		if args:IsPlayer() then
 			specWarnStaticAnger:Show()
@@ -267,6 +278,10 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 		if (self.Options.Nameplate1 or self.Options.Nameplate2) then
 			DBM.Nameplate:Hide(args.destGUID, args.spellId)
+		end
+	elseif args:IsSpellID(38281) then
+		if self.Options.Nameplate3 then
+			DBM.Nameplate:Hide(args.destGUID, 38281)
 		end
 	end
 end
