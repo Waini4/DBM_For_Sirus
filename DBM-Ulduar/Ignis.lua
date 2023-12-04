@@ -26,7 +26,7 @@ local timerFlameJetsCooldown	= mod:NewCDCountTimer(42, 312727, nil, nil, nil, 2)
 local timerScorchCooldown		= mod:NewCDTimer(31, 312730, nil, nil, nil, 5)
 local timerScorchCast			= mod:NewCastTimer(3, 312730)
 local timerSlagPot				= mod:NewTargetTimer(10, 312731, nil, nil, nil, 3)
-local timerAchieve				= mod:NewAchievementTimer(240, 2930)
+--local timerAchieve				= mod:NewAchievementTimer(240, 2930)
 
 mod.vb.FlameJetsCount = 0
 
@@ -35,7 +35,7 @@ mod:AddSetIconOption("SlagPotIcon", 63477, false, false, {8})
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 33118, "Ignis the Furnace Master")
 	self.vb.FlameJetsCount = 0
-	timerAchieve:Start()
+	--timerAchieve:Start()
 	timerScorchCooldown:Start(12-delay)
 	timerFlameJetsCooldown:Start(29, self.vb.FlameJetsCount)
 end

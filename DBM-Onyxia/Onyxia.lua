@@ -19,8 +19,8 @@ mod:RegisterEventsInCombat(
 )
 mod:AddTimerLine(L.Achievement)
 
-local timerAchieve			= mod:NewAchievementTimer(300, 4405)
-local timerAchieveWhelps	= mod:NewAchievementTimer(10, 4406)
+--local timerAchieve			= mod:NewAchievementTimer(300, 4405)
+--local timerAchieveWhelps	= mod:NewAchievementTimer(10, 4406)
 
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(1)..": 100% – 66%")
 
@@ -62,7 +62,7 @@ function mod:OnCombatStart(delay)
 	self.vb.whelpsCount = 0
     self.vb.warned_preP2 = false
 	self.vb.warned_preP3 = false
-	timerAchieve:Start(-delay)
+	--timerAchieve:Start(-delay)
 	if self.Options.SoundWTF3 then
 		DBM:PlaySoundFile("Interface\\AddOns\\DBM-Onyxia\\sounds\\dps-very-very-slowly.ogg")
 		self:Schedule(20, DBM.PlaySoundFile, DBM, "Interface\\AddOns\\DBM-Onyxia\\sounds\\hit-it-like-you-mean-it.ogg")
@@ -163,7 +163,7 @@ function mod:OnSync(msg)
 		--timerBigAddCD:Start(65)
 --		preWarnDeepBreath:Schedule(72)	-- Pre-Warn Deep Breath
 		timerNextDeepBreath:Start(77) -- 67
-		timerAchieveWhelps:Start()
+		--timerAchieveWhelps:Start()
 		timerNextFlameBreath:Cancel()
 		self:ScheduleMethod(5, "Whelps")
 		if self.Options.SoundWTF3 then

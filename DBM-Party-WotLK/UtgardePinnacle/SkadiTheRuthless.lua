@@ -25,7 +25,7 @@ local specWarnWhirlwind		= mod:NewSpecialWarningRun(59322, nil, nil, 2, 4, 2)
 local timerPoisonDebuff		= mod:NewTargetTimer(12, 50258, nil, "Healer", 2, 5, nil, DBM_COMMON_L.HEALER_ICON)
 local timerPoisonCD			= mod:NewCDTimer(10, 59331, nil, "Healer", nil, 5)
 local timerWhirlwindCD		= mod:NewCDTimer(20, 59322, nil, nil, nil, 2)
-local timerAchieve			= mod:NewAchievementTimer(180, 1873)
+--local timerAchieve			= mod:NewAchievementTimer(180, 1873)
 
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(50255, 59331) then
@@ -55,7 +55,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		warnPhase2:Show()
 	elseif msg == L.CombatStart or msg:find(L.CombatStart) then
 		if not self:IsDifficulty("normal5") then
-			timerAchieve:Start()
+		--	timerAchieve:Start()
 		end
 	end
 end

@@ -30,7 +30,7 @@ local enrageTimer			= mod:NewBerserkTimer(475)
 local timerFlashFreeze		= mod:NewCastTimer(9, 312818, nil, nil, nil, 2)
 local timerFrozenBlows		= mod:NewBuffActiveTimer(20, 63512, nil, nil, nil, 5, nil, CL.TANK_ICON)
 local timerFlashFrCD		= mod:NewCDTimer(60, 312818, nil, nil, nil, 2)
-local timerAchieve			= mod:NewAchievementTimer(179, 3182)
+--local timerAchieve			= mod:NewAchievementTimer(179, 3182)
 
 mod:AddSetIconOption("SetIconOnStormCloud", 65123, true, false, {8, 7})
 
@@ -40,7 +40,7 @@ function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 32845, "Hodir")
 
 	enrageTimer:Start(-delay)
-	timerAchieve:Start()
+--	timerAchieve:Start()
 	timerFlashFrCD:Start(-delay)
 	self.vb.stormCloudIcon = 8
 end

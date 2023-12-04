@@ -20,7 +20,7 @@ mod:RegisterEventsInCombat(
 
 
 --Общие
-local timerAchieve = mod:NewAchievementTimer(420, 3013)
+--local timerAchieve = mod:NewAchievementTimer(420, 3013)
 local enrageTimer  = mod:NewBerserkTimer(900)
 
 --1 фаза
@@ -108,7 +108,7 @@ function mod:OnCombatStart(delay)
 	Guardians = 0
 	self:SetStage(1)
 	enrageTimer:Start()
-	timerAchieve:Start()
+	--timerAchieve:Start()
 	if self.Options.ShowSaraHealth and not self.Options.HealthFrame then
 		DBM.BossHealth:Show(L.name)
 	end

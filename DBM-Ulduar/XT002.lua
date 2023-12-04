@@ -35,7 +35,7 @@ local timerTympanicTantrumCD   = mod:NewCDTimer(35, 312939, nil, nil, nil, 2, ni
 local timerHeart               = mod:NewCastTimer(30, 312945, nil, nil, nil, 6, nil, CL.DAMAGE_ICON)
 local timerLightBomb           = mod:NewTargetTimer(9, 312941, nil, nil, nil, 3)
 local timerGravityBomb         = mod:NewTargetTimer(9, 312943, nil, nil, nil, 3)
-local timerAchieve             = mod:NewAchievementTimer(205, 2937)
+--local timerAchieve             = mod:NewAchievementTimer(205, 2937)
 
 mod:AddSetIconOption("SetIconOnLightBombTarget", 312941, true, true, { 7 })
 mod:AddSetIconOption("SetIconOnGravityBombTarget", 64234, true, true, { 8 })
@@ -46,7 +46,7 @@ mod:AddRangeFrameOption(12, nil, true)
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 33293, "XT-002 Deconstructor")
 	enrageTimer:Start(-delay)
-	timerAchieve:Start()
+	--timerAchieve:Start()
 	if self:IsDifficulty("normal10") then
 		timerTympanicTantrumCD:Start(35 - delay)
 	else

@@ -14,7 +14,7 @@ mod:RegisterEventsInCombat(
 local myRealm = select(4, DBM:GetMyPlayerInfo()) == 1
 
 local enrageTimer	= mod:NewBerserkTimer(myRealm and 480 or 360)
-local timerAchieve	= mod:NewAchievementTimer(180, 1857)
+--local timerAchieve	= mod:NewAchievementTimer(180, 1857)
 
 mod:AddBoolOption("WarningHateful", false, "announce", nil, nil, nil, 28308)
 
@@ -24,7 +24,7 @@ end
 
 function mod:OnCombatStart(delay)
 	enrageTimer:Start(-delay)
-	timerAchieve:Start(-delay)
+	--timerAchieve:Start(-delay)
 end
 
 function mod:SPELL_DAMAGE(_, _, _, _, destName, _, spellId, _, _, amount)

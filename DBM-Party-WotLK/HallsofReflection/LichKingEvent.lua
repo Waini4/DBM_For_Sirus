@@ -9,7 +9,7 @@ mod:RegisterEvents(
 
 local WarnWave		= mod:NewAnnounce("WarnWave", 2)
 
-local timerEscape	= mod:NewAchievementTimer(360, 4526, "achievementEscape")
+--local timerEscape	= mod:NewAchievementTimer(360, 4526, "achievementEscape")
 
 local addWaves = {
 	[1] = { "6 "..L.Ghoul, "1 "..L.WitchDoctor },
@@ -21,7 +21,7 @@ local addWaves = {
 function mod:SPELL_AURA_REMOVED(args)
 	if args.spellId == 69708 then			--Lich King has broken out of his iceblock, this starts actual event
 		if self:IsDifficulty("heroic5") then
-			timerEscape:Start()
+		--	timerEscape:Start()
 		end
 	end
 end

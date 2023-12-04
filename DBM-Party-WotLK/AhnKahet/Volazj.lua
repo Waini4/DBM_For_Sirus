@@ -22,11 +22,11 @@ local specWarnShadowCrashNear	= mod:NewSpecialWarningClose(60848, nil, nil, nil,
 local yellShadowCrash			= mod:NewYell(62660)
 
 local timerInsanity				= mod:NewCastTimer(5, 57496, nil, nil, nil, 6)
-local timerAchieve				= mod:NewAchievementTimer(120, 1862)
+--local timerAchieve				= mod:NewAchievementTimer(120, 1862)
 
 function mod:OnCombatStart(delay)
 	if not self:IsDifficulty("normal5") then
-		timerAchieve:Start(-delay)
+		--timerAchieve:Start(-delay)
 	end
 end
 

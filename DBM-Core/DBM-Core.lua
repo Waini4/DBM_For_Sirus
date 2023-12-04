@@ -11110,6 +11110,7 @@ do
 		obj:AddOption(optionDefault, optionName, colorType, countdown, spellId, timerType)
 		tinsert(self.timers, obj)
 		-- todo: move the string creation to the GUI with SetFormattedString...
+		--//TODO Разобратся с ачивами
 		if timerType == "achievement" then
 			self.localization.options[id] = L.AUTO_TIMER_OPTIONS[timerType]:format(
 				GetAchievementLink(spellId):gsub("%[(.+)%]",

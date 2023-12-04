@@ -73,7 +73,7 @@ local specWarnMysticBuffet		= mod:NewSpecialWarningStack(70128, false, 5, nil, n
 
 local timerMysticBuffet			= mod:NewBuffFadesTimer(8, 70128, nil, nil, nil, 5)
 local timerNextMysticBuffet		= mod:NewNextTimer(6, 70128, nil, nil, nil, 2)
-local timerMysticAchieve		= mod:NewAchievementTimer(30, 4620, "AchievementMystic")
+--local timerMysticAchieve		= mod:NewAchievementTimer(30, 4620, "AchievementMystic")
 
 mod:AddBoolOption("AchievementCheck", false, "announce", nil, nil, nil, 4620, "achievement")
 
@@ -340,7 +340,7 @@ function mod:SPELL_AURA_APPLIED(args)
 				warnMysticBuffet:Show(args.amount or 1)
 			end
 			if self.Options.AchievementCheck and not self.vb.warnedfailed and (args.amount or 1) < 2 then
-				timerMysticAchieve:Start()
+				--timerMysticAchieve:Start()
 			end
 		end
 		if args:IsDestTypePlayer() then
@@ -382,7 +382,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 	elseif args:IsSpellID(70127, 72528, 72529, 72530) then
 		if args:IsPlayer() then
-			timerMysticAchieve:Cancel()
+			--timerMysticAchieve:Cancel()
 			timerMysticBuffet:Cancel()
 		end
 	end

@@ -28,7 +28,7 @@ local specWarnWhirlwind		= mod:NewSpecialWarningRun(69076, nil, nil, nil, 4, 2)
 local timerBoneSpike		= mod:NewCDTimer(18, 69057, nil, nil, nil, 1, nil, DBM_COMMON_L.DAMAGE_ICON)
 local timerWhirlwindCD		= mod:NewCDTimer(30, 69076, nil, nil, nil, 2, nil, DBM_COMMON_L.MYTHIC_ICON)
 local timerWhirlwind		= mod:NewBuffActiveTimer(30, 69076, nil, nil, nil, 6)
-local timerBoned			= mod:NewAchievementTimer(8, 4610)
+--local timerBoned			= mod:NewAchievementTimer(8, 4610)
 local timerBoneSpikeUp		= mod:NewCastTimer(69057)
 local timerWhirlwindStart	= mod:NewCastTimer(69076)
 
@@ -107,7 +107,7 @@ mod.SPELL_PERIODIC_MISSED = mod.SPELL_PERIODIC_DAMAGE
 function mod:SPELL_SUMMON(args)
 	if args:IsSpellID(69062, 72669, 72670) then			-- Impale
 		warnImpale:CombinedShow(0.3, args.sourceName)
-		timerBoned:Start()
+		--timerBoned:Start()
 		if self.Options.SetIconOnImpale then
 			self:SetIcon(args.sourceName, self.vb.impaleIcon)
 		end

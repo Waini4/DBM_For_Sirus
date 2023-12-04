@@ -42,7 +42,7 @@ local timerSpecial    = mod:NewTimer(45, "TimerSpecialSpell", "Interface\\Icons\
 local timerHeal       = mod:NewCastTimer(15, 65875, nil, nil, nil, 4, nil, DBM_COMMON_L.INTERRUPT_ICON)
 local timerLightTouch = mod:NewTargetTimer(20, 65950, nil, false, 2, 3)
 local timerDarkTouch  = mod:NewTargetTimer(20, 66001, nil, false, 2, 3)
-local timerAchieve    = mod:NewAchievementTimer(180, 3815)
+--local timerAchieve    = mod:NewAchievementTimer(180, 3815)
 
 local timerAnubRoleplay = mod:NewTimer(47.5, "TimerAnubRoleplay", 43827, nil, nil, 6)
 
@@ -59,7 +59,7 @@ function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 34497, "The Twin Val'kyr")
 	timerSpecial:Start(-delay)
 	warnSpecial:Schedule(40 - delay)
-	timerAchieve:Start(-delay)
+	--timerAchieve:Start(-delay)
 	if self:IsHeroic() then
 		enrageTimer:Start(360 - delay)
 	else
