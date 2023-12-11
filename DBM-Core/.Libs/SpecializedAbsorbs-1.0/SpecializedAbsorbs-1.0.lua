@@ -3,7 +3,7 @@
 ------------------------------------------------------------------------
 local _,ns = ...
 local Compat = ns.Compat
-local MAJOR, MINOR = "SpecializedAbsorbs-1.0", 11
+local MAJOR, MINOR = "SpecializedAbsorbs-1.0", 14
 local lib, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 local Core
@@ -1690,7 +1690,8 @@ local lastPalAbsorbTable = {}
 -- lastPalAbsorbTable[guid][2] = count
 local palPokrovBuff = {}
 local palT4GodsHandBuff = {}
-local function Tanks_CLEU(self,...)
+
+local function ALL_CLEU(self,...)
 	-- local whoGUID = ...
 	-- time event whoguid whoname whoflag targetguid targetname targetflag spellid spellname
 	local _, time2, subevent3, whoguid4, _, _, _, _, _,spellid10, spellname11, _, spelldmg13 = ...
@@ -1723,20 +1724,20 @@ local function Tanks_CLEU(self,...)
 		-- UnitStatsTable[playerid][8] = GetShieldBlock()
 		-- UnitStatsTable[playerid][9] = GetBlockChance()
 
-		local blockValue = UnitStatsIndex(whoguid4,8) > 0 and UnitStatsIndex(whoguid4, 8) or 3800
-		local blockChance = UnitStatsIndex(whoguid4,9) > 0 and UnitStatsIndex(whoguid4, 9) or 35
-		local parryChance = UnitStatsIndex(whoguid4,10) > 0 and UnitStatsIndex(whoguid4, 10) or 30
+		local blockValue = UnitStatsIndex(whoguid4,8)>0 and UnitStatsIndex(whoguid4,8) or 3800
+		local blockChance = UnitStatsIndex(whoguid4, 9) > 0 and UnitStatsIndex(whoguid4, 9) or 35
+		local parryChance = UnitStatsIndex(whoguid4, 10) > 0 and UnitStatsIndex(whoguid4, 10) or 15
 		if (whoguid4 == PlayerGUID) then
 			blockValue = GetShieldBlock()
 			blockChance = GetBlockChance()
 			parryChance = GetParryChance()
 		end
+
 		local absorb = (((blockChance-5)/100+(parryChance-12)/100)*4)* blockValue
 		if absorb > 32500 then
 			absorb = 32500
 		end
 		lastPalAbsorbTable[whoguid4][2] = absorb
-
 	elseif csarm[subevent3] and spellid10 == 308125 then
 		lastDkAbsorbTable[whoguid4] = 0
 	elseif sh[subevent3] then
@@ -1746,15 +1747,13 @@ local function Tanks_CLEU(self,...)
 		elseif (spellid10 == 48785) then -- ttg 8% вспышка света
 			local absorb = spelldmg13 * 0.08
 			palPokrovBuff[whoguid4] = absorb
-		elseif (spellid10 == 48821) then
-			palT4GodsHandBuff[whoguid4] = spelldmg13 * 0.75
+		elseif (spellid10 == 48821) then -- hpal 15%
+			palT4GodsHandBuff[whoguid4] = spelldmg13 * 0.15
 		end
 	end
-	-- end
-
 end
 
-TankCLEUFrame:SetScript("OnEvent",Tanks_CLEU)
+TankCLEUFrame:SetScript("OnEvent",ALL_CLEU)
 
 
 local function deathknight_T52BloodTankOnCreate(...)
@@ -1982,9 +1981,7 @@ local function paladin_T5TankOnCreate(srcGUID, srcName, dstGUID, dstName, spelli
 end
 
 
--- t6PalTable = {
--- 	[guid]= bool
--- }
+
 local t6PalValue = 0
 -- The base value is always 500
 local function paladin_SacredShield_Create(srcGUID, srcName, dstGUID, dstName, spellid, destEffects)
@@ -2024,6 +2021,28 @@ end
 
 local function paladin_T4GodsHand(srcGUID, srcName, dstGUID, dstName, spellid, destEffects)
 	return palT4GodsHandBuff[srcGUID], 1.0
+end
+
+local function paladin_2T4proto(srcGUID, srcName, dstGUID, dstName, spellid, destEffects)
+	for i = 1,40 do
+		local unitID = "raid"..i
+		if UnitGUID(unitID) == srcGUID then
+			return UnitHealthMax(unitID) * 0.12, 1.0
+		end
+	end
+	for i=1,5 do
+		local unitID = "party"..i
+		if UnitGUID(unitID) == srcGUID then
+			return UnitHealthMax(unitID) * 0.12, 1.0
+		end
+	end
+	if UnitGUID("target") == srcGUID then
+		return UnitHealthMax("target") * 0.12, 1.0
+	end
+	if UnitGUID("player") == srcGUID then
+		return UnitHealthMax("player") * 0.12, 1.0
+	end
+	-- return palT4GodsHandBuff[srcGUID], 1.0
 end
 
 function OnEnableClass.PALADIN()
@@ -2559,7 +2578,7 @@ Core.Effects = {
 	[43019] = mage_ManaShield_Entry, --  Mana shield (rank 8)
 	[43020] = mage_ManaShield_Entry, --  Mana shield (rank 9)
 	[58597] = {1.0, 6, paladin_SacredShield_Create, generic_Hit}, -- Sacred Shield
-	[319166] = {1.0, 10, paladin_T4GodsHand, generic_Hit}, -- Paladin 4T4 God's Hand
+
 	[17] = priest_PWS_Entry, -- Power Word: Shield (rank 1)
 	[592] = priest_PWS_Entry, -- Power Word: Shield (rank 2)
 	[600] = priest_PWS_Entry, -- Power Word: Shield (rank 3)
@@ -2662,7 +2681,9 @@ Core.Effects = {
 	[65684] = {1.0, 0, function() return 0, 0.0 end, nil}, -- Twin Val'kyr: Dark Essence
 
 	[55277] =  {1.0, 15, function() return 1084*4, 1.0 end, generic_Hit}, --shaman totem pvp
-	--t4 priest dcp
+	--t4 abilities
+	[319166] = {1.0, 30, paladin_T4GodsHand, generic_Hit}, -- Paladin 2T4 God's Hand
+	[321447] = {1.0, 10, paladin_2T4proto, generic_Hit}, -- Paladin 2T4 God's Hand
 	[305082] = priest_PWS_EntryT4, -- Power Word: Shield (rank 14) t4 increase
 	--t5 abilities
 	[308143] = priest_PWS_Entry, -- Power Word: Shield (rank 15)
@@ -2680,6 +2701,8 @@ Core.Effects = {
 
 	[317293] = {1.0, 10, function() return 1700, 1.0 end, generic_Hit}, -- статуэтка бронзового дракона
 	[315529] = {1.0, 10, function() return 3660, 1.0 end, generic_Hit}, -- расколотое солнце
+	[75477] = {1.0, 10, function() return 49207, 1.0 end, generic_Hit}, -- чешка об
+	[75480] = {1.0, 10, function() return 66420, 1.0 end, generic_Hit}, -- чешка хм
 
 	[317911] = {1.0, 10, function() return 722, 1.0 end, generic_Hit}, -- духовный барьер
 	[319738] = {1.0, 6, paladin_TTG_Absorb, generic_Hit}, -- enchant ttg 4
