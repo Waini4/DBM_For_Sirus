@@ -118,9 +118,6 @@ local CombatTriggersOnAuraRemoved
 -- Shortcut to Core.UnitStats
 local UnitStatsTable
 
-local RoundToSignificantDigits
-local UnitTokenFromGUID
-
 local UNIT_STAT_VALUE = {
 	CLASS = 1,
 	AP = 2,

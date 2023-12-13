@@ -42218,4 +42218,6 @@ globals = {
 	"ClassTrainerSkillRequirements",
 	"ClassTrainerSubSkillName",
 	"ClassTrainerTrainButtonText",
+	"RoundToSignificantDigits",
+	"UnitTokenFromGUID"
 }
