@@ -128,7 +128,7 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:CHAT_MSG_MONSTER_EMOTE(msg)
-    if msg == L.YellPullAcolytes then
+    if msg == L.YellPullAcolytes or msg:find(L.YellPullAcolytes) then
 		timerPull:Start()
 	end
 end

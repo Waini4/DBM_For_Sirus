@@ -33,7 +33,7 @@ local specWarnKick			= mod:NewSpecialWarningInterrupt(322301, "HasInterrupt", ni
 local vozgoranie			= mod:NewCDTimer(17, 322301) --SPELL_CAST_START (s)20 (1)36 (2)53
 local prizrachnii_obstrel	= mod:NewCDTimer(17, 322297, nil, nil, nil, 2, nil, DBM_COMMON_L.DEADLY_ICON)
 local potustoron_metka		= mod:NewCDTimer(20, 322292, nil, nil, nil, 2, nil, DBM_COMMON_L.IMPORTANT_ICON) --SPELL_CAST_START (s)20 40
-local svyaz_udar			= mod:NewCDTimer(20, 322294, nil, nil, nil, 2, nil, DBM_COMMON_L.TANK_ICON) --SPELL_CAST_START (s)0:20 (1)0:45 (2)1:04
+local svyaz_udar			= mod:NewCDTimer(25, 322294, nil, nil, nil, 2, nil, DBM_COMMON_L.TANK_ICON) --SPELL_CAST_START (s)0:20 (1)0:45 (2)1:04
 
 function mod:OnCombatStart(delay)
 	berserkTimer:Start(-delay)
