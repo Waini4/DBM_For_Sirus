@@ -13,11 +13,9 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 321595 321598",
 	"SPELL_CAST_SUCCESS 321599 321596",
 	"SPELL_AURA_APPLIED 321599",
-	"SPELL_AURA_REMOVED 321599"
+	"SPELL_AURA_REMOVED 321599",
+	"UNIT_HEALTH"
 )
-
--- ПЕРЕДАЮ ПРИВЕТ РАЗРАБАМ И СПАСИБО ЗА СДВИГИ КАСТОВ КАЖДЫЕ 15%. 5 звезд водителю :)
-
 
 -- local warnShield		= mod:NewSpellAnnounce(39872, 4)
 -- local warnShieldSoon	= mod:NewSoonAnnounce(39872, 10, 3)
@@ -29,14 +27,28 @@ mod:RegisterEventsInCombat(
 -- local timerShield		= mod:NewCDTimer(56, 39872, nil, nil, nil, 5)
 
 local warnCurse				= mod:NewTargetAnnounce(321599, 5)
+local specudar           	= mod:NewSpecialWarningCount(321598, "Melee", nil, nil, 2, 2)
 local specWarnCurse			= mod:NewSpecialWarningDispel(321599, "RemoveCurse", nil, nil, 1, 5)
 
 local berserkTimer			= mod:NewBerserkTimer(480)
 
-local kolossalnyi_udar		= mod:NewCDTimer(9, 321598) --SPELL_CAST_START
-local grohot_priliva		= mod:NewCDTimer(25, 321595) --SPELL_CAST_START
-local vodyanoe_proklyatie	= mod:NewCDTimer(30, 321599) --SPELL_CAST_SUCCESS
-local pronzayous_ship		= mod:NewCDTimer(19, 321596) --SPELL_CAST_SUCCESS
+local kolossalnyi_udar		= mod:NewCDCountTimer(9, 321598, nil, nil, nil, 1) --SPELL_CAST_START
+local grohot_priliva		= mod:NewCDCountTimer(25, 321595, nil, nil, nil, 5) --SPELL_CAST_START
+local vodyanoe_proklyatie	= mod:NewCDCountTimer(30, 321599, nil, nil, nil, 2) --SPELL_CAST_SUCCESS
+local pronzayous_ship		= mod:NewCDCountTimer(19, 321596, nil, nil, nil, 5) --SPELL_CAST_SUCCESS
+
+mod.vb.MiniStage = 0
+mod.vb.Urad = 0
+mod.vb.GrohotCounter = 0
+--local CurseStages = {}
+--local PrilivStages = {}
+--local ShipStages = {19, 20}
+local warned_F1 = false
+local warned_F2 = false
+local warned_F3 = false
+local warned_F4 = false
+local warned_F5 = false
+local warned_F6 = false
 
 -- mod:AddSetIconOption("SpineIcon", 39837)
 mod:AddInfoFrameOption(39878, true)
@@ -51,18 +63,28 @@ local function CurseIcons(self)
 end
 
 function mod:OnCombatStart(delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 22887, "High Warlord Naj'entus")
 	berserkTimer:Start(-delay)
 	kolossalnyi_udar:Start(5.5)
 	grohot_priliva:Start(21)
 	vodyanoe_proklyatie:Start(30)
 	pronzayous_ship:Start(19)
-
+	self.vb.MiniStage = 0
+	self.vb.Urad = 0
+	self.vb.GrohotCounter = 0
+	warned_F1 = false
+	warned_F2 = false
+	warned_F3 = false
+	warned_F4 = false
+	warned_F5 = false
+	warned_F6 = false
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Show(8)
 	end
 end
 
-function mod:OnCombatEnd()
+function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 22887, "High Warlord Naj'entus",wipe)
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end
@@ -73,9 +95,27 @@ end
 
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(kolossalnyi_udar.spellId) then
-		kolossalnyi_udar:Start()
+	--	self.vb.Urad = self.vb.Urad + 1
+	if self.vb.MiniStage ~= self.vb.Urad then
+		if self.vb.Urad ~= 0 then
+			specudar:Show(self.vb.Urad .. " из ".. self.vb.MiniStage)
+		end
+		kolossalnyi_udar:Start(3.7, self.vb.Urad)
+		self.vb.Urad = self.vb.Urad + 1
+		else
+			if self.vb.MiniStage >= 1 then
+				specudar:Show(self.vb.Urad .. " из ".. self.vb.MiniStage)
+			end
+		self.vb.Urad = 0
+		kolossalnyi_udar:Start(nil, self.vb.Urad)
+	end
 	elseif args:IsSpellID(grohot_priliva.spellId) then
-		grohot_priliva:Start()
+		--local timer = PrilivStages[self.vb.GrohotCounter]
+		if self.vb.MiniStage == self.vb.GrohotCounter then
+			grohot_priliva:Start()
+		else
+			grohot_priliva:Start(nil, self.vb.GrohotCounter)
+		end
 	end
 end
 function mod:SPELL_CAST_SUCCESS(args)
@@ -104,5 +144,31 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconCurseTargets then
 			self:RemoveIcon(args.destName)
 		end
+	end
+end
+
+function mod:UNIT_HEALTH(uId)
+	local hp = self:GetUnitCreatureId(uId) == 22887 and DBM:GetBossHP(22887) or nil
+	if hp then -- or hp < 82 or hp < 72 or hp < 62 or hp < 52 or hp < 42 or hp < 32 or hp < 22 or hp < 12 then
+		if not warned_F1 and hp < 85 then
+			warned_F1 = true
+			self.vb.MiniStage = self.vb.MiniStage + 1
+		elseif not warned_F2 and hp < 70 then
+			warned_F2 = true
+			self.vb.MiniStage = self.vb.MiniStage + 1
+		elseif not warned_F3 and hp < 55 then
+			warned_F3 = true
+			self.vb.MiniStage = self.vb.MiniStage + 1
+		elseif not warned_F4 and hp < 40 then
+			warned_F4 = true
+			self.vb.MiniStage = self.vb.MiniStage + 1
+		elseif not warned_F5 and hp < 25 then
+			warned_F5 = true
+			self.vb.MiniStage = self.vb.MiniStage + 1
+		elseif not warned_F6 and hp < 5 then
+			warned_F6 = true
+			self.vb.MiniStage = self.vb.MiniStage + 1
+	end
+		DBM:Debug("Текущее значение: ".. self.vb.MiniStage.. " : ".. self.vb.GrohotCounter, 2)
 	end
 end
