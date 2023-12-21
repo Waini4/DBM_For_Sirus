@@ -44,7 +44,7 @@ local timerPlagueCD			= mod:NewCDTimer(32, 322731, nil, nil, nil, 5) --чума 
 local timerDominateMindCD	= mod:NewCDTimer(48, 322728, nil, nil, nil, 3)
 local timerShadowcleanCD	= mod:NewCDTimer(13.5, 322727, nil, nil, nil, 4) --масс диспел
 local timerDispelAkama		= mod:NewNextCountTimer(45, 322743, nil, nil, nil, 1)
-local berserkTimer			= mod:NewBerserkTimer(240)
+local berserkTimer			= mod:NewBerserkTimer(360)
 
 
 mod.vb.AddsWestCount = 0

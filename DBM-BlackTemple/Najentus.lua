@@ -30,7 +30,7 @@ local warnCurse				= mod:NewTargetAnnounce(321599, 5)
 local specudar           	= mod:NewSpecialWarningCount(321598, "Melee", nil, nil, 2, 2)
 local specWarnCurse			= mod:NewSpecialWarningDispel(321599, "RemoveCurse", nil, nil, 1, 5)
 
-local berserkTimer			= mod:NewBerserkTimer(480)
+local berserkTimer			= mod:NewBerserkTimer(360)
 
 local kolossalnyi_udar		= mod:NewCDCountTimer(9, 321598, nil, nil, nil, 1) --SPELL_CAST_START
 local grohot_priliva		= mod:NewCDCountTimer(20.5, 321595, nil, nil, nil, 5) --SPELL_CAST_START
