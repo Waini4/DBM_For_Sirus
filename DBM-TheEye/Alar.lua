@@ -13,14 +13,16 @@ mod:SetCreatureID(19514)
 mod:SetUsedIcons(3, 4, 5, 6, 7, 8)
 
 mod:RegisterEvents(
+	"SPELL_CAST_SUCCESS 34229 35181",
+	"SPELL_CAST_START 34342 46599",
 	"CHAT_MSG_MONSTER_YELL",
 	"CHAT_MSG_RAID_BOSS_WHISPER",
-	"CHAT_MSG_RAID_BOSS_EMOTE"
+	"CHAT_MSG_RAID_BOSS_EMOTE",
+	"SPELL_HEAL 34342"
 )
 mod:RegisterEventsInCombat(
-	"SPELL_CAST_SUCCESS 34229 35181 308640",
-	"SPELL_CAST_START 34342 46599 308638 308987 308633 308671 308663 308664 308665 308667",
-	"SPELL_HEAL 34342",
+	"SPELL_CAST_SUCCESS 308640",
+	"SPELL_CAST_START 308638 308987 308633 308671 308663 308664 308665 308667",
 	"UNIT_HEALTH"
 )
 
@@ -72,7 +74,7 @@ local timerFatigueCast       = mod:NewCastTimer(20, 308667) -- Знак фени
 local berserkTimerH  = mod:NewBerserkTimer(444)
 local berserkTimerH2 = mod:NewBerserkTimer(500)
 
-
+mod:AddSetIconOption("SetIconOnAlar", 308663, true, true, { 2, 6, 7, 8 })
 mod:AddBoolOption("FeatherIcon")
 mod:AddBoolOption("YellOnFeather", true, "announce")
 mod:AddBoolOption("FeatherArrow")
@@ -180,14 +182,27 @@ function mod:SPELL_CAST_START(args)
 		specWarnPhoenixScream:Show()
 	elseif spellId == 308663 then -- Знак феникса: Рассеяность
 		timerScatteringCast:Start()
+		if self.Options.SetIconOnAlar then
+			self:ScanForMobs(args.destGUID, 1, 7, 1, 0.1, 20, "SetIconOnAlar")
+		end
 	elseif spellId == 308664 then -- Знак феникса: Слабость
 		timerWeaknessCast:Start()
+		if self.Options.SetIconOnAlar then
+			self:ScanForMobs(args.destGUID, 1, 6, 1, 0.1, 20, "SetIconOnAlar")
+		end
 	elseif spellId == 308665 then -- Знак феникса: Ярость
 		timerFuryCast:Start()
+		if self.Options.SetIconOnAlar then
+			self:ScanForMobs(args.destGUID, 1, 2, 1, 0.1, 20, "SetIconOnAlar")
+		end
 	elseif spellId == 308667 then -- Знак феникса: Усталость
 		timerFatigueCast:Start()
+		if self.Options.SetIconOnAlar then
+			self:ScanForMobs(args.destGUID, 1, 8, 1, 0.1, 20, "SetIconOnAlar")
+		end
 	end
 end
+
 
 function mod:UNIT_HEALTH(uId)
 		if not warned_preP1 and self:GetUnitCreatureId(uId) == 19514 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.07 then

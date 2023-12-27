@@ -10,10 +10,10 @@ mod:RegisterCombat("combat")
 --mod:SetWipeTime(50)--Adds come about every 50 seconds, so require at least this long to wipe combat if they die instantly
 
 mod:RegisterEventsInCombat(
-	"SPELL_AURA_APPLIED 322728",
+	"SPELL_AURA_APPLIED 322728 322748 322747 322746 322745 322749",
 	"SPELL_AURA_APPLIED_DOSE",
 	"SPELL_AURA_REMOVED 322728",
-	"SPELL_CAST_START 322727 322728 322731",
+	"SPELL_CAST_START 322727 322728 322731 371519",
 	"SPELL_CAST_SUCCESS",
 	"SPELL_INTERRUPT ",
 	"SPELL_SUMMON",
@@ -28,6 +28,7 @@ mod:RegisterEvents(
 --local warnDefender		= mod:NewAnnounce("warnAshtongueDefender", 2, 41180)
 --local warnSorc			= mod:NewAnnounce("warnAshtongueSorcerer", 2, 40520)
 local specWarnShadowclean 	= mod:NewSpecialWarningInterrupt(322727, "HasInterrupt", nil, nil, 1, 2)
+local specWarnDevastating 	= mod:NewSpecialWarningInterrupt(371519, "HasInterrupt", nil, nil, 1, 2)
 local specWarnFadeDebuff	= mod:NewSpecialWarningAddsCustom(40476, nil, nil, nil, 1, 2)
 local specWarnMind			= mod:NewSpecialWarningSpell(322728, nil, nil, nil, 1, 3)
 
@@ -53,6 +54,7 @@ local dominateMindTargets = {}
 mod.vb.dominateMindIcon = 6
 local isHunter = select(2, UnitClass("player")) == "HUNTER"
 mod:AddSetIconOption("SetIconOnDominateMind", 322728, true, false, {4, 5, 6})
+mod:AddSetIconOption("SetIconOnPokemon", 322748, true, true, { 3, 4, 5, 6, 7 })
 
 local RaidWarningFrame = RaidWarningFrame
 local GetFramesRegisteredForEvent, RaidNotice_AddMessage = GetFramesRegisteredForEvent, RaidNotice_AddMessage
@@ -195,6 +197,10 @@ function mod:SPELL_CAST_START(args)
 			specWarnShadowclean:Show(args.sourceName)
 		end
 		timerShadowcleanCD:Start()
+	elseif args:IsSpellID(371519) then
+		if self:CheckInterruptFilter(args.sourceGUID, false, true) then
+			specWarnDevastating:Show(args.sourceName)
+		end
 	end
 end
 
@@ -235,6 +241,26 @@ function mod:SPELL_AURA_REMOVED(args)
 			self:ScheduleMethod(5.0, "EqW")
 			self:ScheduleMethod(8.0, "EqW")
 			self:ScheduleMethod(9.9, "EqW")
+		end
+	elseif args:IsSpellID(322748) then
+		if self.Options.SetIconOnPokemon then
+			self:ScanForMobs(args.destGUID, 1, 5, 1, 0.1, 20, "SetIconOnPokemon")
+		end
+	elseif args:IsSpellID(322747) then
+		if self.Options.SetIconOnPokemon then
+			self:ScanForMobs(args.destGUID, 1, 6, 1, 0.01, 20, "SetIconOnPokemon")
+		end
+	elseif args:IsSpellID(322746) then
+		if self.Options.SetIconOnPokemon then
+			self:ScanForMobs(args.destGUID, 1, 4, 1, 0.01, 20, "SetIconOnPokemon")
+		end
+	elseif args:IsSpellID(322745) then
+		if self.Options.SetIconOnPokemon then
+			self:ScanForMobs(args.destGUID, 1, 7, 1, 0.01, 20, "SetIconOnPokemon")
+		end
+	elseif args:IsSpellID(322749) then
+		if self.Options.SetIconOnPokemon then
+			self:ScanForMobs(args.destGUID, 1, 3, 1, 0.01, 20, "SetIconOnPokemon")
 		end
 	end
 end
