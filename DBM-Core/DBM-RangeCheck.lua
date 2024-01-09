@@ -1359,15 +1359,19 @@ function rangeCheck:Show(range, filter, bossUnit, reverse)
 	local level = GetCurrentMapDungeonLevel()
 	local usesTerrainMap = DungeonUsesTerrainMap()
 	level = usesTerrainMap and level - 1 or level
-	if DBM.Options.RangeFrameFrames == "text" or DBM.Options.RangeFrameFrames == "both" or not DBM.MapSizes[mapName] or
-		(DBM.MapSizes[mapName] and not DBM.MapSizes[mapName][level]) then
-		frame:Show()
-		frame:SetOwner(UIParent, "ANCHOR_PRESERVE")
-		onUpdate(frame, 0)
-	end
-	if (DBM.Options.RangeFrameFrames == "radar" or DBM.Options.RangeFrameFrames == "both") and
-		(DBM.MapSizes[mapName] and DBM.MapSizes[mapName][level]) then
+	if DBM.Options["DefaultRadarFrame"] ~= nil and DBM.Options["DefaultRadarFrame"] and (DBM.MapSizes[mapName] and DBM.MapSizes[mapName][level]) then
 		onUpdateRadar(radarFrame, 1)
+	else
+		if DBM.Options.RangeFrameFrames == "text" or DBM.Options.RangeFrameFrames == "both" or not DBM.MapSizes[mapName] or
+			(DBM.MapSizes[mapName] and not DBM.MapSizes[mapName][level]) then
+			frame:Show()
+			frame:SetOwner(UIParent, "ANCHOR_PRESERVE")
+			onUpdate(frame, 0)
+		end
+		if (DBM.Options.RangeFrameFrames == "radar" or DBM.Options.RangeFrameFrames == "both") and
+			(DBM.MapSizes[mapName] and DBM.MapSizes[mapName][level]) then
+			onUpdateRadar(radarFrame, 1)
+		end
 	end
 end
 
