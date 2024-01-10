@@ -4,4 +4,4 @@ local panel = DBM_GUI.Cat_Frames:CreateNewPanel(L.Panel_Range, "option")
 local general = panel:CreateArea(L.Area_General)
 
 general:CreateCheckButton(L.SpamBlockNoRangeFrame, true, nil, "DontShowRangeFrame")
-general:CreateCheckButton(L.ShowRadarFrameByDefault, true, nil, "DefaultRadarFrame")
+general:CreateCheckButton(L.UseAlternateRangeCheck, true, nil, "UseAlternateRangeCheck")
