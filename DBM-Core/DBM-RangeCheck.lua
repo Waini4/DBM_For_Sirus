@@ -932,7 +932,70 @@ function onUpdate(self, elapsed)
 			end
 		end
 	else
-		self:AddLine(L.RANGE_CHECK_ZONE_UNSUPPORTED:format(self.range))
+		if GetNumRaidMembers() > 0 then
+			for i = 1, GetNumRaidMembers() do
+				local uId = "raid" .. i
+				if not frame.reverse and not UnitIsUnit(uId, "player") and 
+				not UnitIsDeadOrGhost(uId) and
+				self.checkFunc(uId, self.range) and
+				(not self.filter or self.filter(uId)) then
+					j = j + 1
+					color = RAID_CLASS_COLORS[select(2, UnitClass(uId))] or NORMAL_FONT_COLOR
+					local icon = GetRaidTargetIndex(uId)
+					local text = icon and ("|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_%d:0|t %s"):format(icon, UnitName(uId))
+						or UnitName(uId)
+					self:AddLine(text, color.r, color.g, color.b)
+					if j >= 5 then
+						break
+					end
+				elseif frame.reverse and not UnitIsUnit(uId, "player") and 
+				not UnitIsDeadOrGhost(uId) and
+				not self.checkFunc(uId, self.range) and 
+				(not self.filter or self.filter(uId)) then
+					j = j + 1
+					color = RAID_CLASS_COLORS[select(2, UnitClass(uId))] or NORMAL_FONT_COLOR
+					local icon = GetRaidTargetIndex(uId)
+					local text = icon and ("|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_%d:0|t %s"):format(icon, UnitName(uId))
+						or UnitName(uId)
+					self:AddLine(text, color.r, color.g, color.b)
+					if j >= 5 then
+						break
+					end
+				end
+			end
+		elseif GetNumPartyMembers() > 0 then
+			for i = 1, GetNumPartyMembers() do
+				local uId = "party" .. i
+				if not frame.reverse and not UnitIsUnit(uId, "player") and 
+				not UnitIsDeadOrGhost(uId) and
+				self.checkFunc(uId, self.range) and
+				(not self.filter or self.filter(uId)) then
+					j = j + 1
+					color = RAID_CLASS_COLORS[select(2, UnitClass(uId))] or NORMAL_FONT_COLOR
+					local icon = GetRaidTargetIndex(uId)
+					local text = icon and ("|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_%d:0|t %s"):format(icon, UnitName(uId))
+						or UnitName(uId)
+					self:AddLine(text, color.r, color.g, color.b)
+					if j >= 5 then
+						break
+					end
+				elseif frame.reverse and not UnitIsUnit(uId, "player") and 
+				not UnitIsDeadOrGhost(uId) and
+				not self.checkFunc(uId, self.range) and
+				(not self.filter or self.filter(uId)) then
+					j = j + 1
+					color = RAID_CLASS_COLORS[select(2, UnitClass(uId))] or NORMAL_FONT_COLOR
+					local icon = GetRaidTargetIndex(uId)
+					local text = icon and ("|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_%d:0|t %s"):format(icon, UnitName(uId))
+						or UnitName(uId)
+					self:AddLine(text, color.r, color.g, color.b)
+					if j >= 5 then
+						break
+					end
+				end
+			end
+		end
+		--self:AddLine(L.RANGE_CHECK_ZONE_UNSUPPORTED:format(self.range))
 	end
 	soundUpdate = soundUpdate + elapsed
 	if soundUpdate >= 5 and j > 0 then
@@ -1090,7 +1153,6 @@ do
 						end)
 					end
 				end
-
 				for i = 1, numPlayers do
 					local uId = unitID:format(i)
 					if not UnitIsUnit(uId, "player") then
@@ -1187,7 +1249,69 @@ local getDistanceBetween
 do
 	local mapSizes = DBM.MapSizes
 
+	-- Две следующие таблицы позаимствованы с DBM с ретейла
+	-- https://github.com/DeadlyBossMods/DBM-Retail/blob/9.0.21/DBM-Core/DBM-RangeCheck.lua#L57
+	-- Не очень понятно, используются ли там ярды или метры
+	-- проверить с помощью радара дбм соответствие текущим настройкам:
+	-- Взять чела в пати, поставить его афк и сравнить /run print(IsItemInRange(ID)) и /run print(CheckInteractDistance("target", X)) с тем, что показывает радар
+
+	-- Расстояния для проверки через предметы
+	-- [метров] = itemID
+	local itemRanges = {
+		[6] = 37727, -- Рубиновый желудь
+		[8] = 34368, -- Настроенные кристаллы-сердечники
+		[13] = 32321, -- Сеть для ловли скальной пустельги
+		[25] = 31463, -- Кристалл Зеззака
+		[30] = 34191, -- Горсть снежинок
+		[35] = 18904, -- Ультрасжиматель Зорбина
+		[48] = 32698, -- Веревочный аркан
+		[60] = 32825, -- Пушка души
+		[80] = 35278, -- Укрепленная сеть
+	}
+
+	-- Расстояния для проверки через функции api:
+	-- [метров] = distIndex
+	-- https://wowpedia.fandom.com/wiki/API_CheckInteractDistance
+	local apiRanges = {
+		[10] = 3, -- CheckInteractDistance (Дуэль)
+		[11] = 2, -- CheckInteractDistance (Обмен)
+		[30] = 1, -- CheckInteractDistance (Осмотр)
+	}
+
+	-- собственно, сама проверка с ритейл дбма
+	-- название, переводящееся как "это снова БК" говорит о многом...
+	function itsBCAgain(uId, checkrange)
+		if checkrange then -- в этой ветке возвращается true или false, что нам не подходит
+			if itemRanges[checkrange] then -- Only query item range for requested active range check
+				return IsItemInRange(itemRanges[checkrange], uId) and checkrange or 1000
+			elseif apiRanges[checkrange] then -- Only query item range for requested active range if no item found for it
+				return CheckInteractDistance(uId, apiRanges[checkrange]) and checkrange or 1000
+			else
+				return 1000 -- Если ни одна проверка не подходит, просто вернем очень большое значение, чтобы точно было false в mapRangeCheck
+			end
+		else -- используем только эту часть, так как нам нужно вернуть числовое значение
+			-- ID и дистанции взяты с таблиц выше, но они могут КРАЙНЕ неточными, как и сам алгоритм проверки
+			if IsItemInRange(37727, uId) == 1 then return 6
+			elseif IsItemInRange(34368, uId) == 1 then return 8
+			elseif CheckInteractDistance(uId, 3) == 1 then return 10
+			elseif CheckInteractDistance(uId, 2) == 1 then return 11
+			elseif IsItemInRange(32321, uId) == 1 then return 13
+			-- нужен предмет с рейндж 15, если все остальные ренджи верные, очень большой промежуток
+			elseif IsItemInRange(31463, uId) == 1 then return 25
+			elseif CheckInteractDistance(uId, 1) == 1 then return 30
+			elseif IsItemInRange(18904, uId) == 1 then return 35
+			elseif IsItemInRange(32698, uId) == 1 then return 48
+			elseif IsItemInRange(32825, uId) == 1 then return 60
+			elseif IsItemInRange(35278, uId) == 1 then return 80
+			else return 1000 end -- Если ни одна проверка не подходит, просто вернем очень большое значение, чтобы точно было false в mapRangeCheck
+		end
+	end
+
 	function getDistanceBetween(uId, x, y)
+		if x == 0 and y == 0 then -- Используем проверку через предметы
+			--print("Расстояние до "..uId.." = "..itsBCAgain(uId))
+			return itsBCAgain(uId)
+		end
 		if not x then -- If only one arg then 2nd arg is always assumed to be player
 			x, y = GetPlayerMapPosition("player")
 		end
@@ -1228,6 +1352,9 @@ do
 		if pX == 0 and pY == 0 then
 			SetMapToCurrentZone()
 			pX, pY = GetPlayerMapPosition("player")
+			if pX == 0 and pY == 0 then -- координат все еще нет, значит все очень плохо (или мы на Джайне) и надо проверять через предметы и интеракты
+				return false
+			end
 		end
 		local levels = mapSizes[GetMapInfo()]
 		if not levels then
@@ -1359,6 +1486,7 @@ function rangeCheck:Show(range, filter, bossUnit, reverse)
 	local level = GetCurrentMapDungeonLevel()
 	local usesTerrainMap = DungeonUsesTerrainMap()
 	level = usesTerrainMap and level - 1 or level
+	--[[ Предыдущий вариант
 	if DBM.Options.RangeFrameFrames == "text" or DBM.Options.RangeFrameFrames == "both" or not DBM.MapSizes[mapName] or
 		(DBM.MapSizes[mapName] and not DBM.MapSizes[mapName][level]) then
 		frame:Show()
@@ -1368,6 +1496,22 @@ function rangeCheck:Show(range, filter, bossUnit, reverse)
 	if (DBM.Options.RangeFrameFrames == "radar" or DBM.Options.RangeFrameFrames == "both") and
 		(DBM.MapSizes[mapName] and DBM.MapSizes[mapName][level]) then
 		onUpdateRadar(radarFrame, 1)
+	end
+	]]
+
+	if (DBM.MapSizes[mapName] and DBM.MapSizes[mapName][level]) or DBM.Options["UseAlternateRangeCheck"] then
+		if DBM.Options.RangeFrameFrames == "text" or DBM.Options.RangeFrameFrames == "both" then
+			frame:Show()
+			frame:SetOwner(UIParent, "ANCHOR_PRESERVE")
+			onUpdate(frame, 0)
+		end
+		if DBM.Options.RangeFrameFrames == "radar" or DBM.Options.RangeFrameFrames == "both" then
+			onUpdateRadar(radarFrame, 1)
+		end
+	else
+		DBM:AddMsg(L.RANGE_CHECK_USE_ALTERNATIVE)
+		-- todo coalaboooy 
+		-- добавить фрейм, аналогичный текстовому фрейму проверки, чтобы юзер видел на экране, что надо включить альтернативную проверку
 	end
 end
 
