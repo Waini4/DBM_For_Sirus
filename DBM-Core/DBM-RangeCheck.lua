@@ -1258,15 +1258,15 @@ do
 	-- Расстояния для проверки через предметы
 	-- [метров] = itemID
 	local itemRanges = {
-		[6] = 37727, -- Рубиновый желудь
-		[8] = 34368, -- Настроенные кристаллы-сердечники
+		[5] = 37727, -- Рубиновый желудь
+		[10] = 34368, -- Настроенные кристаллы-сердечники
 		[13] = 32321, -- Сеть для ловли скальной пустельги
-		[25] = 31463, -- Кристалл Зеззака
+		[24] = 31463, -- Кристалл Зеззака
 		[30] = 34191, -- Горсть снежинок
 		[35] = 18904, -- Ультрасжиматель Зорбина
 		[48] = 32698, -- Веревочный аркан
-		[60] = 32825, -- Пушка души
-		[80] = 35278, -- Укрепленная сеть
+		[61] = 32825, -- Пушка души
+		[77] = 35278, -- Укрепленная сеть
 	}
 
 	-- Расстояния для проверки через функции api:
@@ -1291,18 +1291,18 @@ do
 			end
 		else -- используем только эту часть, так как нам нужно вернуть числовое значение
 			-- ID и дистанции взяты с таблиц выше, но они могут КРАЙНЕ неточными, как и сам алгоритм проверки
-			if IsItemInRange(37727, uId) == 1 then return 6
-			elseif IsItemInRange(34368, uId) == 1 then return 8
+			if IsItemInRange(37727, uId) == 1 then return 5
+			elseif IsItemInRange(34368, uId) == 1 then return 10
 			elseif CheckInteractDistance(uId, 3) == 1 then return 10
 			elseif CheckInteractDistance(uId, 2) == 1 then return 11
 			elseif IsItemInRange(32321, uId) == 1 then return 13
-			-- нужен предмет с рейндж 15, если все остальные ренджи верные, очень большой промежуток
-			elseif IsItemInRange(31463, uId) == 1 then return 25
+			-- нужен предмет с рейндж 15-20, если все остальные ренджи верные, очень большой промежуток
+			elseif IsItemInRange(31463, uId) == 1 then return 24
 			elseif CheckInteractDistance(uId, 1) == 1 then return 30
 			elseif IsItemInRange(18904, uId) == 1 then return 35
 			elseif IsItemInRange(32698, uId) == 1 then return 48
-			elseif IsItemInRange(32825, uId) == 1 then return 60
-			elseif IsItemInRange(35278, uId) == 1 then return 80
+			elseif IsItemInRange(32825, uId) == 1 then return 61
+			elseif IsItemInRange(35278, uId) == 1 then return 77 -- макс дальность, после нее IsItemInRange возвращает nil, так как юнит слишком далеко
 			else return 1000 end -- Если ни одна проверка не подходит, просто вернем очень большое значение, чтобы точно было false в mapRangeCheck
 		end
 	end
