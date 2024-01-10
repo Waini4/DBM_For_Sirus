@@ -10,10 +10,10 @@ mod:RegisterCombat("combat")
 --mod:SetWipeTime(50)--Adds come about every 50 seconds, so require at least this long to wipe combat if they die instantly
 
 mod:RegisterEventsInCombat(
-	"SPELL_AURA_APPLIED 322728 322748 322747 322746 322745 322749",
+	"SPELL_AURA_APPLIED 322728 322748 322747 322746 322745 322749 371509",
 	"SPELL_AURA_APPLIED_DOSE",
-	"SPELL_AURA_REMOVED 322728",
-	"SPELL_CAST_START 322727 322728 322731 371519",
+	"SPELL_AURA_REMOVED 322728 371509",
+	"SPELL_CAST_START 322727 322728 322731 371519 ",
 	"SPELL_CAST_SUCCESS",
 	"SPELL_INTERRUPT ",
 	"SPELL_SUMMON",
@@ -31,6 +31,7 @@ local specWarnShadowclean 	= mod:NewSpecialWarningInterrupt(322727, "HasInterrup
 local specWarnDevastating 	= mod:NewSpecialWarningInterrupt(371519, "HasInterrupt", nil, nil, 1, 2)
 local specWarnFadeDebuff	= mod:NewSpecialWarningAddsCustom(40476, nil, nil, nil, 1, 2)
 local specWarnMind			= mod:NewSpecialWarningSpell(322728, nil, nil, nil, 1, 3)
+local specWarnReflect		= mod:NewSpecialWarningSpell(371509, "SpellCaster", nil, nil, 3, 3)
 
 local warnDominateMind		= mod:NewTargetAnnounce(322728, 3)
 
@@ -45,6 +46,9 @@ local timerPlagueCD			= mod:NewCDTimer(32, 322731, nil, nil, nil, 5) --чума 
 local timerDominateMindCD	= mod:NewCDTimer(48, 322728, nil, nil, nil, 3)
 local timerShadowcleanCD	= mod:NewCDTimer(13.5, 322727, nil, nil, nil, 4) --масс диспел
 local timerDispelAkama		= mod:NewNextCountTimer(45, 322743, nil, nil, nil, 1)
+local timerReflect			= mod:NewCDTimer(12, 371509, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1)
+local timerReflectBuff		= mod:NewBuffActiveTimer(3, 371509, nil, nil, nil, 3)
+
 local berserkTimer			= mod:NewBerserkTimer(360)
 
 
@@ -147,7 +151,7 @@ local function addsLoop(self)
 	specWarnAdds:Show()
 	specWarnAdds:Play("killmob")
 	--specWarnAdds:ScheduleVoice(1, "east")
-	timerAddsCD:Start()
+	timerAddsCD:Start(80, "Боковые")
 end
 --[[
 local function sorcLoop(self)
@@ -171,8 +175,8 @@ function mod:OnCombatStart(delay)
 	berserkTimer:Start()
 	timerDispelAkama:Start(nil, self.vb.ControlAkama)
 	timerDominateMindCD:Start(30)
-	self:Schedule(80, addsLoop, self)
-	timerAddsCD:Start(80, "Боковые")
+	self:Schedule(10, addsLoop, self)
+	timerAddsCD:Start(10, "Боковые")
 	self:RegisterShortTermEvents(
 		"SWING_DAMAGE",
 		"SWING_MISSED",
@@ -225,6 +229,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		self.vb.dominateMindIcon = self.vb.dominateMindIcon - 1
 		self:Unschedule(showDominateMindWarning)
 		self:Schedule(0.9, showDominateMindWarning, self)
+	elseif args:IsSpellID(371509) and self:AntiSpam(2, 1) then
+		specWarnReflect:Show()
+		timerReflectBuff:Start()
 	end
 end
 
@@ -262,6 +269,8 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnPokemon then
 			self:ScanForMobs(args.destGUID, 1, 3, 1, 0.01, 20, "SetIconOnPokemon")
 		end
+		elseif args:IsSpellID(371509) then
+			timerReflect:Start()
 	end
 end
 
