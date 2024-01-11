@@ -1251,16 +1251,16 @@ do
 
 	-- Две следующие таблицы позаимствованы с DBM с ретейла
 	-- https://github.com/DeadlyBossMods/DBM-Retail/blob/9.0.21/DBM-Core/DBM-RangeCheck.lua#L57
-	-- Не очень понятно, используются ли там ярды или метры
-	-- проверить с помощью радара дбм соответствие текущим настройкам:
-	-- Взять чела в пати, поставить его афк и сравнить /run print(IsItemInRange(ID)) и /run print(CheckInteractDistance("target", X)) с тем, что показывает радар
-
+	
 	-- Расстояния для проверки через предметы
 	-- [метров] = itemID
+
 	local itemRanges = {
-		[5] = 37727, -- Рубиновый желудь
+		[5] = 37727,  -- Рубиновый желудь
 		[10] = 34368, -- Настроенные кристаллы-сердечники
 		[13] = 32321, -- Сеть для ловли скальной пустельги
+		[16] = 1251,  -- Льняные бинты
+		[20] = 21519, -- Омела
 		[24] = 31463, -- Кристалл Зеззака
 		[30] = 34191, -- Горсть снежинок
 		[35] = 18904, -- Ультрасжиматель Зорбина
@@ -1268,6 +1268,10 @@ do
 		[61] = 32825, -- Пушка души
 		[77] = 35278, -- Укрепленная сеть
 	}
+
+	for range, itemId in pairs(itemRanges) do
+		GetItemInfo(itemID) -- получаем данные о предмете, чтобы он был в кэше и IsItemInRange не возвращал nil
+	end
 
 	-- Расстояния для проверки через функции api:
 	-- [метров] = distIndex
@@ -1290,13 +1294,15 @@ do
 				return 1000 -- Если ни одна проверка не подходит, просто вернем очень большое значение, чтобы точно было false в mapRangeCheck
 			end
 		else -- используем только эту часть, так как нам нужно вернуть числовое значение
-			-- ID и дистанции взяты с таблиц выше, но они могут КРАЙНЕ неточными, как и сам алгоритм проверки
+			-- ID и дистанции взяты с таблиц выше
 			if IsItemInRange(37727, uId) == 1 then return 5
+			-- нужен предмет с рейндж 8, часто встречающаяся дальность на механиках
 			elseif IsItemInRange(34368, uId) == 1 then return 10
 			elseif CheckInteractDistance(uId, 3) == 1 then return 10
 			elseif CheckInteractDistance(uId, 2) == 1 then return 11
 			elseif IsItemInRange(32321, uId) == 1 then return 13
-			-- нужен предмет с рейндж 15-20, если все остальные ренджи верные, очень большой промежуток
+			elseif IsItemInRange(1251, uId) == 1 then return 16
+			elseif IsItemInRange(21519, uId) == 1 then return 20
 			elseif IsItemInRange(31463, uId) == 1 then return 24
 			elseif CheckInteractDistance(uId, 1) == 1 then return 30
 			elseif IsItemInRange(18904, uId) == 1 then return 35
