@@ -41,8 +41,7 @@ local timerEnhancedGlaiveofDefilementCD = mod:NewNextTimer(10, 319026, nil, nil,
 local timerMarkofRockCD                 = mod:NewNextCountTimer(40, 319029, nil, nil, nil, 3)
 local timerguardianofthespiritCD        = mod:NewTargetTimer(60, 319012, nil, nil, nil, 5)
 local timerInfernalDownpourCast         = mod:NewCastTimer(5, 320374, nil, nil, nil, 3) -- Без дебаффа на долгий каст
-local timerInfernalDownpourCD           = mod:NewNextCountTimer(40, 319021, nil, nil, nil, 2, nil,
-	DBM_COMMON_L.DEADLY_ICON, nil, 1)
+local timerInfernalDownpourCD           = mod:NewNextCountTimer(40, 319021, nil, nil, nil, 2, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1)
 
 
 mod:AddSetIconOption("SetIconFlameTargets", 320374, true, false, { 1, 2, 3 })
