@@ -581,10 +581,10 @@ do
 
 		elseif level == 2 then
 			if menu == "range" then
-				local ranges = { 5, 6, 8, 10, 11, 12, 13, 14, 15, 16, 18, 20, 30, 35, 40 }
-
-				for _, r in pairs(ranges) do
-					if initRangeCheck(r) then
+				pX, pY = GetPlayerMapPosition("player") 
+				if pX == 0 and pY == 0 then -- если координаты 0.0, добавим дальности из списка предметов
+					local ranges = { 5, 10, 11, 13, 16, 20, 30, 35, 48 }
+					for _, r in pairs(ranges) do
 						info = UIDropDownMenu_CreateInfo()
 						info.text = L.RANGECHECK_SETRANGE_TO:format(r)
 						info.func = setRange
@@ -592,8 +592,19 @@ do
 						info.checked = (frame.range == r)
 						UIDropDownMenu_AddButton(info, 2)
 					end
+				else
+					local ranges = { 5, 6, 8, 10, 11, 12, 13, 14, 15, 16, 18, 20, 30, 35, 40 }
+					for _, r in pairs(ranges) do
+						if initRangeCheck(r) then -- этот чек всегда возвращает false, если координаты 0.0
+							info = UIDropDownMenu_CreateInfo()
+							info.text = L.RANGECHECK_SETRANGE_TO:format(r)
+							info.func = setRange
+							info.arg1 = r
+							info.checked = (frame.range == r)
+							UIDropDownMenu_AddButton(info, 2)
+						end -- и поэтому список дальностей пустой
+					end
 				end
-
 			elseif menu == "sounds" then
 				info = UIDropDownMenu_CreateInfo()
 				info.text = L.RANGECHECK_SOUND_OPTION_1
@@ -1211,19 +1222,23 @@ do
 				self:Show()
 			end
 		else
-			if isInSupportedArea then
-				-- we were in an area with known map dimensions during the last update but looks like we left it
-				isInSupportedArea = false
-				-- white frame
-				radarFrame.circle:SetVertexColor(1, 1, 1)
-				-- hide everything
-				for _, v in pairs(dots) do
-					v.dot:Hide()
-				end
-				for i = 1, 8 do
-					charms[i]:Hide()
-				end
-			end
+			-- Вместо серого радара показываем текстовый фрейм
+			setFrames(self, "text")
+			DBM:AddMsg(L.NO_RANGE)
+			return
+			-- if isInSupportedArea then
+			-- 	-- we were in an area with known map dimensions during the last update but looks like we left it
+			-- 	isInSupportedArea = false
+			-- 	-- white frame
+			-- 	radarFrame.circle:SetVertexColor(1, 1, 1)
+			-- 	-- hide everything
+			-- 	for _, v in pairs(dots) do
+			-- 		v.dot:Hide()
+			-- 	end
+			-- 	for i = 1, 8 do
+			-- 		charms[i]:Hide()
+			-- 	end
+			-- end
 		end
 	end
 end
