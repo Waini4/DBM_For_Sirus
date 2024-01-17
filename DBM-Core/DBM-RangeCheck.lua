@@ -1267,7 +1267,7 @@ local getDistanceBetween
 do
 	local mapSizes = DBM.MapSizes
 	-- Две следующие таблицы позаимствованы с DBM с ретейла
-	-- https://github.com/DeadlyBossMods/DBM-Retail/blob/9.0.21/DBM-Core/DBM-RangeCheck.lua#L57	
+	-- https://github.com/DeadlyBossMods/DBM-Retail/blob/9.0.21/DBM-Core/DBM-RangeCheck.lua#L57
 	-- Расстояния для проверки через предметы
 	-- [метров] = itemID
 
