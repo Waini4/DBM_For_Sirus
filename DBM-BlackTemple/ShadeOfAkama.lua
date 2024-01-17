@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Akama", "DBM-BlackTemple")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20220518110528")
+mod:SetRevision("20240117155828")
 mod:SetCreatureID(22841)
 
 mod:SetModelID(21357)
@@ -13,15 +13,16 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 322728 322748 322747 322746 322745 322749 371509",
 	"SPELL_AURA_APPLIED_DOSE",
 	"SPELL_AURA_REMOVED 322728 371509",
-	"SPELL_CAST_START 322727 322728 322731 371519 ",
-	"SPELL_CAST_SUCCESS",
+	"SPELL_CAST_START 322727 322728 322731 371519",
+	"SPELL_CAST_SUCCESS 371507",
 	"SPELL_INTERRUPT ",
 	"SPELL_SUMMON",
 	"CHAT_MSG_RAID_BOSS_EMOTE",
 	"UNIT_DIED"
 )
 mod:RegisterEvents(
-	"SPELL_AURA_REMOVED 34189"
+	"SPELL_AURA_REMOVED 34189",
+	"UNIT_TARGET"
 )
 
 --local warnPhase2		= mod:NewPhaseAnnounce(2)
@@ -31,14 +32,15 @@ local specWarnShadowclean 	= mod:NewSpecialWarningInterrupt(322727, "HasInterrup
 local specWarnDevastating 	= mod:NewSpecialWarningInterrupt(371519, "HasInterrupt", nil, nil, 1, 2)
 local specWarnFadeDebuff	= mod:NewSpecialWarningAddsCustom(40476, nil, nil, nil, 1, 2)
 local specWarnMind			= mod:NewSpecialWarningSpell(322728, nil, nil, nil, 1, 3)
-local specWarnReflect		= mod:NewSpecialWarningSpell(371509, "SpellCaster", nil, nil, 3, 3)
+local specWarnWave			= mod:NewSpecialWarningSpell(371507, nil, nil, nil, 1, 3)
+local specWarnReflect		= mod:NewSpecialWarningSpell(371509, nil, nil, nil, 2, 3)
 
 local warnDominateMind		= mod:NewTargetAnnounce(322728, 3)
 
 local specWarnAdds			= mod:NewSpecialWarningAdds(40474, "-Healer", nil, nil, 1, 2)
 
 local timerCombatStart		= mod:NewCombatTimer(12)
-local timerAddsCD			= mod:NewAddsCustomTimer(120, 40474)--NewAddsCustomTimer
+local timerAddsCD			= mod:NewAddsCustomTimer(70, 40474)--NewAddsCustomTimer
 --local timerDefenderCD	= mod:NewTimer(25, "timerAshtongueDefender", 41180, nil, nil, 1)
 --local timerSorcCD		= mod:NewTimer(25, "timerAshtongueSorcerer", 40520, nil, nil, 1)
 
@@ -46,19 +48,27 @@ local timerPlagueCD			= mod:NewCDTimer(32, 322731, nil, nil, nil, 5) --чума 
 local timerDominateMindCD	= mod:NewCDTimer(48, 322728, nil, nil, nil, 3)
 local timerShadowcleanCD	= mod:NewCDTimer(13.5, 322727, nil, nil, nil, 4) --масс диспел
 local timerDispelAkama		= mod:NewNextCountTimer(45, 322743, nil, nil, nil, 1)
-local timerReflect			= mod:NewCDTimer(12, 371509, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1)
+local timerWaveCD			= mod:NewCDTimer(7, 371507, nil, nil, nil, 3)
+local timerReflect			= mod:NewCDTimer(12, 371509, nil, nil, nil, 3)
 local timerReflectBuff		= mod:NewBuffActiveTimer(3, 371509, nil, nil, nil, 3)
-
 local berserkTimer			= mod:NewBerserkTimer(360)
 
+mod:AddBoolOption("SetNecromancerIcon")
+mod:AddNamePlateOption("Nameplate1", 371509, true)
+mod:AddSetIconOption("SetIconOnBeacon", 322748, true, true, { 1, 2, 3, 4, 5, 6, 7, 8 })
+mod:AddSetIconOption("SetIconOnDominateMind", 322728, true, false, {4, 5, 6})
 
+mod.vb.NecromancerIcon = 1
 mod.vb.AddsWestCount = 0
+mod.vb.AddsLoop = 0
 mod.vb.ControlAkama = 0
 local dominateMindTargets = {}
 mod.vb.dominateMindIcon = 6
+--local Adds = {}
+--local addsCount = {70, 50}
+local addsLoops = {50, 60}
+
 local isHunter = select(2, UnitClass("player")) == "HUNTER"
-mod:AddSetIconOption("SetIconOnDominateMind", 322728, true, false, {4, 5, 6})
-mod:AddSetIconOption("SetIconOnPokemon", 322748, true, true, { 3, 4, 5, 6, 7 })
 
 local RaidWarningFrame = RaidWarningFrame
 local GetFramesRegisteredForEvent, RaidNotice_AddMessage = GetFramesRegisteredForEvent, RaidNotice_AddMessage
@@ -132,44 +142,31 @@ local function showDominateMindWarning(self)
 	end
 end
 
---[[
-local function addsWestLoop(self)
-	self.vb.AddsWestCount = self.vb.AddsWestCount + 1
-	specWarnAdds:Show(DBM_COMMON_L.WEST)
-	specWarnAdds:Play("killmob")
-	specWarnAdds:ScheduleVoice(1, "west")
-	if self.vb.AddsWestCount == 2 then--Special
-		self:Schedule(51, addsWestLoop, self)
-		timerAddsCD:Start(51, DBM_COMMON_L.WEST)
-	else
-		self:Schedule(47, addsWestLoop, self)
-		timerAddsCD:Start(47, DBM_COMMON_L.WEST)
-	end
-end]]
+
 
 local function addsLoop(self)
-	specWarnAdds:Show()
-	specWarnAdds:Play("killmob")
-	--specWarnAdds:ScheduleVoice(1, "east")
-	timerAddsCD:Start(80, "Боковые")
+	self.vb.AddsWestCount = self.vb.AddsWestCount+1
+	if self.vb.AddsWestCount < 2 then
+		specWarnAdds:Schedule(70)
+		timerAddsCD:Start(70,self.vb.AddsWestCount)
+		self:Schedule(70, addsLoop, self)
+	elseif self.vb.AddsWestCount >= 2 then
+		self.vb.AddsLoop = self.vb.AddsLoop+1
+		local timer = addsLoops[self.vb.AddsLoop]
+		specWarnAdds:Schedule(timer)
+		timerAddsCD:Start(timer,self.vb.AddsWestCount)
+		self:Schedule(timer, addsLoop, self)
+		if self.vb.AddsLoop == 2 then
+			self.vb.AddsLoop = 0
+		end
+	end
 end
---[[
-local function sorcLoop(self)
-	warnSorc:Show()
-	self:Schedule(25, sorcLoop, self)
-	timerSorcCD:Start(25)
-end
-
-local function defenderLoop(self)
-	warnDefender:Show()
-	self:Schedule(30, defenderLoop, self)
-	timerDefenderCD:Start(30)
-end]]
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 22841, "Shade of Akama")
 	self:SetStage(1)
 	self.vb.AddsWestCount = 0
+	self.vb.AddsLoop = 0
 	self.vb.dominateMindIcon = 6
 	self.vb.ControlAkama = 0
 	berserkTimer:Start()
@@ -190,6 +187,7 @@ function mod:OnCombatEnd(wipe)
 	self:UnregisterShortTermEvents()
 	self:UnscheduleMethod("UnW")
 	self:UnscheduleMethod("EqW")
+	self:Unschedule(addsLoop)
 end
 
 function mod:SPELL_CAST_START(args)
@@ -209,9 +207,19 @@ function mod:SPELL_CAST_START(args)
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
-	if args.spellId == 322728 then
-	end
+--[[	if args.spellId == 371507 and self:AntiSpam(2,2) then
+		specWarnWave:Show()
+		timerWaveCD:Start()
+	end]]
 end
+
+--[[
+322748,"Пепельная Эгида - Тьма"
+322747,"Пепельная Эгида - Лед"
+322746,"Пепельная Эгида - Природа"
+322745,"Пепельная Эгида - Огонь"
+322749,"Пепельная Эгида - Тайная магия
+]]
 
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(322728) then
@@ -223,15 +231,38 @@ function mod:SPELL_AURA_APPLIED(args)
 			DBM:Debug("Unequipping",2)
 		end
 		dominateMindTargets[#dominateMindTargets + 1] = args.destName
-		if self.Options.SetIconOnDominateMind then
-			self:SetIcon(args.destName, self.vb.dominateMindIcon, 12)
-		end
-		self.vb.dominateMindIcon = self.vb.dominateMindIcon - 1
+		--if self.Options.SetIconOnDominateMind then
+		--	self:SetIcon(args.destName, self.vb.dominateMindIcon, 12)
+		--end
+		--self.vb.dominateMindIcon = self.vb.dominateMindIcon - 1
 		self:Unschedule(showDominateMindWarning)
 		self:Schedule(0.9, showDominateMindWarning, self)
-	elseif args:IsSpellID(371509) and self:AntiSpam(2, 1) then
+	elseif args:IsSpellID(322748) then
+		if self.Options.SetIconOnBeacon then
+			self:ScanForMobs(args.destGUID, 1, 5, 1, 0.1, 20, "SetIconOnBeacon")
+		end
+	elseif args:IsSpellID(322747) then
+		if self.Options.SetIconOnBeacon then
+			self:ScanForMobs(args.destGUID, 1, 6, 1, 0.01, 20, "SetIconOnBeacon")
+		end
+	elseif args:IsSpellID(322746) then
+		if self.Options.SetIconOnBeacon then
+			self:ScanForMobs(args.destGUID, 1, 4, 1, 0.01, 20, "SetIconOnBeacon")
+		end
+	elseif args:IsSpellID(322745) then
+		if self.Options.SetIconOnBeacon then
+			self:ScanForMobs(args.destGUID, 1, 7, 1, 0.01, 20, "SetIconOnBeacon")
+		end
+	elseif args:IsSpellID(322749) then
+		if self.Options.SetIconOnBeacon then
+			self:ScanForMobs(args.destGUID, 1, 3, 1, 0.01, 20, "SetIconOnBeacon")
+		end
+	elseif args:IsSpellID(371509) then
 		specWarnReflect:Show()
 		timerReflectBuff:Start()
+		if self.Options.Nameplate1 then
+			DBM.Nameplate:Show(args.destGUID, 371509, 3)
+		end
 	end
 end
 
@@ -249,28 +280,11 @@ function mod:SPELL_AURA_REMOVED(args)
 			self:ScheduleMethod(8.0, "EqW")
 			self:ScheduleMethod(9.9, "EqW")
 		end
-	elseif args:IsSpellID(322748) then
-		if self.Options.SetIconOnPokemon then
-			self:ScanForMobs(args.destGUID, 1, 5, 1, 0.1, 20, "SetIconOnPokemon")
+	elseif args:IsSpellID(371509) then
+		timerReflect:Start()
+		if self.Options.Nameplate1 then
+			DBM.Nameplate:Hide(args.destGUID, 320374)
 		end
-	elseif args:IsSpellID(322747) then
-		if self.Options.SetIconOnPokemon then
-			self:ScanForMobs(args.destGUID, 1, 6, 1, 0.01, 20, "SetIconOnPokemon")
-		end
-	elseif args:IsSpellID(322746) then
-		if self.Options.SetIconOnPokemon then
-			self:ScanForMobs(args.destGUID, 1, 4, 1, 0.01, 20, "SetIconOnPokemon")
-		end
-	elseif args:IsSpellID(322745) then
-		if self.Options.SetIconOnPokemon then
-			self:ScanForMobs(args.destGUID, 1, 7, 1, 0.01, 20, "SetIconOnPokemon")
-		end
-	elseif args:IsSpellID(322749) then
-		if self.Options.SetIconOnPokemon then
-			self:ScanForMobs(args.destGUID, 1, 3, 1, 0.01, 20, "SetIconOnPokemon")
-		end
-		elseif args:IsSpellID(371509) then
-			timerReflect:Start()
 	end
 end
 
@@ -281,6 +295,11 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, mob)
 		specWarnFadeDebuff:Show(DBM_COMMON_L.NORTH)
 	end
 end
+
+--[[
+function mod:UNIT_TARGET()
+
+end]]
 
 --[[
 function mod:SWING_DAMAGE(_, sourceName)
