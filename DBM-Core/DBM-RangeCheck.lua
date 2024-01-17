@@ -581,7 +581,7 @@ do
 
 		elseif level == 2 then
 			if menu == "range" then
-				pX, pY = GetPlayerMapPosition("player") 
+				pX, pY = GetPlayerMapPosition("player")
 				if pX == 0 and pY == 0 then -- если координаты 0.0, добавим дальности из списка предметов
 					local ranges = { 5, 10, 11, 13, 16, 20, 30, 35, 48 }
 					for _, r in pairs(ranges) do
@@ -946,7 +946,7 @@ function onUpdate(self, elapsed)
 		if GetNumRaidMembers() > 0 then
 			for i = 1, GetNumRaidMembers() do
 				local uId = "raid" .. i
-				if not frame.reverse and not UnitIsUnit(uId, "player") and 
+				if not frame.reverse and not UnitIsUnit(uId, "player") and
 				not UnitIsDeadOrGhost(uId) and
 				self.checkFunc(uId, self.range) and
 				(not self.filter or self.filter(uId)) then
@@ -959,9 +959,9 @@ function onUpdate(self, elapsed)
 					if j >= 5 then
 						break
 					end
-				elseif frame.reverse and not UnitIsUnit(uId, "player") and 
+				elseif frame.reverse and not UnitIsUnit(uId, "player") and
 				not UnitIsDeadOrGhost(uId) and
-				not self.checkFunc(uId, self.range) and 
+				not self.checkFunc(uId, self.range) and
 				(not self.filter or self.filter(uId)) then
 					j = j + 1
 					color = RAID_CLASS_COLORS[select(2, UnitClass(uId))] or NORMAL_FONT_COLOR
@@ -977,7 +977,7 @@ function onUpdate(self, elapsed)
 		elseif GetNumPartyMembers() > 0 then
 			for i = 1, GetNumPartyMembers() do
 				local uId = "party" .. i
-				if not frame.reverse and not UnitIsUnit(uId, "player") and 
+				if not frame.reverse and not UnitIsUnit(uId, "player") and
 				not UnitIsDeadOrGhost(uId) and
 				self.checkFunc(uId, self.range) and
 				(not self.filter or self.filter(uId)) then
@@ -990,7 +990,7 @@ function onUpdate(self, elapsed)
 					if j >= 5 then
 						break
 					end
-				elseif frame.reverse and not UnitIsUnit(uId, "player") and 
+				elseif frame.reverse and not UnitIsUnit(uId, "player") and
 				not UnitIsDeadOrGhost(uId) and
 				not self.checkFunc(uId, self.range) and
 				(not self.filter or self.filter(uId)) then
@@ -1222,6 +1222,9 @@ do
 				self:Show()
 			end
 		else
+			if isInSupportedArea then
+				-- we were in an area with known map dimensions during the last update but looks like we left it
+				isInSupportedArea = false
 			-- Вместо серого радара показываем текстовый фрейм
 			setFrames(self, "text")
 			DBM:AddMsg(L.NO_RANGE)
@@ -1263,7 +1266,6 @@ end
 local getDistanceBetween
 do
 	local mapSizes = DBM.MapSizes
-
 	-- Две следующие таблицы позаимствованы с DBM с ретейла
 	-- https://github.com/DeadlyBossMods/DBM-Retail/blob/9.0.21/DBM-Core/DBM-RangeCheck.lua#L57
 	
@@ -1284,8 +1286,8 @@ do
 		[77] = 35278, -- Укрепленная сеть
 	}
 
-	for range, itemId in pairs(itemRanges) do
-		GetItemInfo(itemID) -- получаем данные о предмете, чтобы он был в кэше и IsItemInRange не возвращал nil
+	for _, itemId in pairs(itemRanges) do
+		GetItemInfo(itemId) -- получаем данные о предмете, чтобы он был в кэше и IsItemInRange не возвращал nil
 	end
 
 	-- Расстояния для проверки через функции api:
@@ -1531,7 +1533,7 @@ function rangeCheck:Show(range, filter, bossUnit, reverse)
 		end
 	else
 		DBM:AddMsg(L.RANGE_CHECK_USE_ALTERNATIVE)
-		-- todo coalaboooy 
+		-- todo coalaboooy
 		-- добавить фрейм, аналогичный текстовому фрейму проверки, чтобы юзер видел на экране, что надо включить альтернативную проверку
 	end
 end
