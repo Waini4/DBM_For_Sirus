@@ -337,6 +337,7 @@ DBM.DefaultOptions = {
 	DontSetIcons = false,
 	DontRestoreIcons = false,
 	DontShowRangeFrame = false,
+	UseAlternateRangeCheck = false,
 	DontRestoreRange = false,
 	DontShowInfoFrame = false,
 	DontShowHudMap2 = false,
