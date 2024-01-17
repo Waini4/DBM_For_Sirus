@@ -272,6 +272,7 @@ L.RANGERADAR_IN_RANGE_TEXT     = "%d в радиусе (%0.1fм)"
 L.RANGECHECK_IN_RANGE_TEXT     = "%d в радиусе" --Text based doesn't need (%dyd), especially since it's not very accurate to the specific yard anyways
 L.RANGERADAR_IN_RANGE_TEXTONE  = "%s (%0.1fм)" --One target
 L.RANGE_CHECK_ZONE_UNSUPPORTED = "Проверка дистанции %d м. недоступна в этой зоне.\nДоступные дистанции - 10, 11, 15 и 28 м."
+L.RANGE_CHECK_USE_ALTERNATIVE  = "Проверка дистанции недоступна в этой зоне. Используйте опцию \"Дистанция\" -> \"Включить альтернативную проверку дистанции\"."
 
 L.LOCK_FRAME             = "Закрепить окно"
 L.INFOFRAME_SHOW_SELF    = "Всегда показывать Вашу энергию" -- Always show your own power value even if you are below the threshold

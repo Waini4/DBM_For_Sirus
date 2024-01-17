@@ -194,6 +194,7 @@ L.RANGERADAR_BOSS_HEADER				= "Boss Range (%d yd)"
 L.RANGERADAR_IN_RANGE_TEXT				= "%d in range (%d yd)"--Multi
 L.RANGERADAR_IN_RANGE_TEXTONE			= "%s (%0.1f yd)"--One target
 L.RANGE_CHECK_ZONE_UNSUPPORTED			= "A %d yard range check is not supported in this zone.\nSupported ranges are 10, 11, 15 and 28 yard."
+L.RANGE_CHECK_USE_ALTERNATIVE           = "Range check unsupported in this zone. Use \"Rangeframe\" -> \"Use alternate range check\" option."
 
 L.LOCK_FRAME							= "Frame Locked"
 L.INFOFRAME_SHOW_SELF					= "Always show your power"		-- Always show your own power value even if you are below the threshold
