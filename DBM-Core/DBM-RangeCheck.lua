@@ -1225,10 +1225,11 @@ do
 			if isInSupportedArea then
 				-- we were in an area with known map dimensions during the last update but looks like we left it
 				isInSupportedArea = false
+			end
 			-- Вместо серого радара показываем текстовый фрейм
 			setFrames(self, "text")
 			DBM:AddMsg(L.NO_RANGE)
-			return end
+			return 
 			-- if isInSupportedArea then
 			-- 	-- we were in an area with known map dimensions during the last update but looks like we left it
 			-- 	isInSupportedArea = false
