@@ -53,12 +53,12 @@ local timerReflect			= mod:NewCDTimer(12, 371509, nil, nil, nil, 3)
 local timerReflectBuff		= mod:NewBuffActiveTimer(3, 371509, nil, nil, nil, 3)
 local berserkTimer			= mod:NewBerserkTimer(360)
 
-mod:AddBoolOption("SetNecromancerIcon")
+--mod:AddBoolOption("SetNecromancerIcon")
 mod:AddNamePlateOption("Nameplate1", 371509, true)
 mod:AddSetIconOption("SetIconOnBeacon", 322748, true, true, { 1, 2, 3, 4, 5, 6, 7, 8 })
 mod:AddSetIconOption("SetIconOnDominateMind", 322728, true, false, {4, 5, 6})
 
-mod.vb.NecromancerIcon = 1
+--mod.vb.NecromancerIcon = 1
 mod.vb.AddsWestCount = 0
 mod.vb.AddsLoop = 0
 mod.vb.ControlAkama = 0
