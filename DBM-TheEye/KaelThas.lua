@@ -93,7 +93,7 @@ local timerGravityH   = mod:NewCDTimer(63, 35941, "Interface\\Icons\\Spell_Magic
 	CL.DEADLY_ICON)                                                                       -- хм
 local timerGravityHCD = mod:NewCDTimer(150, 35941, nil, nil, nil, 6, nil, CL.DEADLY_ICON) -- хм
 local timerAvengerS   = mod:NewCDTimer(22, 308743, nil, nil, nil, 3)
-local berserkTimer   = mod:NewBerserkTimer(360)
+local berserkTimer   = mod:NewBerserkTimer(392)
 
 mod:AddBoolOption("SetIconOnMC", true)
 mod:AddBoolOption("SayBoom", true)
@@ -250,7 +250,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 			if self.Options.RemoveShadowResistanceBuffs and mod:IsDifficulty("normal25", "normal10") then
 				mod:ScheduleMethod(0.1, "RemoveBuffs")
 			end
-			berserkTimer:Start()
+			berserkTimer:Start() --//TODO нужны логи
 			warnPhase:Show(L.WarnPhase4)
 			timerPhase4:Cancel()
 			DBM.RangeCheck:Hide()
