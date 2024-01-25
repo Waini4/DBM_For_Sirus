@@ -118,7 +118,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(vodyanoe_proklyatie.spellId) then
 		vodyanoe_proklyatie:Start()
 		specWarnCurse:Show(args.SpellName)
-	elseif args:IsSpellID(pronzayous_ship.spellId) then
+	elseif args:IsSpellID(pronzayous_ship.spellId) and self:AntiSpam(3,1) then
 		pronzayous_ship:Start()
 	end
 end
@@ -165,6 +165,6 @@ function mod:UNIT_HEALTH(uId)
 			warned_F6 = true
 			self.vb.MiniStage = self.vb.MiniStage + 1
 	end
-		DBM:Debug("Текущее значение: ".. self.vb.MiniStage.. " : ".. self.vb.GrohotCounter, 2)
+		--DBM:Debug("Текущее значение: ".. self.vb.MiniStage.. " : ".. self.vb.GrohotCounter, 2)
 	end
 end

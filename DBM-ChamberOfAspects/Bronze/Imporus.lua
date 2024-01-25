@@ -114,7 +114,7 @@ end
 
 function mod:SPELL_AURA_APPLIED(args)
 	-- local spellId = args.spellId
-	if args:IsSpellID(312199) then
+	if args:IsSpellID(312199) and self:AntiSpam(3, 1) then
 		IadCD:Start()
 	elseif args:IsSpellID(316508) then
 		local amount = args.amount or 1
