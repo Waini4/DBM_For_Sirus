@@ -59,6 +59,21 @@ L:SetGeneralLocalization({
 	name = "Тень Акамы"
 })
 
+L:SetWarningLocalization({
+	WeaponsStatus				= "Cнятие оружий включено"
+})
+
+L:SetOptionLocalization({
+	EqUneqWeapons			= "Снимать/надевать оружия если в вас кастанулся контроль. Для надевания создайте компл. экип. 'pve'. Для снятия не нужен.",
+	EqUneqTimer				= "Снимать оружия по таймеру ВСЕГДА, а не в каст(если высокий пинг). Опция выше должна быть вкл.",
+	BlockWeapons			= "Полностью заблокировать функции снятия/надевания выше",
+	RaidSay					= "Оповещение о несбитом касте в Рейд чат"
+})
+
+L:SetMiscLocalization({
+	SummonPepel = "Один из Пеплоустов-чаротворцев выходит из транса и вступает в бой!"
+})
+
 -------------------------
 --  Teron Gorefiend  --
 -------------------------
@@ -73,7 +88,7 @@ L:SetTimerLocalization({
 })
 
 L:SetOptionLocalization({
-	TimerVengefulSpirit		= "Show timer for Ghost durations"--Translate
+	TimerVengefulSpirit		= "Show timer for Ghost durations",--Translate
 })
 
 ----------------------------
