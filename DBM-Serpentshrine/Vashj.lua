@@ -330,11 +330,11 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 end
 
 function mod:UNIT_DIED(args)
- 	if args.destName == L.TaintedElemental then
+if args.destName == L.TaintedElemental then
 		timerElemFade:Cancel()
- 	--	self:ScheduleMethod(45, "ElementalSoon")
- 	end
- end
+--	self:ScheduleMethod(45, "ElementalSoon")
+end
+end
 
 function mod:UNIT_HEALTH(uId)
 	if self:GetUnitCreatureId(uId) == 21212 then
