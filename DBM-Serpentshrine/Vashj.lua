@@ -16,6 +16,7 @@ mod:RegisterEventsInCombat(
 	"UNIT_DIED",
 	"UNIT_TARGET",
 	"UNIT_HEALTH",
+	"SPELL_CAST_SUCCESS",
 	"SPELL_AURA_REMOVED 310636 310659",
 	"CHAT_MSG_LOOT",
 	"SWING_DAMAGE",
@@ -24,7 +25,7 @@ mod:RegisterEventsInCombat(
 
 mod:RegisterEvents(
 	"SPELL_AURA_APPLIED 38132 38281",
-	"SPELL_CAST_SUCCESS 38280",
+	"SPELL_CAST_SUCCESS 38280 38509 38316",
 	"SPELL_AURA_REMOVED 38281"
 )
 
@@ -32,15 +33,19 @@ mod:AddTimerLine(L.Normal)
 
 local warnCore      = mod:NewAnnounce("WarnCore", 3, 38132)
 local warnCharge    = mod:NewTargetAnnounce(38280, 4)
+local warnShock	    = mod:NewTargetAnnounce(38509, 4)
 local warnPhase     = mod:NewAnnounce("WarnPhase", 1)
 local warnElemental = mod:NewAnnounce("WarnElemental", 4)
 
 local specWarnCore   = mod:NewSpecialWarningYou(38132)
 local specWarnCharge = mod:NewSpecialWarningRun(38280)
 
+local timerShockNext = mod:NewNextTimer(10, 38509, nil, nil, nil, 5)
+local timerTangling	 = mod:NewNextTimer(32, 38316, nil, nil, nil, 2)
+local timerElemFade	 = mod:NewBuffFadesTimer(15, 24991)
 local timerStrider   = mod:NewTimer(45, "Strider", "Interface\\Icons\\INV_Misc_Fish_13", nil, nil, 1)
 local timerElemental = mod:NewTimer(45, "TaintedElemental", "Interface\\Icons\\Spell_Nature_ElementalShields", nil, nil, 1)
-local timerNaga      = mod:NewTimer(45, "Naga", "Interface\\Icons\\INV_Misc_MonsterHead_02", nil, nil, 1)
+local timerNaga      = mod:NewTimer(30, "Naga", "Interface\\Icons\\INV_Misc_MonsterHead_02", nil, nil, 1)
 local timerCharge    = mod:NewTargetTimer(20, 38280, nil, nil, nil, 4)
 
 local berserkTimer   = mod:NewBerserkTimer(600)
@@ -133,6 +138,7 @@ end
 
 function mod:NextElemental()
 	timerElemental:Start()
+	timerElemFade:Start()
 	self:UnscheduleMethod("NextElemental")
 	self:ScheduleMethod(45, "NextElemental")
 
@@ -294,6 +300,11 @@ function mod:SPELL_CAST_SUCCESS(args)
 		if args:IsPlayer() then
 			specWarnCharge:Show()
 		end
+	elseif spellId == 38509 then
+		warnShock:Show(args.destName)
+		timerShockNext:Start()
+	elseif spellId == 38316 then
+		timerTangling:Start()
 	end
 end
 
@@ -318,12 +329,12 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 	end
 end
 
--- function mod:UNIT_DIED(args)
--- 	if args.destName == L.TaintedElemental then
--- 		timerElemental:Start()
--- 		self:ScheduleMethod(45, "ElementalSoon")
--- 	end
--- end
+function mod:UNIT_DIED(args)
+ 	if args.destName == L.TaintedElemental then
+		timerElemFade:Cancel()
+ 	--	self:ScheduleMethod(45, "ElementalSoon")
+ 	end
+ end
 
 function mod:UNIT_HEALTH(uId)
 	if self:GetUnitCreatureId(uId) == 21212 then

@@ -26,10 +26,9 @@ mod:RegisterEvents(
 	"UNIT_TARGET"
 )
 
---local warnPhase2		= mod:NewPhaseAnnounce(2)
 --local warnDefender		= mod:NewAnnounce("warnAshtongueDefender", 2, 41180)
 --local warnSorc			= mod:NewAnnounce("warnAshtongueSorcerer", 2, 40520)
-local warnPhase               = mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2)
+local warnPhase2               = mod:NewPhaseAnnounce(2)
 
 
 local specWarnShadowclean 	= mod:NewSpecialWarningInterrupt(322727, "HasInterrupt", nil, nil, 1, 2)
@@ -37,17 +36,15 @@ local specWarnDevastating 	= mod:NewSpecialWarningInterrupt(371519, "HasInterrup
 --local specWarnFadeDebuff 	= mod:NewSpecialWarningFades(322743, nil, nil, nil, 3, 4)
 --local specWarnPePa			= mod:NewSpecialWarningAdds(40476, nil, nil, nil, 1, 2)
 local specWarnMind			= mod:NewSpecialWarningSpell(322728, nil, nil, nil, 1, 3)
-local specWarnWave			= mod:NewSpecialWarningSpell(371507, nil, nil, nil, 1, 3)
+--local specWarnWave			= mod:NewSpecialWarningSpell(371507, nil, nil, nil, 1, 3)
 local specWarnFadeDebuff    = mod:NewSpecialWarning("|cff71d5ff|Hspell:322743|hЗа гранью|h|r МОЖНО БИТЬ ЧАРОТВОРЦА!!!!", nil, nil, nil, 3, 2)
 local specWarnReflect		= mod:NewSpecialWarningReflect(371509, nil, nil, nil, 2, 3)
-local specWarnClean			= mod:NewSpecialWarningSpell(371511, nil, nil, nil, 1, 3)
+--local specWarnClean			= mod:NewSpecialWarningSpell(371511, nil, nil, nil, 1, 3)
 local specWarnInferno		= mod:NewSpecialWarningCast(322737, nil, nil, nil, 1, 2)
 local specCowardice         = mod:NewSpecialWarning("|cff71d5ff|Hspell:322750|hЛик Тени|h|r НЕ СБИЛИ КАСТ БОСС ОТХИЛИЛСЯ!!!!", nil, nil, nil, 2, 2)
-
-
---local warnDominateMind		= mod:NewTargetAnnounce(322728, 3)
-
 local specWarnAdds			= mod:NewSpecialWarningAdds(40474, "-Healer", nil, nil, 1, 2)
+
+
 
 local timerCombatStart		= mod:NewCombatTimer(12)
 local timerAddsCD			= mod:NewAddsCustomTimer(70, 40474)--NewAddsCustomTimer
@@ -64,13 +61,13 @@ local timerDispelAkama		= mod:NewNextCountTimer(45, 322743, nil, nil, nil, 1)
 local timerReflect			= mod:NewCDTimer(12, 371509, nil, nil, nil, 3)
 local timerInferno			= mod:NewCDTimer(20, 322737, nil, nil, nil, 3)
 local timerReflectBuff		= mod:NewBuffActiveTimer(3, 371509, nil, nil, nil, 3)
-local berserkTimer			= mod:NewBerserkTimer(720)
+local berserkTimer			= mod:NewBerserkTimer(360)
 local Stage2             	= mod:NewPhaseTimer(360, nil, "Фаза: %d", nil, nil, 4)
 
---mod:AddBoolOption("SetNecromancerIcon")
+--mod:AddBoolOption("SetNecromancerIcon", false)
 --mod:AddNamePlateOption("Nameplate1", 371509, true)
 mod:AddNamePlateOption("Nameplate2", 322732, true)
-mod:AddBoolOption("RaidSay", true)
+mod:AddBoolOption("RaidSay", false)
 mod:AddSetIconOption("SetIconOnBeacon", 322748, true, true, { 1, 2, 3, 4, 5, 6, 7, 8 })
 --mod:AddSetIconOption("SetIconOnDominateMind", 322728, true, false, {4, 5, 6})
 
@@ -81,7 +78,7 @@ mod.vb.ControlAkama = 0
 --mod.vb.dominateMindIcon = 6
 --local Adds = {}
 --local addsCount = {70, 50}
-local addsLoops = {50, 60}
+local addsLoops = {50, 70}
 
 --[[
 local function addsWestLoop(self)
@@ -135,7 +132,6 @@ function mod:OnCombatStart(delay)
 	self.vb.AddsLoop = 0
 	--self.vb.dominateMindIcon = 6
 	self.vb.ControlAkama = 0
-	berserkTimer:Start()
 	Stage2:Start(nil, 2)
 	timerDispelAkama:Start(nil, self.vb.ControlAkama)
 	timerDominateMindCD:Start(30)
@@ -146,6 +142,14 @@ function mod:OnCombatStart(delay)
 		"SWING_MISSED",
 		"UNIT_SPELLCAST_SUCCEEDED"
 	)
+	if self.Options.HealthFrame then
+		DBM.BossHealth:Show(L.name)
+		DBM.BossHealth:AddBoss(23421, L.Ciao)
+		DBM.BossHealth:AddBoss(23524, L.Dusha)
+		DBM.BossHealth:AddBoss(23523, L.Groz)
+		DBM.BossHealth:AddBoss(23318, L.CrisaTH)
+		DBM.BossHealth:AddBoss(23216, L.GigaChad)
+	end
 	--timerAddsCD:Start(18, DBM_COMMON_L.EAST or "East")
 end
 
@@ -177,10 +181,10 @@ function mod:SPELL_CAST_SUCCESS(args)
 	--if args:IsSpellID(371507) and self:AntiSpam(2,2) then
 	--	specWarnWave:Show()
 	--	timerWaveCD:Start()
-	if args:IsSpellID(371511) then
-		specWarnClean:Show()
-		timercleanCD:Start()
-	end
+	--if args:IsSpellID(371511) then
+	--	specWarnClean:Show()
+	--	timercleanCD:Start()
+	--end
 end
 
 --[[
@@ -222,8 +226,9 @@ function mod:SPELL_AURA_APPLIED(args)
 			DBM.Nameplate:Show(args.destGUID, 322732)
 		end
 	elseif args:IsSpellID(322734) then
-		warnPhase:Show()
+		warnPhase2:Show()
 		timerInferno:Start(15)
+		berserkTimer:Start()
 		self:NextStage()
 	end
 end
@@ -233,7 +238,6 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 34189 and args:GetDestCreatureID() == 23191 then--Coming out of stealth (he's been activated)
 		timerCombatStart:Start()
-		self:SendSync("StartAkam")
 	elseif args:IsSpellID(322728) then
 	elseif args:IsSpellID(371509) then
 		timerReflect:Start()
@@ -295,14 +299,17 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	end
 end
 ]]
+--[[function mod:UNIT_TARGET()
+	if self.Options.SetNecromancerIcon then
+		local uid = ScanWhitName("Пеплоуст-чаротворец")
+		if uid then
+			self:SetIcon(uid, 8)
+		end
+	end
+end]]
+
 function mod:UNIT_DIED(args)
 	if self:GetCIDFromGUID(args.destGUID) == 22841 then
 		DBM:EndCombat(self)
-	end
-end
-
-function mod:OnSync(event, args)
-	if event == "StartAkam" then
-		timerCombatStart:Start()
 	end
 end
