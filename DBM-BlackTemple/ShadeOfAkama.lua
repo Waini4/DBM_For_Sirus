@@ -144,6 +144,7 @@ function mod:OnCombatStart(delay)
 	)
 	if self.Options.HealthFrame then
 		DBM.BossHealth:Show(L.name)
+		DBM.BossHealth:AddBoss(22841, L.name)
 		DBM.BossHealth:AddBoss(23421, L.Ciao)
 		DBM.BossHealth:AddBoss(23524, L.Dusha)
 		DBM.BossHealth:AddBoss(23523, L.Groz)
