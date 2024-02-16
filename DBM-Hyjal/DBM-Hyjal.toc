@@ -25,6 +25,7 @@
 ## X-DBM-Mod-LoadZone: Hyjal Summit
 ## X-DBM-Mod-LoadZone-zhCN: 海加尔峰
 ## X-DBM-Mod-LoadZone-ruRU: Вершина Хиджала
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-Hyjal
 
 localization.en.lua
 # localization.de.lua

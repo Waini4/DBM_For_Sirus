@@ -30,6 +30,7 @@
 ## X-DBM-Mod-LoadZone: Onyxia's Lair
 ## X-DBM-Mod-LoadZone-zhCN: 奥妮克希亚的巢穴
 ## X-DBM-Mod-LoadZone-ruRU: Логово Ониксии
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-Onyxia
 
 localization.en.lua
 localization.de.lua

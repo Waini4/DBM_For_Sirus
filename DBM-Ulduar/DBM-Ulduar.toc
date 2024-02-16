@@ -29,6 +29,7 @@
 ## X-DBM-Mod-LoadZone-esES: Ulduar
 ## X-DBM-Mod-LoadZone-esMX: Ulduar
 ## X-DBM-Mod-LoadZone-deDE: Ulduar
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-Ulduar
 
 localization.en.lua
 localization.de.lua

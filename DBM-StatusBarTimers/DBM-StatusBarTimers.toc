@@ -21,5 +21,7 @@
 ## Author: MysticalOS, QartemisT, fxpw
 ## Version: 9.2.2
 ## X-Website: https://deadlybossmods.com
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-StatusBarTimers
+
 
 DBT.lua

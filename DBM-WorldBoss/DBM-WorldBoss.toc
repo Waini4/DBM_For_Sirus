@@ -17,6 +17,7 @@
 ## X-DBM-Mod-LoadZone: Tol'Garod, A Waking Nightmare
 ## X-DBM-Mod-LoadZone-ruRU: Тол'Гарод, Кошмар Наяву
 ## X-DBM-Mod-LoadCID: 70010
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-WorldBoss
 
 localization.ru.lua
 TolGarodeNorigorn\Norigorn.lua

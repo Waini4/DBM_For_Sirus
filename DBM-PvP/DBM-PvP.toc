@@ -38,6 +38,8 @@
 ## X-DBM-Mod-LoadZone-ruRU:Арена Острогорья,Арена Даларана,Арена Награнда,Руины Лордерона,Арена Доблести
 ## X-DBM-Mod-LoadZone-zhCN:刀锋山竞技场,达拉然竞技场,纳格兰竞技场,洛丹伦废墟,勇气竞技场
 ## X-DBM-Mod-LoadZone-zhTW:劍刃競技場,達拉然競技場,納葛蘭競技場,羅德隆廢墟,勇武競技場
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-PvP
+
 
 localization.en.lua
 # localization.cn.lua

@@ -6,6 +6,7 @@ mod:SetCreatureID(17257)
 
 mod:SetModelID(17257)
 mod:RegisterCombat("yell", L.YellPhase1)
+mod:RegisterCombat("combat", 17257)
 
 mod:RegisterEvents(
 	"CHAT_MSG_MONSTER_YELL",

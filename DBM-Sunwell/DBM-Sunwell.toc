@@ -25,6 +25,7 @@
 ## X-DBM-Mod-LoadZone: Sunwell Plateau
 ## X-DBM-Mod-LoadZone-zhCN: 太阳之井高地
 ## X-DBM-Mod-LoadZone-ruRU: Плато Солнечного Колодца
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-Sunwell
 
 localization.en.lua
 localization.cn.lua

@@ -32,6 +32,7 @@
 ## X-DBM-Mod-LoadZone-zhCN: 安其拉废墟
 ## X-DBM-Mod-LoadZone-koKR: 안퀴라즈 폐허
 ## X-DBM-Mod-LoadZone-deDE: Nitram,Ruinen von Ahn'Qiraj
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-AQ20
 
 localization.en.lua
 localization.de.lua

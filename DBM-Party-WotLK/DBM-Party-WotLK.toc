@@ -45,6 +45,8 @@
 ## X-DBM-Mod-LoadZone-koKR: 안카헤트: 고대 왕국,아졸네룹,옛 스트라솔름,드락타론 성채,군드락,번개의 전당,돌의 전당,마력의 탑,마력의 눈,우트가드 성채,우트가드 첨탑,보랏빛 요새,용사의 시험장,검은바위 나락,붉은십자군 수도원,사론의 구덩이,영혼의 제련소,투영의 전당,그림자송곳니 성채
 ## X-DBM-Mod-LoadZone-esES: Ahn'kahet: El Antiguo Reino,Azjol-Nerub,La Matanza de Stratholme,Fortaleza de Drak'Tharon,Gundrak,Cámaras de Relámpagos,Cámaras de Piedra,El Nexo,El Oculus,Fortaleza de Utgarde,Pináculo de Utgarde,El Bastión Violeta,Prueba del Campeón,Foso de Saron,La Forja de Almas,Cámaras de Reflexión
 ## X-DBM-Mod-LoadZone-esMX: Ahn'kahet: El Antiguo Reino,Azjol-Nerub,La Matanza de Stratholme,Fortaleza de Drak'Tharon,Gundrak,Cámaras de Relámpagos,Cámaras de Piedra,El Nexo,El Oculus,Fortaleza de Utgarde,Pináculo de Utgarde,El Bastión Violeta,Prueba del Campeón,Foso de Saron,La Forja de Almas,Cámaras de Reflexión
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-Party-WotLK
+
 localization.en.lua
 localization.cn.lua
 localization.ru.lua

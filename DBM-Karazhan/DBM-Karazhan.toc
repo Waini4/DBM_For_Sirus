@@ -16,6 +16,7 @@
 ## X-DBM-Mod-MapID: 868
 ## X-DBM-Mod-LoadZone: Karazhan
 ## X-DBM-Mod-LoadZone-ruRU: Каражан
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-Karazhan
 
 localization.en.lua
 localization.ru.lua

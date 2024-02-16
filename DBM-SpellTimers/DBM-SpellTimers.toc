@@ -15,6 +15,7 @@
 ## Author: Nitram and Tandanu, fxpw
 ## URL: http://www.deadlybossmods.com
 ## SavedVariables: DBM_SpellTimers_Settings
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-SpellTimers
 
 
 SpellTimersCore.lua

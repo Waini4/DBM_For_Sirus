@@ -12,3 +12,4 @@
 ## X-DBM-Voice-ShortName: VEM
 ## X-DBM-Voice-Version: 11
 ## X-DBM-Voice-HasCount: 1
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-VPVEM

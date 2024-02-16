@@ -29,6 +29,8 @@
 ## X-DBM-Mod-Sort: 1006
 ## X-DBM-Mod-MapID: 474,466,482,162
 ## X-DBM-Mod-LoadCID: 17711,18728,18166,20130
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-Outland
+
 
 localization.en.lua
 localization.de.lua

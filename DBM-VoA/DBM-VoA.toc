@@ -29,6 +29,7 @@
 ## X-DBM-Mod-LoadZone: Vault of Archavon
 ## X-DBM-Mod-LoadZone-zhCN: 阿尔卡冯的宝库
 ## X-DBM-Mod-LoadZone-ruRU: Склеп Аркавона
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-VoA
 
 localization.en.lua
 localization.de.lua

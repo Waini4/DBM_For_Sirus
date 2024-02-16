@@ -45,6 +45,7 @@
 ## X-DBM-Mod-LoadZone-zhCN: 冰冠堡垒
 ## X-DBM-Mod-LoadZone-esES: Ciudadela de la Corona de Hielo
 ## X-DBM-Mod-LoadZone-esMX: Ciudadela de la Corona de Hielo
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-Icecrown
 
 localization.en.lua
 # localization.de.lua

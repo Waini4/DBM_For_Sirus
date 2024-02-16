@@ -19,6 +19,7 @@
 ## X-DBM-Mod-LoadZone: Magtheridon's Lair
 ## X-DBM-Mod-LoadZone-zhCN: 玛瑟里顿的巢穴
 ## X-DBM-Mod-LoadZone-ruRU: Логово Магтеридона
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-Magtheridon
 
 localization.ru.lua
 

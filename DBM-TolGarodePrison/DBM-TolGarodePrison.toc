@@ -15,6 +15,7 @@
 ## X-DBM-Mod-MapID: 955
 ## X-DBM-Mod-LoadZone: Tol'GarodePrison
 ## X-DBM-Mod-LoadZone-ruRU: Тол'Гародская тюрьма
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-TolGarodePrison
 
 localization.ru.lua
 

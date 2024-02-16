@@ -37,6 +37,7 @@
 ## X-DBM-Mod-LoadZone: Naxxramas
 ## X-DBM-Mod-LoadZone-zhCN: 纳克萨玛斯
 ## X-DBM-Mod-LoadZone-ruRU: Наксрамас
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-Naxx
 
 localization.en.lua
 localization.de.lua

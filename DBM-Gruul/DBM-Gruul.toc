@@ -19,6 +19,7 @@
 ## X-DBM-Mod-LoadZone: Gruul's Lair
 ## X-DBM-Mod-LoadZone-zhCN: 格鲁尔的巢穴
 ## X-DBM-Mod-LoadZone-ruRU: Логово Груула
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-Gruul
 
 localization.en.lua
 # localization.de.lua

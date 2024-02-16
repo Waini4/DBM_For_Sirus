@@ -20,6 +20,8 @@
 ## X-DBM-Mod-LoadZone: Blackrock Depths,Scarlet Monastery,Shadowfang Keep,The Slave Pens
 ## X-DBM-Mod-LoadZone-zhCN: 黑石深渊,血色修道院,影牙城堡,奴隶围栏
 ## X-DBM-Mod-LoadZone-ruRU: Глубины Черной горы,Монастырь Алого ордена,Крепость Темного Клыка,Узилище
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-WorldEvents
+
 localization.en.lua
 localization.cn.lua
 localization.ru.lua

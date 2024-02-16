@@ -26,6 +26,7 @@
 ## X-DBM-Mod-LoadZone: The Eye of Eternity
 ## X-DBM-Mod-LoadZone-zhCN: 永恒之眼
 ## X-DBM-Mod-LoadZone-ruRU: Око Вечности
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-EyeOfEternity
 
 localization.en.lua
 localization.fr.lua

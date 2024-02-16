@@ -17,6 +17,7 @@
 ## X-DBM-Mod-Sort: 303
 ## X-DBM-Mod-LoadZone: Tempest Keep
 ## X-DBM-Mod-LoadZone-ruRU: Крепость Бурь
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-TheEye
 
 
 localization.en.lua

@@ -22,6 +22,7 @@
 ## X-DBM-Mod-Name-zhCN: 黑翼之巢
 ## X-DBM-Mod-Name-ruRU: Логово Крыла Тьмы
 ## X-DBM-Mod-LoadZone-zhCN: 黑翼之巢
+## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-BWL
 
 localization.en.lua
 localization.de.lua
