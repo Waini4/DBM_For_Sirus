@@ -219,7 +219,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.SetIconOnBeacon then
 			self:ScanForMobs(args.destGUID, 1, 3, 1, 0.01, 20, "SetIconOnBeacon")
 		end
-	elseif args:IsSpellID(371509) and self:AntiSpam(3, 1) then
+	elseif args:IsSpellID(371509) and self:AntiSpam(8, 1) then
 		specWarnReflect:Show(args.destName)
 		timerReflectBuff:Start()
 	elseif args:IsSpellID(322732) then
