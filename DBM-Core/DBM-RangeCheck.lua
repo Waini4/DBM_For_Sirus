@@ -442,6 +442,7 @@ DBM:RegisterMapSize("VIP", 0, 733.63, 491.25)
 DBM:RegisterMapSize("vip_location_map", 0, 2134, 2667)
 DBM:RegisterMapSize("Zort", 0, 470.03, 470.08)
 DBM:RegisterMapSize("TolGarodJail", 0, 585, 390)
+DBM:RegisterMapSize("TolGarod", 0, 2325.89, 1860.19)
 ---------------
 --  Globals  --
 ---------------
