@@ -28,7 +28,8 @@ mod:RegisterEvents(
 
 --local warnDefender		= mod:NewAnnounce("warnAshtongueDefender", 2, 41180)
 --local warnSorc			= mod:NewAnnounce("warnAshtongueSorcerer", 2, 40520)
-local warnPhase2               = mod:NewPhaseAnnounce(2)
+local warnPhase2            = mod:NewPhaseAnnounce(2)
+local warnDominateMind		= mod:NewTargetAnnounce(322728, 3)
 
 
 local specWarnShadowclean 	= mod:NewSpecialWarningInterrupt(322727, "HasInterrupt", nil, nil, 1, 2)
@@ -41,7 +42,7 @@ local specWarnFadeDebuff    = mod:NewSpecialWarning("|cff71d5ff|Hspell:322743|h�
 local specWarnReflect		= mod:NewSpecialWarningReflect(371509, nil, nil, nil, 2, 3)
 --local specWarnClean			= mod:NewSpecialWarningSpell(371511, nil, nil, nil, 1, 3)
 local specWarnInferno		= mod:NewSpecialWarningCast(322737, nil, nil, nil, 1, 2)
-local specCowardice         = mod:NewSpecialWarning("|cff71d5ff|Hspell:322750|hЛик Тени|h|r НЕ СБИЛИ КАСТ БОСС ОТХИЛИЛСЯ!!!!", nil, nil, nil, 2, 2)
+local specCowardice         = mod:NewSpecialWarning("НЕ СБИЛИ |cff71d5ff|Hspell:322750|hЛик Тени|h|r БОСС ОТХИЛИЛСЯ!!!!", nil, nil, nil, 2, 2)
 local specWarnAdds			= mod:NewSpecialWarningAdds(40474, "-Healer", nil, nil, 1, 2)
 
 
@@ -58,7 +59,7 @@ local timercleanCD			= mod:NewCDTimer(15, 371511, nil, nil, nil, 4) --диспе
 
 local timerDispelAkama		= mod:NewNextCountTimer(45, 322743, nil, nil, nil, 1)
 --local timerWaveCD			= mod:NewCDTimer(7, 371507, nil, nil, nil, 3)
-local timerReflect			= mod:NewCDTimer(12, 371509, nil, nil, nil, 3)
+local timerReflect			= mod:NewCDTimer(12, 371509, nil, "SpellCaster", nil, 3)
 local timerInferno			= mod:NewCDTimer(20, 322737, nil, nil, nil, 3)
 local timerReflectBuff		= mod:NewBuffActiveTimer(3, 371509, nil, nil, nil, 3)
 local berserkTimer			= mod:NewBerserkTimer(360)
@@ -72,6 +73,7 @@ mod:AddSetIconOption("SetIconOnBeacon", 322748, true, true, { 1, 2, 3, 4, 5, 6, 
 --mod:AddSetIconOption("SetIconOnDominateMind", 322728, true, false, {4, 5, 6})
 
 --mod.vb.NecromancerIcon = 1
+local dominateMindTargets = {}
 mod.vb.AddsWestCount = 0
 mod.vb.AddsLoop = 0
 mod.vb.ControlAkama = 0
@@ -112,13 +114,13 @@ local function addsLoop(self)
 		end
 	end
 end
---[[
-local function sorcLoop(self)
-	warnSorc:Show()
-	self:Schedule(25, sorcLoop, self)
-	timerSorcCD:Start(25)
+
+local function warnMindTargets(self)
+		warnDominateMind:Show(table.concat(dominateMindTargets, "<, >"))
+		table.wipe(dominateMindTargets)
 end
 
+--[[
 local function defenderLoop(self)
 	warnDefender:Show()
 	self:Schedule(30, defenderLoop, self)
@@ -198,6 +200,9 @@ end
 
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(322728) then
+		dominateMindTargets[#dominateMindTargets + 1] = args.destName
+		self:Unschedule(warnMindTargets)
+		self:Schedule(0.1, warnMindTargets, self)
 		-- DBM:Debug("MC on "..args.destName,2)
 	elseif args:IsSpellID(322748) then
 		if self.Options.SetIconOnBeacon then

@@ -60,6 +60,17 @@ mod.vb.markSos = 5
 mod.vb.FlameCount = 0
 mod.vb.MarkCount = 0
 
+local function warnHarasmTargets(self)
+	warnHarassmentTarget:Show(table.concat(HarasmTargets, "<, >"))
+	table.wipe(HarasmTargets)
+end
+
+local function warnSoulTargets(self)
+	warnSoulAbductionTarget:Show(table.concat(SoulTargets, "<, >"))
+	table.wipe(SoulTargets)
+end
+
+
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 17968, "Archimonde")
 	self:SetStage(1)
@@ -126,7 +137,8 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnLeg:Show(args.destName)
 	elseif args:IsSpellID(319917) then
 		SoulTargets[#SoulTargets + 1] = args.destName
-		warnSoulAbductionTarget:Show(table.concat(SoulTargets, "<, >"))
+		self:Unschedule(warnSoulTargets)
+		self:Schedule(0.1, warnSoulTargets, self)
 		if args:IsPlayer() then
 			specWarnSoulAbduction:Show("Беги в воду!")
 		end
@@ -140,10 +152,10 @@ function mod:SPELL_AURA_APPLIED(args)
 				self.vb.markSos = 5
 			end
 		end
-		table.wipe(SoulTargets)
 	elseif args:IsSpellID(319931) then
 		HarasmTargets[#HarasmTargets + 1] = args.destName
-		warnHarassmentTarget:Show(table.concat(HarasmTargets, "<, >"))
+		self:Unschedule(warnHarasmTargets)
+		self:Schedule(0.1, warnHarasmTargets, self)
 		if args:IsPlayer() then
 			specWarnHarassment:Show()
 			yellHaras:Yell()
@@ -151,7 +163,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.HarassmentPlate then
 			DBM.Nameplate:Show(args.destGUID, 319931)
 		end
-		table.wipe(HarasmTargets)
 	end
 end
 
