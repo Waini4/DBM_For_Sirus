@@ -443,6 +443,7 @@ DBM:RegisterMapSize("vip_location_map", 0, 2134, 2667)
 DBM:RegisterMapSize("Zort", 0, 470.03, 470.08)
 DBM:RegisterMapSize("TolGarodJail", 0, 585, 390)
 DBM:RegisterMapSize("TolGarod", 0, 2325.89, 1860.19)
+DBM:RegisterMapSize("VaultofArchavon2", 1, 2600, 1733.333) -- Vault of Archavon (Raid-WotLK)
 ---------------
 --  Globals  --
 ---------------
