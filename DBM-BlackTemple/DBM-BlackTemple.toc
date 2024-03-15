@@ -20,6 +20,7 @@
 ## X-DBM-Mod-Name-zhCN: 黑暗神殿
 ## X-DBM-Mod-Name-ruRU: Черный храм
 ## X-DBM-Mod-LoadZone-ruRU: Черный храм
+## Version: 9.2.93
 ## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-BlackTemple
 
 localization.en.lua
