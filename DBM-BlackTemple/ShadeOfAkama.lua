@@ -10,10 +10,10 @@ mod:RegisterCombat("combat")
 --mod:SetWipeTime(50)--Adds come about every 50 seconds, so require at least this long to wipe combat if they die instantly
 
 mod:RegisterEventsInCombat(
-	"SPELL_AURA_APPLIED 322728 322748 322747 322746 322745 322749 371509 322732 322734",
+	"SPELL_AURA_APPLIED 322728 322748 322747 322746 322745 322749 371509 322732 322734 322739",
 	"SPELL_AURA_APPLIED_DOSE",
 	"SPELL_AURA_REMOVED 322728 371509 322732 322743",
-	"SPELL_CAST_START 322727 322728 322731 322737 371519",
+	"SPELL_CAST_START 322727 322728 322731 322737 371519 322739",
 	"SPELL_CAST_SUCCESS 371507 371511",
 	"SPELL_INTERRUPT ",
 	"SPELL_SUMMON",
@@ -30,8 +30,10 @@ mod:RegisterEvents(
 --local warnSorc			= mod:NewAnnounce("warnAshtongueSorcerer", 2, 40520)
 local warnPhase2            = mod:NewPhaseAnnounce(2)
 local warnDominateMind		= mod:NewTargetAnnounce(322728, 3)
+local warnDom				= mod:NewCastAnnounce(322739, 3, 1)
 
 
+local specWarnDom		 	= mod:NewSpecialWarningTarget(322739, nil, nil, nil, 1, 1)
 local specWarnShadowclean 	= mod:NewSpecialWarningInterrupt(322727, "HasInterrupt", nil, nil, 1, 2)
 local specWarnDevastating 	= mod:NewSpecialWarningInterrupt(371519, "HasInterrupt", nil, nil, 1, 2)
 --local specWarnFadeDebuff 	= mod:NewSpecialWarningFades(322743, nil, nil, nil, 3, 4)
@@ -51,12 +53,11 @@ local timerCombatStart		= mod:NewCombatTimer(12)
 local timerAddsCD			= mod:NewAddsCustomTimer(70, 40474)--NewAddsCustomTimer
 --local timerDefenderCD	= mod:NewTimer(25, "timerAshtongueDefender", 41180, nil, nil, 1)
 --local timerSorcCD		= mod:NewTimer(25, "timerAshtongueSorcerer", 40520, nil, nil, 1)
-
+local timerInfernoCast		= mod:NewCastTimer(3.5, 322737, nil, nil, nil, 2)
 local timerPlagueCD			= mod:NewCDTimer(32, 322731, nil, nil, nil, 5) --чума (должна диспелится)
 local timerDominateMindCD	= mod:NewCDTimer(48, 322728, nil, nil, nil, 3)
 local timerShadowcleanCD	= mod:NewCDTimer(13.5, 322727, nil, nil, nil, 4) --масс диспел
 local timercleanCD			= mod:NewCDTimer(15, 371511, nil, nil, nil, 4) --диспел 5 челов
-
 local timerDispelAkama		= mod:NewNextCountTimer(45, 322743, nil, nil, nil, 1)
 --local timerWaveCD			= mod:NewCDTimer(7, 371507, nil, nil, nil, 3)
 local timerReflect			= mod:NewCDTimer(12, 371509, nil, "SpellCaster", nil, 3)
@@ -64,6 +65,7 @@ local timerInferno			= mod:NewCDTimer(20, 322737, nil, nil, nil, 3)
 local timerReflectBuff		= mod:NewBuffActiveTimer(3, 371509, nil, nil, nil, 3)
 local berserkTimer			= mod:NewBerserkTimer(360)
 local Stage2             	= mod:NewPhaseTimer(360, nil, "Фаза: %d", nil, nil, 4)
+local timerDomCD			= mod:NewCDTimer(27, 322739, nil, nil, nil, 4)
 
 --mod:AddBoolOption("SetNecromancerIcon", false)
 --mod:AddNamePlateOption("Nameplate1", 371509, true)
@@ -175,8 +177,12 @@ function mod:SPELL_CAST_START(args)
 			specWarnDevastating:Show(args.sourceName)
 		end
 	elseif args:IsSpellID(322737) then
-		specWarnInferno:Show()
+		timerInfernoCast:Start()
+		specWarnInferno:Schedule(3)
 		timerInferno:Start()
+	elseif args:IsSpellID(322739) then
+		warnDom:Show()
+		timerDomCD:Start()
 	end
 end
 
@@ -234,8 +240,14 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(322734) then
 		warnPhase2:Show()
 		timerInferno:Start(15)
+		timerDomCD:Start(31)
 		berserkTimer:Start()
 		self:NextStage()
+	elseif args:IsSpellID(322739) then
+		specWarnDom:Show(args.destName)
+		if self.Options.SetIconOnBeacon then
+			self:ScanForMobs(args.destGUID, 1, 8, 1, 0.01, 20, "SetIconOnBeacon")
+		end
 	end
 end
 
