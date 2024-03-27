@@ -18,7 +18,7 @@
 ## X-DBM-Mod-LoadZone: Serpentshrine Cavern
 ## X-DBM-Mod-LoadZone-ruRU: Змеиное святилище
 ## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-Serpentshrine
-
+## Version: 9.2.93
 
 localization.en.lua
 localization.ru.lua

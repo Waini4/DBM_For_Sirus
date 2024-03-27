@@ -11,29 +11,51 @@ mod:RegisterCombat("combat", L.YellPull)
 mod:SetUsedIcons(4, 5, 6, 7, 8)
 
 mod:RegisterEvents(
+	"SPELL_CAST_START 38445 38330 29436",
+	"SPELL_CAST_SUCCESS 38236 38373 38306 38304 38358 38441",
+	"SPELL_AURA_APPLIED",
+	"SPELL_AURA_REMOVED",
 	"CHAT_MSG_MONSTER_YELL",
+	"SPELL_DAMAGE 38358",
 	"CHAT_MSG_MONSTER_EMOTE"
 )
 
 mod:RegisterEventsInCombat(
-	"SPELL_CAST_START 309253 309289 309256 38445",
-	"SPELL_CAST_SUCCESS 309262 38236 309258",
+	"SPELL_CAST_START 309253 309289 309256",
+	"SPELL_CAST_SUCCESS 309262 309258",
 	"SPELL_AURA_APPLIED 309292 309262",
 	"SPELL_AURA_REMOVED 309252 309292 309262",
 	"UNIT_DIED"
 )
 
+mod:AddTimerLine(DBM_CORE_L.NORMAL_MODE25)
+local warnNovaSoon       	= mod:NewSoonAnnounce(38445, 3)   -- Огненная звезда
+local warnBeastInside		= mod:NewCastAnnounce(38373, 3) -- Зверь
+local warnAnti				= mod:NewCastAnnounce(38306, 3)
+local warnEarth				= mod:NewCastAnnounce(38304, 3)
+local warnHealf				= mod:NewCastAnnounce(38330, 4)
+local warnLeech				= mod:NewCastAnnounce(29436, 4)
+local warnTide				= mod:NewCastAnnounce(38358, 4)
+local warnLightning			= mod:NewCastAnnounce(38441, 4)
 
-local warnNovaSoon       = mod:NewSoonAnnounce(38445, 3)   -- Огненная звезда
-local specWarnNova       = mod:NewSpecialWarningSpell(38445)  -- Огненная звезда
 
-local timerNovaCD        = mod:NewCDTimer(26, 38445, nil, nil, nil, 2)
-local timerSpitfireCD    = mod:NewCDTimer(30, 38236, nil, nil, nil, 2)
-local timerDispelCD    = mod:NewCDTimer(15, 38306, nil, nil, nil, 2)
+local specWarnNova       	= mod:NewSpecialWarningSpell(38445)  -- Огненная звезда
+local specWarnFire      	= mod:NewSpecialWarningSpell(38236)
+local specWarnKick			= mod:NewSpecialWarningInterrupt(38330, "HasInterrupt", nil, nil, 1, 2)
+
+local timerHealCD 			= mod:NewCDTimer(16, 38330, nil, nil, nil, 4)
+local timerNovaCD        	= mod:NewCDTimer(26, 38445, nil, nil, nil, 2)
+local timerSpitfireCD   	= mod:NewCDTimer(30, 38236, nil, nil, nil, 2)
+local timerSpitEarthCD   	= mod:NewCDTimer(20, 38304, nil, nil, nil, 2)
+local timerTideCD   		= mod:NewCDTimer(15, 38358, nil, nil, nil, 2)
+local timerLeechCD   		= mod:NewCDTimer(15, 29436, nil, nil, nil, 2)
+local timerDispelCD    		= mod:NewCDTimer(15, 38306, nil, nil, nil, 2)
+local timerBeastinsideCD    = mod:NewCDTimer(30, 38373, nil, nil, nil, 3)
+local timerLightning    	= mod:NewCDTimer(10, 38441, nil, nil, nil, 3)
 
 local berserkTimer          = mod:NewBerserkTimer(600)
 
-
+mod:AddTimerLine(DBM_CORE_L.HEROIC_MODE25)
 ------------------------ХМ-------------------------
 
 -- local warnPhase2Soon		= mod:NewPrePhaseAnnounce(2)
@@ -69,6 +91,7 @@ mod:AddBoolOption("AnnounceSvaz", false)
 
 local SvazTargets = {}
 local SvazIcons = 7
+local Sumkill = 0
 
 do
 	-- local function sort_by_group(v1, v2)
@@ -99,27 +122,31 @@ end
 
 function mod:OnCombatStart()
 	DBM:FireCustomEvent("DBM_EncounterStart", 21214, "Fathom-Lord Karathress")
+	mod:SetStage(1)
+	if self.Options.HealthFrameBoss and not self.Options.HealthFrame then
+		DBM.BossHealth:Show(L.name)
+	end
+	if self.Options.HealthFrameBoss then
+		DBM.BossHealth:AddBoss(21966, L.Shark)
+		DBM.BossHealth:AddBoss(21965, L.Volni)
+		DBM.BossHealth:AddBoss(21964, L.Karib)
+		DBM.BossHealth:AddBoss(21214, L.Karat)
+	end
 	if mod:IsDifficulty("heroic25") then
-		self:SetStage(1)
 		berserkTimer:Start()
 		timerOkoCD:Start()
 		timerSvazCd:Start()
 		timerCastHeal:Start()
 		timerStrelaCD:Start()
-		if self.Options.HealthFrameBoss and not self.Options.HealthFrame then
-			DBM.BossHealth:Show(L.name)
-		end
-		if self.Options.HealthFrameBoss then
-			DBM.BossHealth:AddBoss(21966, L.Shark)
-			DBM.BossHealth:AddBoss(21965, L.Volni)
-			DBM.BossHealth:AddBoss(21964, L.Karib)
-			DBM.BossHealth:AddBoss(21214, L.Karat)
-		end
 	else -- Обычка
+		timerBeastinsideCD:Start(6.6)
 		berserkTimer:Start()
 		timerNovaCD:Start()
-		timerSpitfireCD:Start(15)
+		timerSpitfireCD:Start(21.8)
+		timerSpitEarthCD:Start(11.8)
+		timerDispelCD:Start(6.7)
 		warnNovaSoon:Show(23)
+		Sumkill = 0
 	end
 end
 
@@ -147,6 +174,15 @@ function mod:SPELL_CAST_START(args)
 		warnZeml:Show()
 		timerZemlyaCast:Start()
 		specWarnZeml:Show()
+	elseif spellId == 38330 then
+		warnHealf:Show()
+		timerHealCD:Start()
+		if self:CheckNearby(30, args.destName) then
+			specWarnKick:Show(args.sourceName)
+		end
+	elseif spellId == 29436 then
+		warnLeech:Show()
+		timerLeechCD:Start()
 	end
 end
 
@@ -166,14 +202,28 @@ end
 function mod:SPELL_CAST_SUCCESS(args)
 	local spellId = args.spellId
 	if spellId == 38236 then -- Обычка
+		specWarnFire:Show()
 		timerSpitfireCD:Start()
 	elseif spellId == timerDispelCD.spellId then -- противоядие
 		timerDispelCD:Start()
+		warnAnti:Show()
+	elseif spellId == 38304 then
+		warnEarth:Show()
+		timerSpitEarthCD:Start()
 	elseif spellId == 309258 then -- Око
 		warnOko:Show()
 		timerOkoCD:Start()
 	elseif spellId == 309262 then -- Связь
 		timerSvazCd:Start()
+	elseif spellId == 38373 then
+		warnBeastInside:Show(args.destName)
+		timerBeastinsideCD:Start()
+	elseif spellId == 38358 then
+		warnTide:Show()
+		timerTideCD:Start()
+	elseif spellId == 38441 and self:GetStage() == 2 then
+		warnLightning:Show()
+		timerLightning:Start()
 	end
 end
 
@@ -187,6 +237,16 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnSvaz:Show()
 		end
 		self:ScheduleMethod(0.1, "SetSvazIcons")
+	elseif spellId == 38373 and args:GetDestCreatureID() == 21214 then
+		warnBeastInside:Show(args.destName)
+		timerBeastinsideCD:Start(48)
+	end
+end
+
+function mod:SPELL_DAMAGE(_, _, _, destGUID, _, _, spellId)
+	if spellId == 38358 and Sumkill == 3 and self:AntiSpam(4, 5) then--Flame Crash
+		warnTide:Show()
+		timerTideCD:Start(22)
 	end
 end
 
@@ -212,6 +272,12 @@ end
 function mod:UNIT_DIED(args)
 	local cid = self:GetCIDFromGUID(args.destGUID)
 	if cid == 21966 or cid == 21965 or cid == 21964 then
+		if mod:IsDifficulty("normal25") then
+			Sumkill = Sumkill+1
+			if Sumkill == 3 then
+				self:SetStage(2)
+			end
+		end
 		if self.Options.HealthFrameBoss then
 			DBM.BossHealth:RemoveBoss(cid)
 		end
