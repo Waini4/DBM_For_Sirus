@@ -7,7 +7,7 @@ mod:SetUsedIcons(4, 5, 6, 7, 8)
 mod:RegisterCombat("yell", L.YellPull)
 
 mod:RegisterEventsInCombat(
-	"SPELL_AURA_APPLIED 71289 71001 72108 72109 72110 71237 70674 71204",
+	"SPELL_AURA_APPLIED 71289 71001 72108 72109 72110 71237 70674 71204 72906 72908 72905 72907",
 	"SPELL_AURA_APPLIED_DOSE 71204",
 	"SPELL_AURA_REMOVED 70842 71289",
 	"SPELL_CAST_START 71420 72007 72501 72502 70900 70901 72499 72500 72497 72496",
@@ -74,6 +74,7 @@ local timerFrostboltCast			= mod:NewCastTimer(2, 72007, nil, "HasInterrupt")
 local timerTouchInsignificance		= mod:NewTargetTimer(30, 71204, nil, "Tank|Healer", nil, 5)
 local yellVengefulShade             = mod:NewYell(71426)
 local soundWarnSpirit				= mod:NewSound(71426)
+local timerZalpStrel				= mod:NewCDTimer(20, 72906, nil, nil, nil, 2)
 
 local dominateMindTargets = {}
 mod.vb.dominateMindIcon = 6
@@ -320,6 +321,8 @@ function mod:SPELL_AURA_APPLIED(args)
 		else
 			warnTouchInsignificance:Show(args.destName, amount)
 		end
+	elseif args:IsSpellID(72906, 72908, 72905, 72907) then
+		timerZalpStrel:Start()
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED

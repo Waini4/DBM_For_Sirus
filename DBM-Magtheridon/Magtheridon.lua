@@ -224,9 +224,6 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 			timerNovaHeroicCD:Cancel()
 		end
 	end
-	if msg == L.YellPullAcolytes2 then
-		timerPull:Start(105)
-	end
 end
 
 function mod:OnCombatEnd(wipe)
