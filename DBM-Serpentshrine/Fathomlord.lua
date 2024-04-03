@@ -31,8 +31,6 @@ mod:RegisterEventsInCombat(
 mod:AddTimerLine(DBM_CORE_L.NORMAL_MODE25)
 local warnNovaSoon       	= mod:NewSoonAnnounce(38445, 3)   -- Огненная звезда
 local warnBeastInside		= mod:NewCastAnnounce(38373, 3) -- Зверь
-local warnAnti				= mod:NewCastAnnounce(38306, 3)
-local warnEarth				= mod:NewCastAnnounce(38304, 3)
 local warnHealf				= mod:NewCastAnnounce(38330, 4)
 local warnLeech				= mod:NewCastAnnounce(29436, 4)
 local warnTide				= mod:NewCastAnnounce(38358, 4)
@@ -46,7 +44,6 @@ local specWarnKick			= mod:NewSpecialWarningInterrupt(38330, "HasInterrupt", nil
 local timerHealCD 			= mod:NewCDTimer(16, 38330, nil, nil, nil, 4)
 local timerNovaCD        	= mod:NewCDTimer(26, 38445, nil, nil, nil, 2)
 local timerSpitfireCD   	= mod:NewCDTimer(30, 38236, nil, nil, nil, 2)
-local timerSpitEarthCD   	= mod:NewCDTimer(20, 38304, nil, nil, nil, 2)
 local timerTideCD   		= mod:NewCDTimer(15, 38358, nil, nil, nil, 2)
 local timerLeechCD   		= mod:NewCDTimer(15, 29436, nil, nil, nil, 2)
 local timerDispelCD    		= mod:NewCDTimer(15, 38306, nil, nil, nil, 2)
@@ -143,7 +140,6 @@ function mod:OnCombatStart()
 		berserkTimer:Start()
 		timerNovaCD:Start()
 		timerSpitfireCD:Start(21.8)
-		timerSpitEarthCD:Start(11.8)
 		timerDispelCD:Start(6.7)
 		warnNovaSoon:Show(23)
 		Sumkill = 0
@@ -177,9 +173,7 @@ function mod:SPELL_CAST_START(args)
 	elseif spellId == 38330 then
 		warnHealf:Show()
 		timerHealCD:Start()
-		if self:CheckNearby(30, args.destName) then
-			specWarnKick:Show(args.sourceName)
-		end
+		specWarnKick:Show(args.sourceName)
 	elseif spellId == 29436 then
 		warnLeech:Show()
 		timerLeechCD:Start()
@@ -206,10 +200,6 @@ function mod:SPELL_CAST_SUCCESS(args)
 		timerSpitfireCD:Start()
 	elseif spellId == timerDispelCD.spellId then -- противоядие
 		timerDispelCD:Start()
-		warnAnti:Show()
-	elseif spellId == 38304 then
-		warnEarth:Show()
-		timerSpitEarthCD:Start()
 	elseif spellId == 309258 then -- Око
 		warnOko:Show()
 		timerOkoCD:Start()

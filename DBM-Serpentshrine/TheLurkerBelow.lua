@@ -10,7 +10,7 @@ mod:SetRevision("20220609123000") -- fxpw check 20220609123000
 mod:SetCreatureID(21217)
 mod:RegisterCombat("combat", 21217)
 
-mod:RegisterEventsInCombat(
+mod:RegisterEvents(
 	"CHAT_MSG_RAID_BOSS_EMOTE"
 )
 
@@ -19,10 +19,10 @@ local warnEmerge   = mod:NewAnnounce("WarnEmerge", 3)
 
 local specWarnSpout = mod:NewSpecialWarningRun(37433)
 
-local timerSubmerge = mod:NewTimer(50, "Submerge", "Interface\\AddOns\\DBM-Core\\Textures\\CryptFiendBurrow.blp")
+local timerSubmerge = mod:NewTimer(60, "Submerge", "Interface\\AddOns\\DBM-Core\\Textures\\CryptFiendBurrow.blp")
 local timerEmerge   = mod:NewTimer(64, "Emerge", "Interface\\AddOns\\DBM-Core\\Textures\\CryptFiendUnBurrow.blp")
 local timerSpout    = mod:NewCastTimer(14, 37433)
-local timerSpoutCD  = mod:NewCDTimer(14, 37433)
+local timerSpoutCD  = mod:NewCDTimer(36, 37433)
 
 function mod:Submerge()
 	warnSubmerge:Show()

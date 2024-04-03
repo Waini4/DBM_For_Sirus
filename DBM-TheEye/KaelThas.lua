@@ -53,7 +53,7 @@ local timerBombCD         = mod:NewCDTimer(25, 37036, nil, nil, nil, 3)
 local timerFlameStrike    = mod:NewCDTimer(35, 36731, nil, nil, nil, 3)
 
 local timerBarrierCD      = mod:NewCDTimer(70, 36815, nil, nil, nil, 3)
-local timerPhoenixCD      = mod:NewCDTimer(45, 36723, nil, nil, nil, 1, nil, CL.DAMAGE_ICON)
+local timerPhoenixCD      = mod:NewCDTimer(55, 36723, nil, nil, nil, 1, nil, CL.DAMAGE_ICON)
 local timerMCCD           = mod:NewCDTimer(70, 36797, nil, nil, nil, 3)
 
 local timerGravity        = mod:NewBuffFadesTimer(32.5, 35941, nil, nil, nil, 4, nil, CL.DEADLY_ICON, nil, 2, 5) --- хм
@@ -269,10 +269,11 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 			self:SetStage(5)
 			warnPhase:Show(L.WarnPhase5)
 			timerMCCD:Cancel()
+			timerPhoenixCD:Cancel()
 			warnMCSoon:Cancel()
 			timerGravityCD:Start()
-			timerPhoenixCD:Start(128)
-			warnGravitySoon:Schedule(85)
+			timerPhoenixCD:Start(112)
+			warnGravitySoon:Schedule(106)
 		end
 	end
 end
@@ -317,8 +318,8 @@ function mod:SPELL_CAST_SUCCESS(args)
 		warnConflagrateSoon:Schedule(16)
 		timerConflagrateCD:Start()
 	elseif args:IsSpellID(36723) then
-		timerPhoenixCD:Start()
-		warnPhoenixSoon:Schedule(55)
+		timerPhoenixCD:Start(self:GetStage() == 5 and 80 or 55)
+		warnPhoenixSoon:Schedule(self:GetStage() == 5 and 75 or 55)
 	elseif args:IsSpellID(308749) then
 		timerBombhmCD:Start()
 	elseif args:IsSpellID(308743) then
