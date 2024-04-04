@@ -215,7 +215,6 @@ function mod:SPELL_AURA_REMOVED(args)
 	end
 end
 
---[[
 local SidToTimeH = {
 	[38215] = { 10, 25 },
 	[38216] = { 25, 50 },
@@ -231,46 +230,54 @@ local SidToTimeC = {
 	[38222] = { 100, 250 },
 	[38230] = { 250, 500 },
 	[40583] = { 500, 500 },
-}]]
+}
 
 function mod:SPELL_CAST_SUCCESS(args)
 	local spellId = tonumber(args.spellId)
-		if spellId == 38215 then
-		warnMarkOfHydross:Show("10")
-		timerMarkOfHydross:Start("25")
-		elseif spellId == 38216 then
-		warnMarkOfHydross:Show("25")
-		timerMarkOfHydross:Start("50")
-		elseif spellId == 38217 then
-		warnMarkOfHydross:Show("50")
-		timerMarkOfHydross:Start("100")
-		elseif spellId == 38218 then
-		warnMarkOfHydross:Show("100")
-		timerMarkOfHydross:Start("250")
-		elseif spellId == 38231 then
-		warnMarkOfHydross:Show("250")
-		timerMarkOfHydross:Start("500")
-		elseif spellId == 40584 then
-		warnMarkOfHydross:Show("500")
-		timerMarkOfHydross:Start("500")
-		elseif spellId == 38219 then
-		warnMarkOfCorruption:Show("10")
-		timerMarkOfCorruption:Start("25")
-		elseif spellId == 38220 then
-		warnMarkOfCorruption:Show("25")
-		timerMarkOfCorruption:Start("50")
-		elseif spellId == 38221 then
-		warnMarkOfCorruption:Show("50")
-		timerMarkOfCorruption:Start("100")
-		elseif spellId == 38222 then
-		warnMarkOfCorruption:Show("100")
-		timerMarkOfCorruption:Start("250")
-		elseif spellId == 38230 then
-		warnMarkOfCorruption:Show("250")
-		timerMarkOfCorruption:Start("500")
-		elseif spellId == 40583 then
-		warnMarkOfCorruption:Show("500")
-		timerMarkOfCorruption:Start("500")
+	if SidToTimeH[spellId] then
+		warnMarkOfHydross:Show(SidToTimeH[spellId][1])
+		timerMarkOfHydross:Start(nil, SidToTimeH[spellId][2])
+
+		-- if spellId == 38215 then
+		-- 	warnMarkOfHydross:Show("10")
+		-- 	timerMarkOfHydross:Start("25")
+		-- elseif spellId == 38216 then
+		-- 	warnMarkOfHydross:Show("25")
+		-- 	timerMarkOfHydross:Start("50")
+		-- elseif spellId == 38217 then
+		-- 	warnMarkOfHydross:Show("50")
+		-- 	timerMarkOfHydross:Start("100")
+		-- elseif spellId == 38218 then
+		-- 	warnMarkOfHydross:Show("100")
+		-- 	timerMarkOfHydross:Start("250")
+		-- elseif spellId == 38231 then
+		-- 	warnMarkOfHydross:Show("250")
+		-- 	timerMarkOfHydross:Start("500")
+		-- elseif spellId == 40584 then
+		-- 	warnMarkOfHydross:Show("500")
+		-- 	timerMarkOfHydross:Start("500")
+	elseif SidToTimeC[spellId] then
+		warnMarkOfCorruption:Show(SidToTimeC[spellId][1])
+		timerMarkOfCorruption:Start(nil, SidToTimeC[spellId][2])
+
+		-- elseif spellId == 38219 then
+		-- 	warnMarkOfCorruption:Show("10")
+		-- 	timerMarkOfCorruption:Start("25")
+		-- elseif spellId == 38220 then
+		-- 	warnMarkOfCorruption:Show("25")
+		-- 	timerMarkOfCorruption:Start("50")
+		-- elseif spellId == 38221 then
+		-- 	warnMarkOfCorruption:Show("50")
+		-- 	timerMarkOfCorruption:Start("100")
+		-- elseif spellId == 38222 then
+		-- 	warnMarkOfCorruption:Show("100")
+		-- 	timerMarkOfCorruption:Start("250")
+		-- elseif spellId == 38230 then
+		-- 	warnMarkOfCorruption:Show("250")
+		-- 	timerMarkOfCorruption:Start("500")
+		-- elseif spellId == 40583 then
+		-- 	warnMarkOfCorruption:Show("500")
+		-- 	timerMarkOfCorruption:Start("500")
 	elseif spellId == 38235 then
 		warnWaterTomb:Show(args.destName)
 	elseif spellId == 38246 then
