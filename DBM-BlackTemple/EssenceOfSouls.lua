@@ -10,15 +10,17 @@ mod:SetUsedIcons(4, 5, 6, 7, 8)
 mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
-	"SPELL_AURA_APPLIED 41305 41431 41376 41303 41294 41410",
-	"SPELL_AURA_REMOVED 41305",
-	"SPELL_CAST_START 41410 41426",
-	"SPELL_CAST_SUCCESS 41350 41337",
-	"SPELL_DAMAGE 41545",
-	"SPELL_MISSED 41545",
+	"SPELL_AURA_APPLIED ",
+	"SPELL_AURA_REMOVED ",
+	"SPELL_CAST_START ",
+	"SPELL_CAST_SUCCESS ",
+	"SPELL_DAMAGE ",
+	"SPELL_MISSED ",
 	"CHAT_MSG_MONSTER_YELL",
 	"UNIT_SPELLCAST_SUCCEEDED"
 )
+
+--Реликварий
 
 --maybe a warning for Seethe if tanks mess up in phase 3
 local warnFixate		= mod:NewTargetNoFilterAnnounce(41294, 3, nil, "Tank|Healer", 2)

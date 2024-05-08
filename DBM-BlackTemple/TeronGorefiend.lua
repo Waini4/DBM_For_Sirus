@@ -10,9 +10,9 @@ mod:SetUsedIcons(4, 5, 6, 7, 8)
 mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
-	"SPELL_AURA_APPLIED 40243 40251",
-	"SPELL_AURA_REMOVED 40243 40251",
-	"SPELL_CAST_SUCCESS 40239"
+	"SPELL_AURA_APPLIED ",
+	"SPELL_AURA_REMOVED ",
+	"SPELL_CAST_SUCCESS "
 )
 
 --Incinerate useful?

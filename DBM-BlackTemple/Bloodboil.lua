@@ -9,13 +9,15 @@ mod:SetModelID(21443)
 mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
-	"SPELL_CAST_SUCCESS 42005",
-	"SPELL_AURA_APPLIED 42005 40481 40491 40604",
-	"SPELL_AURA_APPLIED_DOSE 40481 42005",
-	"SPELL_AURA_REFRESH 42005 40481",
-	"SPELL_AURA_REMOVED 42005",
-	"SPELL_AURA_REMOVED_DOSE 42005"
+	"SPELL_CAST_SUCCESS ",
+	"SPELL_AURA_APPLIED ",
+	"SPELL_AURA_APPLIED_DOSE ",
+	"SPELL_AURA_REFRESH ",
+	"SPELL_AURA_REMOVED ",
+	"SPELL_AURA_REMOVED_DOSE "
 )
+
+-- ГУРТОР
 
 --TODO, verify blood is in combat log like that, otherwise have to use playerdebuffstacks frame instead
 local warnBlood			= mod:NewTargetAnnounce(42005, 3)

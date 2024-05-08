@@ -57,7 +57,7 @@ local timerSubmerge			= mod:NewTimer(45, "TimerSubmerge", "Interface\\AddOns\\DB
 local timerEmerge			= mod:NewTimer(10, "TimerEmerge", "Interface\\AddOns\\DBM-Core\\textures\\CryptFiendUnBurrow.blp", nil, nil, 6)
 
 local timerBreath			= mod:NewCastTimer(5, 66689, nil, nil, nil, 3)--3 or 5? is it random target or tank?
-local timerNextStomp		= mod:NewNextTimer(myPomoi5 == 5 and 13.5 or 28.5, 66330, nil, nil, nil, 2, nil, CL.INTERRUPT_ICON, nil, mod:IsSpellCaster() and 3 or nil, 3)
+local timerNextStomp		= mod:NewNextTimer(myPomoi5 == 5 and 13.5 or 15, 66330, nil, nil, nil, 2, nil, CL.INTERRUPT_ICON, nil, mod:IsSpellCaster() and 3 or nil, 3)
 local timerNextImpale		= mod:NewNextTimer(10, 66331, nil, "Tank|Healer", nil, 5, nil, CL.TANK_ICON)
 local timerRisingAnger      = mod:NewNextTimer(20.5, 66636, nil, nil, nil, 1)
 local timerStaggeredDaze	= mod:NewBuffActiveTimer(15, 66758, nil, nil, nil, 5, nil, CL.DAMAGE_ICON)
