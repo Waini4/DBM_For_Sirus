@@ -14,7 +14,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED_DOSE 371989 371997",
 	"SPELL_AURA_REMOVED",
 	"SPELL_CAST_START 371993 371992",
-	"SPELL_CAST_SUCCESS 371984 371999 371997 371994",
+	"SPELL_CAST_SUCCESS 371984 371999 371997 371994 371986",
 	"SPELL_DAMAGE 41545",
 	"SPELL_MISSED 41545",
 	"CHAT_MSG_MONSTER_YELL",
@@ -53,15 +53,15 @@ local timerNextRage 		= mod:NewCDTimer(20, 371999, nil, nil, nil, 5)
 local specWarnThirst        = mod:NewSpecialWarningMoveAway(371992, "Melee", nil, nil, 4, 2) --Пожирающая жажда
 local specWarnDeceit		= mod:NewSpecialWarningStack(371989, nil, 10, nil, nil, 1, 6)
 
-local timerNextThirst		= mod:NewCDTimer(18, 371992, nil, nil, nil, 5)
+local timerNextThirst		= mod:NewCDTimer(18, 371992, nil, nil, nil, 5, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1)
 local timerNextKick		= mod:NewCDTimer(10, 371993, nil, nil, nil, 5) --желания
 --Воплощение страдания
 
- --371985,"Иссушающая лихорадка"
- local warnFever		= mod:NewTargetAnnounce(371985, 3)
- local specWarnGTFO	    = mod:NewSpecialWarningGTFO(371984, nil, nil, nil, 1, 2)
+--371985,"Иссушающая лихорадка"
+local warnFever		= mod:NewTargetAnnounce(371985, 3)
+local specWarnGTFO	    = mod:NewSpecialWarningGTFO(371984, nil, nil, nil, 1, 2)
 
- local timerNextGTFO		= mod:NewCDTimer(9, 371984, nil, nil, nil, 3) --реликв потерь
+local timerNextGTFO		= mod:NewCDTimer(9, 371984, nil, nil, nil, 3) --реликв потерь
 
 --[[
 local warnPhase3		= mod:NewPhaseAnnounce(3, 2)
@@ -97,10 +97,10 @@ local RageTargets = {}
 local UnitSpirits = 0
 mod.vb.StageUwU = 0
 mod:AddInfoFrameOption(371997, true)
-local Stages = { "Воплощение Гнева", "Воплощение Желания", "Воплощение Страдания"}
+local Stages = { "|cffff1919Воплощение Гнева|r", "|cfffc9bffВоплощение Желания|r", "|cffffe00aВоплощение Страдания|r"}
 
 --[[
-0x80000000,371980,"Аура ужасных страданий",0x20
+0x80000000,371980,"Аура ужасных страданий",0x20 
 	371980,"Аура ужасных страданий",0x20,DEBUFF
 
 	23:07:35.615 - 23:08:54.826 = 25+54=79
@@ -113,7 +113,7 @@ local Stages = { "Воплощение Гнева", "Воплощение Жел
 
 23:42:36.957 - 23:43:54.061 = 67
 
-
+0x80000000,371986,"Аура неутолимой жажды",0x40
 ]]
 
 local function warnFeverTargets(self)
@@ -126,7 +126,7 @@ local function warnRageTargets(self)
 end
 
 local function Unit(self)
-	self.vb.StageUwU = 0
+	UnitSpirits = 0
 end
 
 
@@ -176,7 +176,7 @@ end]]
 
 function mod:SPELL_CAST_START(args)
 	if args.spellId == 371992 then
-		specWarnThirst:Show(args.destName)
+		specWarnThirst:Schedule(17, args.destName)
 		timerNextThirst:Start()
 	elseif args.spellId == 371993 and self:AntiSpam(3, 1) then
 		timerNextKick:Start()
@@ -195,6 +195,9 @@ function mod:SPELL_CAST_SUCCESS(args)
 		timerNextGrip:Start()
 	elseif args.spellId == 371980 then
 		self.vb.StageUwU = 0
+	elseif args.spellId == 371986 then
+		specWarnThirst:Schedule(14, args.destName)
+		timerNextThirst:Start(15)
 	end
 end
 

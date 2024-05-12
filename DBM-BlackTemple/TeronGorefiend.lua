@@ -11,8 +11,8 @@ mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 373799 373791 373807 373795",
-	"SPELL_AURA_APPLIED 373795 373811",
-	"SPELL_AURA_APPLIED_DOSE 373795 373811",
+	"SPELL_AURA_APPLIED 373795 373811 373792 373801",
+	"SPELL_AURA_APPLIED_DOSE 373795 373811 373792",
 	"SPELL_AURA_REMOVED ",
 	"SPELL_CAST_SUCCESS 373803 373796"
 )
@@ -20,6 +20,7 @@ mod:RegisterEventsInCombat(
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(1) .. " : " .. "|cff00f7ffВласть Белого Хлада|r")
 local warnFreezingStacks	= mod:NewStackAnnounce(373795, 2, nil, "Tank")
 local specWarnCold			= mod:NewSpecialWarningGTFO(373796, "SpellCaster", nil, nil, 4, 2)
+local specWarnColdMove		= mod:NewSpecialWarningKeepMove(373792, nil, nil, nil, 1, 2)
 
 local timerNextFreezing		= mod:NewCDTimer(6, 373795, nil, "Tank", nil, 3)
 local timerColdCast 		= mod:NewCastTimer(10, 373798, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON)
@@ -31,8 +32,10 @@ local FreezBuff 			= DBM:GetSpellInfoNew(373795)
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(2) .. " : " .. "|cffff1919Власть Страданий|r")
 
 --local warnReposeStacks	= mod:NewStackAnnounce(373811, 2, nil, "Tank")
-local specWarnDecapitation	= mod:NewSpecialWarningDodge(373803, nil, nil, nil, 3, 2)
+local warnDisease			= mod:NewTargetAnnounce(373801, 3)
+local specWarnDecapitation	= mod:NewSpecialWarningDodge(373803, nil, nil, nil, 4, 2)
 
+local timerNextDisease		= mod:NewCDTimer(10, 373801, nil, "RemoveDisease")
 local timerDecapitation     = mod:NewCDTimer(12, 373803, nil, "Melee", nil, 5, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1)
 
 
@@ -50,7 +53,12 @@ local StageAura = {"Власть Страданий", "Власть Тьмы"}
 --local CrushedTargets = {}
 mod.vb.Aura = 0
 mod:AddInfoFrameOption(373795, true)
+local DiseaseTargets = {}
 
+local function warnDiseaseTargets(self)
+	warnDisease:Show(table.concat(DiseaseTargets, "<, >"))
+	table.wipe(DiseaseTargets)
+end
 
 function mod:OnCombatStart(delay)
 	self.vb.Aura = 0
@@ -104,6 +112,15 @@ function mod:SPELL_AURA_APPLIED(args)
 			DBM.InfoFrame:SetHeader(FreezBuff)
 			DBM.InfoFrame:Show(30, "playerdebuffstacks", FreezBuff, 2)
 		end
+	elseif args.spellId == 373792 then
+		if args:IsPlayer() and amount >= 2 then
+			specWarnColdMove:Show()
+		end
+	elseif args.spellId == 373801 then
+		timerNextDisease:Start()
+		DiseaseTargets[#DiseaseTargets + 1] = args.destName
+		self:Unschedule(warnDiseaseTargets)
+		self:Schedule(0.1, warnDiseaseTargets, self)
 	end
 end
 
