@@ -96,6 +96,9 @@ L:SetOptionLocalization({
 	TimerVengefulSpirit		= "Show timer for Ghost durations",--Translate
 })
 
+L:SetMiscLocalization({
+	CamStart = "Я был первым. Колесо моей жизни сделало уже не один оборот. Столько времени прошло... Мне нужно столько наверстать."
+})
 ----------------------------
 --  Gurtogg Bloodboil  --
 ----------------------------
