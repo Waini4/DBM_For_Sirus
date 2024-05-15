@@ -54,42 +54,15 @@ local specWarnThirst        = mod:NewSpecialWarningMoveAway(371992, "Melee", nil
 local specWarnDeceit		= mod:NewSpecialWarningStack(371989, nil, 10, nil, nil, 1, 6)
 
 local timerNextThirst		= mod:NewCDTimer(18, 371992, nil, nil, nil, 5, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1)
-local timerNextKick		= mod:NewCDTimer(10, 371993, nil, nil, nil, 5) --желания
+local timerNextKick			= mod:NewCDTimer(10, 371993, nil, nil, nil, 5) --желания
 --Воплощение страдания
 
 --371985,"Иссушающая лихорадка"
-local warnFever		= mod:NewTargetAnnounce(371985, 3)
-local specWarnGTFO	    = mod:NewSpecialWarningGTFO(371984, nil, nil, nil, 1, 2)
+local warnFever				= mod:NewTargetAnnounce(371985, 3)
+local specWarnGTFO	    	= mod:NewSpecialWarningGTFO(371984, nil, nil, nil, 1, 2)
 
-local timerNextGTFO		= mod:NewCDTimer(9, 371984, nil, nil, nil, 3) --реликв потерь
+local timerNextGTFO			= mod:NewCDTimer(9, 371984, nil, nil, nil, 3) --реликв потерь
 
---[[
-local warnPhase3		= mod:NewPhaseAnnounce(3, 2)
-local warnSoul			= mod:NewSpellAnnounce(41545, 2, nil, "Tank", 2)
-local warnSpite			= mod:NewTargetAnnounce(41376, 3)
-
-local specWarnShield	= mod:NewSpecialWarningDispel(41431, "RemoveCurse", nil, 2, 1, 2)
-local specWarnSpite		= mod:NewSpecialWarningYou(41376, nil, nil, nil, 1, 2)
-local specWarnGTFO	    = mod:NewSpecialWarningGTFO(371984, nil, nil, nil, 1, 2)
-
---Phase 1
-local timerNextGTFO		= mod:NewCDTimer(9, 371984, nil, nil, nil, 3) --реликв потерь
-
-local timerPhaseChange	= mod:NewPhaseTimer(41)
-local timerFrenzy		= mod:NewBuffActiveTimer(8, 41305, nil, "Tank|Healer", 2, 5, nil, DBM_COMMON_L.TANK_ICON)
-local timerNextFrenzy	= mod:NewNextTimer(40, 41305, nil, "Tank|Healer", 2, 5, nil, DBM_COMMON_L.TANK_ICON)
---Phase 2
-local timerDeaden		= mod:NewTargetTimer(10, 41410, nil, nil, nil, 5, nil, DBM_COMMON_L.DAMAGE_ICON, nil, mod:IsTank() and select(2, UnitClass("player")) == "WARRIOR" and 2, 4)
-local timerNextDeaden	= mod:NewCDTimer(31, 41410, nil, nil, nil, 5)--Roll timer because I don't want to assign it interrupt one when many groups will use prot warrior
-local timerMana			= mod:NewTimer(160, "TimerMana", 41350)
-local timerNextShock	= mod:NewCDTimer(12, 41426, nil, nil, nil, 4, nil, DBM_COMMON_L.INTERRUPT_ICON)--Blizz lied, this is a 12-15 second cd. you can NOT solo interrupt these with most classes
---Phase 3
-local timerNextShield	= mod:NewCDTimer(15, 41431, nil, "MagicDispeller", 2, 5, nil, DBM_COMMON_L.MAGIC_ICON)
-local timerNextSoul		= mod:NewCDTimer(10, 41545, nil, "Tank", 2, 5, nil, DBM_COMMON_L.TANK_ICON)
-
-mod:AddSetIconOption("DrainIcon", 41303, false)
-mod:AddSetIconOption("SpiteIcon", 41376, false)
-]]
 local GripBuff = DBM:GetSpellInfoNew(371997)
 mod.vb.lastFixate = "None"
 local FeverTargets = {}
@@ -98,23 +71,6 @@ local UnitSpirits = 0
 mod.vb.StageUwU = 0
 mod:AddInfoFrameOption(371997, true)
 local Stages = { "|cffff1919Воплощение Гнева|r", "|cfffc9bffВоплощение Желания|r", "|cffffe00aВоплощение Страдания|r"}
-
---[[
-0x80000000,371980,"Аура ужасных страданий",0x20
-	371980,"Аура ужасных страданий",0x20,DEBUFF
-
-	23:07:35.615 - 23:08:54.826 = 25+54=79
-
-23:24:53.069 - 23:26:24.904 = 2.29	1.28
-23:30:14.210 - 23:30:25.141 = 0.01
-
-23:35:41.702 - 23:37:14.248 = 1.27 60+32=92
-23:39:02.203 - 23:39:22.263 = 0.20
-
-23:42:36.957 - 23:43:54.061 = 67
-
-0x80000000,371986,"Аура неутолимой жажды",0x40
-]]
 
 local function warnFeverTargets(self)
 	warnFever:Show(table.concat(FeverTargets, "<, >"))
