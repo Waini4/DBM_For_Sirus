@@ -23,7 +23,8 @@ mod:RegisterEventsInCombat(
 )
 mod:RegisterEvents(
 	"SPELL_AURA_REMOVED 34189",
-	"UNIT_TARGET"
+	"UNIT_TARGET",
+	"UNIT_HEALTH"
 )
 
 --local warnDefender		= mod:NewAnnounce("warnAshtongueDefender", 2, 41180)
@@ -75,6 +76,7 @@ mod:AddSetIconOption("SetIconOnBeacon", 322748, true, true, { 1, 2, 3, 4, 5, 6, 
 --mod:AddSetIconOption("SetIconOnDominateMind", 322728, true, false, {4, 5, 6})
 
 --mod.vb.NecromancerIcon = 1
+local EndAkama = false
 local dominateMindTargets = {}
 mod.vb.AddsWestCount = 0
 mod.vb.AddsLoop = 0
@@ -132,6 +134,7 @@ end]]
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 22841, "Shade of Akama")
 	self:SetStage(1)
+	EndAkama = false
 	self.vb.AddsWestCount = 0
 	self.vb.AddsLoop = 0
 	--self.vb.dominateMindIcon = 6
@@ -326,8 +329,9 @@ end
 	end
 end]]
 
-function mod:UNIT_DIED(args)
-	if self:GetCIDFromGUID(args.destGUID) == 22841 then
+function mod:UNIT_HEALTH(uId)
+	if UnitHealth(uId) / UnitHealthMax(uId) <= 0.01 and self:GetUnitCreatureId(uId) == 23191 and not EndAkama then
+		EndAkama = true
 		DBM:EndCombat(self)
 	end
 end

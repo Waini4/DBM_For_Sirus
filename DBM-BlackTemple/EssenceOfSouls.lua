@@ -45,7 +45,7 @@ local specWarnRageDispel	= mod:NewSpecialWarningDispel(371999, "RemoveCurse", ni
 
 local specWarnKick			= mod:NewSpecialWarningInterrupt(371993, "HasInterrupt", nil, nil, 1, 2)
 
-local timerNextGrip 		= mod:NewNextTimer(3, 371997, nil, nil, nil, 5)
+--local timerNextGrip 		= mod:NewNextTimer(3, 371997, nil, nil, nil, 5)
 --local timerGrip				= mod:NewTargetTimer(10, 371997, nil, "Tank", nil, 5, nil, DBM_COMMON_L.TANK_ICON)
 local timerNextRage 		= mod:NewCDTimer(20, 371999, nil, nil, nil, 5)
 
@@ -152,8 +152,8 @@ function mod:SPELL_CAST_SUCCESS(args)
 	elseif args.spellId == 371999 and self:AntiSpam(3, 1) then --Aura of Anger
 		specWarnRageDispel:Show(args.sourceName)
 		timerNextRage:Start()
-	elseif args.spellId == 371997 then
-		timerNextGrip:Start()
+	--elseif args.spellId == 371997 then
+		--timerNextGrip:Start()
 	elseif args.spellId == 371980 then
 		self.vb.StageUwU = 0
 	elseif args.spellId == 371986 then
@@ -202,9 +202,8 @@ function mod:OnSync(msg)
 end
 ]]
 
-function mod:UNIT_DIED(args)
-	local cid = self:GetCIDFromGUID(args.destGUID)
-	if cid == 23469 then
+function mod:UNIT_DIED(uId)
+	if self:GetUnitCreatureId(uId) == 23469 then
 		UnitSpirits = UnitSpirits+1
 		if UnitSpirits == 8 then
 			self.vb.StageUwU = self.vb.StageUwU+1

@@ -17,11 +17,12 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_REMOVED 373742"
 )
 
+--TODO, verify blood is in combat log like that, otherwise have to use playerdebuffstacks frame instead
 --local warnFilth			= mod:NewTargetAnnounce(373742, 3)
 
 local specWarnGTFO		= mod:NewSpecialWarningGTFO(373744, nil, nil, nil, 4, 8)
-local specWarnFilth		= mod:NewSpecialWarningStack(373742, nil, 13, nil, nil, 2, 2)
-local specWarnBlood		= mod:NewSpecialWarningStack(373749, nil, 3, nil, nil, 1, 2)
+local specWarnFilth		= mod:NewSpecialWarningStack(373742, nil, 14, nil, nil, 2, 2)
+local specWarnBlood		= mod:NewSpecialWarningStack(373749, nil, 2, nil, nil, 1, 2)
 --local specWarnRage		= mod:NewSpecialWarningYou(40604, nil, nil, nil, 1, 2)
 local yellFilth			= mod:NewCountYell(373742)
 
@@ -67,7 +68,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
 	local amount = args.amount or 1
 	if spellId == 373742 then
-		if amount >= 13 then
+		if amount >= 14 then
 			if args:IsPlayer() and self:AntiSpam(2) then
 				specWarnFilth:Show(amount)
 				yellFilth:Yell(amount)
@@ -81,7 +82,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 		end
 	elseif spellId == 373749 then
-		if amount >= 3 and args:IsPlayer() then
+		if amount >= 2 and args:IsPlayer() then
 			specWarnBlood:Show(amount)
 		end
 	elseif spellId == 373744 and self:AntiSpam(2) then
