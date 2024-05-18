@@ -54,14 +54,15 @@ local specWarnThirst        = mod:NewSpecialWarningMoveAway(371992, "Melee", nil
 local specWarnDeceit		= mod:NewSpecialWarningStack(371989, nil, 10, nil, nil, 1, 6)
 
 local timerNextThirst		= mod:NewCDTimer(18, 371992, nil, nil, nil, 5, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1)
-local timerNextKick			= mod:NewCDTimer(10, 371993, nil, nil, nil, 5) --желания
+local timerNextKick		= mod:NewCDTimer(10, 371993, nil, nil, nil, 5) --желания
 --Воплощение страдания
 
 --371985,"Иссушающая лихорадка"
-local warnFever				= mod:NewTargetAnnounce(371985, 3)
-local specWarnGTFO	    	= mod:NewSpecialWarningGTFO(371984, nil, nil, nil, 1, 2)
+local warnFever		= mod:NewTargetAnnounce(371985, 3)
+local specWarnGTFO	    = mod:NewSpecialWarningGTFO(371984, nil, nil, nil, 1, 2)
 
-local timerNextGTFO			= mod:NewCDTimer(9, 371984, nil, nil, nil, 3) --реликв потерь
+local timerNextGTFO		= mod:NewCDTimer(9, 371984, nil, nil, nil, 3) --реликв потерь
+
 
 local GripBuff = DBM:GetSpellInfoNew(371997)
 mod.vb.lastFixate = "None"
@@ -71,6 +72,7 @@ local UnitSpirits = 0
 mod.vb.StageUwU = 0
 mod:AddInfoFrameOption(371997, true)
 local Stages = { "|cffff1919Воплощение Гнева|r", "|cfffc9bffВоплощение Желания|r", "|cffffe00aВоплощение Страдания|r"}
+mod:AddRangeFrameOption(8, nil, true)
 
 local function warnFeverTargets(self)
 	warnFever:Show(table.concat(FeverTargets, "<, >"))
@@ -91,6 +93,9 @@ end
 function mod:OnCombatStart(delay)
 	UnitSpirits = 0
 	self.vb.StageUwU = 1
+	if self.Options.RangeFrame then
+		DBM.RangeCheck:Show(8)
+	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
