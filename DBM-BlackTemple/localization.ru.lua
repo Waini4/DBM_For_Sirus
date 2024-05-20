@@ -94,6 +94,7 @@ L:SetTimerLocalization({
 
 L:SetOptionLocalization({
 	TimerVengefulSpirit		= "Show timer for Ghost durations",--Translate
+	RaidTimer               = "Таймер для всего рейда о начале боя и фазах"
 })
 
 L:SetMiscLocalization({
