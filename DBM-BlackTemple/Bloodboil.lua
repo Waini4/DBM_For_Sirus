@@ -26,7 +26,8 @@ local specWarnBlood		= mod:NewSpecialWarningStack(373749, nil, 2, nil, nil, 1, 2
 --local specWarnRage		= mod:NewSpecialWarningYou(40604, nil, nil, nil, 1, 2)
 local yellFilth			= mod:NewCountYell(373742)
 
-local timerStrikeCD		= mod:NewCDTimer(6, 373745, nil, "Tank", 2, 5, nil, DBM_COMMON_L.TANK_ICON)--25-82? Is this even a CD timer?
+local timerStrikeCast	= mod:NewCastTimer(1.5, 373745, nil, "Tank", nil, 2)
+local timerStrikeCD		= mod:NewCDTimer(6, 373745, nil, "Tank", 2, 5, nil, DBM_COMMON_L.TANK_ICON)
 
 --local berserkTimer		= mod:NewBerserkTimer(600)
 
@@ -60,6 +61,7 @@ end
 
 function mod:SPELL_CAST_START(args)
 	if args.spellId == 373745 then
+		timerStrikeCast:Start()
 		timerStrikeCD:Start()
 	end
 end
