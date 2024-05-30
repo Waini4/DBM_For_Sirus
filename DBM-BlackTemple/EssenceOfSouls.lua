@@ -154,8 +154,6 @@ function mod:SPELL_CAST_SUCCESS(args)
 		timerNextRage:Start()
 	--elseif args.spellId == 371997 then
 		--timerNextGrip:Start()
-	elseif args.spellId == 371980 then
-		self.vb.StageUwU = 0
 	elseif args.spellId == 371986 then
 		specWarnThirst:Schedule(14, args.destName)
 		timerNextThirst:Start(15)
@@ -202,14 +200,17 @@ function mod:OnSync(msg)
 end
 ]]
 
-function mod:UNIT_DIED(uId)
-	if self:GetUnitCreatureId(uId) == 23469 then
+function mod:UNIT_DIED(args)
+	if self:GetCIDFromGUID(args.destGUID) == 23469 then
 		UnitSpirits = UnitSpirits+1
 		if UnitSpirits == 8 then
 			self.vb.StageUwU = self.vb.StageUwU+1
 			Stage2:Start(nil, Stages[self.vb.StageUwU])
 			specWarnPhase:Show(Stages[self.vb.StageUwU])
 			self:Schedule(2, Unit, self)
+			if self.vb.StageUwU == 3 then
+				self.vb.StageUwU = 0
+			end
 		end
 	end
-end -- Гнев, желания,
+end

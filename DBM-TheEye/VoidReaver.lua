@@ -98,7 +98,7 @@ function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 19516, "Void Reaver")
 	if mod:IsDifficulty("heroic25") then
 		timerLoadCD:Start()
-		timerOrbCD:Start()
+		timerOrbCD:Start(28)
 		--timerKnockbackCD:Start()
 		if self.Options.RangeFrame then
 			DBM.RangeCheck:Show(15)
@@ -176,6 +176,14 @@ function mod:SPELL_AURA_APPLIED(args)
 	end
 end
 
+function mod:SPELL_AURA_REFRESH(args)
+	if args:IsSpellID(308471) and args:IsPlayer() then
+		specWarnSign:Show()
+		yellSign:Yell()
+		yellSignFades:Countdown(308471)
+	end
+end
+
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(308471) then
 		if self.Options.SetIconOnSignTargets then
@@ -199,5 +207,3 @@ function mod:UNIT_HEALTH(uId)
 		-- end
 	end
 end
-
-mod.SPELL_AURA_REFRESH = mod.SPELL_AURA_APPLIED

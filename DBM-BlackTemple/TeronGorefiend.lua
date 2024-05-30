@@ -213,6 +213,5 @@ end
 function mod:SPELL_DAMAGE(_, _, _, destGUID, _, _, spellId)
 	if (spellId == 373793) and destGUID == UnitGUID("player") and self:AntiSpam(2) then
 		specWarnColdMove:Show()
-		--specWarnBitingCold:Play("keepmove")
 	end
 end

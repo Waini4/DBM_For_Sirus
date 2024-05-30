@@ -12,8 +12,8 @@ mod:RegisterCombat("combat")
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 373745",
 	"SPELL_CAST_SUCCESS 42005",
-	"SPELL_AURA_APPLIED 373742 373744",
-	"SPELL_AURA_APPLIED_DOSE 373742",
+	"SPELL_AURA_APPLIED 373742 373744 373749",
+	"SPELL_AURA_APPLIED_DOSE 373742 373749",
 	"SPELL_AURA_REMOVED 373742"
 )
 
@@ -84,7 +84,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 		end
 	elseif spellId == 373749 then
-		if amount >= 2 and args:IsPlayer() then
+		if amount >= 2 and args:IsPlayer() and self:AntiSpam(2) then
 			specWarnBlood:Show(amount)
 		end
 	elseif spellId == 373744 and self:AntiSpam(2) then

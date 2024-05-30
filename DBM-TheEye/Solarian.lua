@@ -61,7 +61,7 @@ local specWarnFlashVoid = mod:NewSpecialWarningLookAway(308585, nil, nil, nil, 2
 local yellWrathH        = mod:NewYell(308548)
 local yellWrathHFades   = mod:NewShortFadesYell(308548)
 
-local timerRing       = mod:NewCDTimer(20, 308562, nil, nil, nil, 1, nil, CL.ENRAGE_ICON)
+local timerRing       = mod:NewCDTimer(17, 308562, nil, nil, nil, 1, nil, CL.ENRAGE_ICON)
 local timerNextHelp   = mod:NewCDTimer(40, 308558, nil, nil, nil, 3, nil, CL.TANK_ICON)
 local timerWrathH     = mod:NewTargetTimer(6, 308548, nil, "RemoveEnrage", nil, 1, nil, CL.ENRAGE_ICON, nil, 1, 5)
 local timerNextWrathH = mod:NewCDTimer(43, 308548, nil, "RemoveEnrage", nil, 1, nil, CL.ENRAGE_ICON)
@@ -93,7 +93,7 @@ function mod:OnCombatStart(delay)
 	self:SetStage(1)
 	DBM:FireCustomEvent("DBM_EncounterStart", 18805, "High Astromancer Solarian")
 	if self:IsDifficulty("heroic25") then
-		timerNextHelp:Start(40 - delay)
+		timerNextHelp:Start(38 - delay)
 		timerNextWrathH:Start(43 - delay)
 		-- self:SetStage(1)
 		self:RegisterShortTermEvents(

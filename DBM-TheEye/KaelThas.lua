@@ -14,6 +14,7 @@ mod:RegisterEvents(
 	"SPELL_AURA_APPLIED 36797 308732 308741 308750 308756 308797 308749",
 	"SPELL_AURA_APPLIED_DOSE 36797 308732 308741 308750 308756 308797 308749",
 	"UNIT_TARGET",
+	"UNIT_DIED",
 	"SPELL_AURA_REMOVED 308750 36797 308797",
 	"CHAT_MSG_MONSTER_YELL",
 	"CHAT_MSG_MONSTER_EMOTE",
@@ -111,6 +112,7 @@ mod:AddNamePlateOption("Nameplate2", 308797, true)
 local dominateMindTargets = {}
 local dominateMindIcon = 8
 local mincControl = {}
+local DeadTelon = false
 local axe = true
 local BombTargets = {}
 local BombIcons = 8
@@ -131,6 +133,7 @@ function mod:OnCombatStart()
 	self:SetStage(1)
 	dominateMindIcon = 8
 	axe = true
+	DeadTelon = false
 	warnPhase:Show(L.WarnPhase1)
 	timerNextAdd:Start(L.NamesAdds["Thaladred"])
 	table.wipe(dominateMindTargets)
@@ -527,6 +530,13 @@ end
 function mod:UNIT_TARGET()
 	if axe then
 		self:AxeIcon()
+	end
+end
+
+function mod:UNIT_DIED(args)
+	if self:GetCIDFromGUID(args.destGUID) == 20063 and mod:IsDifficulty("heroic25") and not DeadTelon then
+		timerPhase3:Start(33)
+		DeadTelon = true
 	end
 end
 
