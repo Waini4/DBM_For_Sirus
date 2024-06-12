@@ -27,7 +27,7 @@ local specWarnInfernoDeff    = mod:NewSpecialWarningDefensive(317870, "Tank", ni
 local specWarnInferno        = mod:NewSpecialWarningMoveAway(317870, nil, nil, nil, 4, 2)
 local specWarnCrimsonBarrier = mod:NewSpecialWarningDispel(317872, "MagicDispeller", nil, nil, 1, 2)
 local specWarnManaAbsorption = mod:NewSpecialWarningInterrupt(317884, "HasInterrupt", nil, nil, 1, 2)
-local yellFear               = mod:NewYell(317884, "Хлебушек: " .. UnitName("player"))
+local yellFear               = mod:NewYell(317884, "Фирнуло: " .. UnitName("player"))
 
 local timerCrimsonBarrierNext = mod:NewNextTimer(30, 317872, nil, nil, nil, 4)
 local timerManaAbsorptionNext = mod:NewNextTimer(20, 317884, nil, nil, nil, 4)
@@ -36,15 +36,7 @@ local timerFingerofDeathCD    = mod:NewCDTimer(7, 317876, nil, nil, nil, 4)
 local timerInfernoCast        = mod:NewCastTimer(3, 317870, nil, nil, nil, 3)
 local berserkTimer            = mod:NewBerserkTimer(600)
 
-local warned_F1 = false
-local warned_F2 = false
-local warned_F3 = false
-local warned_F4 = false
-local warned_F5 = false
-local warned_F6 = false
-local warned_F7 = false
-local warned_F8 = false
-local warned_F9 = false
+local warned_Inferno = false
 
 mod:AddBoolOption("AnnounceFails", false, "announce")
 local FearTargets = {}
@@ -65,15 +57,7 @@ function mod:OnCombatStart(delay)
 	timerWaveHorror:Start()
 	timerCrimsonBarrierNext:Start(60)
 	berserkTimer:Start()
-	warned_F1 = false
-	warned_F2 = false
-	warned_F3 = false
-	warned_F4 = false
-	warned_F5 = false
-	warned_F6 = false
-	warned_F7 = false
-	warned_F8 = false
-	warned_F9 = false
+	warned_Inferno = false
 	table.wipe(FearTargets)
 end
 
@@ -106,6 +90,7 @@ function mod:SPELL_CAST_START(args)
 		end
 		timerInfernoCast:Start()
 		self:BossTargetScanner(17808, "InfernoTarget", 0.05, 10)
+		warned_Inferno = false
 	elseif args:IsSpellID(317872) then
 		specWarnCrimsonBarrier:Show()
 		timerCrimsonBarrierNext:Start()
@@ -153,35 +138,8 @@ end
 
 function mod:UNIT_HEALTH(uId)
 	--local hp = self:GetUnitCreatureId(uId) == 17808
-	local hp = self:GetUnitCreatureId(uId) == 17808 and DBM:GetBossHP(17808) or nil
-	if hp then -- or hp < 82 or hp < 72 or hp < 62 or hp < 52 or hp < 42 or hp < 32 or hp < 22 or hp < 12 then
-		if not warned_F1 and hp < 92 then
-			warned_F1 = true
-			warnwarnInfernoSoon:Show()
-		elseif not warned_F2 and hp < 82 then
-			warned_F2 = true
-			warnwarnInfernoSoon:Show()
-		elseif not warned_F3 and hp < 72 then
-			warned_F3 = true
-			warnwarnInfernoSoon:Show()
-		elseif not warned_F4 and hp < 62 then
-			warned_F4 = true
-			warnwarnInfernoSoon:Show()
-		elseif not warned_F5 and hp < 52 then
-			warned_F5 = true
-			warnwarnInfernoSoon:Show()
-		elseif not warned_F6 and hp < 42 then
-			warned_F6 = true
-			warnwarnInfernoSoon:Show()
-		elseif not warned_F7 and hp < 32 then
-			warned_F7 = true
-			warnwarnInfernoSoon:Show()
-		elseif not warned_F8 and hp < 22 then
-			warned_F8 = true
-			warnwarnInfernoSoon:Show()
-		elseif not warned_F9 and hp < 12 then
-			warned_F9 = true
-			warnwarnInfernoSoon:Show()
-		end
+	if self:GetUnitCreatureId(uId) == 17808 and not warned_Inferno and ((DBM:GetBossHPByUnitID(uId) % 10) == 1) then
+		warned_Inferno = true
+		warnwarnInfernoSoon:Show()
 	end
 end

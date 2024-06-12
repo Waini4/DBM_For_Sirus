@@ -4,7 +4,7 @@ local L		= mod:GetLocalizedStrings()
 mod:SetRevision("2023".."11".."22".."10".."00".."00") --fxpw check
 mod:SetCreatureID(22898)
 
-mod:SetModelID(21145)
+mod:SetModelID(22898)
 mod:SetUsedIcons(8)
 
 mod:RegisterCombat("combat")

@@ -2,9 +2,8 @@ local mod	= DBM:NewMod("Souls", "DBM-BlackTemple")
 local L		= mod:GetLocalizedStrings()
 
 mod:SetRevision("20220518110528")
-mod:SetCreatureID(23420)
+mod:SetCreatureID(22856)
 
-mod:SetModelID(21483)
 mod:SetUsedIcons(4, 5, 6, 7, 8)
 
 mod:RegisterCombat("combat")
@@ -64,7 +63,7 @@ local specWarnGTFO	    = mod:NewSpecialWarningGTFO(371984, nil, nil, nil, 1, 2)
 local timerNextGTFO		= mod:NewCDTimer(9, 371984, nil, nil, nil, 3) --реликв потерь
 
 
-local GripBuff = DBM:GetSpellInfoNew(371997)
+local DeceitBuff = DBM:GetSpellInfoNew(371989)
 mod.vb.lastFixate = "None"
 local FeverTargets = {}
 local RageTargets = {}
@@ -111,15 +110,15 @@ function mod:SPELL_AURA_APPLIED(args)
 		local amount = args.amount or 1
 		warnGripStacks:Show(args.destName, amount)
 		--timerGrip:Start()
-		if self.Options.InfoFrame then
-			DBM.InfoFrame:SetHeader(GripBuff)
-			DBM.InfoFrame:Show(30, "playerdebuffstacks", GripBuff, 2)
-		end
 	elseif args.spellId == 371989 then
 		if args:IsPlayer() then
 			if ((args.amount or 1) >= 10) and self:AntiSpam(4, 2) then
 				specWarnDeceit:Show(args.amount)
 			end
+		end
+		if self.Options.InfoFrame then
+			DBM.InfoFrame:SetHeader(DeceitBuff)
+			DBM.InfoFrame:Show(30, "playerdebuffstacks", DeceitBuff, 2)
 		end
 	end
 end
@@ -204,13 +203,10 @@ function mod:UNIT_DIED(args)
 	if self:GetCIDFromGUID(args.destGUID) == 23469 then
 		UnitSpirits = UnitSpirits+1
 		if UnitSpirits == 8 then
-			self.vb.StageUwU = self.vb.StageUwU+1
+			self.vb.StageUwU = (self.vb.StageUwU % 3)+1
 			Stage2:Start(nil, Stages[self.vb.StageUwU])
 			specWarnPhase:Show(Stages[self.vb.StageUwU])
 			self:Schedule(2, Unit, self)
-			if self.vb.StageUwU == 3 then
-				self.vb.StageUwU = 0
-			end
 		end
 	end
 end

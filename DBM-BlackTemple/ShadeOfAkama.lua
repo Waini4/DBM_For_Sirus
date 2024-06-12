@@ -4,8 +4,6 @@ local L		= mod:GetLocalizedStrings()
 mod:SetRevision("20220518110528")
 mod:SetCreatureID(22841)
 
-mod:SetModelID(21357)
-
 mod:RegisterCombat("combat")
 --mod:SetWipeTime(50)--Adds come about every 50 seconds, so require at least this long to wipe combat if they die instantly
 

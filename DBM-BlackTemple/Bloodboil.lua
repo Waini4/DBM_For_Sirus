@@ -5,15 +5,15 @@ mod:SetRevision("20220518110528")
 mod:SetCreatureID(22948)
 mod:SetUsedIcons(2, 3, 4, 5, 6, 7, 8)
 
-mod:SetModelID(21443)
+mod:SetModelID(22948)
 
 mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 373745",
 	"SPELL_CAST_SUCCESS 42005",
-	"SPELL_AURA_APPLIED 373742 373744 373749",
-	"SPELL_AURA_APPLIED_DOSE 373742 373749",
+	"SPELL_AURA_APPLIED 373742 373744 373749 373747",
+	"SPELL_AURA_APPLIED_DOSE 373742 373749 373747",
 	"SPELL_AURA_REMOVED 373742"
 )
 
@@ -33,6 +33,8 @@ local timerStrikeCD		= mod:NewCDTimer(6, 373745, nil, "Tank", 2, 5, nil, DBM_COM
 
 mod:AddSetIconOption("SetIconOnFilth", 373742, true, true, { 2, 3, 4, 5, 6, 7, 8})
 mod:AddInfoFrameOption(373742)
+mod:AddInfoFrameOption(373747)
+local ApofStack = DBM:GetSpellInfoNew(373747)
 local FilthBuff = DBM:GetSpellInfoNew(373742)
 mod:AddRangeFrameOption(8, nil, true)
 mod.vb.Filth = 8
@@ -40,9 +42,12 @@ mod.vb.Filth = 8
 
 function mod:OnCombatStart(delay)
 	self.vb.Filth = 8
-	if self.Options.InfoFrame then
+	if self.Options.InfoFrame and not self:IsTank() then
 		DBM.InfoFrame:SetHeader(FilthBuff)
 		DBM.InfoFrame:Show(30, "playerdebuffstacks", FilthBuff, 2)
+	else
+		DBM.InfoFrame:SetHeader(ApofStack)
+		DBM.InfoFrame:Show(30, "playerdebuffstacks", ApofStack, 2)
 	end
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Show(8)
