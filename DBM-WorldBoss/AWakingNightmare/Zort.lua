@@ -7,24 +7,18 @@ mod:SetUsedIcons(1, 2, 3, 4, 5, 6, 7, 8)
 
 mod:RegisterCombat("combat", 50702)
 
-mod:RegisterEvents(
+mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 307829 307820 307818 307817 308520 307852 308512 307845",
 	"SPELL_CAST_SUCCESS 308520 307834 318956",
 	"SPELL_AURA_APPLIED 307815 307839 307842 308512 307861 308517 308620 308515 307834 307833",
 	"SPELL_AURA_APPLIED_DOSE 307815 307839 307842 308512 308517 307861 308620 308515 307834 307833",
-	-- "UNIT_TARGET",
-	-- "SPELL_DAMAGE",
-	-- "SPELL_PERIODIC_DAMAGE",
 	"SPELL_AURA_REMOVED 307839 308516 308517 318956 307861",
-	"SPELL_INTERRUPT 307829"
--- "SPELL_CAST_FAILED"
--- "UNIT_HEALTH"
--- "UNIT_DIED",
--- "SWING_DAMAGE"
-)
-mod:RegisterEventsInCombat(
+	"SPELL_INTERRUPT 307829",
 	"UNIT_HEALTH"
 )
+--[[mod:RegisterEventsInCombat(
+	"UNIT_HEALTH"
+)]]
 mod:AddTimerLine(L.name)
 -- local warnPhase2Soon          = mod:NewPrePhaseAnnounce(2)
 -- local warnPhase2              = mod:NewPhaseAnnounce(2)
@@ -97,7 +91,7 @@ mod.vb.SveazIcons = 7
 -- local warned_kill3 = false
 -- local warned_P2 = false
 -- local warned_P3 = false
-local warned_P4 = false
+--local warned_P4 = false
 -- local warned_P5 = false
 
 -- local Trees = {}

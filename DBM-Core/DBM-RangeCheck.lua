@@ -439,6 +439,7 @@ DBM:RegisterMapSize("ZulFarrak", 0, 1383.3332214359998, 922.91662597) -- Zul'Far
 DBM:RegisterMapSize("ZulGurub", 0, 2120.83325195, 1414.5830078) -- Zul'Gurub (Raid-Classic)
 DBM:RegisterMapSize("BronzeSanctuary", 0, 2399.850, 1599.901)
 DBM:RegisterMapSize("VIP", 0, 733.63, 491.25)
+DBM:RegisterMapSize("VIP-PRIME", 0, 3199.8, 2133.2)
 DBM:RegisterMapSize("vip_location_map", 0, 2134, 2667)
 DBM:RegisterMapSize("Zort", 0, 470.03, 470.08)
 DBM:RegisterMapSize("TolGarodJail", 0, 585, 390)
