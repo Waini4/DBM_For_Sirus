@@ -8,7 +8,7 @@ mod:SetUsedIcons(1, 2, 3, 4, 5, 6, 7, 8)
 mod:RegisterCombat("combat", 50702)
 
 mod:RegisterEventsInCombat(
-	"SPELL_CAST_START 307829 307820 307818 307817 308520 307852 308512 307845",
+	"SPELL_CAST_START 307829 307820 307818 307817 308520 307852 308512 307845 307844",
 	"SPELL_CAST_SUCCESS 308520 307834 318956",
 	"SPELL_AURA_APPLIED 307815 307839 307842 308512 307861 308517 308620 308515 307834 307833",
 	"SPELL_AURA_APPLIED_DOSE 307815 307839 307842 308512 308517 307861 308620 308515 307834 307833",
@@ -33,7 +33,7 @@ local warnSveaz               = mod:NewTargetAnnounce(308620, 3)
 --local warnShkval						= mod:NewCastAnnounce(307821, 3)
 -- local warnTraitor             = mod:NewCountAnnounce(307814, 2, nil, false)
 local warnInternalbleeding    = mod:NewStackAnnounce(307833, 2, nil, "Tank|Healer")
-local warnInternalbgPre       = mod:NewPreWarnAnnounce(307833, 5, nil, nil, "Tank|Healer")
+--local warnInternalbgPre       = mod:NewPreWarnAnnounce(307833, 5, nil, nil, "Tank|Healer")
 local specWarnBreathNightmare = mod:NewSpecialWarningDispel(308512, "RemoveDisease", nil, nil, 1, 6)
 
 local specWarnRazrsveaz       = mod:NewSpecialWarning("KnopSv", 3)
@@ -67,9 +67,11 @@ local timerAmonstrousblow     = mod:NewCDTimer(15, 307845)
 local timerCDChep             = mod:NewCDTimer(6, 308520)
 
 mod:AddTimerLine(DBM_COMMON_L.ADDS)
-local warnPriziv  = mod:NewCastAnnounce(307852, 3)
+local warnNightmare			  	= mod:NewCastAnnounce(307844, 2, 1, nil,"Tank")
+local warnPriziv  				= mod:NewCastAnnounce(307852, 3)
 -- local timerTrees  = mod:NewCDTimer(5, 307852, nil, nil, nil, 4)
-local timerPriziv = mod:NewCDTimer(120, 307852, nil, nil, nil, 4)
+local timerNightmare		  	= mod:NewCDTimer(10, 307844, nil, "Tank")
+local timerPriziv 				= mod:NewCDTimer(120, 307852, nil, nil, nil, 4)
 
 mod:AddSetIconOption("SetIconOnSveazTarget", 314606, true, true, { 5, 6, 7 })
 mod:AddSetIconOption("SetIconOnFlameTarget", 307839, true, true, { 1, 2 })
@@ -157,6 +159,9 @@ function mod:SPELL_CAST_START(args)
 		timerBreathNightmare:Start(stage == 5 and 30 or 42)
 	elseif args:IsSpellID(307845) then
 		timerAmonstrousblow:Start()
+		elseif args:IsSpellID(307844) and self:AntiSpam(2) then
+			warnNightmare:Show()
+            timerNightmare:Start()
 	end
 end
 

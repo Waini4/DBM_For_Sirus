@@ -35,7 +35,7 @@ local berserkTimer = mod:NewBerserkTimer(480)
 local warnVzglad     = mod:NewStackAnnounce(310136, 5, nil, "Tank") -- Взгляд
 local warnZemla      = mod:NewSoonAnnounce(310152, 2) -- Землетрясение
 local warnHwat       = mod:NewTargetAnnounce(310144, 3) -- Хватка
-local warnSuh        = mod:NewTargetAnnounce(310155, 3) -- Обезвоживание
+--local warnSuh        = mod:NewTargetAnnounce(310155, 3) -- Обезвоживание
 local warnKrik       = mod:NewSpellAnnounce(310151, 2) -- Земля
 local warnTop        = mod:NewSpellAnnounce(310140, 2) -- Топот
 local warnMon        = mod:NewSpellAnnounce(310137, 4) -- Топот
@@ -68,25 +68,6 @@ local graveTargets = {}
 local warned_preP1 = false
 local warned_preP2 = false
 local SuhTargets = {}
-local SuhIcons = 8
-
-do
-	-- local function sort_by_group(v1, v2)
-	-- 	return DBM:GetRaidSubgroup(UnitName(v1)) < DBM:GetRaidSubgroup(UnitName(v2))
-	-- end
-	function mod:SetSuhIcons()
-		table.sort(SuhTargets, function(v1, v2) return DBM:GetRaidSubgroup(v1) < DBM:GetRaidSubgroup(v2) end)
-		for _, v in ipairs(SuhTargets) do
-			if self.Options.SetIconOnSklepTargets then
-				self:SetIcon(UnitName(v), SuhIcons, 10)
-			end
-			SuhIcons = SuhIcons - 1
-		end
-		warnSuh:Show(table.concat(SuhTargets, "<, >"))
-		table.wipe(SuhTargets)
-		SuhIcons = 8
-	end
-end
 
 function mod:AnnounceGraves()
 	warnGraves:Show(table.concat(graveTargets, "<, >"))
@@ -175,8 +156,6 @@ function mod:SPELL_AURA_APPLIED(args) -- все хм --
 		timerHwatCD:Start()
 		warnHwat:Show(args.destName)
 	elseif spellId == 310155 then
-		SuhTargets[#SuhTargets + 1] = args.destName
-		self:ScheduleMethod(0.1, "SetSuhIcons")
 		timerSuhCD:Start()
 	elseif spellId == 310138 then
 		timerMonCD:Start()

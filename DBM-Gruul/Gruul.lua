@@ -16,7 +16,7 @@ mod:AddTimerLine(DBM_CORE_L.NORMAL_MODE)
 local specWarnRock                  = mod:NewSpecialWarningMove(36240)
 
 local timerEarthStrikeCD            = mod:NewCDTimer(133, 33525)
-local timerEchoCD                   = mod:NewCDTimer(18, 36297)
+local timerEchoCD                   = mod:NewCDTimer(15, 36297)
 local timerRockCD                   = mod:NewCDTimer(30, 36240)
 
 mod:AddTimerLine(DBM_CORE_L.HEROIC_MODE)
