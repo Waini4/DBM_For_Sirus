@@ -31,7 +31,7 @@ local specWarnColdMove		= mod:NewSpecialWarningStack(373793, nil, 1, nil, nil, 1
 
 local timerCombatStart		= mod:NewCombatTimer(20)
 local timerNextFreezing		= mod:NewCDTimer(6, 373795, nil, "Tank", nil, 3)
-local timerColdCast 		= mod:NewCastTimer(12, 373798, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON)
+local timerColdCast 		= mod:NewCastTimer(7, 373798, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON)
 local timerCold     		= mod:NewCDTimer(20, 373796, nil, "SpellCaster", nil, 4, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1)
 local StageTimer			= mod:NewPhaseTimer(120, nil, "Скоро Фаза: %s", nil, nil, 4)
 
