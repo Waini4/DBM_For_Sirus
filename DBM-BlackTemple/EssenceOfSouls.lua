@@ -34,8 +34,9 @@ local warnPhase2		= mod:NewPhaseAnnounce(2, 2)
 local warnMana			= mod:NewAnnounce("WarnMana", 4, 41350)
 local warnDeaden		= mod:NewTargetNoFilterAnnounce(41410, 1)
 ]]
-local specWarnPhase 	= mod:NewSpecialWarning("Скоро фаза %s", nil, nil, nil, 1, 2)
+local specWarnPhase 		= mod:NewSpecialWarning("Скоро фаза %s", nil, nil, nil, 1, 2)
 local Stage2             	= mod:NewPhaseTimer(11, nil, "Фаза: %s", nil, nil, 4)
+local StageTimer			= mod:NewPhaseTimer(101, nil, "Cледующая Фаза", nil, nil, 3)
 
 -- Гнева
 local warnRage				= mod:NewTargetAnnounce(371999, 3)
@@ -53,14 +54,14 @@ local specWarnThirst        = mod:NewSpecialWarningMoveAway(371992, "Melee", nil
 local specWarnDeceit		= mod:NewSpecialWarningStack(371989, nil, 10, nil, nil, 1, 6)
 
 local timerNextThirst		= mod:NewCDTimer(18, 371992, nil, nil, nil, 5, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1)
-local timerNextKick		= mod:NewCDTimer(10, 371993, nil, nil, nil, 5) --желания
+local timerNextKick			= mod:NewCDTimer(10, 371993, nil, nil, nil, 5) --желания
 --Воплощение страдания
 
 --371985,"Иссушающая лихорадка"
-local warnFever		= mod:NewTargetAnnounce(371985, 3)
-local specWarnGTFO	    = mod:NewSpecialWarningGTFO(371984, nil, nil, nil, 1, 2)
+local warnFever				= mod:NewTargetAnnounce(371985, 3)
+local specWarnGTFO	   		= mod:NewSpecialWarningGTFO(371984, nil, nil, nil, 1, 2)
 
-local timerNextGTFO		= mod:NewCDTimer(9, 371984, nil, nil, nil, 3) --реликв потерь
+local timerNextGTFO			= mod:NewCDTimer(9, 371984, nil, nil, nil, 3) --реликв потерь
 
 
 local DeceitBuff = DBM:GetSpellInfoNew(371989)
@@ -205,6 +206,7 @@ function mod:UNIT_DIED(args)
 		if UnitSpirits == 8 then
 			self.vb.StageUwU = (self.vb.StageUwU % 3)+1
 			Stage2:Start(nil, Stages[self.vb.StageUwU])
+			StageTimer:Start()
 			specWarnPhase:Show(Stages[self.vb.StageUwU])
 			self:Schedule(2, Unit, self)
 		end
