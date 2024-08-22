@@ -52,7 +52,7 @@ local specWarnHandOfMagt        = mod:NewSpecialWarningSpell(305131, nil, nil, n
 local specWarnDevastatingStrike = mod:NewSpecialWarningYou(305134, "Tank", nil, nil, nil, 1, 2) --Оповещение на экран о получении сокрушительного удара
 
 local berserkTimer				= mod:NewBerserkTimer(600)
-local timerPull   				= mod:NewTimer(120, "Pull", 305131, nil, nil, 6) -- Пулл босса
+local timerPull   				= mod:NewTimer(9, "Pull", 305131, nil, nil, 6) -- Пулл босса
 
 local warnPhase3Soon			= mod:NewPrePhaseAnnounce(3)
 local warnPhase3				= mod:NewPhaseAnnounce(3)
@@ -129,7 +129,7 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:CHAT_MSG_MONSTER_EMOTE(msg)
-    if msg == L.YellPullAcolytes or msg:find(L.YellPullAcolytes) then
+    if msg == L.YellPullShort or msg:find(L.YellPullShort) then
 		timerPull:Start()
 	end
 end
