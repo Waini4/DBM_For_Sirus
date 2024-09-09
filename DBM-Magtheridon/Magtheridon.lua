@@ -130,9 +130,9 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:CHAT_MSG_MONSTER_EMOTE(msg)
-   	if MyRealm == 2 and msg == L.YellPullShort or msg:find(L.YellPullShort) then
+	if MyRealm == 2 and msg == L.YellPullShort or msg:find(L.YellPullShort) then
 		timerPull:Start()
-	 end
+	end
 	 if msg == L.YellPullAcolytes or msg:find(L.YellPullAcolytes) and MyRealm ~= 2 then
 		timerPull:Start(120)
 	 end
