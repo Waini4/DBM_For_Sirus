@@ -42,12 +42,9 @@ mod:AddRangeFrameOption(8, nil, true)
 
 function mod:OnCombatStart(delay)
 --	self.vb.Filth = 8
-	if self.Options.InfoFrame and not self:IsTank() then
+	if self.Options.InfoFrame then
 		DBM.InfoFrame:SetHeader(FilthBuff)
 		DBM.InfoFrame:Show(30, "playerdebuffstacks", FilthBuff, 2)
-	else
-		DBM.InfoFrame:SetHeader(ApofStack)
-		DBM.InfoFrame:Show(30, "playerdebuffstacks", ApofStack, 2)
 	end
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Show(8)
