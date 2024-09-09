@@ -96,6 +96,12 @@ function mod:OnCombatStart(delay)
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Show(8)
 	end
+	if self.Options.HealthFrame then
+		DBM.BossHealth:Show(L.name)
+		DBM.BossHealth:AddBoss(23420, L.Anger)
+		DBM.BossHealth:AddBoss(23419, L.Desire)
+		DBM.BossHealth:AddBoss(23418, L.Suffering)
+	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)

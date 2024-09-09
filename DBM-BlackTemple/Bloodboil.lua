@@ -33,8 +33,8 @@ local timerStrikeCD		= mod:NewCDTimer(6, 373745, nil, "Tank", 2, 5, nil, DBM_COM
 
 --mod:AddSetIconOption("SetIconOnFilth", 373742, true, true, { 2, 3, 4, 5, 6, 7, 8})
 mod:AddInfoFrameOption(373742)
-mod:AddInfoFrameOption(373747)
-local ApofStack = DBM:GetSpellInfoNew(373747)
+--mod:AddInfoFrameOption(373747)
+--local ApofStack = DBM:GetSpellInfoNew(373747)
 local FilthBuff = DBM:GetSpellInfoNew(373742)
 mod:AddRangeFrameOption(8, nil, true)
 --mod.vb.Filth = 8

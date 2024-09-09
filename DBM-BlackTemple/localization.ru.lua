@@ -158,9 +158,9 @@ L:SetOptionLocalization({
 L:SetMiscLocalization({
 	Enrage			= "%s впадает в ярость!",
 	SpiteWhisper	= "Злоба на Вас!",
-	Suffering		= "Essence of Suffering",--Translate
-	Desire			= "Essence of Desire",--Translate
-	Anger			= "Essence of Anger"--Translate
+	Suffering		= "Воплощение Страдания",--Translate
+	Desire			= "Воплощение Желания",--Translate
+	Anger			= "Воплощение Гнева"--Translate
 })
 
 -----------------------
