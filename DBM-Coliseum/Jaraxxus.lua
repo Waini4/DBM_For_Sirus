@@ -26,6 +26,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_PERIODIC_HEAL"
 )
 
+local MyRealm = select(4, DBM:GetMyPlayerInfo())
 local warnPortalSoon  = mod:NewSoonAnnounce(66269, 3)
 local warnVolcanoSoon = mod:NewSoonAnnounce(66258, 3)
 local warnFlame       = mod:NewTargetAnnounce(66197, 4)
@@ -40,7 +41,7 @@ local specWarnFelInferno        = mod:NewSpecialWarningMove(66496, nil, nil, nil
 local SpecWarnFelFireball       = mod:NewSpecialWarningInterrupt(66532, "HasInterrupt", nil, 2, 1, 2)
 local SpecWarnFelFireballDispel = mod:NewSpecialWarningDispel(66532, "RemoveMagic", nil, 2, 1, 2)
 
-local timerCombatStart   = mod:NewCombatTimer(90.5) --roleplay for first pull
+local timerCombatStart   = mod:NewCombatTimer(MyRealm == 2 and 34.5 or 90.5) --roleplay for first pull 34
 local timerFlame         = mod:NewTargetTimer(8, 66197, nil, nil, nil, 3) --There are 8 debuff Ids. Since we detect first to warn, use an 8sec timer to cover duration of trigger spell and damage debuff.
 local timerFlameCD       = mod:NewCDTimer(30, 66197, nil, nil, nil, 3)
 local timerNetherPowerCD = mod:NewCDTimer(42.5, 67009, nil, "MagicDispeller", nil, 5, nil, CL.MAGIC_ICON)

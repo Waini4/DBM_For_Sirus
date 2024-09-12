@@ -41,6 +41,7 @@ local timerCDCosmicSmash      = mod:NewCDCountTimer(25, 313036, nil, nil, nil, 2
 local timerCastCosmicSmash    = mod:NewCastTimer(4.5, 313036)
 local timerPhasePunch         = mod:NewBuffActiveTimer(45, 313033, nil, "Tank", nil, 6)
 local timerNextPhasePunch     = mod:NewNextTimer(16, 313033, nil, "Tank", nil, 6)
+local timerCombatStart		  = mod:NewCombatTimer(8)
 
 mod.vb.SmashCount = 0
 local warned_preP2 = false
@@ -51,15 +52,18 @@ function mod:OnCombatStart(delay)
 	self.vb.SmashCount = 0
 	warned_preP2 = false
 	warned_star = false
+end
+
+function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 32871, "Algalon", wipe)
+end
+
+function mod:startTimers()
 	enrageTimer:Start()
 	timerNextBigBang:Start()
 	announcePreBigBang:Schedule(80)
 	timerCDCosmicSmash:Start(nil, self.vb.SmashCount + 1)
 	timerNextCollapsingStar:Start()
-end
-
-function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 32871, "Algalon", wipe)
 end
 
 function mod:SPELL_CAST_START(args)
@@ -109,6 +113,12 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.Phase2 or msg:find(L.Phase2) then
 		timerNextCollapsingStar:Cancel()
 		warnPhase2:Show()
+	elseif msg == L.YellPull or msg:find(L.YellPull) then
+	    timerCombatStart:Start(26)
+		self:ScheduleMethod(26, "startTimers")
+    elseif msg == L.PullCheck or msg:find(L.PullCheck) then
+		timerCombatStart:Start()
+		self:ScheduleMethod(8, "startTimers")
 	end
 end
 
