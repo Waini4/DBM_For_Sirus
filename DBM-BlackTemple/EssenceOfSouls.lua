@@ -6,7 +6,7 @@ mod:SetCreatureID(22856)
 
 mod:SetUsedIcons(4, 5, 6, 7, 8)
 
-mod:RegisterCombat("combat")
+mod:RegisterCombat("combat", 23420, 23419, 23418, 22856)
 
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 371985 371999 371989 371997",
@@ -20,20 +20,7 @@ mod:RegisterEventsInCombat(
 	"UNIT_DIED",
 	"UNIT_SPELLCAST_SUCCEEDED"
 )
---[[
---maybe a warning for Seethe if tanks mess up in phase 3
-local warnFixate		= mod:NewTargetNoFilterAnnounce(41294, 3, nil, "Tank|Healer", 2)
-local warnDrain			= mod:NewTargetNoFilterAnnounce(41303, 3, nil, "Healer", 2)
-local warnFrenzy		= mod:NewSpellAnnounce(41305, 3, nil, "Tank|Healer", 2)
-local warnFrenzySoon	= mod:NewPreWarnAnnounce(41305, 5, 2)
-local warnFrenzyEnd		= mod:NewEndAnnounce(41305, 1, nil, "Tank|Healer", 2)
 
-local specWarnPhase 	= mod:NewSpecialWarning("Скоро фаза %s", nil, nil, nil, 1, 2)
-local warnPhaseDesires  = mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2, 1)
-local warnPhase2		= mod:NewPhaseAnnounce(2, 2)
-local warnMana			= mod:NewAnnounce("WarnMana", 4, 41350)
-local warnDeaden		= mod:NewTargetNoFilterAnnounce(41410, 1)
-]]
 local specWarnPhase 		= mod:NewSpecialWarning("Скоро фаза %s", nil, nil, nil, 1, 2)
 local Stage2             	= mod:NewPhaseTimer(11, nil, "Фаза: %s", nil, nil, 4)
 local StageTimer			= mod:NewPhaseTimer(101, nil, "Cледующая Фаза", nil, nil, 3)
@@ -65,14 +52,13 @@ local timerNextGTFO			= mod:NewCDTimer(9, 371984, nil, nil, nil, 3) --релик
 
 
 local DeceitBuff = DBM:GetSpellInfoNew(371989)
-mod.vb.lastFixate = "None"
 local FeverTargets = {}
 local RageTargets = {}
 local UnitSpirits = 0
 mod.vb.StageUwU = 0
 mod:AddInfoFrameOption(371997, true)
 local Stages = { "|cffff1919Воплощение Гнева|r", "|cfffc9bffВоплощение Желания|r", "|cffffe00aВоплощение Страдания|r"}
-mod:AddRangeFrameOption(8, nil, true)
+mod:AddRangeFrameOption(9, nil, true)
 
 local function warnFeverTargets(self)
 	warnFever:Show(table.concat(FeverTargets, "<, >"))
@@ -94,7 +80,7 @@ function mod:OnCombatStart(delay)
 	UnitSpirits = 0
 	self.vb.StageUwU = 1
 	if self.Options.RangeFrame then
-		DBM.RangeCheck:Show(8)
+		DBM.RangeCheck:Show(9)
 	end
 	if self.Options.HealthFrame then
 		DBM.BossHealth:Show(L.name)

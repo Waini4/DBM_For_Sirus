@@ -9,12 +9,12 @@ mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 322728 322748 322747 322746 322745 322749 371509 322732 322734 322739",
-	"SPELL_AURA_APPLIED_DOSE",
+	--"SPELL_AURA_APPLIED_DOSE",
 	"SPELL_AURA_REMOVED 322728 371509 322732 322743",
 	"SPELL_CAST_START 322727 322728 322731 322737 371519 322739",
 	"SPELL_CAST_SUCCESS 371507 371511",
-	"SPELL_INTERRUPT ",
-	"SPELL_SUMMON",
+	--"SPELL_INTERRUPT ",
+	--"SPELL_SUMMON",
 	"SPELL_HEAL 322750",
 	"CHAT_MSG_RAID_BOSS_EMOTE",
 	"UNIT_DIED"
@@ -25,7 +25,7 @@ mod:RegisterEvents(
 	"UNIT_HEALTH"
 )
 
---local warnDefender		= mod:NewAnnounce("warnAshtongueDefender", 2, 41180)
+--local warnDefenderSoon	= mod:NewSoonAnnounce("warnAshtongueDefender", 2, 41180)
 --local warnSorc			= mod:NewAnnounce("warnAshtongueSorcerer", 2, 40520)
 local warnPhase2            = mod:NewPhaseAnnounce(2)
 local warnDominateMind		= mod:NewTargetAnnounce(322728, 3)
@@ -36,20 +36,22 @@ local specWarnDom		 	= mod:NewSpecialWarningTarget(322739, nil, nil, nil, 1, 1)
 local specWarnShadowclean 	= mod:NewSpecialWarningInterrupt(322727, "HasInterrupt", nil, nil, 1, 2)
 local specWarnDevastating 	= mod:NewSpecialWarningInterrupt(371519, "HasInterrupt", nil, nil, 1, 2)
 --local specWarnFadeDebuff 	= mod:NewSpecialWarningFades(322743, nil, nil, nil, 3, 4)
---local specWarnPePa			= mod:NewSpecialWarningAdds(40476, nil, nil, nil, 1, 2)
+--local specWarnPePa		= mod:NewSpecialWarningAdds(40476, nil, nil, nil, 1, 2)
 local specWarnMind			= mod:NewSpecialWarningSpell(322728, nil, nil, nil, 1, 3)
 --local specWarnWave			= mod:NewSpecialWarningSpell(371507, nil, nil, nil, 1, 3)
-local specWarnFadeDebuff    = mod:NewSpecialWarning("|cff71d5ff|Hspell:322743|hЗа гранью|h|r МОЖНО БИТЬ ЧАРОТВОРЦА!!!!", nil, nil, nil, 3, 2)
+local specWarnFadeDebuff    = mod:NewSpecialWarning("|cff71d5ff|Hspell:322743|hЗа гранью|h|r СПАЛО, МОЖНО БИТЬ ЧАРОТВОРЦА!!!!", nil, nil, nil, 3, 2)
 local specWarnReflect		= mod:NewSpecialWarningReflect(371509, nil, nil, nil, 2, 3)
---local specWarnClean			= mod:NewSpecialWarningSpell(371511, nil, nil, nil, 1, 3)
+--local specWarnClean		= mod:NewSpecialWarningSpell(371511, nil, nil, nil, 1, 3)
 local specWarnInferno		= mod:NewSpecialWarningCast(322737, nil, nil, nil, 1, 2)
 local specCowardice         = mod:NewSpecialWarning("НЕ СБИЛИ |cff71d5ff|Hspell:322750|hЛик Тени|h|r БОСС ОТХИЛИЛСЯ!!!!", nil, nil, nil, 2, 2)
-local specWarnAdds			= mod:NewSpecialWarningAdds(40474, "-Healer", nil, nil, 1, 2)
+local specWarnDef			= mod:NewSpecialWarningSoon(40474, "-Healer", nil, nil, 1, 2)
+local specWarnAdds			= mod:NewSpecialWarningSoon(42035, "-Healer", nil, nil, 1, 2)
 
 
 
 local timerCombatStart		= mod:NewCombatTimer(12)
-local timerAddsCD			= mod:NewAddsCustomTimer(70, 40474)--NewAddsCustomTimer
+local timerDefendCD			= mod:NewAddsCustomTimer(70, 40474, "Защитники: %d", nil, nil, 5)--NewAddsCustomTimer
+local timerAddsCD			= mod:NewAddsCustomTimer(40, 42035, "Адды: %d", nil, nil, 5)
 --local timerDefenderCD	= mod:NewTimer(25, "timerAshtongueDefender", 41180, nil, nil, 1)
 --local timerSorcCD		= mod:NewTimer(25, "timerAshtongueSorcerer", 40520, nil, nil, 1)
 local timerInfernoCast		= mod:NewCastTimer(3.5, 322737, nil, nil, nil, 2)
@@ -76,13 +78,15 @@ mod:AddSetIconOption("SetIconOnBeacon", 322748, true, true, { 1, 2, 3, 4, 5, 6, 
 --mod.vb.NecromancerIcon = 1
 local EndAkama = false
 local dominateMindTargets = {}
-mod.vb.AddsWestCount = 0
-mod.vb.AddsLoop = 0
+mod.vb.warnDefenderCount = 1
+mod.vb.AddsLoop = 1
 mod.vb.ControlAkama = 0
 --mod.vb.dominateMindIcon = 6
 --local Adds = {}
---local addsCount = {70, 50}
-local addsLoops = {50, 70}
+--local addsLoops = {50, 70}
+
+-- defence 10, 70 70
+-- adds 40, 100
 
 --[[
 local function addsWestLoop(self)
@@ -99,6 +103,7 @@ local function addsWestLoop(self)
 	end
 end]]
 
+--[[
 local function addsLoop(self)
 	self.vb.AddsWestCount = self.vb.AddsWestCount+1
 	if self.vb.AddsWestCount < 2 then
@@ -107,14 +112,23 @@ local function addsLoop(self)
 		self:Schedule(70, addsLoop, self)
 	elseif self.vb.AddsWestCount >= 2 then
 		self.vb.AddsLoop = self.vb.AddsLoop+1
-		local timer = addsLoops[self.vb.AddsLoop]
-		specWarnAdds:Schedule(timer)
-		timerAddsCD:Start(timer,self.vb.AddsWestCount)
-		self:Schedule(timer, addsLoop, self)
-		if self.vb.AddsLoop == 2 then
-			self.vb.AddsLoop = 0
-		end
+		--local timer = addsLoops[self.vb.AddsLoop]
+		specWarnAdds:Schedule(70)
+		timerAddsCD:Start(70,self.vb.AddsWestCount)
+		self:Schedule(70, addsLoop, self)
+		--if self.vb.AddsLoop == 2 then
+		--	self.vb.AddsLoop = 0
+		--end
 	end
+end]]
+
+
+local function addsLoop(self)
+	specWarnDef:Schedule(65)
+	timerDefendCD:Start(70, self.vb.warnDefenderCount+1)
+	specWarnAdds:Schedule(35)
+	timerAddsCD:Start(40, self.vb.AddsLoop+1)
+	self:Schedule(70, addsLoop, self)
 end
 
 local function warnMindTargets(self)
@@ -133,7 +147,7 @@ function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 22841, "Shade of Akama")
 	self:SetStage(1)
 	EndAkama = false
-	self.vb.AddsWestCount = 0
+	self.vb.warnDefenderCount = 0
 	self.vb.AddsLoop = 0
 	--self.vb.dominateMindIcon = 6
 	self.vb.ControlAkama = 0
@@ -141,7 +155,7 @@ function mod:OnCombatStart(delay)
 	timerDispelAkama:Start(nil, self.vb.ControlAkama)
 	timerDominateMindCD:Start(30)
 	self:Schedule(10, addsLoop, self)
-	timerAddsCD:Start(10, "Боковые")
+	timerAddsCD:Start(10)
 	self:RegisterShortTermEvents(
 		"SWING_DAMAGE",
 		"SWING_MISSED",
