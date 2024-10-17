@@ -79,7 +79,7 @@ mod:AddSetIconOption("SetIconOnBeacon", 322748, true, true, { 1, 2, 3, 4, 5, 6, 
 local EndAkama = false
 local dominateMindTargets = {}
 mod.vb.warnDefenderCount = 1
-mod.vb.AddsLoop = 1
+mod.vb.AddsLoop = 0
 mod.vb.ControlAkama = 0
 --mod.vb.dominateMindIcon = 6
 --local Adds = {}
@@ -124,6 +124,7 @@ end]]
 
 
 local function addsLoop(self)
+	timerReflect:Start()
 	specWarnDef:Schedule(65)
 	timerDefendCD:Start(70, self.vb.warnDefenderCount+1)
 	specWarnAdds:Schedule(35)
@@ -147,7 +148,7 @@ function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 22841, "Shade of Akama")
 	self:SetStage(1)
 	EndAkama = false
-	self.vb.warnDefenderCount = 0
+	self.vb.warnDefenderCount = 1
 	self.vb.AddsLoop = 0
 	--self.vb.dominateMindIcon = 6
 	self.vb.ControlAkama = 0
@@ -155,7 +156,7 @@ function mod:OnCombatStart(delay)
 	timerDispelAkama:Start(nil, self.vb.ControlAkama)
 	timerDominateMindCD:Start(30)
 	self:Schedule(10, addsLoop, self)
-	timerAddsCD:Start(10)
+	timerAddsCD:Start(10, self.vb.AddsLoop)
 	self:RegisterShortTermEvents(
 		"SWING_DAMAGE",
 		"SWING_MISSED",
@@ -271,7 +272,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 34189 and args:GetDestCreatureID() == 23191 then--Coming out of stealth (he's been activated)
 		timerCombatStart:Start()
-	elseif args:IsSpellID(322728) then
+	--elseif args:IsSpellID(322728) then
 	elseif args:IsSpellID(371509) then
 		timerReflect:Start()
 	elseif args:IsSpellID(322732) then
