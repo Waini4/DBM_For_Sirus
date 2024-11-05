@@ -42,7 +42,7 @@ local timerUnbalancingStrike = mod:NewCDTimer(15, 312898, nil, "Tank", nil, 5, n
 local timerHardmode          = mod:NewTimer(175, "TimerHardmode", 312898)
 -- local timerFrostNova				= mod:NewNextTimer(20, 62605)
 -- local timerFrostNovaCast			= mod:NewCastTimer(2.5, 62605)
-local timerChainLightning    = mod:NewNextTimer(12, 312895)
+local timerChainLightning    = mod:NewNextTimer(13, 312895)
 local timerFBVolley          = mod:NewCDTimer(13, 62604)
 
 mod:AddRangeFrameOption("11")
@@ -130,7 +130,11 @@ function mod:SPELL_CAST_SUCCESS(args)
 		warnLightningCharge:Show()
 		timerLightningCharge:Start()
 	elseif args:IsSpellID(312898, 312545) then -- Unbalancing Strike
-		timerUnbalancingStrike:Start()
+		if self:IsDifficulty("normal10", "heroic10") then
+			timerUnbalancingStrike:Start(22)
+		else
+			timerUnbalancingStrike:Start()
+		end
 	elseif spellId == 62604 then -- Frostbolt Volley by Sif
 		timerFBVolley:Start()
 	elseif args:IsSpellID(312895, 312542, 300871, 64390, 64213) then

@@ -10,7 +10,7 @@ mod:RegisterCombat("combat",32857, 32867, 32927)
 mod:SetUsedIcons(1, 2, 3, 4, 5, 6, 7, 8)
 
 mod:RegisterEvents(
-	"SPELL_CAST_START 312766 312413 61920 312780 312427 63479 61879 312783 312430 63483 61915 312769 312416 61903 63493 312775 312774 312421 62274 63489 312779 312778 312425 312426 62273 61973 64321 61974",
+	"SPELL_CAST_START 312766 312770 312417 312413 61920 312780 312427 63479 61879 312783 312430 63483 61915 312769 312416 61903 63493 312775 312774 312421 62274 63489 312779 312778 312425 312426 62273 61973 64321 61974 63495",
 	"SPELL_AURA_APPLIED 312769 312416 61903 63493 312424 312777 62269 63490 312775 312774 312421 62274 63489 312771 312772 312418 312419 64637 61888 312786 312785 312432 312433 63486 61887 312770 312417 63495 61912 63494",
 	"SPELL_CAST_SUCCESS 312777 312424 63490 62269 312781 312428 61869 63481",
 	"UNIT_DIED"
@@ -45,7 +45,7 @@ local timerFusionPunchActive	= mod:NewTargetTimer(4,312769, nil, nil, nil, 5, ni
 local warnOverwhelmingPower		= mod:NewTargetAnnounce(312772, 2)
 local timerOverwhelmingPower	= mod:NewTargetTimer(25, 312772, nil, nil, nil, 5, nil, CL.TANK_ICON)
 local warnStaticDisruption		= mod:NewTargetAnnounce(312770, 3)
-local timerStaticDisruption		= mod:NewNextTimer(20, 312770, nil,nil, nil, 5)
+local timerStaticDisruption		= mod:NewNextTimer(32, 312770, nil,nil, nil, 5)
 mod:AddSetIconOption("SetIconOnOverwhelmingPower", 61888, false, false, {8})
 mod:AddSetIconOption("SetIconOnStaticDisruption", 312770, false, false, {1, 2, 3, 4, 5, 6, 7})
 
@@ -57,7 +57,7 @@ local warnShieldofRunes			= mod:NewSpellAnnounce(312774, 2) -- Руна щита
 local warnRuneofSummoning		= mod:NewSpellAnnounce(312778, 3) --Руна призыва
 local specwarnRuneofDeath		= mod:NewSpecialWarningMove(312777, nil, nil, nil, 1, 2)
 local specWarnRuneofShields		= mod:NewSpecialWarningDispel(63967, "MagicDispeller", nil, nil, 1, 2)
-local timerRuneofDeathDura		= mod:NewNextTimer(30, 312777, nil, nil, nil, 3)
+local timerRuneofDeathDura		= mod:NewNextTimer(35, 312777, nil, nil, nil, 3)
 local timerRuneofPower			= mod:NewCDTimer(35, 61973, nil, nil, nil, 5)
 
 mod:AddBoolOption("PlaySoundDeathRune", true, "announce")
@@ -106,6 +106,8 @@ function mod:SPELL_CAST_START(args)
 		warnShieldofRunes:Show()
 	elseif args:IsSpellID(312779, 312778, 312425, 312426, 62273) then			--	Руна призыва
 		warnRuneofSummoning:Show()
+	elseif args:IsSpellID(312770, 312417, 63495, 61912, 63494) then
+		timerStaticDisruption:Start()
 	elseif args:IsSpellID(61973, 64321, 61974) then
 			self:ScheduleMethod(0.1, "RuneTarget")
 			timerRuneofPower:Start()
@@ -115,7 +117,7 @@ end
 function mod:UNIT_DIED(args)
 	if args.destName == L.StormcallerBrundir then
         timerRuneofPower:Start(25)
-        timerRuneofDeathDura:Start()
+        timerRuneofDeathDura:Start(25)
         timerShieldofRunes:Start(27)
 	end
 end
@@ -179,7 +181,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			self:SetIcon(args.destName, disruptIcon, 20)
 			disruptIcon = disruptIcon - 1
 		end
-		timerStaticDisruption:Start()
 		self:Unschedule(warnStaticDisruptionTargets)
 		self:Schedule(0.3, warnStaticDisruptionTargets)
 	elseif args:IsSpellID(63483, 61915) then	-- LightningWhirl
