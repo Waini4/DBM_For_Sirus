@@ -8,9 +8,9 @@ mod:RegisterCombat("combat")
 --mod:SetWipeTime(50)--Adds come about every 50 seconds, so require at least this long to wipe combat if they die instantly
 
 mod:RegisterEventsInCombat(
-	"SPELL_AURA_APPLIED 322728 322748 322747 322746 322745 322749 371509 322732 322734 322739",
+	"SPELL_AURA_APPLIED 322728 322748 322747 322746 322745 322749 371509 322732 322734 322739 374653",
 	--"SPELL_AURA_APPLIED_DOSE",
-	"SPELL_AURA_REMOVED 322728 371509 322732 322743",
+	"SPELL_AURA_REMOVED 322728 371509 322732 322743 374653",
 	"SPELL_CAST_START 322727 322728 322731 322737 371519 322739",
 	"SPELL_CAST_SUCCESS 371507 371511",
 	--"SPELL_INTERRUPT ",
@@ -38,7 +38,7 @@ local specWarnDevastating 	= mod:NewSpecialWarningInterrupt(371519, "HasInterrup
 --local specWarnFadeDebuff 	= mod:NewSpecialWarningFades(322743, nil, nil, nil, 3, 4)
 --local specWarnPePa		= mod:NewSpecialWarningAdds(40476, nil, nil, nil, 1, 2)
 local specWarnMind			= mod:NewSpecialWarningSpell(322728, nil, nil, nil, 1, 3)
---local specWarnWave			= mod:NewSpecialWarningSpell(371507, nil, nil, nil, 1, 3)
+local specWarnDPS			= mod:NewSpecialWarning("|cffffe00a|Hspell:374653|hОстаточные эманации|h|r ПОЯВИЛОСЬ, МОЖНО БИТЬ АКАМУ!!!!", nil, nil, nil, 1, 3)
 local specWarnFadeDebuff    = mod:NewSpecialWarning("|cff71d5ff|Hspell:322743|hЗа гранью|h|r СПАЛО, МОЖНО БИТЬ ЧАРОТВОРЦА!!!!", nil, nil, nil, 3, 2)
 local specWarnReflect		= mod:NewSpecialWarningReflect(371509, nil, nil, nil, 2, 3)
 --local specWarnClean		= mod:NewSpecialWarningSpell(371511, nil, nil, nil, 1, 3)
@@ -64,6 +64,7 @@ local timerDispelAkama		= mod:NewNextCountTimer(50, 322743, nil, nil, nil, 1)
 local timerReflect			= mod:NewCDTimer(12, 371509, nil, "SpellCaster", nil, 3)
 local timerInferno			= mod:NewCDTimer(20, 322737, nil, nil, nil, 3)
 local timerReflectBuff		= mod:NewBuffActiveTimer(3, 371509, nil, nil, nil, 3)
+local timerDpsBuff			= mod:NewBuffActiveTimer(10, 374653, nil, nil, nil, 5)
 local berserkTimer			= mod:NewBerserkTimer(360)
 local Stage2             	= mod:NewPhaseTimer(360, nil, "Фаза: %d", nil, nil, 4)
 local timerDomCD			= mod:NewCDTimer(27, 322739, nil, nil, nil, 4)
@@ -266,6 +267,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.SetIconOnBeacon then
 			self:ScanForMobs(args.destGUID, 1, 8, 1, 0.01, 20, "SetIconOnBeacon")
 		end
+	elseif args:IsSpellID(374653) then
+		specWarnDPS:Show()
+		timerDpsBuff:Start()
 	end
 end
 
