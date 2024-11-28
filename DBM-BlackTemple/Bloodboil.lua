@@ -72,19 +72,19 @@ function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
 	local amount = args.amount or 1
 	if spellId == 373742 then
-		if amount >= 18 then
+		--[[if amount >= 18 then
 			if args:IsPlayer() and self:AntiSpam(2) then
 				specWarnFilth:Show(amount)
 				yellFilth:Yell(amount)
 			end
-		--[[	if self.Options.SetIconOnFilth then
+			if self.Options.SetIconOnFilth then
 				self:SetIcon(args.destName, self.vb.Filth)
 				self.vb.Filth = self.vb.Filth - 1
 				if self.vb.Filth < 2 then
 					self.vb.Filth = 8
 				end
-			end]]
-		end
+			end
+		end]]
 	elseif spellId == 373749 then
 		if amount >= 2 and args:IsPlayer() and self:AntiSpam(2) then
 			specWarnBlood:Show(amount)

@@ -59,7 +59,7 @@ local timerPlagueCD			= mod:NewCDTimer(32, 322731, nil, nil, nil, 5) --чума 
 local timerDominateMindCD	= mod:NewCDTimer(48, 322728, nil, nil, nil, 3)
 local timerShadowcleanCD	= mod:NewCDTimer(13.5, 322727, nil, nil, nil, 4) --масс диспел
 local timercleanCD			= mod:NewCDTimer(15, 371511, nil, nil, nil, 4) --диспел 5 челов
-local timerDispelAkama		= mod:NewNextCountTimer(45, 322743, nil, nil, nil, 1)
+local timerDispelAkama		= mod:NewNextCountTimer(50, 322743, nil, nil, nil, 1)
 --local timerWaveCD			= mod:NewCDTimer(7, 371507, nil, nil, nil, 3)
 local timerReflect			= mod:NewCDTimer(12, 371509, nil, "SpellCaster", nil, 3)
 local timerInferno			= mod:NewCDTimer(20, 322737, nil, nil, nil, 3)
@@ -124,6 +124,8 @@ end]]
 
 
 local function addsLoop(self)
+	self.vb.AddsLoop = self.vb.AddsLoop+1
+	self.vb.warnDefenderCount = self.vb.warnDefenderCount+1
 	timerReflect:Start()
 	specWarnDef:Schedule(65)
 	timerDefendCD:Start(70, self.vb.warnDefenderCount+1)
@@ -153,7 +155,7 @@ function mod:OnCombatStart(delay)
 	--self.vb.dominateMindIcon = 6
 	self.vb.ControlAkama = 0
 	Stage2:Start(nil, 2)
-	timerDispelAkama:Start(nil, self.vb.ControlAkama)
+	timerDispelAkama:Start(30, self.vb.ControlAkama)
 	timerDominateMindCD:Start(30)
 	self:Schedule(10, addsLoop, self)
 	timerAddsCD:Start(10, self.vb.AddsLoop)
