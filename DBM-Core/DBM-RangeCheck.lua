@@ -1492,6 +1492,7 @@ end
 ---------------
 function rangeCheck:Show(range, filter, bossUnit, reverse)
 	-- print(range, filter, bossUnit, reverse)
+	if DBM.Options.DontShowRangeFrame then return end
 	SetMapToCurrentZone() --Set map to current zone before checking other stuff, work around annoying bug i hope?
 	if type(range) == "function" then -- the first argument is optional
 		return self:Show(nil, range, reverse)
@@ -1541,9 +1542,9 @@ function rangeCheck:Show(range, filter, bossUnit, reverse)
 	end
 end
 
--- todo fxpw
+-- //TODO fxpw радар
 -- function rangeCheck:SetBossRange(range, bossUnit)
--- 	if DBM.Options.DontShowRangeFrame then return end
+	--if DBM.Options.DontShowRangeFrame then return  end
 -- 	if not HarmItems[range] then
 -- 		error(("Boss mode range \"%d yd\" is not supported."):format(range), 2)
 -- 	end

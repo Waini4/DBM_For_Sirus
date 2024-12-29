@@ -12,18 +12,18 @@ L:SetGeneralLocalization({
 })
 
 L:SetWarningLocalization({
-	specWarnBrew		= "Избавьтесь от варева прежде, чем она бросит вам другое!",
-	specWarnBrewStun	= "СОВЕТ: Вы получили удар, не забудьте выпить варево в следующий раз!"
+	specWarnBrew     = "Избавьтесь от варева прежде, чем она бросит вам другое!",
+	specWarnBrewStun = "СОВЕТ: Вы получили удар, не забудьте выпить варево в следующий раз!"
 })
 
 L:SetOptionLocalization({
-	specWarnBrew		= "Спец-предупреждение для Пива темной официантки",
-	specWarnBrewStun	= "Спец-предупреждение для Оглушения темным пивом официантки",
-	YellOnBarrel		= "Крикнуть, когда на вас Бочка"
+	specWarnBrew     = "Спец-предупреждение для Пива темной официантки",
+	specWarnBrewStun = "Спец-предупреждение для Оглушения темным пивом официантки",
+	YellOnBarrel     = "Крикнуть, когда на вас Бочка"
 })
 
 L:SetMiscLocalization({
-	YellBarrel	= "Бочка на мне!"
+	YellBarrel = "Бочка на мне!"
 })
 
 -------------------------
@@ -36,19 +36,19 @@ L:SetGeneralLocalization({
 })
 
 L:SetWarningLocalization({
-	warnHorsemanSoldiers	= "Призыв Пульсирующих тыкв",
-	specWarnHorsemanHead	= "Вихрь - переключитесь на голову"
+	warnHorsemanSoldiers = "Призыв Пульсирующих тыкв",
+	specWarnHorsemanHead = "Вихрь - переключитесь на голову"
 })
 
 L:SetOptionLocalization({
-	warnHorsemanSoldiers	= "Предупреждать о призыве Пульсирующих тыкв",
-	specWarnHorsemanHead	= "Спец-предупреждение для Вихря (призыв 2ой и следующей головы)"
+	warnHorsemanSoldiers = "Предупреждать о призыве Пульсирующих тыкв",
+	specWarnHorsemanHead = "Спец-предупреждение для Вихря (призыв 2ой и следующей головы)"
 })
 
 L:SetMiscLocalization({
-	HorsemanHead		= "Не надоело еще убегать?",
-	HorsemanSoldiers	= "Восстаньте слуги, устремитесь в бой! Пусть павший рыцарь обретет покой!",
-	SayCombatEnd		= "Со смертью мы давно уже друзья...Что ждет теперь на пустоши меня?"
+	HorsemanHead     = "Не надоело еще убегать?",
+	HorsemanSoldiers = "Восстаньте слуги, устремитесь в бой! Пусть павший рыцарь обретет покой!",
+	SayCombatEnd     = "Со смертью мы давно уже друзья...Что ждет теперь на пустоши меня?"
 })
 
 -----------------------
@@ -61,17 +61,17 @@ L:SetGeneralLocalization({
 })
 
 L:SetTimerLocalization({
-	HummelActive	= "Хаммел вступает в бой",
-	BaxterActive	= "Бакстер вступает в бой",
-	FryeActive		= "Фрай вступает в бой"
+	HummelActive = "Хаммел вступает в бой",
+	BaxterActive = "Бакстер вступает в бой",
+	FryeActive   = "Фрай вступает в бой"
 })
 
 L:SetOptionLocalization({
-	TrioActiveTimer		= "Отсчет времени до вступления Троих аптекарей в бой"
+	TrioActiveTimer = "Отсчет времени до вступления Троих аптекарей в бой"
 })
 
 L:SetMiscLocalization({
-	SayCombatStart		= "Тебе хоть сказали, кто я и чем занимаюсь?"
+	SayCombatStart = "Тебе хоть сказали, кто я и чем занимаюсь?"
 })
 
 -------------
@@ -84,26 +84,62 @@ L:SetGeneralLocalization({
 })
 
 L:SetWarningLocalization({
-	Submerged		= "Ахун исчез",
-	Emerged			= "Ахун появился",
-	specWarnAttack	= "Ахун уязвим - атакуйте сейчас!"
+	Submerged      = "Ахун исчез",
+	Emerged        = "Ахун появился",
+	specWarnAttack = "Ахун уязвим - атакуйте сейчас!"
 })
 
 L:SetTimerLocalization({
-	SubmergeTimer	= "Исчезновение",
-	EmergeTimer		= "Появление",
-	TimerCombat		= "Начало боя"
+	SubmergeTimer = "Исчезновение",
+	EmergeTimer   = "Появление",
+	TimerCombat   = "Начало боя"
 })
 
 L:SetOptionLocalization({
-	Submerged		= "Предупреждение, когда Ахун исчезает",
-	Emerged			= "Предупреждение, когда Ахун появляется",
-	specWarnAttack	= "Спец-предупреждение, когда Ахун становится уязвим",
-	SubmergeTimer	= "Отсчет времени до исчезновения",
-	EmergeTimer		= "Отсчет времени до появления",
-	TimerCombat		= "Отсчет времени до начала боя",
+	Submerged      = "Предупреждение, когда Ахун исчезает",
+	Emerged        = "Предупреждение, когда Ахун появляется",
+	specWarnAttack = "Спец-предупреждение, когда Ахун становится уязвим",
+	SubmergeTimer  = "Отсчет времени до исчезновения",
+	EmergeTimer    = "Отсчет времени до появления",
+	TimerCombat    = "Отсчет времени до начала боя",
 })
 
 L:SetMiscLocalization({
-	Pull			= "Камень Льда растаял!"
+	Pull = "Камень Льда растаял!"
+})
+
+L = DBM:GetModLocalization("Snowman")
+
+L:SetGeneralLocalization({
+	name = "Мороженка"
+})
+
+L:SetWarningLocalization({
+	Submerged      = "Ахун исчез",
+	Emerged        = "Ахун появился",
+	specWarnAttack = "Ахун уязвим - атакуйте сейчас!"
+})
+
+L:SetTimerLocalization({
+	SubmergeTimer = "Исчезновение",
+	EmergeTimer   = "Появление",
+	TimerCombat   = "Начало боя"
+})
+
+L:SetOptionLocalization({
+	Submerged      = "Предупреждение, когда Ахун исчезает",
+	Emerged        = "Предупреждение, когда Ахун появляется",
+	specWarnAttack = "Спец-предупреждение, когда Ахун становится уязвим",
+	SubmergeTimer  = "Отсчет времени до исчезновения",
+	EmergeTimer    = "Отсчет времени до появления",
+	TimerCombat    = "Отсчет времени до начала боя",
+})
+
+L:SetMiscLocalization({
+	Ball = "Гигантский снежный ком нацелен на (%S+)",
+	WaveLight = "Текущий уровень: (%d+)",
+	Guard = "Ледяной защитник предотвращает весь урон получаемый Мороженкой.",
+	GuardName = "Ледяной защитник",
+	Pull = "Мы должны разморозить его сердце и вернуть ему веселье Зимнего покрова.",
+	Pull2 = "Узрите! Узрите величайшего снеговика из когда-либо созданных!"
 })

@@ -16,10 +16,10 @@
 ## X-DBM-Mod-Name-ruRU: Игровые события
 ## X-DBM-Mod-Name-esES: Eventos del Mundo
 ## X-DBM-Mod-Sort: 150
-## X-DBM-Mod-MapID: 705,763,765,729
+## X-DBM-Mod-MapID: 705,763,765,729, 932
 ## X-DBM-Mod-LoadZone: Blackrock Depths,Scarlet Monastery,Shadowfang Keep,The Slave Pens
 ## X-DBM-Mod-LoadZone-zhCN: 黑石深渊,血色修道院,影牙城堡,奴隶围栏
-## X-DBM-Mod-LoadZone-ruRU: Глубины Черной горы,Монастырь Алого ордена,Крепость Темного Клыка,Узилище
+## X-DBM-Mod-LoadZone-ruRU: Глубины Черной горы,Монастырь Алого ордена,Крепость Темного Клыка,Узилище,Вершина Снеговика
 ## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-WorldEvents
 
 localization.en.lua
@@ -27,6 +27,7 @@ localization.cn.lua
 localization.ru.lua
 
 ApothecaryTrio.lua
+Snowman.lua
 Ahune.lua
 CorenDirebrew.lua
 HeadlessHorseman.lua

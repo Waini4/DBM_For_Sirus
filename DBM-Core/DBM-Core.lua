@@ -81,9 +81,9 @@ local function currentFullDate()
 end
 
 DBM = {
-	Revision = parseCurseDate("2024" .. "11" .. "28" .. "14" .. "00" .. "00"),
+	Revision = parseCurseDate("2024" .. "12" .. "29" .. "17" .. "00" .. "00"),
 	DisplayVersion = GetAddOnMetadata(_addonname, "Version"), -- the string that is shown as version
-	ReleaseRevision = releaseDate(2024, 11, 28, 14, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	ReleaseRevision = releaseDate(2024, 12, 29, 17, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 
 local fakeBWVersion = 7558
@@ -2281,10 +2281,14 @@ do
 		"raid28target", "raid29target", "raid30target",
 		"raid31target", "raid32target", "raid33target", "raid34target", "raid35target", "raid36target", "raid37target",
 		"raid38target", "raid39target", "raid40target",
-		"nameplate1", "nameplate2", "nameplate3", "nameplate4", "nameplate5", "nameplate6", "nameplate7", "nameplate8", "nameplate9", "nameplate10",
-		"nameplate11", "nameplate12", "nameplate13", "nameplate14", "nameplate15", "nameplate16", "nameplate17", "nameplate18", "nameplate19", "nameplate20",
-		"nameplate21", "nameplate22", "nameplate23", "nameplate24", "nameplate25", "nameplate26", "nameplate27", "nameplate28", "nameplate29", "nameplate30",
-		"nameplate31", "nameplate32", "nameplate33", "nameplate34", "nameplate35", "nameplate36", "nameplate37", "nameplate38", "nameplate39", "nameplate40"
+		"nameplate1", "nameplate2", "nameplate3", "nameplate4", "nameplate5", "nameplate6", "nameplate7", "nameplate8",
+		"nameplate9", "nameplate10",
+		"nameplate11", "nameplate12", "nameplate13", "nameplate14", "nameplate15", "nameplate16", "nameplate17",
+		"nameplate18", "nameplate19", "nameplate20",
+		"nameplate21", "nameplate22", "nameplate23", "nameplate24", "nameplate25", "nameplate26", "nameplate27",
+		"nameplate28", "nameplate29", "nameplate30",
+		"nameplate31", "nameplate32", "nameplate33", "nameplate34", "nameplate35", "nameplate36", "nameplate37",
+		"nameplate38", "nameplate39", "nameplate40"
 	}
 
 	function DBM:GetEnemyUnitIdByGUID(guid) -- взято у zidras, спиздил стекольный
@@ -4017,12 +4021,12 @@ do
 	}
 	local localized_TIMER_BREAK = {
 		"休息时间！", -- CN
-		"Pause!",    -- DE
-		"Pause",     -- DE (old DBM)
+		"Pause!", -- DE
+		"Pause", -- DE (old DBM)
 		"Break time!", -- EN, FR (old DBM)
 		"¡Toca descanso!", -- ES
 		"¡Descanso!", -- ES (old DBM)
-		"Pause !",   -- FR
+		"Pause !", -- FR
 		"쉬는 시간!", -- KR
 		"Перерыв!", -- RU
 		"休息時間!" -- TW
@@ -5719,7 +5723,7 @@ do
 								self:PlaySoundFile(defeatSounds[random(3, #defeatSounds)].value)
 							end
 						else
-								self:PlaySoundFile(self.Options.EventSoundWipe, nil, true)
+							self:PlaySoundFile(self.Options.EventSoundWipe, nil, true)
 						end
 					end
 				end
@@ -10332,14 +10336,14 @@ do
 		if self.Options.Memes and soundId == 4 then
 			sound = memFileRun:format(soundRun[math.random(#soundRun)])
 		else
-		if not force and self:IsTrivial() and self.Options.DontPlayTrivialSpecialWarningSound then
-			sound = self.Options.RaidWarningSound
-		else
-			sound = type(soundId) == "number" and self.Options
-				["SpecialWarningSound" .. (soundId == 1 and "" or soundId)] or
-				soundId or self.Options.SpecialWarningSound
+			if not force and self:IsTrivial() and self.Options.DontPlayTrivialSpecialWarningSound then
+				sound = self.Options.RaidWarningSound
+			else
+				sound = type(soundId) == "number" and self.Options
+					["SpecialWarningSound" .. (soundId == 1 and "" or soundId)] or
+					soundId or self.Options.SpecialWarningSound
+			end
 		end
-	end
 		self:PlaySoundFile(sound, nil, true)
 	end
 
@@ -11251,7 +11255,7 @@ do
 			-- if timerType == "achievement" then
 			-- 	spellName = select(2, GetAchievementInfo(spellId))
 			-- else
-				spellName = DBM:GetSpellInfo(spellId)
+			spellName = DBM:GetSpellInfo(spellId)
 			-- end
 			--Name wasn't provided, but we succeeded in getting a name, generate one into object now for caching purposes
 			--This would really only happen if GetSpellInfo failed to return spell name on first attempt (which now happens in 9.0)
