@@ -20,7 +20,7 @@ mod:RegisterEvents(
 local warnBall        = mod:NewTargetAnnounce(311877, 3)
 local warnShild       = mod:NewStackAnnounce(311798, 3)
 local warnOrbDied     = mod:NewAnnounce("OrbDiedCount", 3)
-local warnOrbSoon     = mod:NewAnnounce("Скоро появятся Ледяный духи!!!!!", 2)
+local warnOrbSoon     = mod:NewAnnounce("Скоро появятся Ледяные духи!!!!!", 2)
 
 local specWarnGuardSw = mod:NewSpecialWarningSwitch(302946, nil, nil, nil, 1, 2)
 local specWarnOrbSw   = mod:NewSpecialWarningSwitch(52954, nil, nil, nil, 1, 2)
