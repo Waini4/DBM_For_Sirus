@@ -4,13 +4,15 @@ local L   = mod:GetLocalizedStrings()
 mod:SetRevision("20220518110528")
 mod:SetCreatureID(81373, 81402, 81405)
 
-mod:RegisterCombat("combat", 81373, 81402, 81405)
+mod:RegisterCombat("combat", 15866, 15869)
 --mod:RegisterKill("say", L.SayCombatEnd)
 
 mod:RegisterEvents(
     "SPELL_AURA_APPLIED 311798 321125 321126",
     "SPELL_AURA_REMOVED 311798 321125 321126",
+    "SPELL_CAST_SUCCESS 311800",
     "CHAT_MSG_RAID_BOSS_EMOTE",
+    "UPDATE_WORLD_STATES",
     "CHAT_MSG_MONSTER_SAY",
     "CHAT_MSG_BG_SYSTEM_NEUTRAL",
     "UNIT_DIED",
@@ -27,13 +29,15 @@ local specWarnOrbSw   = mod:NewSpecialWarningSwitch(52954, nil, nil, nil, 1, 2)
 local specWarnBallYou = mod:NewSpecialWarningYou(311877, nil, nil, nil, 4, 2)
 local yellBall        = mod:NewYell(311877)
 
-
-local timerBallCD = mod:NewCDTimer(60, 311877, nil, nil, nil, 2, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1)
+local timerBallCD     = mod:NewCDTimer(60, 311877, nil, nil, nil, 2, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1)
 
 mod:AddSetIconOption("BallIcon", 311877, true, false, { 7 })
 mod:AddBoolOption("PartySay", false)
 local currentWave
+local History = false
 local Hard = false
+local shit = false
+local Sneg = 5
 local Orbs = 0
 local OrbsStack = 0
 
@@ -63,8 +67,8 @@ local SnowConfig = {
         [2] = { 93, 90, 63, 60, 23, 20 },
         [3] = { 93, 90, 63, 60, 23, 20 },
         [4] = { 93, 90, 63, 60, 53, 50, 23, 20, 13, 10 },
-        [5] = { 93, 90, 63, 60, 53, 50, 23, 20, 13, 10 },
-        [6] = { 93, 90, 63, 60, 53, 50, 23, 20, 13, 10 },
+        [5] = { 93, 90, 73, 70, 63, 60, 53, 50, 23, 20, 13, 10 },
+        [6] = { 93, 90, 73, 70, 63, 60, 53, 50, 23, 20, 13, 10 },
     }
 }
 
@@ -77,15 +81,57 @@ local function Stages(self)
 end
 
 function mod:SPELL_AURA_APPLIED(args)
+    if args:IsSpellID(311798) then -- 311800
+        shit = true
+        if History then
+            Sneg = 25
+        elseif not Hard and not History then
+            if currentWave < 20 then
+                Sneg = 5
+            else
+                Sneg = 10
+            end
+            Sneg = 5
+        elseif Hard then
+            if currentWave > 1 then
+                Sneg = 25
+            else
+                Sneg = 30
+            end
+        end
+        warnShild:Show(L.name, Sneg)
+    end
+end
+
+function mod:SPELL_AURA_REMOVED(args)
     if args:IsSpellID(311798) then
-        local amount = args.amount or 1
-        warnShild:Show(L.name, amount)
+        shit = false
+    end
+end
+
+function mod:UPDATE_WORLD_STATES()
+    local text2 = select(3, GetWorldStateUIInfo(1))
+    if not text2 then return end
+    local cek = text2:find(L.Cek)
+    if cek then
+        History = true
     end
 end
 
 function mod:CHAT_MSG_BG_SYSTEM_NEUTRAL(msg)
     if msg == L.End or msg:find(L.End) then
         Hard = false
+        History = false
+        timerBallCD:Stop()
+    end
+end
+
+function mod:SPELL_CAST_SUCCESS(args)
+    if args:IsSpellID(311800) then --Aura of Desire
+        if shit then
+            Sneg = Sneg - 1
+            warnShild:Show(L.name, Sneg)
+        end
     end
 end
 
@@ -98,20 +144,22 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
         else
             warnBall:Show(target)
         end
-        -- if self.Options.BallIcon then
-        -- self:ScanForMobs(target, 1, 7, 1, 0.1, 20, "BallIcon")
-        -- self:SetIcon(target, 7, 5)
-        --  end
-        timerBallCD:Start()
+        if Hard then
+            local Timer = 61 - currentWave
+            timerBallCD:Start(Timer)
+        else
+            timerBallCD:Start()
+        end
     elseif msg == L.Guard or msg:find(L.Guard) then
         specWarnGuardSw:Show()
     end
 end
 
 function mod:CHAT_MSG_MONSTER_SAY(msg)
-    if msg == L.Pull or msg:find(L.Pull) or msg == L.Pull2 then --msg:match(L.HealSham or L.HealPrist)
+    if msg == L.Pull or msg:find(L.Pull) or msg == L.Pull2 then
         local text = select(3, GetWorldStateUIInfo(4))
         if not text then return end
+        History = false
         timerBallCD:Stop()
         Orbs = 0
         OrbsStack = 0
