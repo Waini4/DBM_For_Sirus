@@ -92,11 +92,7 @@ function mod:SPELL_AURA_APPLIED(args)
             end
             Sneg = 5
         elseif Hard then
-            if currentWave > 1 then
-                Sneg = 25
-            else
-                Sneg = 30
-            end
+            Sneg = 25
         end
         warnShild:Show(L.name, Sneg)
     end
