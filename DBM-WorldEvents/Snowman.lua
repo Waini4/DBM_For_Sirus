@@ -4,7 +4,7 @@ local L   = mod:GetLocalizedStrings()
 mod:SetRevision("20220518110528")
 mod:SetCreatureID(81373, 81402, 81405)
 
-mod:RegisterCombat("combat", 15866, 15869)
+mod:RegisterCombat("combat", 15866, 15869, 15837)
 --mod:RegisterKill("say", L.SayCombatEnd)
 
 mod:RegisterEvents(
@@ -12,7 +12,6 @@ mod:RegisterEvents(
     "SPELL_AURA_REMOVED 311798 321125 321126",
     "SPELL_CAST_SUCCESS 311800",
     "CHAT_MSG_RAID_BOSS_EMOTE",
-    "UPDATE_WORLD_STATES",
     "CHAT_MSG_MONSTER_SAY",
     "CHAT_MSG_BG_SYSTEM_NEUTRAL",
     "UNIT_DIED",
@@ -109,15 +108,6 @@ function mod:SPELL_AURA_REMOVED(args)
     end
 end
 
-function mod:UPDATE_WORLD_STATES()
-    local text2 = select(3, GetWorldStateUIInfo(1))
-    if not text2 then return end
-    local cek = text2:find(L.Cek)
-    if cek then
-        History = true
-    end
-end
-
 function mod:CHAT_MSG_BG_SYSTEM_NEUTRAL(msg)
     if msg == L.End or msg:find(L.End) then
         Hard = false
@@ -127,7 +117,7 @@ function mod:CHAT_MSG_BG_SYSTEM_NEUTRAL(msg)
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
-    if args:IsSpellID(311800) then --Aura of Desire
+    if args:IsSpellID(311800) then
         if shit then
             Sneg = Sneg - 1
             warnShild:Show(L.name, Sneg)
@@ -174,18 +164,24 @@ end
 
 function mod:UNIT_DIED(args)
     if self:GetCIDFromGUID(args.destGUID) == 15846 then
-        Orbs = Orbs - 1
-        warnOrbDied:Show(Orbs)
-        OrbsStack = Orbs
+        if not History then
+            Orbs = Orbs - 1
+            warnOrbDied:Show(Orbs)
+            OrbsStack = Orbs
+        end
     end
 end
 
 function mod:UNIT_HEALTH(uId)
-    if self:GetUnitCreatureId(uId) ~= 15866 and self:GetUnitCreatureId(uId) ~= 15869 then return end
+    if self:GetUnitCreatureId(uId) ~= 15866 and self:GetUnitCreatureId(uId) ~= 15869 and self:GetUnitCreatureId(uId) ~= 15837 then return end
     if self:GetUnitCreatureId(uId) == 15869 then
         Hard = true
+        History = false
     elseif self:GetUnitCreatureId(uId) == 15866 then
         Hard = false
+        History = false
+    elseif self:GetUnitCreatureId(uId) == 15837 then
+        History = true
     end
 
     local Mode = Hard and SnowConfig.Hard[currentWave] or SnowConfig.Normal[currentWave]
