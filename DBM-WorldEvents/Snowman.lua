@@ -149,7 +149,6 @@ function mod:CHAT_MSG_MONSTER_SAY(msg)
     if msg == L.Pull or msg:find(L.Pull) or msg == L.Pull2 then
         local text = select(3, GetWorldStateUIInfo(4))
         if not text then return end
-        History = false
         timerBallCD:Stop()
         Orbs = 0
         OrbsStack = 0
