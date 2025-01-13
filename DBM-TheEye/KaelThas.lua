@@ -58,7 +58,7 @@ local timerPhoenixCD      = mod:NewCDTimer(55, 36723, nil, nil, nil, 1, nil, CL.
 local timerMCCD           = mod:NewCDTimer(70, 36797, nil, nil, nil, 3)
 
 local timerGravity        = mod:NewBuffFadesTimer(32.5, 35941, nil, nil, nil, 4, nil, CL.DEADLY_ICON, nil, 2, 5) --- хм
-local timerGravityCD      = mod:NewCDTimer(90, 35941, nil, nil, nil, 4, nil, CL.DEADLY_ICON, nil, 2, 4)     -- обычка
+local timerGravityCD      = mod:NewCDTimer(90, 35941, nil, nil, nil, 4, nil, CL.DEADLY_ICON, nil, 2, 4)          -- обычка
 
 --об
 local warnAvenger         = mod:NewTargetAnnounce(308743, 4)
@@ -68,9 +68,9 @@ local specAvengerNear     = mod:NewSpecialWarning("|cff71d5ff|Hspell:308743|hЩ�
 local warnFurious         = mod:NewStackAnnounce(308732, 2, nil, "Tank|Healer") -- яростный удар
 local warnJustice         = mod:NewStackAnnounce(308741, 2, nil, "Tank|Healer") -- правосудие тьмы
 local warnIsc             = mod:NewStackAnnounce(308756, 2, nil, "Tank|Healer") -- Искрящий
-local warnShadow          = mod:NewSpellAnnounce(308742, 2)                 -- освященеи тенью (лужа)
-local warnBomb            = mod:NewTargetAnnounce(308750, 2)                -- бомба
-local warnVzriv           = mod:NewTargetAnnounce(308797, 2)                -- лужа
+local warnShadow          = mod:NewSpellAnnounce(308742, 2)                     -- освященеи тенью (лужа)
+local warnBomb            = mod:NewTargetAnnounce(308750, 2)                    -- бомба
+local warnVzriv           = mod:NewTargetAnnounce(308797, 2)                    -- лужа
 local yellvzriv           = mod:NewYell(308797)
 
 local specWarnBomb        = mod:NewSpecialWarningClose(308750)
@@ -94,11 +94,11 @@ local timerGravityH   = mod:NewCDTimer(63, 35941, "Interface\\Icons\\Spell_Magic
 	CL.DEADLY_ICON)                                                                       -- хм
 local timerGravityHCD = mod:NewCDTimer(150, 35941, nil, nil, nil, 6, nil, CL.DEADLY_ICON) -- хм
 local timerAvengerS   = mod:NewCDTimer(22, 308743, nil, nil, nil, 3)
-local berserkTimer   = mod:NewBerserkTimer(392)
+local berserkTimer    = mod:NewBerserkTimer(392)
 
 mod:AddBoolOption("SetIconOnMC", true)
 mod:AddBoolOption("SayBoom", true)
--- mod:AddBoolOption("SoundMem", true)
+mod:AddBoolOption("RemoveWeaponOnMindControl", true)
 mod:AddBoolOption("BoomIcon", true)
 mod:AddBoolOption("SayBomb", true)
 mod:AddBoolOption("SetIconOnBombTargets", true)
