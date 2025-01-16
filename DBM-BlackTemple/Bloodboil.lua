@@ -1,5 +1,5 @@
-local mod	= DBM:NewMod("Bloodboil", "DBM-BlackTemple")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Bloodboil", "DBM-BlackTemple")
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20220518110528")
 mod:SetCreatureID(22948)
@@ -21,13 +21,13 @@ mod:RegisterEventsInCombat(
 --local warnFilth			= mod:NewTargetAnnounce(373742, 3)
 
 --local specWarnGTFO		= mod:NewSpecialWarningGTFO(373744, nil, nil, nil, 4, 8)
-local specWarnFilth		= mod:NewSpecialWarningStack(373742, nil, 18, nil, nil, 2, 2)
-local specWarnBlood		= mod:NewSpecialWarningStack(373749, nil, 2, nil, nil, 1, 2)
+local specWarnFilth   = mod:NewSpecialWarningStack(373742, nil, 18, nil, nil, 2, 2)
+local specWarnBlood   = mod:NewSpecialWarningStack(373749, nil, 2, nil, nil, 1, 2)
 --local specWarnRage		= mod:NewSpecialWarningYou(40604, nil, nil, nil, 1, 2)
-local yellFilth			= mod:NewCountYell(373742)
+local yellFilth       = mod:NewCountYell(373742)
 
-local timerStrikeCast	= mod:NewCastTimer(1.5, 373745, nil, "Tank", nil, 2)
-local timerStrikeCD		= mod:NewCDTimer(6, 373745, nil, "Tank", 2, 5, nil, DBM_COMMON_L.TANK_ICON)
+local timerStrikeCast = mod:NewCastTimer(1.5, 373745, nil, "Tank", nil, 2)
+local timerStrikeCD   = mod:NewCDTimer(6, 373745, nil, "Tank", 2, 5, nil, DBM_COMMON_L.TANK_ICON)
 
 --local berserkTimer		= mod:NewBerserkTimer(600)
 
@@ -41,7 +41,7 @@ mod:AddRangeFrameOption(8, nil, true)
 
 
 function mod:OnCombatStart(delay)
---	self.vb.Filth = 8
+	--	self.vb.Filth = 8
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:SetHeader(FilthBuff)
 		DBM.InfoFrame:Show(30, "playerdebuffstacks", FilthBuff, 2)
@@ -72,27 +72,21 @@ function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
 	local amount = args.amount or 1
 	if spellId == 373742 then
-		--[[if amount >= 18 then
+		if amount >= 18 then
 			if args:IsPlayer() and self:AntiSpam(2) then
 				specWarnFilth:Show(amount)
 				yellFilth:Yell(amount)
 			end
-			if self.Options.SetIconOnFilth then
-				self:SetIcon(args.destName, self.vb.Filth)
-				self.vb.Filth = self.vb.Filth - 1
-				if self.vb.Filth < 2 then
-					self.vb.Filth = 8
-				end
-			end
-		end]]
+		end
 	elseif spellId == 373749 then
 		if amount >= 2 and args:IsPlayer() and self:AntiSpam(2) then
 			specWarnBlood:Show(amount)
 		end
-	--elseif spellId == 373744 and self:AntiSpam(2) then
-	--	specWarnGTFO:Show(args.spellName)
+		--elseif spellId == 373744 and self:AntiSpam(2) then
+		--	specWarnGTFO:Show(args.spellName)
 	end
 end
+
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 --mod.SPELL_AURA_REFRESH = mod.SPELL_AURA_APPLIED
 
