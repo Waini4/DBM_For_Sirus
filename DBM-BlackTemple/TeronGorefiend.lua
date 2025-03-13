@@ -1,70 +1,69 @@
-local mod	= DBM:NewMod("TeronGorefiend", "DBM-BlackTemple")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("TeronGorefiend", "DBM-BlackTemple")
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20220518110528")
 mod:SetCreatureID(22871)
+
 mod:SetUsedIcons(4, 5, 6, 7, 8)
 
 mod:RegisterCombat("combat")
-
-
-mod:RegisterEvents(
-	"CHAT_MSG_MONSTER_YELL"
-)
 
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 373799 373791 373807 373795",
 	"SPELL_AURA_APPLIED 373795 373811 373792 373793 373801 373804",
 	"SPELL_AURA_APPLIED_DOSE 373795 373811 373792 373793",
-	--"SPELL_AURA_REFRESH 373793",
-	"SPELL_AURA_REMOVED ",
 	"SPELL_CAST_SUCCESS 373803 373796 373804 373791",
-	"SPELL_DAMAGE 373793"
+	"SPELL_DAMAGE 373793 373792"
 )
 
+mod:RegisterEvents(
+	"CHAT_MSG_MONSTER_YELL"
+)
+
+
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(1) .. " : " .. "|cff00f7ffВласть Белого Хлада|r")
-local warnFreezingStacks	= mod:NewStackAnnounce(373795, 2, nil, "Tank")
+local warnFreezingStacks = mod:NewStackAnnounce(373795, 2, nil, "Tank")
 
-local specWarnCold			= mod:NewSpecialWarningGTFO(373796, "SpellCaster", nil, nil, 4, 2)
+local specWarnCold       = mod:NewSpecialWarningGTFO(373796, "SpellCaster", nil, nil, 4, 2)
 --local specWarnColdMove		= mod:NewSpecialWarningKeepMove(373793, nil, nil, nil, 1, 2)
-local specWarnColdMove		= mod:NewSpecialWarningStack(373793, nil, 1, nil, nil, 1, 6)
+local specWarnColdMove   = mod:NewSpecialWarningStack(373793, nil, 1, nil, nil, 1, 6)
 
-local timerCombatStart		= mod:NewCombatTimer(20)
-local timerNextFreezing		= mod:NewCDTimer(6, 373795, nil, "Tank", nil, 3)
-local timerColdCast 		= mod:NewCastTimer(7, 373798, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON)
-local timerCold     		= mod:NewCDTimer(10, 373796, nil, "SpellCaster", nil, 4, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1)
-local StageTimer			= mod:NewPhaseTimer(120, nil, "Скоро Фаза: %s", nil, nil, 4)
+local timerCombatStart   = mod:NewCombatTimer(20)
+local timerNextFreezing  = mod:NewCDTimer(6, 373795, nil, "Tank", nil, 3)
+local timerColdCast      = mod:NewCastTimer(7, 373798, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON)
+local timerCold          = mod:NewCDTimer(10, 373796, nil, "SpellCaster", nil, 4, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1)
+local StageTimer         = mod:NewPhaseTimer(120, nil, "Скоро Фаза: %s", nil, nil, 4)
 
-local FreezBuff 			= DBM:GetSpellInfoNew(373795)
+local FreezBuff          = DBM:GetSpellInfoNew(373795)
 
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(2) .. " : " .. "|cffff1919Власть Страданий|r")
 
 --local warnReposeStacks	= mod:NewStackAnnounce(373811, 2, nil, "Tank")
-local warnDisease			= mod:NewTargetAnnounce(373801, 3)
-local warnBlood				= mod:NewTargetAnnounce(373804, 3)
+local warnDisease          = mod:NewTargetAnnounce(373801, 3)
+local warnBlood            = mod:NewTargetAnnounce(373804, 3)
 
-local specWarnBloodYou		= mod:NewSpecialWarningYou(373804, nil, nil, nil, 4, 2)
-local specWarnPhase2    	= mod:NewSpecialWarning("СКОРО ФАЗА |cffff1919Власть Страданий|r", nil, nil, nil, 1, 2)
-local specWarnDecapitation	= mod:NewSpecialWarningDodge(373803, nil, nil, nil, 4, 2)
+local specWarnBloodYou     = mod:NewSpecialWarningYou(373804, nil, nil, nil, 4, 2)
+local specWarnPhase2       = mod:NewSpecialWarning("СКОРО ФАЗА |cffff1919Власть Страданий|r", nil, nil, nil, 1, 2)
+local specWarnDecapitation = mod:NewSpecialWarningDodge(373803, nil, nil, nil, 4, 2)
 
-local timerNextBlood		= mod:NewCDTimer(15, 373804, nil, "SpellCaster", nil, 3)
-local timerNextDisease		= mod:NewCDTimer(10, 373801, nil, "RemoveDisease")
-local timerDecapitation     = mod:NewCDTimer(12, 373803, nil, "Melee", nil, 5, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1)
+local timerNextBlood       = mod:NewCDTimer(15, 373804, nil, "SpellCaster", nil, 3)
+local timerNextDisease     = mod:NewCDTimer(10, 373801, nil, "RemoveDisease")
+local timerDecapitation    = mod:NewCDTimer(12, 373803, nil, "Melee", nil, 5, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1)
 
 
 mod:AddTimerLine(DBM_CORE_L.SCENARIO_STAGE:format(3) .. " : " .. "|cfffc9bffВласть Тьмы|r")
 
-local specWarnPhase3    	= mod:NewSpecialWarning("СКОРО ФАЗА |cfffc9bffВласть Тьмы|r", nil, nil, nil, 1, 2)
-local warnReposeStacks		= mod:NewStackAnnounce(373811, 2, nil, "Tank")
+local specWarnPhase3   = mod:NewSpecialWarning("СКОРО ФАЗА |cfffc9bffВласть Тьмы|r", nil, nil, nil, 1, 2)
+local warnReposeStacks = mod:NewStackAnnounce(373811, 2, nil, "Tank")
 
-local timerNextRepose		= mod:NewCDTimer(6, 373811, nil, "Tank", nil, 3)
-local berserkTimer          = mod:NewBerserkTimer(90)
+local timerNextRepose  = mod:NewCDTimer(6, 373811, nil, "Tank", nil, 3)
+local berserkTimer     = mod:NewBerserkTimer(90)
 --local timerRepos			= mod:NewTimer(60, "Стаки: %d, %s", 373811, "Tank", nil, 3) -- Прим удар
 
-local ReposeBuff = DBM:GetSpellInfoNew(373811)
+local ReposeBuff       = DBM:GetSpellInfoNew(373811)
 mod:AddRangeFrameOption(9, nil, true)
 mod:AddBoolOption("RaidTimer", false)
-local StageAura = {"Власть Страданий", "Власть Тьмы"}
+local StageAura = { "Власть Страданий", "Власть Тьмы" }
 --local CrushedTargets = {}
 mod.vb.Aura = 0
 mod:AddInfoFrameOption(373795, true)
@@ -81,12 +80,13 @@ local function warnBloodTargets(self)
 end
 
 local function Combat(self)
-		specWarnPhase2:Schedule(110)
-		timerCold:Start()
-		StageTimer:Start(nil, StageAura[self.vb.Aura+1])
-		if self.Options.RaidTimer then
-			DBM:CreatePizzaTimer(120, "2-3 фаза")
-		end
+	self.vb.Aura = 0
+	specWarnPhase2:Schedule(110)
+	timerCold:Start()
+	StageTimer:Start(nil, StageAura[self.vb.Aura + 1])
+	if self.Options.RaidTimer then
+		DBM:CreatePizzaTimer(120, "2-3 фаза")
+	end
 end
 
 function mod:OnCombatStart(delay)
@@ -106,7 +106,7 @@ function mod:SPELL_CAST_START(args)
 	if args.spellId == 373799 then
 		specWarnDecapitation:Schedule(10)
 		timerDecapitation:Start()
-		StageTimer:Start(nil, StageAura[self.vb.Aura+1])
+		StageTimer:Start(nil, StageAura[self.vb.Aura + 1])
 		timerCold:Stop()
 		timerNextFreezing:Stop()
 		specWarnPhase3:Schedule(110)
@@ -118,10 +118,10 @@ function mod:SPELL_CAST_START(args)
 		end
 	elseif args.spellId == 373795 then
 		timerNextFreezing:Start()
-	--elseif args.spellId == 373791 then
-	--	specWarnPhase2:Schedule(110)
-	--	timerCold:Start()
-	--	StageTimer:Start(nil, StageAura[self.vb.Aura+1])
+		--elseif args.spellId == 373791 then
+		--	specWarnPhase2:Schedule(110)
+		--	timerCold:Start()
+		--	StageTimer:Start(nil, StageAura[self.vb.Aura+1])
 	elseif args.spellId == 373807 then
 		timerNextRepose:Start()
 		timerDecapitation:Stop()
@@ -144,10 +144,10 @@ function mod:SPELL_AURA_APPLIED(args)
 			DBM.InfoFrame:SetHeader(FreezBuff)
 			DBM.InfoFrame:Show(30, "playerdebuffstacks", FreezBuff, 2)
 		end
---	elseif args:IsSpellID(373793) then
-	--	if args:IsPlayer() then
-		--	specWarnColdMove:Show(args.amount)
-		--end
+	elseif args:IsSpellID(373793, 373792) then
+		if args:IsPlayer() then
+			specWarnColdMove:Show(amount)
+		end
 	elseif args.spellId == 373801 then
 		timerNextDisease:Start()
 		DiseaseTargets[#DiseaseTargets + 1] = args.destName
@@ -195,23 +195,27 @@ function mod:SPELL_CAST_SUCCESS(args)
 	elseif args.spellId == 373791 then
 		specWarnPhase2:Schedule(110)
 		timerCold:Start()
-		StageTimer:Start(nil, StageAura[self.vb.Aura+1])
+		StageTimer:Start(nil, StageAura[self.vb.Aura + 1])
 	end
 end
 
 function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.CamStart or msg:find(L.CamStart) then
-	timerCombatStart:Start()
-	if self.Options.RaidTimer then
-		DBM:CreatePizzaTimer(20, "Пул")
-	end
-	self:Unschedule(Combat)
-	self:Schedule(20, Combat, self)
+		timerCombatStart:Start()
+		if self.Options.RaidTimer then
+			DBM:CreatePizzaTimer(20, "Пул")
+		end
+		self:Unschedule(Combat)
+		self:Schedule(20, Combat, self)
 	end
 end
 
 function mod:SPELL_DAMAGE(_, _, _, destGUID, _, _, spellId)
-	if (spellId == 373793) and destGUID == UnitGUID("player") and self:AntiSpam(2) then
+	--local s = string.format("%d", (GetUnitSpeed("Player") / 7) * 100)
+	if (spellId == 373792 or spellId == 373793) and destGUID == UnitGUID("player") and self:AntiSpam(3, 1) then
+		--print(s)
+		--if s == 0 then
 		specWarnColdMove:Show()
+		--end
 	end
 end
