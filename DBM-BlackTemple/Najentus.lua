@@ -1,7 +1,7 @@
-local mod	= DBM:NewMod("Najentus", "DBM-BlackTemple")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("Najentus", "DBM-BlackTemple")
+local L   = mod:GetLocalizedStrings()
 
-mod:SetRevision("2023".."11".."22".."10".."00".."00") --fxpw check
+mod:SetRevision("2023" .. "11" .. "22" .. "10" .. "00" .. "00") --fxpw check
 mod:SetCreatureID(22887)
 
 mod:SetUsedIcons(8)
@@ -25,34 +25,34 @@ mod:RegisterEventsInCombat(
 
 -- local timerShield		= mod:NewCDTimer(56, 39872, nil, nil, nil, 5)
 
-local warnCurse				= mod:NewTargetAnnounce(321599, 5)
-local specudar           	= mod:NewSpecialWarningCount(321598, "Melee", nil, nil, 2, 2)
-local specWarnCurse			= mod:NewSpecialWarningDispel(321599, "RemoveCurse", nil, nil, 1, 5)
+local warnCurse           = mod:NewTargetAnnounce(321599, 5)
+local specudar            = mod:NewSpecialWarningCount(321598, "Melee", nil, nil, 2, 2)
+local specWarnCurse       = mod:NewSpecialWarningDispel(321599, "RemoveCurse", nil, nil, 1, 5)
 
-local berserkTimer			= mod:NewBerserkTimer(360)
+local berserkTimer        = mod:NewBerserkTimer(360)
 
-local kolossalnyi_udar		= mod:NewCDCountTimer(9, 321598, nil, nil, nil, 1) --SPELL_CAST_START
-local grohot_priliva		= mod:NewCDCountTimer(20.5, 321595, nil, nil, nil, 5) --SPELL_CAST_START
-local vodyanoe_proklyatie	= mod:NewCDTimer(30, 321599, nil, nil, nil, 2) --SPELL_CAST_SUCCESS
-local pronzayous_ship		= mod:NewCDCountTimer(19, 321596, nil, nil, nil, 5) --SPELL_CAST_SUCCESS
+local kolossalnyi_udar    = mod:NewCDCountTimer(9, 321598, nil, nil, nil, 1)    --SPELL_CAST_START
+local grohot_priliva      = mod:NewCDCountTimer(20.5, 321595, nil, nil, nil, 5) --SPELL_CAST_START
+local vodyanoe_proklyatie = mod:NewCDTimer(30, 321599, nil, nil, nil, 2)        --SPELL_CAST_SUCCESS
+local pronzayous_ship     = mod:NewCDTimer(19, 321596, nil, nil, nil, 5)        --SPELL_CAST_SUCCESS
 
-mod.vb.MiniStage = 0
-mod.vb.Urad = 0
-mod.vb.GrohotCounter = 0
+mod.vb.MiniStage          = 1
+mod.vb.Urad               = 1
+mod.vb.GrohotCounter      = 0
 --local CurseStages = {}
 --local PrilivStages = {}
 --local ShipStages = {19, 20}
-local warned_F1 = false
-local warned_F2 = false
-local warned_F3 = false
-local warned_F4 = false
-local warned_F5 = false
-local warned_F6 = false
+local warned_F1           = false
+local warned_F2           = false
+local warned_F3           = false
+local warned_F4           = false
+local warned_F5           = false
 
 -- mod:AddSetIconOption("SpineIcon", 39837)
 mod:AddInfoFrameOption(39878, true)
 local CurseTargets = {}
 mod.vb.CurseIcon = 8
+local tr = false
 mod:AddRangeFrameOption("8")
 
 local function CurseIcons(self)
@@ -62,20 +62,20 @@ local function CurseIcons(self)
 end
 
 local function StagesUdar(self)
-	self.vb.Urad = 0
+	self.vb.Urad = 1
 end
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 22887, "High Warlord Naj'entus")
-	self.vb.MiniStage = 0
-	self.vb.Urad = 0
+	self.vb.MiniStage = 1
+	self.vb.Urad = 1
 	self.vb.GrohotCounter = 0
+	tr = false
 	warned_F1 = false
 	warned_F2 = false
 	warned_F3 = false
 	warned_F4 = false
 	warned_F5 = false
-	warned_F6 = false
 	berserkTimer:Start(-delay)
 	kolossalnyi_udar:Start(5.5, self.vb.Urad)
 	grohot_priliva:Start(21, self.vb.GrohotCounter)
@@ -87,7 +87,7 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 22887, "High Warlord Naj'entus",wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 22887, "High Warlord Naj'entus", wipe)
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end
@@ -98,26 +98,37 @@ end
 
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(kolossalnyi_udar.spellId) then
-		specudar:Show(self.vb.Urad .. " из ".. self.vb.MiniStage)
+		specudar:Show(self.vb.Urad .. " из " .. self.vb.MiniStage)
 		if self.vb.MiniStage ~= self.vb.Urad then
 			kolossalnyi_udar:Start(3.7, self.vb.Urad)
 			self.vb.Urad = self.vb.Urad + 1
 			self:Unschedule(StagesUdar)
 			self:Schedule(4.5, StagesUdar, self)
+			if vodyanoe_proklyatie:GetRemaining() < 3 and not tr then
+				local elapsed, total = kolossalnyi_udar:GetTime()
+				local extend = total - elapsed
+				--local count = self.vb.MiniStage - self.vb.Urad
+				vodyanoe_proklyatie:Stop()
+				vodyanoe_proklyatie:Update(0, ((self.vb.MiniStage - self.vb.Urad) * 3.7) + extend + 2)
+				tr = true
+				print(self.vb.MiniStage - self.vb.Urad)
+			end
 		else
-			kolossalnyi_udar:Start(nil, self.vb.Urad)
-			self.vb.Urad = 0
+			--kolossalnyi_udar:Start(nil, self.vb.Urad)
+			self.vb.Urad = 1
 		end
 	elseif args:IsSpellID(grohot_priliva.spellId) then
 		--local timer = PrilivStages[self.vb.GrohotCounter]
-			grohot_priliva:Start(nil, self.vb.GrohotCounter)
+		grohot_priliva:Start(nil, self.vb.GrohotCounter)
 	end
 end
+
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(vodyanoe_proklyatie.spellId) then
 		vodyanoe_proklyatie:Start()
 		specWarnCurse:Show(args.SpellName)
-	elseif args:IsSpellID(pronzayous_ship.spellId) and self:AntiSpam(3,1) then
+		tr = false
+	elseif args:IsSpellID(pronzayous_ship.spellId) and self:AntiSpam(3, 1) then
 		pronzayous_ship:Start()
 	end
 end
@@ -160,10 +171,7 @@ function mod:UNIT_HEALTH(uId)
 		elseif not warned_F5 and hp < 25 then
 			warned_F5 = true
 			self.vb.MiniStage = self.vb.MiniStage + 1
-		elseif not warned_F6 and hp < 5 then
-			warned_F6 = true
-			self.vb.MiniStage = self.vb.MiniStage + 1
-	end
+		end
 		--DBM:Debug("Текущее значение: ".. self.vb.MiniStage.. " : ".. self.vb.GrohotCounter, 2)
 	end
 end

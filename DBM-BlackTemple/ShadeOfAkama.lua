@@ -85,8 +85,8 @@ mod:AddSetIconOption("SetIconOnBeacon", 322748, true, true, { 1, 2, 3, 4, 5, 6, 
 local EndAkama = false
 local dominateMindTargets = {}
 mod.vb.warnDefenderCount = 1
-mod.vb.AddsLoop = 0
-mod.vb.ControlAkama = 0
+mod.vb.AddsLoop = 1
+mod.vb.ControlAkama = 1
 --mod.vb.dominateMindIcon = 6
 --local Adds = {}
 --local addsLoops = {50, 70}
@@ -96,9 +96,9 @@ local function addsLoop(self)
 	self.vb.warnDefenderCount = self.vb.warnDefenderCount + 1
 	timerReflect:Start()
 	specWarnDef:Schedule(65)
-	timerDefendCD:Start(70, self.vb.warnDefenderCount + 1)
+	timerDefendCD:Start(70, self.vb.warnDefenderCount)
 	specWarnAdds:Schedule(35)
-	timerAddsCD:Start(40, self.vb.AddsLoop + 1)
+	timerAddsCD:Start(40, self.vb.AddsLoop)
 	self:Schedule(70, addsLoop, self)
 end
 
@@ -112,9 +112,9 @@ function mod:OnCombatStart(delay)
 	self:SetStage(1)
 	EndAkama = false
 	self.vb.warnDefenderCount = 1
-	self.vb.AddsLoop = 0
+	self.vb.AddsLoop = 1
 	--self.vb.dominateMindIcon = 6
-	self.vb.ControlAkama = 0
+	self.vb.ControlAkama = 1
 	Stage2:Start(nil, 2)
 	timerDispelAkama:Start(30, self.vb.ControlAkama)
 	timerDominateMindCD:Start(30)

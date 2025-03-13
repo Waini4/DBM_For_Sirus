@@ -1,7 +1,7 @@
 local mod = DBM:NewMod("Jaraxxus", "DBM-Coliseum")
 local L   = mod:GetLocalizedStrings()
 
-local CL = DBM_COMMON_L
+local CL  = DBM_COMMON_L
 
 mod:SetRevision("20220518110528")
 mod:SetMinSyncRevision(7007)
@@ -26,11 +26,11 @@ mod:RegisterEventsInCombat(
 	"SPELL_PERIODIC_HEAL"
 )
 
-local MyRealm = select(4, DBM:GetMyPlayerInfo())
-local warnPortalSoon  = mod:NewSoonAnnounce(66269, 3)
-local warnVolcanoSoon = mod:NewSoonAnnounce(66258, 3)
-local warnFlame       = mod:NewTargetAnnounce(66197, 4)
-local warnFlesh       = mod:NewTargetNoFilterAnnounce(66237, 4, nil, "Healer")
+local MyRealm                   = select(4, DBM:GetMyPlayerInfo())
+local warnPortalSoon            = mod:NewSoonAnnounce(66269, 3)
+local warnVolcanoSoon           = mod:NewSoonAnnounce(66258, 3)
+local warnFlame                 = mod:NewTargetAnnounce(66197, 4)
+local warnFlesh                 = mod:NewTargetNoFilterAnnounce(66237, 4, nil, "Healer")
 
 local specWarnFlame             = mod:NewSpecialWarningRun(66877, nil, nil, 2, 4, 2)
 local specWarnFlameGTFO         = mod:NewSpecialWarningMove(66877, nil, nil, 2, 4, 2)
@@ -41,16 +41,16 @@ local specWarnFelInferno        = mod:NewSpecialWarningMove(66496, nil, nil, nil
 local SpecWarnFelFireball       = mod:NewSpecialWarningInterrupt(66532, "HasInterrupt", nil, 2, 1, 2)
 local SpecWarnFelFireballDispel = mod:NewSpecialWarningDispel(66532, "RemoveMagic", nil, 2, 1, 2)
 
-local timerCombatStart   = mod:NewCombatTimer(MyRealm == 2 and 34.5 or 90.5) --roleplay for first pull 34
-local timerFlame         = mod:NewTargetTimer(8, 66197, nil, nil, nil, 3) --There are 8 debuff Ids. Since we detect first to warn, use an 8sec timer to cover duration of trigger spell and damage debuff.
-local timerFlameCD       = mod:NewCDTimer(30, 66197, nil, nil, nil, 3)
-local timerNetherPowerCD = mod:NewCDTimer(42.5, 67009, nil, "MagicDispeller", nil, 5, nil, CL.MAGIC_ICON)
-local timerFlesh         = mod:NewTargetTimer(12, 66237, nil, "Healer", 2, 5, nil, CL.HEALER_ICON)
-local timerFleshCD       = mod:NewCDTimer(23, 66237, nil, "Healer", 2, 5, nil, CL.HEALER_ICON)
-local timerPortalCD      = mod:NewCDTimer(120, 66269, nil, nil, nil, 1)
-local timerVolcanoCD     = mod:NewCDTimer(120, 66258, nil, nil, nil, 1)
+local timerCombatStart          = mod:NewCombatTimer(20)                         --roleplay for first pull 34
+local timerFlame                = mod:NewTargetTimer(8, 66197, nil, nil, nil, 3) --There are 8 debuff Ids. Since we detect first to warn, use an 8sec timer to cover duration of trigger spell and damage debuff.
+local timerFlameCD              = mod:NewCDTimer(30, 66197, nil, nil, nil, 3)
+local timerNetherPowerCD        = mod:NewCDTimer(42.5, 67009, nil, "MagicDispeller", nil, 5, nil, CL.MAGIC_ICON)
+local timerFlesh                = mod:NewTargetTimer(12, 66237, nil, "Healer", 2, 5, nil, CL.HEALER_ICON)
+local timerFleshCD              = mod:NewCDTimer(23, 66237, nil, "Healer", 2, 5, nil, CL.HEALER_ICON)
+local timerPortalCD             = mod:NewCDTimer(120, 66269, nil, nil, nil, 1)
+local timerVolcanoCD            = mod:NewCDTimer(120, 66258, nil, nil, nil, 1)
 
-local enrageTimer = mod:NewBerserkTimer(600)
+local enrageTimer               = mod:NewBerserkTimer(600)
 
 mod:AddSetIconOption("LegionFlameIcon", 66197, true, 0, { 7 })
 mod:AddSetIconOption("IncinerateFleshIcon", 66237, true, 0, { 8 })
@@ -230,7 +230,7 @@ end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE
 
 function mod:CHAT_MSG_MONSTER_YELL(msg)
-	if msg == L.FirstPull or msg:find(L.FirstPull) then
+	if msg == L.Pull20 or msg:find(L.Pull20) then
 		timerCombatStart:Start()
 	end
 end
