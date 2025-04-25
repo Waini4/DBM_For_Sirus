@@ -51,7 +51,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		timerNextSilence:Start()
 		timerNextTrollForm:Start()
 		warnTrollSoon:Schedule(25)
-	elseif msg == L.YellNormal or msg:find(L.YellNormal) then
+	elseif msg == L.YellTroll or msg:find(L.YellTroll) then
 		timerNextTrollForm:Cancel()
 		warnTrollSoon:Cancel()
 		timerNextSilence:Cancel()
