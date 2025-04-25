@@ -11,15 +11,15 @@ mod:RegisterEventsInCombat(
 	"CHAT_MSG_MONSTER_YELL"
 )
 
-local warnBear			= mod:NewAnnounce("WarnBear", 4, 39414)
-local warnBearSoon		= mod:NewAnnounce("WarnBearSoon", 3, 39414)
-local warnTroll			= mod:NewAnnounce("WarnTroll", 4, 39414)
-local warnTrollSoon		= mod:NewAnnounce("WarnTrollSoon", 3, 39414)
-local warnSilence		= mod:NewSpellAnnounce(42398, 3)
+local warnBear           = mod:NewAnnounce("WarnBear", 4, 39414)
+local warnBearSoon       = mod:NewAnnounce("WarnBearSoon", 3, 39414)
+local warnTroll          = mod:NewAnnounce("WarnTroll", 4, 39414)
+local warnTrollSoon      = mod:NewAnnounce("WarnTrollSoon", 3, 39414)
+local warnSilence        = mod:NewSpellAnnounce(42398, 3)
 
 local timerNextBearForm  = mod:NewTimer(45, "TimerBear", 9634, nil, nil, 6)
 local timerNextTrollForm = mod:NewTimer(30, "TimerTroll", 26297, nil, nil, 6)
-local timerNextSilence   = mod:NewCDTimer(9, 42398)
+local timerNextSilence   = mod:NewCDTimer(20, 42398)
 local timerMangle        = mod:NewTargetTimer(60, 42389)
 
 local berserkTimer       = mod:NewBerserkTimer(480)
@@ -54,6 +54,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 	elseif msg == L.YellNormal or msg:find(L.YellNormal) then
 		timerNextTrollForm:Cancel()
 		warnTrollSoon:Cancel()
+		timerNextSilence:Cancel()
 		warnTroll:Show()
 		timerNextBearForm:Start()
 		warnBearSoon:Schedule(40)
