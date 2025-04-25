@@ -26,7 +26,7 @@ local warnFreezingStacks = mod:NewStackAnnounce(373795, 2, nil, "Tank")
 
 local specWarnCold       = mod:NewSpecialWarningGTFO(373796, "SpellCaster", nil, nil, 4, 2)
 --local specWarnColdMove		= mod:NewSpecialWarningKeepMove(373793, nil, nil, nil, 1, 2)
-local specWarnColdMove   = mod:NewSpecialWarningStack(373793, nil, 1, nil, nil, 1, 6)
+local specWarnColdMove   = mod:NewSpecialWarningMove(373793, nil, nil, nil, 1, 6)
 
 local timerCombatStart   = mod:NewCombatTimer(20)
 local timerNextFreezing  = mod:NewCDTimer(6, 373795, nil, "Tank", nil, 3)
@@ -146,7 +146,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif args:IsSpellID(373793, 373792) then
 		if args:IsPlayer() then
-			specWarnColdMove:Show(amount)
+			specWarnColdMove:Show()
 		end
 	elseif args.spellId == 373801 then
 		timerNextDisease:Start()
