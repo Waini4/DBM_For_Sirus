@@ -22,7 +22,7 @@ local timerNextTrollForm = mod:NewTimer(30, "TimerTroll", 26297, nil, nil, 6)
 local timerNextSilence   = mod:NewCDTimer(20, 42398)
 local timerMangle        = mod:NewTargetTimer(60, 42389)
 
-local berserkTimer       = mod:NewBerserkTimer(480)
+local berserkTimer       = mod:NewBerserkTimer(420)
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 23576, "Nalorakk")
