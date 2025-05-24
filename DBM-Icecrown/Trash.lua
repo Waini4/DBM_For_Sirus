@@ -1,5 +1,5 @@
-local mod	= DBM:NewMod("ICCTrash", "DBM-Icecrown", 6)
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("ICCTrash", "DBM-Icecrown", 6)
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20230520110528")
 mod:SetModelID(37007)
@@ -7,10 +7,10 @@ mod:SetUsedIcons(1, 2, 3, 4, 5, 6, 7, 8)
 mod.isTrashMod = true
 
 mod:RegisterEvents(
-	"SPELL_AURA_APPLIED",
-	"SPELL_AURA_APPLIED_DOSE",
-	"SPELL_AURA_REMOVED",
-	"SPELL_CAST_START",
+	"SPELL_AURA_APPLIED 69483 71443 72865 71127 70451 70432 70645 71785 71298 70475",
+	"SPELL_AURA_APPLIED_DOSE 69483 71443 72865 71127 70451 70432 70645 71785 71298 70475",
+	"SPELL_AURA_REMOVED 70451 70432 70645 71785 71298",
+	"SPELL_CAST_START 71022 71088 71123",
 	"SPELL_SUMMON",
 	"SPELL_DAMAGE",
 	"SPELL_MISSED",
@@ -19,63 +19,63 @@ mod:RegisterEvents(
 )
 
 --Lower Spire
-local warnDisruptingShout		= mod:NewSpellAnnounce(71022, 2)
-local warnDarkReckoning			= mod:NewTargetNoFilterAnnounce(69483, 3)
-local warnDeathPlague			= mod:NewTargetNoFilterAnnounce(72865, 4)
+local warnDisruptingShout     = mod:NewSpellAnnounce(71022, 2)
+local warnDarkReckoning       = mod:NewTargetNoFilterAnnounce(69483, 3)
+local warnDeathPlague         = mod:NewTargetNoFilterAnnounce(72865, 4)
 --Plagueworks
-local warnZombies				= mod:NewSpellAnnounce(71159, 2)
-local warnMortalWound			= mod:NewStackAnnounce(71127, 2, nil, "Tank|Healer")
-local warnDecimateSoon			= mod:NewSoonAnnounce(71123, 3)
+local warnZombies             = mod:NewSpellAnnounce(71159, 2)
+local warnMortalWound         = mod:NewStackAnnounce(71127, 2, nil, "Tank|Healer")
+local warnDecimateSoon        = mod:NewSoonAnnounce(71123, 3)
 --Crimson Hall
-local warnBloodMirror			= mod:NewTargetNoFilterAnnounce(70451, 3, nil, "Healer|Tank")
-local warnBloodSap				= mod:NewTargetNoFilterAnnounce(70432, 4, nil, "Healer|Tank")
-local warnChainsofShadow		= mod:NewTargetNoFilterAnnounce(70645, 3, nil, false)
+local warnBloodMirror         = mod:NewTargetNoFilterAnnounce(70451, 3, nil, "Healer|Tank")
+local warnBloodSap            = mod:NewTargetNoFilterAnnounce(70432, 4, nil, "Healer|Tank")
+local warnChainsofShadow      = mod:NewTargetNoFilterAnnounce(70645, 3, nil, false)
 --Frostwing Hall
-local warnConflag				= mod:NewTargetNoFilterAnnounce(71785, 4, nil, false)
-local warnBanish				= mod:NewTargetNoFilterAnnounce(71298, 3, nil, false)
+local warnConflag             = mod:NewTargetNoFilterAnnounce(71785, 4, nil, false)
+local warnBanish              = mod:NewTargetNoFilterAnnounce(71298, 3, nil, false)
 
 --Lower Spire
-local specWarnDisruptingShout	= mod:NewSpecialWarningCast(71022)
-local specWarnDarkReckoning		= mod:NewSpecialWarningMoveAway(69483)
-local specWarnDeathPlague		= mod:NewSpecialWarningYou(72865)
-local specWarnTrapL				= mod:NewSpecialWarning("SpecWarnTrapL")
+local specWarnDisruptingShout = mod:NewSpecialWarningCast(71022)
+local specWarnDarkReckoning   = mod:NewSpecialWarningMoveAway(69483)
+local specWarnDeathPlague     = mod:NewSpecialWarningYou(72865)
+local specWarnTrapL           = mod:NewSpecialWarning("SpecWarnTrapL")
 --Plagueworks
-local specWarnDecimate			= mod:NewSpecialWarningSpell(71123)
-local specWarnMortalWound		= mod:NewSpecialWarningStack(71127, "Tank|Healer", 6)
-local specWarnTrapP				= mod:NewSpecialWarning("SpecWarnTrapP")
-local specWarnBlightBomb		= mod:NewSpecialWarningSpell(71088)
+local specWarnDecimate        = mod:NewSpecialWarningSpell(71123)
+local specWarnMortalWound     = mod:NewSpecialWarningStack(71127, "Tank|Healer", 6)
+local specWarnTrapP           = mod:NewSpecialWarning("SpecWarnTrapP")
+local specWarnBlightBomb      = mod:NewSpecialWarningSpell(71088)
 --Frostwing Hall
-local specWarnGosaEvent			= mod:NewSpecialWarning("SpecWarnGosaEvent")
-local specWarnBlade				= mod:NewSpecialWarningMove(70305)
+local specWarnGosaEvent       = mod:NewSpecialWarning("SpecWarnGosaEvent")
+local specWarnBlade           = mod:NewSpecialWarningMove(70305)
 
 --Lower Spire
-local timerDisruptingShout		= mod:NewCastTimer(3, 71022, nil, nil, nil, 2)
-local timerDarkReckoning		= mod:NewTargetTimer(8, 69483, nil, nil, nil, 5)
-local timerDeathPlague			= mod:NewTargetTimer(15, 72865, nil, nil, nil, 3)
+local timerDisruptingShout    = mod:NewCastTimer(3, 71022, nil, nil, nil, 2)
+local timerDarkReckoning      = mod:NewTargetTimer(8, 69483, nil, nil, nil, 5)
+local timerDeathPlague        = mod:NewTargetTimer(15, 72865, nil, nil, nil, 3)
 --Plagueworks
-local timerZombies				= mod:NewNextTimer(20, 71159, nil, nil, nil, 1)
-local timerMortalWound			= mod:NewTargetTimer(15, 71127, nil, nil, nil, 5)
-local timerDecimate				= mod:NewNextTimer(33, 71123, nil, nil, nil, 2)
-local timerBlightBomb			= mod:NewCastTimer(5, 71088, nil, nil, nil, 3)
-local timerProfessorEvent		= mod:NewRPTimer(59, 70475, nil, nil, nil, 2)
+local timerZombies            = mod:NewNextTimer(20, 71159, nil, nil, nil, 1)
+local timerMortalWound        = mod:NewTargetTimer(15, 71127, nil, nil, nil, 5)
+local timerDecimate           = mod:NewNextTimer(33, 71123, nil, nil, nil, 2)
+local timerBlightBomb         = mod:NewCastTimer(5, 71088, nil, nil, nil, 3)
+local timerProfessorEvent     = mod:NewRPTimer(59, 70475, nil, nil, nil, 2)
 --Crimson Hall
-local timerBloodMirror			= mod:NewTargetTimer(30, 70451, nil, "Healer|Tank", nil, 5)
-local timerBloodSap				= mod:NewTargetTimer(8, 70432, nil, "Healer|Tank", nil, 5)
-local timerChainsofShadow		= mod:NewTargetTimer(10, 70645, nil, false, nil, 3)
+local timerBloodMirror        = mod:NewTargetTimer(30, 70451, nil, "Healer|Tank", nil, 5)
+local timerBloodSap           = mod:NewTargetTimer(8, 70432, nil, "Healer|Tank", nil, 5)
+local timerChainsofShadow     = mod:NewTargetTimer(10, 70645, nil, false, nil, 3)
 --Frostwing Hall
-local timerConflag				= mod:NewTargetTimer(10, 71785, nil, false, nil, 3)
-local timerBanish				= mod:NewTargetTimer(6, 71298, nil, false, nil, 3)
+local timerConflag            = mod:NewTargetTimer(10, 71785, nil, false, nil, 3)
+local timerBanish             = mod:NewTargetTimer(6, 71298, nil, false, nil, 3)
 --валька
 --local timerSpear				= mod:NewCastTimer(20, 71443) --todo создать отдельного "Босса"
 
 mod:RemoveOption("HealthFrame")
 --Lower Spire
-mod:AddSetIconOption("SetIconOnDarkReckoning", 69483, true, 0, {8})
-mod:AddSetIconOption("SetIconOnDeathPlague", 72865, true, 7, {1, 2, 3, 4, 5, 6, 7, 8})
+mod:AddSetIconOption("SetIconOnDarkReckoning", 69483, true, 0, { 8 })
+mod:AddSetIconOption("SetIconOnDeathPlague", 72865, true, 7, { 1, 2, 3, 4, 5, 6, 7, 8 })
 --Crimson Hall
-mod:AddSetIconOption("BloodMirrorIcon", 70451, false, 0, {2})
+mod:AddSetIconOption("BloodMirrorIcon", 70451, false, 0, { 2 })
 --валька
-mod:AddSetIconOption("SetIconOnSpear", 71443, true, 0, {7})
+mod:AddSetIconOption("SetIconOnSpear", 71443, true, 0, { 7 })
 
 local eventProfessorStarted = false
 
@@ -135,6 +135,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerProfessorEvent:Start()
 	end
 end
+
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 function mod:SPELL_AURA_REMOVED(args)
@@ -164,7 +165,7 @@ function mod:SPELL_CAST_START(args)
 		timerBlightBomb:Start()
 	elseif spellId == 71123 then
 		specWarnDecimate:Show()
-		warnDecimateSoon:Cancel()	-- in case the first 1 is inaccurate, you wont have an invalid soon warning
+		warnDecimateSoon:Cancel() -- in case the first 1 is inaccurate, you wont have an invalid soon warning
 		warnDecimateSoon:Schedule(28)
 		timerDecimate:Start()
 	end
@@ -182,6 +183,7 @@ function mod:SPELL_DAMAGE(_, _, _, destGUID, _, _, spellId)
 		specWarnBlade:Show()
 	end
 end
+
 mod.SPELL_MISSED = mod.SPELL_DAMAGE
 
 function mod:UNIT_DIED(args)

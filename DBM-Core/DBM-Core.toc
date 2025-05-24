@@ -15,7 +15,7 @@
 ## LoadOnDemand: 0
 ## DefaultState: enabled
 ## Author: Barsoom, Bunny67, Zidras, DBM-Frostmourne contributors, original DBM team, fixes for sirus Stekolnyu, Waini, fxpw
-## Version: 9.2.116
+## Version: 9.2.117
 ## X-Website: https://github.com/Waini4/DBM_For_Sirus
 ## X-Sirus-Update: https://github.com/Waini4/DBM_For_Sirus/tree/main/DBM-Core
 

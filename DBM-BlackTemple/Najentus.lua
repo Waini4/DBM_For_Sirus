@@ -42,17 +42,12 @@ mod.vb.GrohotCounter      = 0
 --local CurseStages = {}
 --local PrilivStages = {}
 --local ShipStages = {19, 20}
-local warned_F1           = false
-local warned_F2           = false
-local warned_F3           = false
-local warned_F4           = false
-local warned_F5           = false
+local StageUp             = false
 
 -- mod:AddSetIconOption("SpineIcon", 39837)
 mod:AddInfoFrameOption(39878, true)
 local CurseTargets = {}
 mod.vb.CurseIcon = 8
-local tr = false
 mod:AddRangeFrameOption("8")
 
 local function CurseIcons(self)
@@ -70,12 +65,7 @@ function mod:OnCombatStart(delay)
 	self.vb.MiniStage = 1
 	self.vb.Urad = 1
 	self.vb.GrohotCounter = 0
-	tr = false
-	warned_F1 = false
-	warned_F2 = false
-	warned_F3 = false
-	warned_F4 = false
-	warned_F5 = false
+	StageUp = false
 	berserkTimer:Start(-delay)
 	kolossalnyi_udar:Start(5.5, self.vb.Urad)
 	grohot_priliva:Start(21, self.vb.GrohotCounter)
@@ -100,22 +90,20 @@ function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(kolossalnyi_udar.spellId) then
 		specudar:Show(self.vb.Urad .. " из " .. self.vb.MiniStage)
 		if self.vb.MiniStage ~= self.vb.Urad then
+			StageUp = false
+			local Test2 = ((self.vb.MiniStage - self.vb.Urad) * 3.7) + 2
 			kolossalnyi_udar:Start(3.7, self.vb.Urad)
-			self.vb.Urad = self.vb.Urad + 1
 			self:Unschedule(StagesUdar)
 			self:Schedule(4.5, StagesUdar, self)
-			if vodyanoe_proklyatie:GetRemaining() < 3 and not tr then
-				local elapsed, total = kolossalnyi_udar:GetTime()
-				local extend = total - elapsed
-				--local count = self.vb.MiniStage - self.vb.Urad
+			if vodyanoe_proklyatie:GetRemaining() > Test2 and self.vb.Urad == 1 then -- #TODO Тест нужно проверить - 1 кд в неделю :)
 				vodyanoe_proklyatie:Stop()
-				vodyanoe_proklyatie:Update(0, ((self.vb.MiniStage - self.vb.Urad) * 3.7) + extend + 2)
-				tr = true
+				vodyanoe_proklyatie:Start(Test2, self.vb.Urad)
 				print(self.vb.MiniStage - self.vb.Urad)
 			end
+			self.vb.Urad = self.vb.Urad + 1
 		else
-			--kolossalnyi_udar:Start(nil, self.vb.Urad)
 			self.vb.Urad = 1
+			StageUp = true
 		end
 	elseif args:IsSpellID(grohot_priliva.spellId) then
 		--local timer = PrilivStages[self.vb.GrohotCounter]
@@ -127,7 +115,6 @@ function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(vodyanoe_proklyatie.spellId) then
 		vodyanoe_proklyatie:Start()
 		specWarnCurse:Show(args.SpellName)
-		tr = false
 	elseif args:IsSpellID(pronzayous_ship.spellId) and self:AntiSpam(3, 1) then
 		pronzayous_ship:Start()
 	end
@@ -155,23 +142,21 @@ end
 
 function mod:UNIT_HEALTH(uId)
 	local hp = self:GetUnitCreatureId(uId) == 22887 and DBM:GetBossHP(22887) or nil
-	if hp then
-		if not warned_F1 and hp < 85 then
-			warned_F1 = true
-			self.vb.MiniStage = self.vb.MiniStage + 1
-		elseif not warned_F2 and hp < 70 then
-			warned_F2 = true
-			self.vb.MiniStage = self.vb.MiniStage + 1
-		elseif not warned_F3 and hp < 55 then
-			warned_F3 = true
-			self.vb.MiniStage = self.vb.MiniStage + 1
-		elseif not warned_F4 and hp < 40 then
-			warned_F4 = true
-			self.vb.MiniStage = self.vb.MiniStage + 1
-		elseif not warned_F5 and hp < 25 then
-			warned_F5 = true
-			self.vb.MiniStage = self.vb.MiniStage + 1
+	if hp and StageUp then
+		local thresholds = {
+			{ "warned_F1", 85 },
+			{ "warned_F2", 70 },
+			{ "warned_F3", 55 },
+			{ "warned_F4", 40 },
+			{ "warned_F5", 25 }
+		}
+
+		for _, check in ipairs(thresholds) do
+			if not self[check[1]] and hp < check[2] then
+				self[check[1]] = true
+				self.vb.MiniStage = self.vb.MiniStage + 1
+				break
+			end
 		end
-		--DBM:Debug("Текущее значение: ".. self.vb.MiniStage.. " : ".. self.vb.GrohotCounter, 2)
 	end
 end
