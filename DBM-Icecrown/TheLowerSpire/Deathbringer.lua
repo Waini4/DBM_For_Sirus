@@ -30,7 +30,6 @@ local enrageTimer			= mod:NewBerserkTimer(480)
 
 mod:RemoveOption("HealthFrame")
 mod:AddBoolOption("RunePowerFrame", false, "misc")
-mod:AddBoolOption("RemoveDI")
 
 -- Deathbringer Saurfang
 mod:AddTimerLine(BOSS)
@@ -216,8 +215,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif spellId == 72737 then						-- Frenzy
 		warnFrenzy:Show()
-	elseif spellId == 19753 and self:IsInCombat() and self.Options.RemoveDI then	-- Remove Divine Intervention
-		CancelUnitBuff("player", GetSpellInfo(19753))
 	end
 end
 
