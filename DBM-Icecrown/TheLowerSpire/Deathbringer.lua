@@ -15,7 +15,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 73058 72378 72293",
 	"SPELL_CAST_SUCCESS 72410",
 	"SPELL_SUMMON 72172 72173 72356 72357 72358",
-	"SPELL_AURA_APPLIED 72293 72385 72441 72442 72443 72737 19753",
+	"SPELL_AURA_APPLIED 72293 72385 72441 72442 72443 72737 19753 10278",
 	"SPELL_AURA_REMOVED 72385 72441 72442 72443",
 	"UNIT_HEALTH boss1"
 )
@@ -30,7 +30,8 @@ local enrageTimer			= mod:NewBerserkTimer(480)
 
 mod:RemoveOption("HealthFrame")
 mod:AddBoolOption("RunePowerFrame", false, "misc")
-mod:AddBoolOption("RemoveDI")
+mod:AddBoolOption("RemoveDI", false, "misc")
+mod:AddBoolOption("RemoveHOP", false, "misc")
 
 -- Deathbringer Saurfang
 mod:AddTimerLine(BOSS)
@@ -218,6 +219,8 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnFrenzy:Show()
 	elseif spellId == 19753 and self:IsInCombat() and self.Options.RemoveDI then	-- Remove Divine Intervention
 		CancelUnitBuff("player", GetSpellInfo(19753))
+	elseif spellId == 10278 and self:IsInCombat() and self.Options.RemoveHOP then	-- Remove Divine Intervention
+		CancelUnitBuff("player", GetSpellInfo(10278))
 	end
 end
 
