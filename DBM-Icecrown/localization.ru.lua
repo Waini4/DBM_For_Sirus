@@ -104,7 +104,8 @@ L:SetGeneralLocalization({
 
 L:SetOptionLocalization({
 	RunePowerFrame		= "Показывать здоровье босса + индикатор для $spell:72371",
-	RemoveDI			= "Удалите $spell:19752, если используется для предотвращения $spell:72293"
+	RemoveDI			= "Удалите $spell:19752, если используется для предотвращения $spell:72293",
+	RemoveHOP			= "Удалите $spell:10278, если используется для предотвращения $spell:72385"
 })
 
 L:SetMiscLocalization({
@@ -171,6 +172,9 @@ L:SetMiscLocalization{
 	YellMalleable	= "Вязкая гадость на мне!",
 	YellUnbound		= "Безудержная чума на мне!"
 }
+L:SetOptionLocalization({
+	RemoveDI			= "Удалите $spell:19752, если используется для предотвращения $spell:72451"
+})
 ----------------------------
 --  Blood Prince Council  --
 ----------------------------
