@@ -1,14 +1,14 @@
-local mod	= DBM:NewMod("Souls", "DBM-BlackTemple")
-local L		= mod:GetLocalizedStrings()
+local mod = DBM:NewMod("EssenceOfSouls", "DBM-BlackTemple")
+local L   = mod:GetLocalizedStrings()
 
 mod:SetRevision("20220518110528")
 mod:SetCreatureID(22856)
 
 mod:SetUsedIcons(4, 5, 6, 7, 8)
 
-mod:RegisterCombat("combat", 23420, 23419, 23418, 22856)
+mod:RegisterCombat("combat")
 
-mod:RegisterEventsInCombat(
+mod:RegisterEvents(
 	"SPELL_AURA_APPLIED 371985 371999 371989 371997",
 	"SPELL_AURA_APPLIED_DOSE 371989 371997",
 	"SPELL_AURA_REMOVED",
@@ -21,43 +21,43 @@ mod:RegisterEventsInCombat(
 	"UNIT_SPELLCAST_SUCCEEDED"
 )
 
-local specWarnPhase 		= mod:NewSpecialWarning("Скоро фаза %s", nil, nil, nil, 1, 2)
-local Stage2             	= mod:NewPhaseTimer(11, nil, "Фаза: %s", nil, nil, 4)
-local StageTimer			= mod:NewPhaseTimer(101, nil, "Cледующая Фаза", nil, nil, 3)
+local specWarnPhase      = mod:NewSpecialWarning("Скоро фаза %s", nil, nil, nil, 1, 2)
+local Stage2             = mod:NewPhaseTimer(11, nil, "Фаза: %s", nil, nil, 4)
+local StageTimer         = mod:NewPhaseTimer(101, nil, "Cледующая Фаза", nil, nil, 3)
 
 -- Гнева
-local warnRage				= mod:NewTargetAnnounce(371999, 3)
-local warnGripStacks		= mod:NewStackAnnounce(371997, 2, nil, "Tank")
-local specWarnRageDispel	= mod:NewSpecialWarningDispel(371999, "RemoveCurse", nil, nil, 1, 2)
+local warnRage           = mod:NewTargetAnnounce(371999, 3)
+local warnGripStacks     = mod:NewStackAnnounce(371997, 2, nil, "Tank")
+local specWarnRageDispel = mod:NewSpecialWarningDispel(371999, "RemoveCurse", nil, nil, 1, 2)
 
-local specWarnKick			= mod:NewSpecialWarningInterrupt(371993, "HasInterrupt", nil, nil, 1, 2)
+local specWarnKick       = mod:NewSpecialWarningInterrupt(371993, "HasInterrupt", nil, nil, 1, 2)
 
 --local timerNextGrip 		= mod:NewNextTimer(3, 371997, nil, nil, nil, 5)
 --local timerGrip				= mod:NewTargetTimer(10, 371997, nil, "Tank", nil, 5, nil, DBM_COMMON_L.TANK_ICON)
-local timerNextRage 		= mod:NewCDTimer(20, 371999, nil, nil, nil, 5)
+local timerNextRage      = mod:NewCDTimer(20, 371999, nil, nil, nil, 5)
 
 --желания
-local specWarnThirst        = mod:NewSpecialWarningMoveAway(371992, "Melee", nil, nil, 4, 2) --Пожирающая жажда
-local specWarnDeceit		= mod:NewSpecialWarningStack(371989, nil, 10, nil, nil, 1, 6)
+local specWarnThirst     = mod:NewSpecialWarningMoveAway(371992, "Melee", nil, nil, 4, 2) --Пожирающая жажда
+local specWarnDeceit     = mod:NewSpecialWarningStack(371989, nil, 10, nil, nil, 1, 6)
 
-local timerNextThirst		= mod:NewCDTimer(18, 371992, nil, nil, nil, 5, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1)
-local timerNextKick			= mod:NewCDTimer(10, 371993, nil, nil, nil, 5) --желания
+local timerNextThirst    = mod:NewCDTimer(18, 371992, nil, nil, nil, 5, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1)
+local timerNextKick      = mod:NewCDTimer(10, 371993, nil, nil, nil, 5) --желания
 --Воплощение страдания
 
 --371985,"Иссушающая лихорадка"
-local warnFever				= mod:NewTargetAnnounce(371985, 3)
-local specWarnGTFO	   		= mod:NewSpecialWarningGTFO(371984, nil, nil, nil, 1, 2)
+local warnFever          = mod:NewTargetAnnounce(371985, 3)
+local specWarnGTFO       = mod:NewSpecialWarningGTFO(371984, nil, nil, nil, 1, 2)
 
-local timerNextGTFO			= mod:NewCDTimer(9, 371984, nil, nil, nil, 3) --реликв потерь
+local timerNextGTFO      = mod:NewCDTimer(9, 371984, nil, nil, nil, 3) --реликв потерь
 
 
 local DeceitBuff = DBM:GetSpellInfoNew(371989)
 local FeverTargets = {}
 local RageTargets = {}
 local UnitSpirits = 0
-mod.vb.StageUwU = 0
+mod.vb.StageUwU = 1
 mod:AddInfoFrameOption(371997, true)
-local Stages = { "|cffff1919Воплощение Гнева|r", "|cfffc9bffВоплощение Желания|r", "|cffffe00aВоплощение Страдания|r"}
+local Stages = { "|cffff1919Воплощение Гнева|r", "|cfffc9bffВоплощение Желания|r", "|cffffe00aВоплощение Страдания|r" }
 mod:AddRangeFrameOption(9, nil, true)
 
 local function warnFeverTargets(self)
@@ -144,7 +144,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 	elseif args.spellId == 371999 and self:AntiSpam(3, 1) then --Aura of Anger
 		specWarnRageDispel:Show(args.sourceName)
 		timerNextRage:Start()
-	--elseif args.spellId == 371997 then
+		--elseif args.spellId == 371997 then
 		--timerNextGrip:Start()
 	elseif args.spellId == 371986 then
 		specWarnThirst:Schedule(14, args.destName)
@@ -194,9 +194,9 @@ end
 
 function mod:UNIT_DIED(args)
 	if self:GetCIDFromGUID(args.destGUID) == 23469 then
-		UnitSpirits = UnitSpirits+1
+		UnitSpirits = UnitSpirits + 1
 		if UnitSpirits == 8 then
-			self.vb.StageUwU = (self.vb.StageUwU % 3)+1
+			self.vb.StageUwU = (self.vb.StageUwU % 3) + 1
 			Stage2:Start(nil, Stages[self.vb.StageUwU])
 			StageTimer:Start()
 			specWarnPhase:Show(Stages[self.vb.StageUwU])
