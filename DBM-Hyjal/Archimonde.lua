@@ -195,7 +195,7 @@ end
 function mod:UNIT_HEALTH(uId)
 	local hp = self:GetUnitCreatureId(uId) == 17968 and DBM:GetBossHP(17968) or nil
 	if hp then
-		if not warned_F1 and hp < 70 then
+		if not warned_F1 and hp < 67 then
 			self:SetStage(2)
 			warned_F1 = true
 			markOfRockCD:Stop()
