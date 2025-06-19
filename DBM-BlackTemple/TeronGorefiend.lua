@@ -213,7 +213,7 @@ end
 function mod:SPELL_DAMAGE(_, _, _, destGUID, _, _, spellId)
 	local s = tonumber(string.format("%d", (GetUnitSpeed("Player") / 7) * 100))
 	if (spellId == 373792 or spellId == 373793) and destGUID == UnitGUID("player") then
-		if s == 0 and self:AntiSpam(3, 1) then
+		if s == 0 and self:AntiSpam(1, 1) then
 			specWarnColdMove:Show()
 		end
 	end
