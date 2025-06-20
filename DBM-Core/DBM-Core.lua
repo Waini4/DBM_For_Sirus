@@ -10747,7 +10747,7 @@ do
 				end
 			end
 		end
-		local nameplateAborted
+		--local nameplateAborted
 		if isBarEnabled then
 			--Basically tops bar from starting if it's being put on a plater nameplate, to give plater users option to have nameplate CDs without actually using the bars
 			--This filter will only apply to trash mods though, boss timers will always be shown due to need to have them exist for Pause, Resume, Update, and GetTime/GetRemaining methods
@@ -10764,7 +10764,7 @@ do
 		if not self.keep then--Don't ever remove startedTimers on a schedule, if it's a keep timer
 			self.mod:Schedule(timer, removeEntry, self.startedTimers, id)
 		end
-		if bar and not nameplateAborted then
+		if bar then --if bar and not nameplateAborted then
 			return bar
 		else
 			return false, "disabled"
