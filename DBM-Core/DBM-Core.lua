@@ -81,9 +81,9 @@ local function currentFullDate()
 end
 
 DBM = {
-	Revision = parseCurseDate("2025" .. "05" .. "24" .. "11" .. "00" .. "00"),
+	Revision = parseCurseDate("2025" .. "06" .. "20" .. "11" .. "00" .. "00"),
 	DisplayVersion = GetAddOnMetadata(_addonname, "Version"), -- the string that is shown as version
-	ReleaseRevision = releaseDate(2025, 05, 24, 11, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	ReleaseRevision = releaseDate(2025, 06, 20, 11, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 
 local fakeBWVersion = 7558
@@ -10460,197 +10460,311 @@ do
 			end
 		end
 	end
+	local function isNegativeZero(x)
+		return x == 0 and 1/x < 0  -- Only true for -0
+	end
+		-- Parse variance from timer string (v30.5-40" or "dv30.5-40"), into minimum and maximum timer, and calculated variance duration
+	---@param timer string
+	---@return number maxTimer, number minTimer, number varianceDuration
+	local function parseVarianceFromTimer(timer)
+		-- ^(d?v) matches starting character d (optional) or v
+		-- (%d+%.?%d*) matches any number of digits with optional decimal
+		-- %- matches literal character "-"
+		-- (%d+%.?%d*)$ matches any number of digits with optional decimal, at the end of the string
+		local minTimer, maxTimer = timer:match("v(%d+%.?%d*)%-(%d+%.?%d*)")
+		minTimer, maxTimer = tonumber(minTimer), tonumber(maxTimer)
+		if type(minTimer) ~= "number" or type(maxTimer) ~= "number" then
+			DBM:Debug("|cffff0000No timers found in the string passed to parseVarianceFromTimer function: "..timer..". Returning zero.|r")
+			return 0, 0, 0
+			end
+		local varianceDuration = maxTimer - minTimer
 
+		return maxTimer, minTimer, varianceDuration  -- maximum possible timer from the variance window, minimum..., variance duration
+	end
+	local function correctWithVarianceDuration(numberToCorrect, timerBar)
+		if not numberToCorrect then
+			DBM:Debug("|cffff0000No number passed to correctWithVarianceDuration function.|r")
+			return
+		end
+
+		if not timerBar then
+			DBM:Debug("|cffff0000No timerBar passed to correctWithVarianceDuration function.|r")
+			return numberToCorrect
+		end
+
+		return timerBar.hasVariance and (numberToCorrect + timerBar.varianceDuration) or numberToCorrect
+	end
 	function timerPrototype:Start(timer, ...)
-		if DBM.Options.DontShowBossTimers then return end
+		if not self.mod.isDummyMod then--Don't apply following rulesets to pull timers and such
+			if DBM.Options.DontShowBossTimers and not self.mod.isTrashMod then return end
+			if DBM.Options.DontShowTrashTimers and self.mod.isTrashMod then return end
+		end
+		local isDelayed = type(timer) == "number" and (isNegativeZero(timer) or timer < 0)
+		local hasVariance = type(timer) == "number" and timer > 0 and false or not timer and self.hasVariance -- account for metavariant timers that were fired with a fixed timer start, like timer:Start(10). Does not account for timer:Start(-delay), which is parsed below after variance started timers
+		local timerStringWithVariance, maxTimer, minTimer
+		if type(timer) == "string" and timer:match("^v%d+%.?%d*-%d+%.?%d*$") then -- catch "timer variance" pattern, expressed like v10.5-20.5
+			hasVariance = true
+			timerStringWithVariance = timer -- cache timer string
+			maxTimer, minTimer = parseVarianceFromTimer(timer) -- use highest possible value as the actual End timer
+			timer = DBT.Options.VarianceEnabled and maxTimer or minTimer
+			end
+		if isDelayed then -- catch metavariant timers with delay, expressed like timer:Start(-delay)
+			if self.hasVariance then
+				hasVariance = self.hasVariance
+				maxTimer, minTimer = parseVarianceFromTimer(self.timerStringWithVariance) -- use highest possible value as the actual End timer
+				timerStringWithVariance = ("v%s-%s"):format(minTimer + timer, maxTimer + timer) -- rebuild timer string with delay applied
+				timer = (DBT.Options.VarianceEnabled and maxTimer or minTimer) + timer
+			end
+		end
+--		if DBM.Options.DebugMode and self.mod.id ~= "TestMod" then
+--			self.keep = hasVariance -- keep variance timers for debug purposes
+--		end
 		if timer and type(timer) ~= "number" then
 			return self:Start(nil, timer, ...) -- first argument is optional!
 		end
-		if not self.option or self.mod.Options[self.option] then
-			if self.type and (self.type == "cdcount" or self.type == "nextcount") and not self.allowdouble then --remove previous timer.
-				for i = #self.startedTimers, 1, -1 do
-					if DBM.Options.BadTimerAlert or DBM.Options.DebugMode and DBM.Options.DebugLevel > 1 then
-						local bar = DBT:GetBar(self.startedTimers[i])
-						if bar then
-							local remaining = ("%.1f"):format(bar.timer)
+		local isBarEnabled = not self.option or self.mod.Options[self.option]
+		--this segment needs to run regardless of enabled to collect info for callback
+		local isCountTimer = false
+		if self.type and (self.type == "cdcount" or self.type == "nextcount" or self.type == "stagecount" or self.type == "stagecontextcount" or self.type == "stagecountcycle" or self.type == "intermissioncount" or self.type == "varcount") then
+			isCountTimer = true
+		end
+		local guid, timerCount
+		if select("#", ...) > 0 then--If timer has args
+			for i = 1, select("#", ...) do
+				local v = select(i, ...)
+				if DBM:IsNonPlayableGUID(v) then--Then scan them for a mob guid
+					guid = v--If found, guid will be passed in DBM_TimerStart callback
+				end
+				--Not most efficient way to do it, but since it's already being done for guid, it's best not to repeat the work
+				if isCountTimer and type(v) == "number" then
+					timerCount = v
+				end
+			end
+		end
+		timer = timer and ((timer > 0 and timer) or self.timer + timer) or self.timer
+		if isCountTimer and not self.allowdouble then--remove previous timer.
+			for i = #self.startedTimers, 1, -1 do
+--					if DBM.Options.BadTimerAlert or DBM.Options.DebugMode and DBM.Options.DebugLevel > 1 then
+					local bar = DBT:GetBar(self.startedTimers[i])
+					if bar then
+						if math.abs(bar.timer) > 0.1 then -- Positive and Negative ("keep") timers. Also shortened time window
+							local remaining = ("%.2f"):format(bar.timer)
 							local ttext = _G[bar.frame:GetName() .. "BarName"]:GetText() or ""
-							ttext = ttext .. "(" .. self.id .. ")"
-							if bar.timer > 0.2 then
-								local phaseText = self.mod.vb.phase and
-									" (" .. L.SCENARIO_STAGE:format(self.mod.vb.phase) .. ")" or ""
-								if DBM.Options.BadTimerAlert and bar.timer > 1 then --If greater than 1 seconds off, report this out of debug mode to all users
-									DBM:AddMsg("Timer " ..
-										ttext .. phaseText .. CL.RefreshedBefore ..
-										remaining .. CL.PlsREport)
-									fireEvent("DBM_Debug",
-										"Timer " ..
-										ttext .. phaseText .. CL.RefreshedBefore ..
-										remaining .. CL.PlsREport, 2)
-								else
-									DBM:Debug("Timer " .. ttext .. phaseText .. CL.RefreshedBefore .. remaining, 2)
+							ttext = ttext .. "(" .. self.id .. "-" .. (timer or 0) .. ")"
+							local deltaFromVarianceMinTimer = ("%.2f"):format(bar.hasVariance and bar.timer - bar.varianceDuration or bar.timer)
+							local phaseText = self.mod.vb.phase and " (" .. L.SCENARIO_STAGE:format(self.mod.vb.phase) .. ")" or ""
+							if bar.hasVariance then
+								if DBM.Options.BadTimerAlert and bar.timer > correctWithVarianceDuration(1, bar) then--If greater than 1 seconds off, report this out of debug mode to all users
+									DBM:AddMsg("Timer "..ttext..phaseText.. " refreshed before expired, outside known variance window. Remaining time is : "..remaining.." (until variance minimum timer: "..deltaFromVarianceMinTimer.."). Please report this bug")
+									fireEvent("DBM_Debug", "Timer "..ttext..phaseText.. " refreshed before expired, outside known variance window. Remaining time is : "..remaining.." (until variance minimum timer: "..deltaFromVarianceMinTimer.."). Please report this bug", 2)
+								elseif bar.timer < -0.1 then -- Would be useful to implement a variance detector, and report outside the known variance, however this would need to happen on a timer after it was refreshed. For the moment, only "keep" arg can achieve this.
+									DBM:Debug("Timer "..ttext..phaseText.. " refreshed after zero, outside known variance window. Remaining time is : "..remaining, 2)
+								elseif bar.timer > correctWithVarianceDuration(0.1, bar) then
+									DBM:Debug("Timer "..ttext..phaseText.. " refreshed before expired. Remaining time is : "..remaining.." (until variance minimum timer: "..deltaFromVarianceMinTimer..")", 2)
+								end
+							else -- duplicated code, should be refactored
+								if DBM.Options.BadTimerAlert and bar.timer > 1 then--If greater than 1 seconds off, report this out of debug mode to all users
+									DBM:AddMsg("Timer "..ttext..phaseText.. " refreshed before expired. Remaining time is : "..remaining..". Please report this bug")
+									fireEvent("DBM_Debug", "Timer "..ttext..phaseText.. " refreshed before expired. Remaining time is : "..remaining..". Please report this bug", 2)
+								elseif bar.timer < -5 then -- arbitrary threshold
+									DBM:Debug("Timer "..ttext..phaseText.. " refreshed after zero. Remaining time is : "..remaining, 2)
+								elseif bar.timer > 0.1 then
+									DBM:Debug("Timer "..ttext..phaseText.. " refreshed before expired. Remaining time is : "..remaining, 2)
 								end
 							end
 						end
 					end
-					DBT:CancelBar(self.startedTimers[i])
-					fireEvent("DBM_Announce", message, self.icon, self.type, self.spellId, self.mod.id, false)
-					fireEvent("DBM_TimerStop", self.startedTimers[i])
-					tremove(self.startedTimers, i)
-				end
+--					end
+				DBT:CancelBar(self.startedTimers[i])
+				fireEvent("DBM_TimerStop", self.startedTimers[i])
+				tremove(self.startedTimers, i)
 			end
-			timer = timer and ((timer > 0 and timer) or self.timer + timer) or self.timer
-			local id = self.id .. pformat((("\t%s"):rep(select("#", ...))), ...)
-			--AI timer api:
-			--Starting ai timer with (1) indicates it's a first timer after pull
-			--Starting timer with (2) or (3) indicates it's a stage 2 or stage 3 first timer
-			--Starting AI timer with anything above 3 indicarets it's a regular timer and to use shortest time in between two regular casts
-			if self.type == "ai" then --A learning timer
-				if not DBM.Options.AITimer then return end
-				if timer > 5 then --Normal behavior.
-					local newPhase = false
-					for i = 1, 5 do
-						--Check for any phase timers that are strings, if a string it means last cast of this ability was first case of a given stage
-						if self["phase" .. i .. "CastTimer"] and type(self["phase" .. i .. "CastTimer"]) == "string" then --This is first cast of spell, we need to generate self.firstPullTimer
-							self["phase" .. i .. "CastTimer"] = tonumber(self["phase" .. i .. "CastTimer"])
-							self["phase" .. i .. "CastTimer"] = GetTime() -
-								self
-								["phase" .. i .. "CastTimer"] --We have generated a self.phase1CastTimer! Next pull, DBM should know timer for first cast next pull. FANCY!
-							DBM:Debug(
-								"AI timer learned a first timer for current phase of " ..
-								self["phase" .. i .. "CastTimer"], 2)
-							newPhase = true
-						end
-					end
-					if self.lastCast and not newPhase then --We have a GetTime() on last cast and it's not affected by a phase change
-						local timeLastCast = GetTime() -
-							self
-							.lastCast                                                                  --Get time between current cast and last cast
-						if timeLastCast > 5 then                                                       --Prevent infinite loop cpu hang. Plus anything shorter than 5 seconds doesn't need a timer
-							if not self.lowestSeenCast or (self.lowestSeenCast and self.lowestSeenCast > timeLastCast) then --Always use lowest seen cast for a timer
-								self.lowestSeenCast = timeLastCast
-								DBM:Debug("AI timer learned a new lowest timer of " .. self.lowestSeenCast, 2)
-							end
-						end
-					end
-					self.lastCast = GetTime()
-					if self.lowestSeenCast then --Always use lowest seen cast for timer
-						timer = self.lowestSeenCast
-					else
-						return --Don't start the bogus timer shoved into timer field in the mod
-					end
-				else --AI timer passed with 4 or less is indicating phase change, with timer as phase number
-					if self["phase" .. timer .. "CastTimer"] and type(self["phase" .. timer .. "CastTimer"]) == "number" then
-						--Check if timer is shorter than previous learned first timer by scanning remaining time on existing bar
-						local bar = DBT:GetBar(id)
-						if bar then
-							local remaining = ("%.1f"):format(bar.timer)
-							if bar.timer > 0.2 then
-								self["phase" .. timer .. "CastTimer"] = self["phase" .. timer .. "CastTimer"] - remaining
-								DBM:Debug(
-									"AI timer learned a lower first timer for current phase of " ..
-									self["phase" .. timer .. "CastTimer"],
-									2)
-							end
-						end
-						timer = self["phase" .. timer .. "CastTimer"]
-					else --No first pull timer generated yet, set it to GetTime, as a string
-						self["phase" .. timer .. "CastTimer"] = tostring(GetTime())
-						return --Don't start the x second timer
+		end
+		local id = self.id .. pformat((("\t%s"):rep(select("#", ...))), ...)
+		--AI timer api:
+		--Starting ai timer with (1) indicates it's a first timer after pull
+		--Starting timer with (2) or (3) indicates it's a stage 2 or stage 3 first timer
+		--Starting AI timer with anything above 3 indicarets it's a regular timer and to use shortest time in between two regular casts
+		if self.type == "ai" then--A learning timer
+			if not DBM.Options.AITimer then return end
+			if timer > 5 then--Normal behavior.
+				local newPhase = false
+				for i = 1, 5 do
+					--Check for any phase timers that are strings, if a string it means last cast of this ability was first case of a given stage
+					if self["phase"..i.."CastTimer"] and type(self["phase"..i.."CastTimer"]) == "string" then--This is first cast of spell, we need to generate self.firstPullTimer
+						self["phase"..i.."CastTimer"] = tonumber(self["phase"..i.."CastTimer"])
+						self["phase"..i.."CastTimer"] = GetTime() - self["phase"..i.."CastTimer"]--We have generated a self.phase1CastTimer! Next pull, DBM should know timer for first cast next pull. FANCY!
+						DBM:Debug("AI timer learned a first timer for current phase of "..self["phase"..i.."CastTimer"], 2)
+						newPhase = true
 					end
 				end
-			end
-			if DBM.Options.BadTimerAlert or DBM.Options.DebugMode and DBM.Options.DebugLevel > 1 then
-				if not self.type or
-					(self.type ~= "target" and self.type ~= "active" and self.type ~= "fades" and self.type ~= "ai") and
-					not self.allowdouble then
+				if self.lastCast and not newPhase then--We have a GetTime() on last cast and it's not affected by a phase change
+					local timeLastCast = GetTime() - self.lastCast--Get time between current cast and last cast
+					if timeLastCast > 5 then--Prevent infinite loop cpu hang. Plus anything shorter than 5 seconds doesn't need a timer
+						if not self.lowestSeenCast or (self.lowestSeenCast and self.lowestSeenCast > timeLastCast) then--Always use lowest seen cast for a timer
+							self.lowestSeenCast = timeLastCast
+							DBM:Debug("AI timer learned a new lowest timer of "..self.lowestSeenCast, 2)
+						end
+					end
+				end
+				self.lastCast = GetTime()
+				if self.lowestSeenCast then--Always use lowest seen cast for timer
+					timer = self.lowestSeenCast
+				else
+					return--Don't start the bogus timer shoved into timer field in the mod
+				end
+			else--AI timer passed with 4 or less is indicating phase change, with timer as phase number
+				if self["phase" .. timer .. "CastTimer"] and type(self["phase" .. timer .. "CastTimer"]) == "number" then
+					--Check if timer is shorter than previous learned first timer by scanning remaining time on existing bar
 					local bar = DBT:GetBar(id)
 					if bar then
 						local remaining = ("%.1f"):format(bar.timer)
+						if bar.timer > 0.1 then -- Shortened time window
+							self["phase"..timer.."CastTimer"] = self["phase"..timer.."CastTimer"] - remaining
+							DBM:Debug("AI timer learned a lower first timer for current phase of "..self["phase"..timer.."CastTimer"], 2)
+						end
+					end
+					timer = self["phase"..timer.."CastTimer"]
+				else--No first pull timer generated yet, set it to GetTime, as a string
+					self["phase"..timer.."CastTimer"] = tostring(GetTime())
+					return--Don't start the x second timer
+				end
+			end
+		end
+		--This should only run if bar is actually enabled, else we don't have a previous bar to compare it to anyways
+		if isBarEnabled --[[and DBM.Options.BadTimerAlert or DBM.Options.DebugMode and DBM.Options.DebugLevel > 1]] then
+			if not self.type or (self.type ~= "target" and self.type ~= "active" and self.type ~= "fades" and self.type ~= "ai") and not self.allowdouble then
+				local bar = DBT:GetBar(id)
+				if bar then
+					if math.abs(bar.timer) > 0.1 then -- Positive and Negative ("keep") timers. Also shortened time window
+						local remaining = ("%.2f"):format(bar.timer)
+						local deltaFromVarianceMinTimer = ("%.2f"):format(bar.hasVariance and bar.timer - bar.varianceDuration or bar.timer)
 						local ttext = _G[bar.frame:GetName() .. "BarName"]:GetText() or ""
-						ttext = ttext .. "(" .. self.id .. ")"
-						if bar.timer > 0.2 then
-							local phaseText = self.mod.vb.phase and
-								" (" .. L.SCENARIO_STAGE:format(self.mod.vb.phase) .. ")" or ""
-							if DBM.Options.BadTimerAlert and bar.timer > 1 then --If greater than 1 seconds off, report this out of debug mode to all users
-								DBM:AddMsg("Timer " ..
-									ttext .. phaseText .. CL.RefreshedBefore .. remaining ..
-									CL.PlsREport)
-								fireEvent("DBM_Debug",
-									"Timer " ..
-									ttext .. phaseText .. CL.RefreshedBefore .. remaining ..
-									CL.PlsREport, 2)
-							else
-								DBM:Debug("Timer " .. ttext .. phaseText .. CL.RefreshedBefore .. remaining, 2)
+						ttext = ttext .. "(" .. self.id .. "-" .. (timer or 0) .. ")"
+						local phaseText = self.mod.vb.phase and " (" .. L.SCENARIO_STAGE:format(self.mod.vb.phase) .. ")" or ""
+						if bar.hasVariance then
+							if DBM.Options.BadTimerAlert and bar.timer > correctWithVarianceDuration(1, bar) then--If greater than 1 seconds off, report this out of debug mode to all users
+								DBM:AddMsg("Timer "..ttext..phaseText.. " refreshed before expired, outside known variance window. Remaining time is : "..remaining.." (until variance minimum timer: "..deltaFromVarianceMinTimer.."). Please report this bug")
+								fireEvent("DBM_Debug", "Timer "..ttext..phaseText.. " refreshed before expired, outside known variance window. Remaining time is : "..remaining.." (until variance minimum timer: "..deltaFromVarianceMinTimer.."). Please report this bug", 2)
+							elseif bar.timer < -0.1 then -- Would be useful to implement a variance detector, and report outside the known variance, however this would need to happen on a timer after it was refreshed. For the moment, only "keep" arg can achieve this.
+								DBM:Debug("Timer "..ttext..phaseText.. " refreshed after zero, outside known variance window. Remaining time is : "..remaining, 2)
+							elseif bar.timer > correctWithVarianceDuration(0.1, bar) then
+								DBM:Debug("Timer "..ttext..phaseText.. " refreshed before expired. Remaining time is : "..remaining.." (until variance minimum timer: "..deltaFromVarianceMinTimer..")", 2)
+							end
+						else -- duplicated code, should be refactored
+							if DBM.Options.BadTimerAlert and bar.timer > 1 then--If greater than 1 seconds off, report this out of debug mode to all users
+								DBM:AddMsg("Timer "..ttext..phaseText.. " refreshed before expired. Remaining time is : "..remaining..". Please report this bug")
+								fireEvent("DBM_Debug", "Timer "..ttext..phaseText.. " refreshed before expired. Remaining time is : "..remaining..". Please report this bug", 2)
+							elseif bar.timer < -5 then -- arbitrary threshold
+								DBM:Debug("Timer "..ttext..phaseText.. " refreshed after zero. Remaining time is : "..remaining, 2)
+							elseif bar.timer > 0.1 then
+								DBM:Debug("Timer "..ttext..phaseText.. " refreshed before expired. Remaining time is : "..remaining, 2)
 							end
 						end
 					end
 				end
 			end
-			local colorId
-			if self.option then
-				colorId = self.mod.Options[self.option .. "TColor"]
-			elseif self.colorType and type(self.colorType) == "string" then --No option for specific timer, but another bool option given that tells us where to look for TColor
-				colorId = self.mod.Options[self.colorType .. "TColor"]
-			else                                                   --No option, or secondary option, set colorId to hardcoded color type
-				colorId = self.colorType
-			end
+		end
+		local colorId
+		if self.option then
+			colorId = self.mod.Options[self.option .. "TColor"]
+		elseif self.colorType and type(self.colorType) == "string" then--No option for specific timer, but another bool option given that tells us where to look for TColor (for mods such as trio boss for valentines day in events mods)
+			colorId = self.mod.Options[self.colorType .. "TColor"]
+		else--No option, or secondary option, set colorId to hardcoded color type
+			colorId = self.colorType or 0
+		end
+		local bar
+		--Bar and countdown construction should only actually occur if enabled
+		if isBarEnabled then
 			local countVoice, countVoiceMax = 0, self.countdownMax or 4
 			if self.option then
 				countVoice = self.mod.Options[self.option .. "CVoice"]
-				if not self.fade and (type(countVoice) == "string" or countVoice > 0) then --Started without faded and has count voice assigned
-					DBM:Unschedule(playCountSound, id)                         -- Prevents count sound if timer is started again before timer expires
-					playCountdown(id, timer, countVoice, countVoiceMax)        --timerId, timer, voice, count
+				if not self.fade and (type(countVoice) == "string" or countVoice > 0) then--Started without faded and has count voice assigned
+					DBM:Unschedule(playCountSound, id) -- Prevents count sound if timer is started again before timer expires
+					-- minTimer checks for the minimum possible timer in the variance timer string sent from Start method, self.minTimer is from newTimer constructor. Else, use timer value
+					playCountdown(id, minTimer or (hasVariance and self.minTimer) or timer, countVoice, countVoiceMax, self.requiresCombat)--timerId, timer, voice, count
 				end
 			end
-			local bar = DBT:CreateBar(timer, id, self.icon, nil, nil, nil, nil, colorId, nil, self.keep, self.fade,
-				countVoice,
-				countVoiceMax)
+			-- timerStringWithVariance checks for timer string sent from Start method, self.timerStringWithVariance is from newTimer constructor. Else, use timer value
+			bar = DBT:CreateBar(timerStringWithVariance or (hasVariance and self.timerStringWithVariance) or timer, id, self.icon, nil, nil, nil, nil, colorId, nil, self.keep, self.fade, countVoice, countVoiceMax, self.simpType == "cd" or self.simpType == "cdnp")
 			if not bar then
 				return false, "error" -- creating the timer failed somehow, maybe hit the hard-coded timer limit of 15
 			end
-			local msg
-			if self.type and not self.text then
-				msg = pformat(self.mod:GetLocalizedTimerText(self.type, self.spellId, self.name), ...)
+		end
+		local msg
+		if self.type and not self.text then
+			msg = pformat(self.mod:GetLocalizedTimerText(self.type, self.spellId, self.name), ...)
+		else
+			if type(self.text) == "number" then--spellId passed in timer text, it's a timer with short text
+				msg = pformat(self.mod:GetLocalizedTimerText(self.type, self.text, self.name), ...)
 			else
-				if type(self.text) == "number" then --spellId passed in timer text, it's a timer with short text
-					msg = pformat(self.mod:GetLocalizedTimerText(self.type, self.text, self.name), ...)
-				else
-					msg = pformat(self.text, ...)
-				end
+				msg = pformat(self.text, ...)
 			end
-			msg = msg:gsub(">.-<", stripServerName)
+		end
+		msg = msg:gsub(">.-<", stripServerName)
+		if bar then
 			bar:SetText(msg, self.inlineIcon)
-			--ID: Internal DBM timer ID
-			--msg: Timer Text (Do not use msg has an event trigger, it varies language to language or based on user timer options. Use this to DISPLAY only (such as timer replacement UI). use spellId field 99% of time
-			--timer: Raw timer value (number).
-			--Icon: Texture Path for Icon
-			--type: Timer type (Cooldowns: cd, cdcount, nextcount, nextsource, cdspecial, nextspecial, stage, ai. Durations: target, active, fades, roleplay. Casting: cast)
-			--spellId: Raw spellid if available (most timers will have spellId or EJ ID unless it's a specific timer not tied to ability such as pull or combat start or rez timers. EJ id will be in format ej%d
-			--colorID: Type classification (1-Add, 2-Aoe, 3-targeted ability, 4-Interrupt, 5-Role, 6-Stage, 7-User(custom))
-			--Mod ID: Encounter ID as string, or a generic string for mods that don't have encounter ID (such as trash, dummy/test mods)
-			--Keep: true or nil, whether or not to keep bar on screen when it expires (if true, timer should be retained until an actual TimerStop occurs or a new TimerStart with same barId happens (in which case you replace bar with new one)
-			--fade: true or nil, whether or not to fade a bar (set alpha to usersetting/2)
-			--spellName: Sent so users can use a spell name instead of spellId, if they choose. Mostly to be more classic wow friendly, spellID is still preferred method (even for classic)
-			--MobGUID if it could be parsed out of args
-			local guid
-			if select("#", ...) > 0 then --If timer has args
-				for i = 1, select("#", ...) do
-					local v = select(i, ...)
-					if DBM:IsNonPlayableGUID(v) then --Then scan them for a mob guid
-						guid = v      --If found, guid will be passed in DBM_TimerStart callback
-					end
+		end
+		--ID (string) Internal DBM timer ID
+		--msg (string) Timer Text (Do not use msg has an event trigger, it varies language to language or based on user timer options. Use this to DISPLAY only (such as timer replacement UI). use spellId field 99% of time
+		--timer (number) Raw timer value. Will return lowest number in variance timers (like DBM has always done, earliest an ability comes off CD is expected behavior for weak auras)
+		--Icon (string or number): Texture Path for Icon
+		--simpleType (string): Timer type, which is one of only 7 possible types: "cd" for coolodwns, "target" for target bars such as debuff on a player, "stage" for any kind of stage timer (stage ends, next stage, or even just a warmup timer like "fight begins"), and then "cast" timer which is used for both a regular cast and a channeled cast (ie boss is casting frostbolt, or boss is channeling whirlwind). Lastly, break, pull, and berserk timers are "breaK", "pull", and "berserk" respectively
+		--spellId (string or number): Raw spellid if available (most timers will have spellId or EJ ID unless it's a specific timer not tied to ability such as pull or combat start or rez timers. EJ id will be in format ej%d
+		--colorID (number): Type classification (1-Add, 2-Aoe, 3-targeted ability, 4-Interrupt, 5-Role, 6-Stage, 7-User(custom))
+		--Mod ID (string or number): Encounter ID as string, or a generic string for mods that don't have encounter ID (such as trash, dummy/test mods)
+		--Keep (true or nil), whether or not to keep bar on screen when it expires (if true, timer should be retained until an actual TimerStop occurs or a new TimerStart with same barId happens (in which case you replace bar with new one)
+		--fade (true or nil), whether or not to fade a bar (set alpha to usersetting/2)
+		--spellName (string) Sent so users can use a spell name instead of spellId, if they choose. Mostly to be more classic wow friendly, spellID is still preferred method (even for classic)
+		--MobGUID (string) if it could be parsed out of args
+		--timerCount (number) if current timer is a count timer. Returns number (count value) needed to have weak auras that trigger off a specific timer count without using localized message text
+		--isPriority: If true, this ability has been flagged as extra important. Can be used for weak auras or nameplate addons to add extra emphasis onto specific timer like a glow
+		--fullType (the true type of timer, for those who really want to filter timers by DBM classifications such as "adds" or "interrupt")
+		--hasVariance (true or nil) if timer has variance.
+		--variancePeaktimer (number) if timer has variance, this is the peak timer in the variance window, otherwise nil
+		--isEnabled (true or nil) if timer is enabled
+
+		--Mods that have specifically flagged that it's safe to assume all timers from that boss mod belong to boss1
+		--This check is performed secondary to args scan so that no adds guids are overwritten
+		--NOTE: Begin fires regardless of enabled status, and includes additional enabled flag. Start only fires if option is enabled (old behavior)
+		if not guid and self.mod.sendMainBossGUID and not DBM.Options.DontSendBossGUIDs and (self.type == "cd" or self.type == "next" or self.type == "cdcount" or self.type == "nextcount" or self.type == "cdspecial" or self.type == "ai") then--Variance excluded for now while NP timers don't support yet
+			guid = UnitGUID("boss1")
+		end
+		if self.simpType and (self.simpType == "cdnp" or self.simpType == "castnp") then--Only send nampelate callback
+			fireEvent("DBM_NameplateBegin", id, msg, minTimer or (hasVariance and self.minTimer) or timer, self.icon, self.simpType, self.waSpecialKey or self.spellId, colorId, self.mod.id, (self.simpType == "cdnp" and DBM.Options.AlwaysKeepNPs) and true or self.keep, self.fade, self.name, guid, timerCount, self.isPriority, self.type, hasVariance, hasVariance and timer, isBarEnabled)
+			if isBarEnabled then
+				fireEvent("DBM_NameplateStart", id, msg, minTimer or (hasVariance and self.minTimer) or timer, self.icon, self.simpType, self.waSpecialKey or self.spellId, colorId, self.mod.id, (self.simpType == "cdnp" and DBM.Options.AlwaysKeepNPs) and true or self.keep, self.fade, self.name, guid, timerCount, self.isPriority, self.type, hasVariance, hasVariance and timer)
+			end
+		else--Send both callbacks
+			fireEvent("DBM_TimerBegin", id, msg, minTimer or (hasVariance and self.minTimer) or timer, self.icon, self.simpType, self.waSpecialKey or self.spellId, colorId, self.mod.id, self.keep, self.fade, self.name, guid, timerCount, self.isPriority, self.type, hasVariance, hasVariance and timer, isBarEnabled)
+			if isBarEnabled then
+				fireEvent("DBM_TimerStart", id, msg, minTimer or (hasVariance and self.minTimer) or timer, self.icon, self.simpType, self.waSpecialKey or self.spellId, colorId, self.mod.id, self.keep, self.fade, self.name, guid, timerCount, self.isPriority, self.type, hasVariance, hasVariance and timer, isBarEnabled)
+			end
+			if guid then--But nameplate is only sent if actual GUID
+				fireEvent("DBM_NameplateBegin", id, msg, minTimer or (hasVariance and self.minTimer) or timer, self.icon, self.simpType, self.waSpecialKey or self.spellId, colorId, self.mod.id, self.keep, self.fade, self.name, guid, timerCount, self.isPriority, self.type, hasVariance, hasVariance and timer, isBarEnabled)
+				if isBarEnabled then
+					fireEvent("DBM_NameplateStart", id, msg, minTimer or (hasVariance and self.minTimer) or timer, self.icon, self.simpType, self.waSpecialKey or self.spellId, colorId, self.mod.id, self.keep, self.fade, self.name, guid, timerCount, self.isPriority, self.type, hasVariance, hasVariance and timer)
 				end
 			end
-			fireEvent("DBM_TimerStart", id, msg, timer, self.icon, self.type, self.spellId, colorId, self.mod.id,
-				self.keep,
-				self.fade, self.name, guid)
-			if not tContains(self.startedTimers, id) then --Make sure timer doesn't exist already before adding it
-				tinsert(self.startedTimers, id)
-			end
-			if not self.keep then --Don't ever remove startedTimers on a schedule, if it's a keep timer
-				self.mod:Unschedule(removeEntry, self.startedTimers, id)
-				self.mod:Schedule(timer, removeEntry, self.startedTimers, id)
-			end
+		end
+		local nameplateAborted
+		if isBarEnabled then
+			--Basically tops bar from starting if it's being put on a plater nameplate, to give plater users option to have nameplate CDs without actually using the bars
+			--This filter will only apply to trash mods though, boss timers will always be shown due to need to have them exist for Pause, Resume, Update, and GetTime/GetRemaining methods
+			-- if guid and DBM.Options.DontShowTimersWithNameplates and Plater and Plater.db.profile.bossmod_support_bars_enabled and self.mod.isTrashMod then
+			-- 	DBT:CancelBar(id)--Cancel bar without stop callback
+			-- 	nameplateAborted = true
+			-- end
+		end
+		--We still want to store timer references in started timers even if we didn't actually start them, so they can be tracked and stoped accordingly
+		if not tContains(self.startedTimers, id) then--Make sure timer doesn't exist already before adding it
+			tinsert(self.startedTimers, id)
+		end
+		self.mod:Unschedule(removeEntry, self.startedTimers, id)
+		if not self.keep then--Don't ever remove startedTimers on a schedule, if it's a keep timer
+			self.mod:Schedule(timer, removeEntry, self.startedTimers, id)
+		end
+		if bar and not nameplateAborted then
 			return bar
 		else
 			return false, "disabled"
