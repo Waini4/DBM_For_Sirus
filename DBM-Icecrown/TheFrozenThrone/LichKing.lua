@@ -33,7 +33,13 @@ local MyRealm = select(4, DBM:GetMyPlayerInfo())
 
 -- General
 local timerCombatStart		= mod:NewCombatTimer(55)
-local berserkTimer			= mod:NewBerserkTimer(1020)
+local myRealm = select(4, DBM:GetMyPlayerInfo())
+local berserkTimer
+if myRealm == 1 then
+	berserkTimer			= mod:NewBerserkTimer(900)
+else
+	berserkTimer			= mod:NewBerserkTimer(1020)
+end
 
 mod:AddBoolOption("RemoveImmunes")
 mod:AddMiscLine(L.FrameGUIDesc)
