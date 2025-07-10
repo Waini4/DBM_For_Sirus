@@ -16,8 +16,13 @@ local isDispeller = select(2, UnitClass("player")) == "PRIEST" or select(2, Unit
 
 local specWarnFrenzy		= mod:NewSpecialWarningDispel(41254, select(2, UnitClass("player")) == "HUNTER")
 local specWarnDispelShock	= mod:NewSpecialWarningDispel(43303, isDispeller)
-
-local berserkTimer					= mod:NewBerserkTimer(600)
+local myRealm = select(4, DBM:GetMyPlayerInfo())
+local berserkTimer
+if myRealm == 1 then
+	berserkTimer			= mod:NewBerserkTimer(600)
+else
+	berserkTimer			= mod:NewBerserkTimer(300)
+end
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 23577, "Halazzi")
