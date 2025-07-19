@@ -4991,10 +4991,10 @@ do
 			delayedFunction()
 			delayedFunction = nil
 		end
-		if watchFrameRestore then
-			WatchFrame_Expand(WatchFrame)
-			watchFrameRestore = false
-		end
+		-- if watchFrameRestore then
+		-- 	WatchFrame_Expand(WatchFrame)
+		-- 	watchFrameRestore = false
+		-- end
 		if DBM.Options.FixCLEUOnCombatStart then
 			self:Schedule(0.5, CombatLogClearEntries)
 			DBM:Debug("Scheduled FixCLEU")
@@ -5420,15 +5420,15 @@ do
 				self:StartLogging(0, nil)
 			end
 			if self.Options.HideObjectivesFrame and GetNumTrackedAchievements() == 0 then -- doesn't need InCombatLockdown() check since it's not a protected function
-				if WatchFrame:IsVisible() then
-					-- WatchFrame_Collapse(WatchFrame)
-					-- self:Schedule(0.05,
-					-- 	function() -- repeating the function with a delay because of a bug in the game where the WatchFrame only gets pushed to the side and doesn't collapse.
-					-- 		WatchFrame_Collapse(WatchFrame)
-					-- 	end)
-					WatchFrame:Hide()
-					watchFrameRestore = true
-				end
+				-- if WatchFrame:IsVisible() then
+				-- 	-- WatchFrame_Collapse(WatchFrame)
+				-- 	-- self:Schedule(0.05,
+				-- 	-- 	function() -- repeating the function with a delay because of a bug in the game where the WatchFrame only gets pushed to the side and doesn't collapse.
+				-- 	-- 		WatchFrame_Collapse(WatchFrame)
+				-- 	-- 	end)
+				-- 	WatchFrame:Hide()
+				-- 	watchFrameRestore = true
+				-- end
 			end
 			fireEvent("DBM_Pull", mod, delay, synced, startHp)
 			self:FlashClientIcon()
@@ -5853,11 +5853,11 @@ do
 				self:Unschedule(checkCustomBossHealth)
 				self.Arrow:Hide(true)
 				-- doesn't need InCombatLockdown() check since it's not a protected function
-				if watchFrameRestore then
-					-- WatchFrame_Expand(WatchFrame)
-					WatchFrame:Show()
-					watchFrameRestore = false
-				end
+				-- if watchFrameRestore then
+				-- 	-- WatchFrame_Expand(WatchFrame)
+				-- 	WatchFrame:Show()
+				-- 	watchFrameRestore = false
+				-- end
 				if tooltipsHidden then
 					--Better or cleaner way?
 					tooltipsHidden = false
