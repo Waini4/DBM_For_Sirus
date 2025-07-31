@@ -23,10 +23,10 @@ mod:RegisterEventsInCombat(
 --local specWarnGTFO		= mod:NewSpecialWarningGTFO(373744, nil, nil, nil, 4, 8)
 
 local specWanrWaveCast = mod:NewSpecialWarningCast(373748, nil, nil, nil, 3)
-local specWarnFilth    = mod:NewSpecialWarningStack(373742, nil, 18, nil, nil, 2, 2)
+--local specWarnFilth    = mod:NewSpecialWarningStack(373742, nil, 18, nil, nil, 2, 2)
 local specWarnBlood    = mod:NewSpecialWarningStack(373749, nil, 2, nil, nil, 1, 2)
 --local specWarnRage		= mod:NewSpecialWarningYou(40604, nil, nil, nil, 1, 2)
-local yellFilth        = mod:NewCountYell(373742)
+--local yellFilth        = mod:NewCountYell(373742)
 
 local timerWaveCast    = mod:NewCastTimer(3, 373748, nil, nil, nil, 3, nil, DBM_COMMON_L.IMPORTANT_ICON)
 local timerStrikeCast  = mod:NewCastTimer(1.5, 373745, nil, "Tank", nil, 2)
@@ -77,14 +77,14 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
 	local amount = args.amount or 1
-	if spellId == 373742 then
+	--[[if spellId == 373742 then
 		if amount >= 18 then
 			if args:IsPlayer() and self:AntiSpam(2) then
 				specWarnFilth:Show(amount)
 				yellFilth:Yell(amount)
 			end
-		end
-	elseif spellId == 373749 then
+	end]]
+	if spellId == 373749 then
 		if amount >= 2 and args:IsPlayer() and self:AntiSpam(2) then
 			specWarnBlood:Show(amount)
 		end
