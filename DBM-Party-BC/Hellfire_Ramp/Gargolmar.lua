@@ -8,7 +8,7 @@ mod:SetModelOffset(-0.2, 0, -0.3)
 mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
-    "SPELL_CAST_SUCCESS  34645 22857",
+    "SPELL_CAST_SUCCESS 34645 22857",
 	"SPELL_AURA_APPLIED_DOSE 36814",
 	"SPELL_AURA_APPLIED 36814"
 )
