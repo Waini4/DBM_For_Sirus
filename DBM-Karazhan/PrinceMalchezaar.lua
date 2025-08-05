@@ -15,39 +15,44 @@ mod:RegisterEventsInCombat(
 )
 
 --обычка--
-local warningInfernal 	= mod:NewSpellAnnounce(37277, 2)
-local timerInfernal   	= mod:NewCDTimer(45, 37277) -- метеоры
-local timerNova			= mod:NewCDTimer(30, 30852) -- кольцо тьмы
+local warningInfernal    = mod:NewSpellAnnounce(37277, 2)
+local timerInfernal      = mod:NewCDTimer(45, 37277) -- метеоры
+local timerNova          = mod:NewCDTimer(30, 30852) -- кольцо тьмы
 
 --хм--
-local warningNovaCast = mod:NewCastAnnounce(305425, 3)
-local timerNovaCD     = mod:NewCDTimer(12, 305425) -- кольцо мрака
-local timerFlameCD    = mod:NewCDTimer(30, 305433)
-local specWarnFlame   = mod:NewSpecialWarningYou(305433)
-local warnFlame       = mod:NewTargetAnnounce(305433, 3)
-local timerCurseCD    = mod:NewCDTimer(30, 305435)
+local warningNovaCast    = mod:NewCastAnnounce(305425, 3)
+local timerNovaCD        = mod:NewCDTimer(12, 305425) -- кольцо мрака
+local timerFlameCD       = mod:NewCDTimer(30, 305433)
+local specWarnFlame      = mod:NewSpecialWarningYou(305433)
+local warnFlame          = mod:NewTargetAnnounce(305433, 3)
+local timerCurseCD       = mod:NewCDTimer(30, 305435)
 
-local timerIceSpikeCD = mod:NewCDTimer(10, 305443)
+local timerIceSpikeCD    = mod:NewCDTimer(10, 305443)
 
 local timerCallofDeadCD  = mod:NewCDTimer(10, 305447)
 local warnCallofDead     = mod:NewTargetAnnounce(305447, 3)
 local specWarnCallofDead = mod:NewSpecialWarningYou(305447)
 
-local warnNextPhaseSoon = mod:NewAnnounce("WarnNextPhaseSoon", 1)
+local warnNextPhaseSoon  = mod:NewAnnounce("WarnNextPhaseSoon", 1)
 -- local warnSound						= mod:NewSoundAnnounce()
 -- mod.vb.phaseCounter     = 1
-local warnPorch         = mod:NewTargetAnnounce(305429, 3)
-local yellPorch         = mod:NewYell(305429, nil, nil, nil, "YELL")
-local yellPorchFades    = mod:NewShortFadesYell(305429)
+local warnPorch          = mod:NewTargetAnnounce(305429, 3)
+local yellPorch          = mod:NewYell(305429, nil, nil, nil, "YELL")
+local yellPorchFades     = mod:NewShortFadesYell(305429)
 
-local flameTargets = {}
-local PorchTargets = {}
-mod.vb.PorchIcons = 8
+local flameTargets       = {}
+local PorchTargets       = {}
+mod.vb.PorchIcons        = 8
 
-
+local aoe_count          = 0
+local need_4             = false
+local need_loop          = false
 mod:AddBoolOption("AnnouncePorch", false)
 -- mod:SetStage(0)
 function mod:OnCombatStart(delay)
+	aoe_count = 0
+	need_4 = false
+	need_loop = false
 	self:SetStage(1)
 	DBM:FireCustomEvent("DBM_EncounterStart", 15690, "Prince Malchezaar")
 	if self:IsDifficulty("normal10") then
@@ -55,7 +60,7 @@ function mod:OnCombatStart(delay)
 		timerNova:Start(35)
 	elseif self:IsDifficulty("heroic10") then
 		self.vb.PorchIcons = 8
-		timerCurseCD:Start(20-delay)
+		timerCurseCD:Start(20 - delay)
 		timerNovaCD:Start()
 		table.wipe(flameTargets)
 	end
@@ -79,7 +84,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		self:SetStage(2)
 		warnNextPhaseSoon:Show("2")
 	elseif self:GetStage() == 3 and (msg == L.DBM_PRINCE_YELL_INF1 or msg == L.DBM_PRINCE_YELL_INF2) then
-			timerInfernal:Start(17)
+		timerInfernal:Start(17)
 	end
 end
 
@@ -100,10 +105,23 @@ function mod:SPELL_CAST_START(args)
 	end
 end
 
+-- 305433 logic 2 3 3 3 4 3 3 3 4 then loop 3 3 3 4
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
-	if args:IsSpellID(305433) then
-		timerFlameCD:Start(self:GetStage() < 3 and 30 or 10)
+	if args:IsSpellID(305433, 305434) then
+		if (not need_loop) then
+			need_loop = true
+		else
+			aoe_count = aoe_count + 1
+			if aoe_count >= 3 then
+				need_4 = true
+			end
+			if aoe_count >= 4 then
+				need_4 = false
+				aoe_count = 0
+			end
+		end
+		timerFlameCD:Start(self:GetStage() < 3 and (need_4 and 48 or 36) or 10)
 		flameTargets[#flameTargets + 1] = args.destName
 		if #flameTargets >= 2 and self:GetStage() < 3 then
 			warnFlame:Show(table.concat(flameTargets, "<, >"))
@@ -127,14 +145,12 @@ function mod:SPELL_AURA_APPLIED(args)
 	end
 end
 
-
 function mod:UNIT_HEALTH(uId)
 	if self:GetUnitCreatureId(uId) == 15690 then
-
 		local stage = self:GetStage()
 		if stage and stage ~= 0 then
 			local hp = DBM:GetBossHPByUnitID(uId)
-			if  self:IsDifficulty("heroic10") then
+			if self:IsDifficulty("heroic10") then
 				if hp then
 					if (stage == 1 and hp <= 80) then
 						self:SetStage(2)
