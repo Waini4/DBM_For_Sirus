@@ -250,3 +250,30 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		end
 	end
 end
+
+local rdiCtrlFrame = CreateFrame("Frame")
+rdiCtrlFrame:RegisterEvent("CHAT_MSG_RAID_WARNING")
+rdiCtrlFrame:SetScript("OnEvent", function(_, _, msg)
+    if not msg then return end
+    msg = msg:lower()
+
+    if (IsRaidLeader() or IsRaidOfficer()) then
+        if msg:find("^!rdi%s*off") or msg:find("^!removedi%s*off") or msg:find("^!rdi%s*0") then
+            if mod.SendSync then mod:SendSync("RDI", "off") end
+        elseif msg:find("^!rdi%s*on") or msg:find("^!removedi%s*on") or msg:find("^!rdi%s*1") then
+            if mod.SendSync then mod:SendSync("RDI", "on") end
+        end
+    end
+end)
+
+function mod:OnSync(msg, arg, sender)
+    if msg ~= "RDI" or not arg then 
+		return 
+	end
+    if arg == "off" then
+        if self.Options.RemoveDI then
+            self.Options.RemoveDI = false
+            DBM:AddMsg("|cff00ff00[DBM:Deathbringer]|r RemoveDI -> OFF от "..(sender or "RL"))
+        end
+	end	
+end
