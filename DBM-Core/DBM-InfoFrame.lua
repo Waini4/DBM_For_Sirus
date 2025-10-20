@@ -43,7 +43,8 @@ local sortMethod = 1 --1 Default, 2 SortAsc, 3 GroupId
 local lines, sortedLines, icons, value = {}, {}, {}, {}
 local playerName = UnitName("player")
 local AceTimer = LibStub("AceTimer-3.0")
-local SpecializedAbsorbs = LibStub("SpecializedAbsorbs-1.0")
+-- local SpecializedAbsorbs = LibStub("SpecializedAbsorbs-1.0")
+-- local has_absorb_func = UnitGetTotalAbsorbs and true or false
 ---------------------
 --  Dropdown Menu  --
 ---------------------
@@ -503,11 +504,12 @@ local function updateEnemyAbsorb()
 			DBM:GetUnitIDFromGUID(specificUnit) --unitID already passed or GUID we convert into unitID
 		if UnitExists(specificUnit) then
 			local absorbAmount
-			if spellInput then -- Get specific spell absorb
-				absorbAmount = SpecializedAbsorbs:UnitEffect(UnitGUID(specificUnit), spellInput)
-			else      -- Get all of them
-				absorbAmount = SpecializedAbsorbs:UnitTotal(UnitGUID(specificUnit))
-			end
+			absorbAmount = UnitGetTotalAbsorbs(specificUnit)
+			-- if spellInput then -- Get specific spell absorb
+			-- 	absorbAmount = SpecializedAbsorbs:UnitEffect(UnitGUID(specificUnit), spellInput)
+			-- else      -- Get all of them
+			-- 	absorbAmount = SpecializedAbsorbs:UnitTotal(UnitGUID(specificUnit))
+			-- end
 			if absorbAmount and absorbAmount > 0 then
 				if totalAbsorb then
 					lines[UnitName(specificUnit)] = mfloor(absorbAmount / totalAbsorb * 100) .. "%"
@@ -521,11 +523,12 @@ local function updateEnemyAbsorb()
 			local uId = "boss" .. i
 			if UnitExists(uId) then
 				local absorbAmount
-				if spellInput then -- Get specific spell absorb
-					absorbAmount = SpecializedAbsorbs:UnitEffect(UnitGUID(uId), spellInput)
-				else   -- Get all of them
-					absorbAmount = SpecializedAbsorbs:UnitTotal(UnitGUID(uId))
-				end
+				absorbAmount = UnitGetTotalAbsorbs(uId)
+				-- if spellInput then -- Get specific spell absorb
+				-- 	absorbAmount = SpecializedAbsorbs:UnitEffect(UnitGUID(uId), spellInput)
+				-- else   -- Get all of them
+				-- 	absorbAmount = SpecializedAbsorbs:UnitTotal(UnitGUID(uId))
+				-- end
 				if absorbAmount and absorbAmount > 0 then
 					if totalAbsorb then
 						lines[UnitName(uId)] = mfloor(totalAbsorb and absorbAmount / totalAbsorb * 100) .. "%"
@@ -559,11 +562,12 @@ local function updateMultiEnemyAbsorb()
 			if guidTable[targetGUID] and not guidTracked[targetGUID] then
 				guidTracked[targetGUID] = true
 				local absorbAmount
-				if spellInput then -- Get specific spell absorb
-					absorbAmount = SpecializedAbsorbs:UnitEffect(targetGUID, spellInput)
-				else   -- Get all of them
-					absorbAmount = SpecializedAbsorbs:UnitTotal(targetGUID)
-				end
+				absorbAmount = UnitGetTotalAbsorbs(targetGUID)
+				-- if spellInput then -- Get specific spell absorb
+				-- 	absorbAmount = SpecializedAbsorbs:UnitEffect(targetGUID, spellInput)
+				-- else   -- Get all of them
+				-- 	absorbAmount = SpecializedAbsorbs:UnitTotal(targetGUID)
+				-- end
 				if absorbAmount and absorbAmount > 0 then
 					if totalAbsorb then
 						lines[UnitName(uId)] = mfloor(totalAbsorb and absorbAmount / totalAbsorb * 100) .. "%"
@@ -583,11 +587,12 @@ local function updateMultiEnemyAbsorb()
 		if guidTable[targetGUID] and not guidTracked[targetGUID] then
 			guidTracked[targetGUID] = true
 			local absorbAmount
-			if spellInput then -- Get specific spell absorb
-				absorbAmount = SpecializedAbsorbs:UnitEffect(UnitGUID(uId), spellInput)
-			else      -- Get all of them
-				absorbAmount = SpecializedAbsorbs:UnitTotal(UnitGUID(uId))
-			end
+			absorbAmount = UnitGetTotalAbsorbs(uId)
+			-- if spellInput then -- Get specific spell absorb
+			-- 	absorbAmount = SpecializedAbsorbs:UnitEffect(UnitGUID(uId), spellInput)
+			-- else      -- Get all of them
+			-- 	absorbAmount = SpecializedAbsorbs:UnitTotal(UnitGUID(uId))
+			-- end
 			if absorbAmount and absorbAmount > 0 then
 				if totalAbsorb then
 					lines[UnitName(uId)] = mfloor(totalAbsorb and absorbAmount / totalAbsorb * 100) .. "%"
@@ -609,11 +614,12 @@ local function updateAllAbsorb()
 		local uId = "boss" .. i
 		if UnitExists(uId) then
 			local absorbAmount
-			if spellInput then -- Get specific spell absorb
-				absorbAmount = SpecializedAbsorbs:UnitEffect(UnitGUID(uId), spellInput)
-			else      -- Get all of them
-				absorbAmount = SpecializedAbsorbs:UnitTotal(UnitGUID(uId))
-			end
+			absorbAmount = UnitGetTotalAbsorbs(uId)
+			-- if spellInput then -- Get specific spell absorb
+			-- 	absorbAmount = SpecializedAbsorbs:UnitEffect(UnitGUID(uId), spellInput)
+			-- else      -- Get all of them
+			-- 	absorbAmount = SpecializedAbsorbs:UnitTotal(UnitGUID(uId))
+			-- end
 			if absorbAmount and absorbAmount > 0 then
 				if totalAbsorb then
 					lines[UnitName(uId)] = mfloor(totalAbsorb and absorbAmount / totalAbsorb * 100) .. "%"
@@ -625,7 +631,8 @@ local function updateAllAbsorb()
 	end
 	if spellInput then
 		for uId in DBM:GetGroupMembers() do
-			local absorbAmount = SpecializedAbsorbs:UnitEffect(UnitGUID(uId), spellInput)
+			local absorbAmount
+			absorbAmount = UnitGetTotalAbsorbs(uId)
 			if absorbAmount and absorbAmount > 0 then
 				if totalAbsorb then
 					lines[UnitName(uId)] = mfloor(totalAbsorb and absorbAmount / totalAbsorb * 100) .. "%"
@@ -645,11 +652,12 @@ local function updatePlayerAbsorb()
 	local totalAbsorb = value[2]
 	for uId in DBM:GetGroupMembers() do
 		local absorbAmount
-		if spellInput then -- Get specific spell absorb
-			absorbAmount = SpecializedAbsorbs:UnitEffect(UnitGUID(uId), spellInput)
-		else         --Not even spell input given, this is a very generic infoframe
-			absorbAmount = SpecializedAbsorbs:UnitTotal(UnitGUID(uId))
-		end
+		absorbAmount = UnitGetTotalAbsorbs(uId)
+		-- if spellInput then -- Get specific spell absorb
+		-- 	absorbAmount = SpecializedAbsorbs:UnitEffect(UnitGUID(uId), spellInput)
+		-- else         --Not even spell input given, this is a very generic infoframe
+		-- 	absorbAmount = SpecializedAbsorbs:UnitTotal(UnitGUID(uId))
+		-- end
 		if absorbAmount and absorbAmount > 0 then
 			if totalAbsorb then
 				lines[UnitName(uId)] = mfloor(totalAbsorb and absorbAmount / totalAbsorb * 100) .. "%"
