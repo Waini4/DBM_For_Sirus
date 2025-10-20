@@ -86,6 +86,7 @@ globals = {
 
 	"nop",
 	"ActorPoolMixin",
+	"UnitGetTotalAbsorbs",
 	"ActorPool_Hide",
 	"ActorPool_HideAndClearModel",
 	"CreateActorPool",
