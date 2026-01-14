@@ -147,7 +147,7 @@ end
 
 function mod:SPELL_CAST_SUCCESS(args)
 	local spellId = args.spellId
-	if spellId == 312978 or spellId == 62660 then -- Shadow Crash
+	if args:IsSpellID(312978, 62660) then -- Shadow Crash
 		self:BossTargetScanner(33271, "ShadowCrashTarget", 0.05, 20)
 		timerShadowCrashCD:Start()
 	elseif args:IsSpellID(312974, 63276, 312621) then -- Mark of the Faceless
