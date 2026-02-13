@@ -17,6 +17,7 @@ function GetRealmNumber()
 	local serverName = GetCVar("realmName")
 	local playerRealm = serverName:match("x4") and 4 or
 						serverName:match("x5") and 5 or
+						serverName:match("x3") and 3 or
 						serverName:match("x2") and 2 or
 						serverName:match("x1") and 1
 	return playerRealm

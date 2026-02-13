@@ -130,10 +130,10 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:CHAT_MSG_MONSTER_EMOTE(msg)
-	if MyRealm == 2 and (msg == L.YellPullShort or msg:find(L.YellPullShort)) then
+	if MyRealm == 5 and (msg == L.YellPullShort or msg:find(L.YellPullShort)) then
 		timerPull:Start()
 	end
-	if MyRealm ~= 2 and (msg == L.YellPullAcolytes or msg:find(L.YellPullAcolytes)) then
+	if MyRealm ~= 5 and (msg == L.YellPullAcolytes or msg:find(L.YellPullAcolytes)) then
 		timerPull:Start(120)
 	end
 end
@@ -205,7 +205,7 @@ function mod:UNIT_HEALTH(uId)
 				self:SetStage(3)
 			end
 		elseif self:IsNormal() then
-			 if  not self.vb.warned_preP2 and DBM:GetBossHP(17257) <= 33 then
+			if  not self.vb.warned_preP2 and DBM:GetBossHP(17257) <= 33 then
 				self.vb.warned_preP2 = true
 				warnPhase3Soon:Show()
 			elseif not self.vb.warned_preP3 and DBM:GetBossHP(17257) <= 30 then
