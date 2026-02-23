@@ -81,9 +81,9 @@ local function currentFullDate()
 end
 
 DBM = {
-	Revision = parseCurseDate("2026" .. "02" .. "13" .. "06" .. "00" .. "00"),
+	Revision = parseCurseDate("2026" .. "02" .. "23" .. "06" .. "00" .. "00"),
 	DisplayVersion = GetAddOnMetadata(_addonname, "Version"), -- the string that is shown as version
-	ReleaseRevision = releaseDate(2026, 02, 13, 06, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	ReleaseRevision = releaseDate(2026, 02, 23, 06, 00, 00) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 
 local fakeBWVersion = 7558
@@ -1419,6 +1419,7 @@ do
 									{ strsplit(",", GetAddOnMetadata(i, "X-DBM-Mod-SubCategories")) },
 								oneFormat    = tonumber(GetAddOnMetadata(i, "X-DBM-Mod-Has-Single-Format") or 0) == 1,
 								hasHeroic    = tonumber(GetAddOnMetadata(i, "X-DBM-Mod-Has-Heroic-Mode") or 1) == 1,
+								hasChallenge = tonumber(GetAddOnMetadata(i, "X-DBM-Mod-Has-Challenge-Mode") or 1) == 1,
 								noHeroic     = tonumber(GetAddOnMetadata(i, "X-DBM-Mod-No-Heroic") or 0) == 1,
 								noStatistics = tonumber(GetAddOnMetadata(i, "X-DBM-Mod-No-Statistics") or 0) == 1,
 								isWorldBoss  = tonumber(GetAddOnMetadata(i, "X-DBM-Mod-World-Boss") or 0) == 1,
@@ -1619,7 +1620,11 @@ do
 				"PARTY_INVITE_REQUEST",
 				"LFG_PROPOSAL_SUCCEEDED",
 				"LFG_UPDATE",
-				"PLAYER_TALENT_UPDATE"
+				"PLAYER_TALENT_UPDATE",
+				"ASMSG_CHALLENGE_MODE_INFO",
+				"ASMSG_CHALLENGE_MODE_MODIFIERS_OVERRIDE",
+				"ASMSG_CHALLENGE_MODE_AFFIX_INFO",
+				"ASMSG_CHALLENGE_MODE_CREATURE_KILLED"
 			)
 			self:ZONE_CHANGED_NEW_AREA()
 			self:RAID_ROSTER_UPDATE()
@@ -2648,6 +2653,8 @@ function DBM:LoadModOptions(modId, inCombat, first)
 			stats.normalPulls = stats.normalPulls or 0
 			stats.heroicKills = stats.heroicKills or 0
 			stats.heroicPulls = stats.heroicPulls or 0
+			stats.MythicKills = stats.MythicKills or 0
+			stats.MythicPulls = stats.MythicPulls or 0
 			-- stats.mythicKills = stats.mythicKills or 0
 			-- stats.mythicPulls = stats.mythicPulls or 0
 			stats.normal25Kills = stats.normal25Kills or 0
@@ -2949,6 +2956,8 @@ function DBM:ClearAllStats(modId)
 		defaultStats.normalPulls = 0
 		defaultStats.heroicKills = 0
 		defaultStats.heroicPulls = 0
+		defaultStats.MythicKills = 0
+		defaultStats.MythicPulls = 0
 		-- defaultStats.mythicKills = 0
 		-- defaultStats.mythicPulls = 0
 		defaultStats.normal25Kills = 0
@@ -5435,7 +5444,7 @@ do
 			--serperate timer recovery and normal start.
 			if event ~= "TIMER_RECOVERY" then
 				--add pull count
-				if mod.stats and not mod.noStatistics then
+				if mod.stats and not mod.noStatistics and not mod.hasChallenge then
 					if not mod.stats[statVarTable[savedDifficulty] .. "Pulls"] then mod.stats[statVarTable[savedDifficulty] .. "Pulls"] = 0 end
 					mod.stats[statVarTable[savedDifficulty] .. "Pulls"] = mod.stats
 						[statVarTable[savedDifficulty] .. "Pulls"] + 1
@@ -5970,7 +5979,7 @@ do
 		end
 		--Current level mythic dungeon
 		if self.Options.LogCurrentMythicZero and (instanceDifficultyBylevel[LastInstanceMapID][1] >= playerLevel) and
-			(instanceDifficultyBylevel[LastInstanceMapID][2] == 2) and savedDifficulty == "mythic" then
+			(instanceDifficultyBylevel[LastInstanceMapID][2] == 3) and savedDifficulty == "mythic" then
 			return true
 		end
 		--Current level heroic dungeon
@@ -6168,19 +6177,24 @@ end
 function DBM:GetCurrentInstanceDifficulty()
 	local _, instanceType, difficulty, difficultyName, maxPlayers, dynamicDifficulty, isDynamicInstance = GetInstanceInfo()
 	if instanceType == "none" then
+		self:Debug(difficultyName)
 		return difficulty == 1 and "worldboss", L.RAID_INFO_WORLD_BOSS .. " - ", difficulty, maxPlayers
 	elseif instanceType == "raid" then
+		self:Debug(difficultyName)
 		if isDynamicInstance then -- Dynamic raids (ICC, RS)
 			if difficulty == 1 then -- 10 players
 				return dynamicDifficulty == 0 and "normal10" or dynamicDifficulty == 1 and "heroic10" or "unknown",
 					difficultyName .. " - ", difficulty, maxPlayers
 			elseif difficulty == 2 then -- 25 players
 				return dynamicDifficulty == 0 and "normal25" or dynamicDifficulty == 1 and "heroic25" or "unknown",
-					difficultyName .. " - ", difficulty, maxPlayers
+					difficultyName .. " - ", difficulty, maxPlayers -- //TODO Ключи сложность
 				-- On Warmane, it was confirmed by Midna that difficulty returning only 1 or 2 is their intended behaviour: https://www.warmane.com/bugtracker/report/91065
 				-- code below (difficulty 3 and 4 in dynamic instances) prevents GetCurrentInstanceDifficulty() from breaking on servers that correctly assign difficulty 1-4 in dynamic instances.
 			elseif difficulty == 3 then -- 10 heroic, dynamic
 				return "heroic10", difficultyName .. " - ", difficulty, maxPlayers
+			elseif difficulty == 3 and difficultyName == "5 игроков (эпохал.)" then -- 10 heroic, dynamic
+				--print(difficulty, "mythic")
+				return "mythic", difficultyName .. " - ", difficulty, maxPlayers
 			elseif difficulty == 4 then -- 25 heroic, dynamic
 				return "heroic25", difficultyName .. " - ", difficulty, maxPlayers
 			end
@@ -7511,11 +7525,11 @@ function bossModPrototype:IsHeroic()
 	return diff == "heroic5" or diff == "heroic10" or diff == "heroic25"
 end
 
--- --Pretty much ANYTHING that has mythic mode
--- function bossModPrototype:IsMythic()
--- 	local diff = savedDifficulty or DBM:GetCurrentInstanceDifficulty()
--- 	return diff == "mythic"
--- end
+function bossModPrototype:IsMythic()
+	local diff = savedDifficulty or DBM:GetCurrentInstanceDifficulty()
+	return diff == "mythic"
+end
+--Pretty much ANYTHING that has mythic mode
 
 -- -- Timewalking
 -- function bossModPrototype:IsTimewalking()

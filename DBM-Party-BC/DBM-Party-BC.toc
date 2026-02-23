@@ -11,7 +11,8 @@
 ## X-DBM-Mod: 1
 ## X-DBM-Mod-Type: PARTY
 ## X-DBM-Mod-Category: BC
-## X-DBM-StatTypes: normal,heroic
+## X-DBM-Mod-Has-Challenge: 1
+## X-DBM-StatTypes: normal,heroic, mythic
 ## X-DBM-Mod-SubCategories: Hellfire Ramparts,The Blood Furnace,The Shattered Halls,The Slave Pens,The Underbog,The Steamvault,Auchenai Crypts,Mana-Tombs,Sethekk Halls,Shadow Labyrinth,Old Hillsbrad Foothills,The Black Morass,The Mechanar,The Botanica,The Arcatraz,Magisters' Terrace
 ## X-DBM-Mod-SubCategories-ruRU: Бастионы Адского Пламени,Кузня Крови,Разрушенные залы,Узилище,Нижетопь,Паровое подземелье,Аукенайские гробницы,Гробницы Маны,Сетеккские залы,Темный лабиринт,Старые предгорья Хилсбрада,Черные топи,Механар,Ботаника,Аркатрац,Терраса Магистров
 ## X-DBM-Mod-Name: Dungeons (BC)
