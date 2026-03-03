@@ -23,6 +23,5 @@
 <Script file = "LibLatency\LibLatency.lua"/> 
 <Script file = "LibDeflate\LibDeflate.lua"/> 
 <Script file = "LibSerialize\LibSerialize.lua"/> 
-<Script file = "SpecializedAbsorbs-1.0\SpecializedAbsorbs-1.0.lua"/> 
 
 </Ui>
