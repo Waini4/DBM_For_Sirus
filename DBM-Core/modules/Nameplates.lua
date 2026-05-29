@@ -179,8 +179,13 @@ local function HookNameplate(frame)
 	frame:HookScript('OnHide',Nameplate_OnHide)
 end
 
-local function Nameplate_AutoHide(self, isGUID, unit, spellId, texture)
-	self:Hide(isGUID, unit, spellId, texture)
+local function SearchNameplateByGUID(guid)
+	if not guid or not NP or not NP.PlateGUID then return end
+	return NP.PlateGUID[guid]
+end
+
+local function Nameplate_AutoHide(self, guid, spellId)
+	self:Hide(guid, spellId)
 end
 
 local function Nameplate_UnitAdded(frame,guid)
@@ -202,6 +207,17 @@ local function Nameplate_UnitAdded(frame,guid)
 		end
 	end
 end
+
+if isElvUILoad and NP and NP.UpdatePlateGUID then
+	hooksecurefunc(NP, "UpdatePlateGUID", function(_, nameplate, guid)
+		if guid and units[guid] then
+			local frame = SearchNameplateByGUID(guid)
+			if frame then
+				Nameplate_UnitAdded(frame, guid)
+			end
+		end
+	end)
+end
 ----------------
 --  On Event  --
 ----------------
@@ -212,7 +228,7 @@ end
 -- 		if prefix ~= "DBM_ShowIconAtPlate" then return end
 -- 		-- local guid = ...
 -- 		if not guid then return end
--- 		local f = NP:SearchNameplateByGUID(guid)
+-- 		local f = SearchNameplateByGUID(guid)
 -- 		if not f then return end
 
 -- 		Nameplate_UnitAdded(f,guid)
@@ -274,12 +290,12 @@ function DBM.Nameplate:Show(guid, spellId, duration, desaturate)
 	})
 
 
-	local frame = NP:SearchNameplateByGUID(guid)
+	local frame = SearchNameplateByGUID(guid)
 	if frame then
 		Nameplate_UnitAdded(frame, guid)
-		if duration then
-			DBM:Schedule(duration, Nameplate_AutoHide, self, true, guid, spellId, currentTexture)
-		end
+	end
+	if duration then
+		DBM:Schedule(duration, Nameplate_AutoHide, self, guid, spellId)
 	end
 
 end
@@ -315,7 +331,7 @@ function DBM.Nameplate:Hide(guid, spellId, force)
 		end
 	end
 
-	local frame = NP:SearchNameplateByGUID(guid)
+	local frame = SearchNameplateByGUID(guid)
 	if frame and frame.DBMAuraFrame then
 		if not currentTexture then
 			frame.DBMAuraFrame:RemoveAll()
