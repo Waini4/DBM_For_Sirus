@@ -20,7 +20,7 @@ local warnImmolate		= mod:NewTargetAnnounce(20294, 2, nil, false, 2)
 
 local specWarnHeal		= mod:NewSpecialWarningInterrupt(19775, "HasInterrupt", nil, nil, 1, 2)
 
-local timerInspire		= mod:NewTargetTimer(10, 19779, nil, "Tank|Healer", 2, 5, nil, DBM_COMMON_L.TANK_ICON..DBM_COMMON_L.HEALER_ICON)
+local timerInspire		= mod:NewTargetTimer(10, 19779, nil, "Tank|Healer", 2, 5, nil, (DBM_COMMON_L.TANK_ICON or "") .. (DBM_COMMON_L.HEALER_ICON or ""))
 local timerHeal			= mod:NewCastTimer(2, 19775, nil, nil, 2, 4, nil, DBM_COMMON_L.INTERRUPT_ICON)
 
 function mod:SPELL_AURA_APPLIED(args)
