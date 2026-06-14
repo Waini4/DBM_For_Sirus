@@ -13,6 +13,7 @@
 ## Dependencies: DBM-Core
 ## SavedVariables: DBMAQ20_AllSavedVars
 ## SavedVariablesPerCharacter: DBMAQ20_SavedStats
+## Version: 1.0.0
 ## X-DBM-Mod: 1
 ## X-DBM-Mod-Type: RAID
 ## X-DBM-Mod-Category: Classic
