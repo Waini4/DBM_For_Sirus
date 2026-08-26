@@ -12,7 +12,7 @@ mod:RegisterCombat("combat")
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 41455",
 	"SPELL_CAST_SUCCESS 41455",
-	"SPELL_AURA_APPLIED 41485 41481 41482 41541 41476 41475 41452 41453 41450 41451",
+	"SPELL_AURA_APPLIED 376223",
 	"SPELL_AURA_REMOVED 41479 41485"
 )
 
@@ -23,14 +23,17 @@ local warnDevAura			= mod:NewSpellAnnounce(41452, 3, nil, "Physical", 2)
 local warnResAura			= mod:NewSpellAnnounce(41453, 3, nil, "-Physical", 2)
 
 local specWarnShield		= mod:NewSpecialWarningReflect(41475, "Dps", nil, nil, 1, 2)
-local specWarnFlame			= mod:NewSpecialWarningMove(41481, nil, nil, nil, 1, 2)
+local specWarnFlame			= mod:NewSpecialWarningMove(376223, nil, nil, nil, 1, 2)
+local yellFlame            	= mod:NewYell(376223)
+local yellFlameFades		= mod:NewShortFadesYell(376223)
 local specWarnBlizzard		= mod:NewSpecialWarningMove(41482, nil, nil, nil, 1, 2)
 local specWarnConsecration	= mod:NewSpecialWarningMove(41541, nil, nil, nil, 1, 2)
 local specWarnCoH			= mod:NewSpecialWarningInterrupt(41455, "HasInterrupt", nil, 2, 1, 2)
 local specWarnImmune		= mod:NewSpecialWarning("Immune", false)
 
 local timerVanish			= mod:NewBuffActiveTimer(31, 41476, nil, nil, nil, 6)
-local timerShield			= mod:NewBuffActiveTimer(20, 41475, nil, nil, nil, 5, nil, (DBM_COMMON_L.HEALER_ICON or "") .. (DBM_COMMON_L.DAMAGE_ICON or ""))
+local timerFlame			= mod:NewBuffActiveTimer(14, 376223, nil, nil, nil, 6)
+local timerShield			= mod:NewBuffActiveTimer(20, 41475, nil, nil, nil, 5, nil, DBM_COMMON_L.HEALER_ICON..DBM_COMMON_L.DAMAGE_ICON)
 local timerMeleeImmune		= mod:NewTargetTimer(15, 41450, nil, "Physical", 2, 5, nil, DBM_COMMON_L.DAMAGE_ICON)
 local timerSpellImmune		= mod:NewTargetTimer(15, 41451, nil, "-Physical", 2, 5, nil, DBM_COMMON_L.DAMAGE_ICON)
 local timerDevAura			= mod:NewBuffActiveTimer(30, 41452, nil, "Physical", 2, 5, nil, DBM_COMMON_L.DAMAGE_ICON)
@@ -43,6 +46,7 @@ mod:AddSetIconOption("PoisonIcon", 41485)
 
 function mod:OnCombatStart(delay)
 	berserkTimer:Start(-delay)
+	timerFlame:Start(16-delay)
 end
 
 function mod:SPELL_AURA_APPLIED(args)
@@ -52,9 +56,14 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.PoisonIcon then
 			self:SetIcon(args.destName, 1)
 		end
-	elseif spellId == 41481 and args:IsPlayer() and self:AntiSpam(3, 1) and not self:IsTrivial() then
-		 specWarnFlame:Show()
-		 specWarnFlame:Play("runaway")
+	elseif spellId == 376223 then
+		timerFlame:Start()
+		if args:IsPlayer() and self:AntiSpam(3, 1) then
+			yellFlame:Yell()
+			yellFlameFades:Countdown(spellId)
+			specWarnFlame:Show()
+			specWarnFlame:Play("runaway")
+		end
 	elseif spellId == 41482 and args:IsPlayer() and self:AntiSpam(3, 2) and not self:IsTrivial() then
 		 specWarnBlizzard:Show()
 		 specWarnBlizzard:Play("runaway")
@@ -90,6 +99,10 @@ function mod:SPELL_AURA_REMOVED(args)
 	elseif spellId == 41485 then
 		if self.Options.PoisonIcon then
 			self:RemoveIcon(args.destName)
+		end
+	elseif spellId == 376223 then
+		if args:IsPlayer() then
+			yellFlameFades:Cancel()
 		end
 	end
 end

@@ -128,7 +128,7 @@ L:SetOptionLocalization({
 --------------------------
 --  Essence Of Souls  --
 --------------------------
-L = DBM:GetModLocalization("Souls")
+L = DBM:GetModLocalization("EssenceOfSouls")
 
 L:SetGeneralLocalization({
 	name = "Воплощение Душ"
@@ -175,6 +175,9 @@ L:SetGeneralLocalization({
 	name = "Матушка Шахраз"
 })
 
+L:SetOptionLocalization({
+	PassionThreshold = "Предупреждение на стаках - %d" --Translate
+})
 ----------------------
 --  Illidari Council  --
 ----------------------
@@ -229,9 +232,9 @@ L:SetWarningLocalization({
 })
 
 L:SetTimerLocalization({
-	TimerCombatStart = "Combat starts", --Translate
-	TimerNextHuman   = "Next Обычная Фаза", --Translate
-	TimerNextDemon   = "Next Демона Фаза" --Translate
+	TimerNextHuman   = "Следующая Обычная Фаза", --Translate
+	TimerNextDemon   = "Следующая Демона Фаза", --Translate
+	TimerChangeForm  = "Смена Формы" --Translate
 })
 
 L:SetOptionLocalization({
@@ -240,17 +243,18 @@ L:SetOptionLocalization({
 	WarnHuman        = "Show warning for Human Phase",                 --Translate
 	WarnHumanSoon    = "Show pre-warning for Human Phase",             --Translate
 	WarnDemon        = "Show warning for Demon Phase",                 --Translate
-	WarnDemonSoon    = "Show pre-warning for Demon Phase",             --Translate
-	TimerCombatStart = "Show time for start of combat",                --Translate
+	WarnDemonSoon    = "Show pre-warning for Demon Phase",             --Translate 
 	TimerNextHuman   = "Show time for Next Human Phase",               --Translate
 	TimerNextDemon   = "Show time for Demon Human Phase",              --Translate
 	RangeFrame       = "Show range frame (10 yards) in Phase 3 and 4"  --Translate
 })
 
 L:SetMiscLocalization({
-	Pull            = "Акама! Твое двуличие меня не удивляет. Мне давным-давно стоило уничтожить тебя и твоих уродливых собратьев.",
+	Pull            = "Акама. Я не удивлен твоей двуличностью. Давно нужно было убить тебя и твоих мерзких прихвостней.",
+	Pullf          = "Твое правление окончено, Иллидан. Мой народ – и все Запределье – будут свободны!",
 	Eyebeam         = "Посмотри в глаза Предателя!",
-	Demon           = "Узрите мощь демона!",
+	Demon           = "Узрите силу... истинного демона!",
 	Phase4          = "Это все, смертные? Это и есть вся ваша ярость?",
 	ParasiteWhisper = "Shadowfiends on you!" --Translate
 })
+--23:07:23-23:08:01

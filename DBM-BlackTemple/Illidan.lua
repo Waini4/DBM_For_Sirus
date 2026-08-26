@@ -5,20 +5,20 @@ mod:SetRevision("20220518110528")
 mod:SetCreatureID(22917)
 
 mod:SetModelID(21135)
-mod:SetUsedIcons(8)
+mod:SetUsedIcons(7, 8)
 
-mod:RegisterCombat("combat")
+mod:RegisterCombat("combat", 22917)
+
 
 mod:RegisterEvents(
-	"CHAT_MSG_MONSTER_YELL"
-)
-
-mod:RegisterEventsInCombat(
-	"SPELL_AURA_APPLIED 41917 41914 40585 40932 41083 40683 40695",
-	"SPELL_AURA_REMOVED 41917 41914",
-	"SPELL_CAST_START 40904 41117 39849",
+	"SPELL_AURA_APPLIED 376251 376249",
+	"SPELL_AURA_APPLIED_DOSE 376251 376249 376285",
+	"SPELL_AURA_REMOVED 376250 376249 376285",
+	"SPELL_CAST_START 376249",
 	"SPELL_CAST_SUCCESS 41126 40647",
-	"UNIT_DIED"
+	"UNIT_DIED",
+	"CHAT_MSG_MONSTER_YELL",
+	"CHAT_MSG_MONSTER_EMOTE"
 )
 
 --Parasites in phase 1? if so range frame needs to be more phases
@@ -26,12 +26,12 @@ mod:RegisterEventsInCombat(
 --TODO, phase 4 log where I don't overkill boss too fast.
 --TODO, add shear warning (defensive) to prevent application all together, taunt swap if it does get applied
 --TODO, fire for elementals added to GTFO
-local warnParasite			= mod:NewTargetAnnounce(41917, 3)
-local warnDrawSoul			= mod:NewSpellAnnounce(40904, 3, nil, "Tank", 2)--Needed?
+local warnParasite			= mod:NewTargetAnnounce(376250, 3)
+local warnDrawSoul			= mod:NewSpellAnnounce(40904, 3, nil, nil, 2)--Needed?
 local warnPhase2Soon		= mod:NewPrePhaseAnnounce(2, 3)
 local warnPhase2			= mod:NewPhaseAnnounce(2)
 local warnEyebeam			= mod:NewSpellAnnounce(40018, 3)
-local warnBarrage			= mod:NewTargetAnnounce(40585, 3)
+local warnBarrage			= mod:NewTargetAnnounce(376249, 3)
 local warnPhase3			= mod:NewPhaseAnnounce(3)
 local warnDemon				= mod:NewAnnounce("WarnDemon", 3 , 40506)
 local warnHuman				= mod:NewAnnounce("WarnHuman", 3 , 97061)
@@ -45,61 +45,80 @@ local warnCaged				= mod:NewSpellAnnounce(40695, 3)
 
 local specWarnParasite		= mod:NewSpecialWarningYou(41917, nil, nil, nil, 1, 2)
 local yellParasiteFades		= mod:NewShortFadesYell(41917)
+local yellSoul            	= mod:NewYell(376250)
+local yellSoulFades			= mod:NewShortFadesYell(376250)
 local specWarnBarrage		= mod:NewSpecialWarningMoveAway(40585, nil, nil, nil, 1, 2)
 local specWarnShadowDemon	= mod:NewSpecialWarningSwitch(41117, "Dps", nil, nil, 3, 2)
 local specWarnGTFO			= mod:NewSpecialWarningGTFO(40841, nil, nil, nil, 1, 2)
+local specWarnGTFOSouls		= mod:NewSpecialWarningYou(376249, nil, nil, nil, 1, 2)
 
-local timerParasite			= mod:NewTargetTimer(10, 41917, nil, false, nil, 1, nil, DBM_COMMON_L.DAMAGE_ICON)
+local timerNextSoulAdds		= mod:NewCDTimer(70, 376250, nil, nil, nil, 5)
+local timerParasite			= mod:NewTargetTimer(10, 376250, nil, false, nil, 1, nil, DBM_COMMON_L.DAMAGE_ICON)
 local timerBarrage			= mod:NewTargetTimer(10, 40585, nil, false, nil, 3)
 local timerNextBarrage		= mod:NewCDTimer(44, 40585, nil, nil, nil, 3)
+local timerNextSoulDraw		= mod:NewCDTimer(23, 376249, nil, nil, nil, 3)
 --local timerFlame			= mod:NewTargetTimer(60, 40932)
 local timerNextFlameBurst	= mod:NewCDTimer(20, 41131, nil, nil, nil, 3)
 local timerShadowDemon		= mod:NewCDTimer(34, 41117, nil, nil, nil, 1, nil, DBM_COMMON_L.DAMAGE_ICON)
-local timerNextHuman		= mod:NewTimer(74, "TimerNextHuman", 97061, nil, nil, 6)
-local timerNextDemon		= mod:NewTimer(60, "TimerNextDemon", 40506, nil, nil, 6)
+local timerNextHuman		= mod:NewTimer(86, "TimerNextHuman", 97061, nil, nil, 6)
+local timerNextDemon		= mod:NewTimer(82, "TimerNextDemon", 40506, nil, nil, 6)
+local TimerChangeForm		= mod:NewTimer(10, "TimerChangeForm", 376249, nil, nil, 6)
 local timerEnrage			= mod:NewBuffActiveTimer(10, 40683)
 local timerNextEnrage		= mod:NewCDTimer(40, 40683)
 local timerCaged			= mod:NewBuffActiveTimer(15, 40695, nil, nil, nil, 6)
 local timerPhase4			= mod:NewPhaseTimer(30)
 
-local timerCombatStart		= mod:NewCombatTimer(36)
-local berserkTimer			= mod:NewBerserkTimer(1500)
+local timerCombatStart		= mod:NewCombatTimer(25)
+local berserkTimer			= mod:NewBerserkTimer(720)
 
 mod:AddRangeFrameOption(6, 40932)--Spell is 5 yards, but give it 6 or good measure since 5 yard check is probably least precise one since nerfs.
 mod:AddSetIconOption("ParasiteIcon", 41917)
+--mod:AddInfoFrameOption(nil, true) -- в тесте до когда-то
+mod:AddSetIconOption("SetIconOnSoul", 376249, true, false, { 7 })
+mod:AddSetIconOption("SetIconOnSoulAdds", 376250, true, false, { 8 })
+--mod:AddSetIconOption("SetIconThreat", 20185, true, false, {3, 4, 5, 6, 7 })
 
 mod.vb.flamesDown = 0
 mod.vb.flameBursts = 0
 mod.vb.warned_preP2 = false
 mod.vb.warned_preP4 = false
 
+function mod:FingerTarget(targetname)
+	if not targetname then return end
+	if self.Options.SetIconOnFinger then
+		self:SetIcon(targetname, 7, 2)
+	end
+	warnBarrage:Show(targetname)
+end
+
 local function humanForms(self)
 	warnHuman:Show()
 	timerNextFlameBurst:Cancel()
+	timerParasite:Cancel()
+	timerNextSoulDraw:Cancel()
+	timerNextSoulAdds:Cancel()
 	timerNextDemon:Start()
-	if self.vb.phase == 4 then
-		timerEnrage:Start()
-	end
+	
 end
 
 function mod:OnCombatStart(delay)
 	self:SetStage(1)
+	timerNextSoulAdds:Start(60 - delay)
 	self.vb.flamesDown = 0
 	self.vb.flameBursts = 0
 	self.vb.warned_preP2 = false
 	self.vb.warned_preP4 = false
+--	if self.Options.InfoFrame and not DBM.InfoFrame:IsShown() then
+--			DBM.InfoFrame:SetHeader("Иллидан Ярость ....ки")
+--			DBM.InfoFrame:Show(5, "function", UpdateThreatFrame)
+--	end
+	timerNextSoulDraw:Start(20 - delay)
 	berserkTimer:Start(-delay)
-	if not self:IsTrivial() then
-		self:RegisterShortTermEvents(
-			"SPELL_DAMAGE 40841",
-			"SPELL_MISSED 40841",
-			"UNIT_HEALTH"
-		)
-	end
 end
 
-function mod:OnCombatEnd()
+function mod:OnCombatEnd(wipe)
 	self:UnregisterShortTermEvents()
+	--DBM:FireCustomEvent("DBM_EncounterEnd", 22917, "Illidan", wipe)
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end
@@ -107,16 +126,17 @@ end
 
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
-	if spellId == 41917 or spellId == 41914 then
+	if args:IsSpellID(376251, 376250) then
+		timerNextSoulAdds:Start()
+		warnParasite:Show(args.destName)
 		timerParasite:Start(args.destName)
 		if args:IsPlayer() then
+			yellSoul:Yell()
 			specWarnParasite:Show()
 			specWarnParasite:Play("targetyou")
-			yellParasiteFades:Countdown(spellId)
-		else
-			warnParasite:Show(args.destName)
+			yellSoulFades:Countdown(spellId)
 		end
-		if self.Options.ParasiteIcon then
+		if self.Options.SetIconOnSoulAdds then
 			self:SetIcon(args.destName, 8)
 		end
 	elseif spellId == 40585 then
@@ -137,29 +157,34 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 40683 then
 		warnEnrage:Show()
 		timerEnrage:Start()
-	elseif spellId == 40695 then
-		warnCaged:Show()
-		timerCaged:Start()
 	end
 end
 
 function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
-	if spellId == 41917 or spellId == 41914 then
+	if spellId == 376250 or spellId == 41914 then
 		timerParasite:Stop(args.destName)
 		if args:IsPlayer() then
 			yellParasiteFades:Cancel()
 		end
-		if self.Options.ParasiteIcon then
+		if self.Options.SetIconOnSoul then
 			self:RemoveIcon(args.destName)
 		end
+	elseif spellId == 376285 then
+	timerNextSoulDraw:Start(30)
+	timerNextSoulAdds:Cancel()
+	timerNextSoulAdds:Start()
+	timerNextDemon:Start()
+	TimerChangeForm:Schedule(70)
 	end
 end
 
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
-	if spellId == 40904 then
-		warnDrawSoul:Show()
+	if spellId == 376249 then
+		self:BossTargetScanner(args.sourceGUID, "FingerTarget", 0.1, 12, true, nil, nil, nil, true)
+		timerNextSoulDraw:Start()
+		--warnDrawSoul:Show()
 	elseif spellId == 41117 then
 		specWarnShadowDemon:Show()
 		specWarnShadowDemon:Play("killmob")
@@ -191,6 +216,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 		timerNextHuman:Cancel()
 		timerNextDemon:Cancel()
 		timerPhase4:Start()
+		TimerChangeForm:Schedule(76)
 		warnPhase4:Schedule(30)
 		timerNextDemon:Start(92)--Verify timer with this trigger, I keep overkilling boss :\
 	end
@@ -206,7 +232,7 @@ mod.SPELL_MISSED = mod.SPELL_DAMAGE
 
 function mod:UNIT_DIED(args)
 	local cid = self:GetCIDFromGUID(args.destGUID)
-	if cid == 22997 then
+	if cid == 22997 or cid == 70055 then
 		self.vb.flamesDown = self.vb.flamesDown + 1
 		if self.vb.flamesDown >= 2 then
 			self:SetStage(3)
@@ -220,8 +246,10 @@ function mod:UNIT_DIED(args)
 	end
 end
 
-function mod:CHAT_MSG_MONSTER_YELL(msg)
+function mod:CHAT_MSG_MONSTER_EMOTE(msg)
 	if msg == L.Pull or msg:find(L.Pull) then
+		timerCombatStart:Start()
+	elseif msg == L.Pullf or msg:find(L.Pullf) then
 		timerCombatStart:Start()
 	elseif msg == L.Eyebeam or msg:find(L.Eyebeam) then
 		warnEyebeam:Show()
@@ -247,10 +275,27 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		timerNextDemon:Start(92)--Verify timer with this trigger, I keep overkilling boss :\
 	end
 end
+mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
+
+function mod:CHAT_MSG_MONSTER_YELL(msg)
+	if msg == L.Pull or msg:find(L.Pull) then
+		timerCombatStart:Start()
+	elseif msg == L.Pullf or msg:find(L.Pullf) then
+		timerCombatStart:Start()
+	elseif msg == L.Demon or msg:find(L.Demon) then
+		warnDemon:Show()
+		timerNextHuman:Start(76)
+		--timerNextFlameBurst:Start()
+		--timerShadowDemon:Start()
+		timerNextSoulDraw:Start(33)
+		timerNextSoulAdds:Start(43)
+	--	self:Schedule(74, humanForms, self)
+	end
+end
 
 function mod:UNIT_HEALTH(uId)
 	local cid = self:GetUnitCreatureId(uId)
-	if not self.vb.warned_preP2 and cid == 22917 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.75 then
+	if not self.vb.warned_preP2 and cid == 22917 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.69 then
 		self.vb.warned_preP2 = true
 		warnPhase2Soon:Show()
 	elseif not self.vb.warned_preP4 and cid == 22917 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.35 then
