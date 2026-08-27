@@ -243,7 +243,7 @@ L:SetOptionLocalization({
 	WarnHuman        = "Show warning for Human Phase",                 --Translate
 	WarnHumanSoon    = "Show pre-warning for Human Phase",             --Translate
 	WarnDemon        = "Show warning for Demon Phase",                 --Translate
-	WarnDemonSoon    = "Show pre-warning for Demon Phase",             --Translate 
+	WarnDemonSoon    = "Show pre-warning for Demon Phase",             --Translate
 	TimerNextHuman   = "Show time for Next Human Phase",               --Translate
 	TimerNextDemon   = "Show time for Demon Human Phase",              --Translate
 	RangeFrame       = "Show range frame (10 yards) in Phase 3 and 4"  --Translate

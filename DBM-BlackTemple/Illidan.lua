@@ -98,7 +98,6 @@ local function humanForms(self)
 	timerNextSoulDraw:Cancel()
 	timerNextSoulAdds:Cancel()
 	timerNextDemon:Start()
-	
 end
 
 function mod:OnCombatStart(delay)
