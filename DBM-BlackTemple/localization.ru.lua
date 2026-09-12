@@ -188,19 +188,20 @@ L:SetGeneralLocalization({
 })
 
 L:SetWarningLocalization({
-	WarnFadeSoon = "Vanish fades in 5 sec",   --Translate
-	WarnFaded    = "Vanish faded",            --Translate
-	WarnDevAura  = "Devotion Aura for 30 sec", --Translate
-	WarnResAura  = "Resistance Aura for 30 sec", --Translate
-	Immune       = "Malande - %s immune for 15 sec" --Translate
+	WarnFadeSoon = "Исчезновение исчезнет через 5 сек",   --Translate
+	WarnFaded    = "Исчезновение исчезло",            --Translate
+	WarnDevAura  = "Аура Преданности на 30 сек", --Translate
+	WarnResAura  = "Аура Сопротивления на 30 сек", --Translate
+	Immune       = "Маланда - %s неуязвима в течение 15 сек" --Translate
 })
 
 L:SetOptionLocalization({
-	WarnFadeSoon = "Show warning 5 seconds before $spell:41476 fades", --Translate
-	WarnFaded    = "Show warning when $spell:41476 fades",            --Translate
-	WarnDevAura  = "Show warning for $spell:41452",                   --Translate
-	WarnResAura  = "Show warning for $spell:41453",                   --Translate
-	Immune       = "Show warning when Manalde becomes spell or melee immune" --Translate
+	WarnFadeSoon = "Показать предупреждение за 5 секунд до исчезновения $spell:41476", --Translate
+	WarnFaded    = "Показать предупреждение, когда $spell:41476 исчезнет",            --Translate
+	WarnDevAura  = "Показать предупреждение для $spell:41452",                   --Translate
+	WarnResAura  = "Показать предупреждение для $spell:41453",                   --Translate
+	Immune       = "Показать предупреждение, когда Маланда становится неуязвимой к заклинаниям или атакам в ближнем бою", --Translate
+	RaidReportHeal   = "Оповещение о хилке в рейд"
 })
 
 L:SetMiscLocalization({
@@ -208,9 +209,9 @@ L:SetMiscLocalization({
 	Malande       = "Леди Маланда",
 	Zerevor       = "Верховный пустомант Зеревор",
 	Veras         = "Верас Глубокий Мрак",
-	Melee         = "Melee",             --Translate
-	Spell         = "Spell",             --Translate
-	PoisonWhisper = "Deadly Poison on you!" --Translate
+	Melee         = "Ближний бой",             --Translate
+	Spell         = "Заклинание",             --Translate
+	PoisonWhisper = "Смертельный яд на вас!" --Translate
 })
 
 -------------------------
@@ -240,13 +241,14 @@ L:SetTimerLocalization({
 L:SetOptionLocalization({
 	WarnPhase2Soon   = "Show pre-warning for Phase 2 transition (at ~75%)", --Translate
 	WarnPhase4Soon   = "Show pre-warning for Phase 4 transition (at ~35%)", --Translate
-	WarnHuman        = "Show warning for Human Phase",                 --Translate
-	WarnHumanSoon    = "Show pre-warning for Human Phase",             --Translate
-	WarnDemon        = "Show warning for Demon Phase",                 --Translate
-	WarnDemonSoon    = "Show pre-warning for Demon Phase",             --Translate
-	TimerNextHuman   = "Show time for Next Human Phase",               --Translate
-	TimerNextDemon   = "Show time for Demon Human Phase",              --Translate
-	RangeFrame       = "Show range frame (10 yards) in Phase 3 and 4"  --Translate
+	WarnHuman        = "Предупреждение до Обычной Фазы",                 --Translate
+	WarnHumanSoon    = "Предупреждение до Обычной Фазы скоро",             --Translate
+	WarnDemon        = "Предупреждение до Демона Фазы",                 --Translate
+	WarnDemonSoon    = "Предупреждение до Демона Фазы скоро",             --Translate
+	TimerNextHuman   = "Показать время для следующей Обычной Фазы",               --Translate
+	TimerNextDemon   = "Показать время для следующей Демона Фазы",              --Translate
+	RangeFrame       = "Show range frame (10 yards) in Phase 3 and 4",  --Translate
+	RaidReportHeal   = "Оповещение о хилке в рейд"
 })
 
 L:SetMiscLocalization({
@@ -254,7 +256,8 @@ L:SetMiscLocalization({
 	Pullf          = "Твое правление окончено, Иллидан. Мой народ – и все Запределье – будут свободны!",
 	Eyebeam         = "Посмотри в глаза Предателя!",
 	Demon           = "Узрите силу... истинного демона!",
+	End				= "Вы не готовы!",
 	Phase4          = "Это все, смертные? Это и есть вся ваша ярость?",
-	ParasiteWhisper = "Shadowfiends on you!" --Translate
+	ParasiteWhisper = "Теневые создания на вас!" --Translate
 })
 --23:07:23-23:08:01

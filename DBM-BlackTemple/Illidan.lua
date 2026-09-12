@@ -18,7 +18,10 @@ mod:RegisterEvents(
 	"SPELL_CAST_SUCCESS 41126 40647",
 	"UNIT_DIED",
 	"CHAT_MSG_MONSTER_YELL",
-	"CHAT_MSG_MONSTER_EMOTE"
+	"CHAT_MSG_MONSTER_EMOTE",
+	"UNIT_HEALTH boss1",
+	"SPELL_HEAL 376249",
+	"SPELL_PERIODIC_HEAL 376249"
 )
 
 --Parasites in phase 1? if so range frame needs to be more phases
@@ -77,14 +80,23 @@ mod:AddSetIconOption("ParasiteIcon", 41917)
 mod:AddSetIconOption("SetIconOnSoul", 376249, true, false, { 7 })
 mod:AddSetIconOption("SetIconOnSoulAdds", 376250, true, false, { 8 })
 --mod:AddSetIconOption("SetIconThreat", 20185, true, false, {3, 4, 5, 6, 7 })
+mod:AddBoolOption("RaidReportHeal", false)
 
-mod.vb.flamesDown = 0
-mod.vb.flameBursts = 0
+mod.vb.flamesDown 	= 0
+mod.vb.totalHeal	= 0
+mod.vb.flameBursts 	= 0
+mod.vb.bossMaxHealth = 583200640
 mod.vb.warned_preP2 = false
 mod.vb.warned_preP4 = false
+mod.vb.CombatEnded 	= false
+mod.vb.MaxHp		= false
 
 function mod:FingerTarget(targetname)
 	if not targetname then return end
+	if targetname == UnitName("player") then
+		specWarnGTFOSouls:Show()
+		specWarnGTFOSouls:Play("runout")
+	end
 	if self.Options.SetIconOnFinger then
 		self:SetIcon(targetname, 7, 2)
 	end
@@ -100,13 +112,24 @@ local function humanForms(self)
 	timerNextDemon:Start()
 end
 
+function mod:HealReport()
+	local pctHeal = 0
+    pctHeal = (self.vb.totalHeal / self.vb.bossMaxHealth) * 100
+	if self.vb.RaidReportHeal then
+		SendChatMessage(string.format("DBM: %s исцелило на %s (%.1ff%% от макс. HP)", self.vb.healSpellName,  self.vb.totalHeal, pctHeal), "RAID")
+	self.vb.totalHeal = 0
+	end
+end
+
 function mod:OnCombatStart(delay)
 	self:SetStage(1)
 	timerNextSoulAdds:Start(60 - delay)
 	self.vb.flamesDown = 0
 	self.vb.flameBursts = 0
+	self.vb.totalHeal	= 0
 	self.vb.warned_preP2 = false
 	self.vb.warned_preP4 = false
+	self.vb.CombatEnded = false
 --	if self.Options.InfoFrame and not DBM.InfoFrame:IsShown() then
 --			DBM.InfoFrame:SetHeader("Иллидан Ярость ....ки")
 --			DBM.InfoFrame:Show(5, "function", UpdateThreatFrame)
@@ -138,24 +161,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.SetIconOnSoulAdds then
 			self:SetIcon(args.destName, 8)
 		end
-	elseif spellId == 40585 then
-		timerBarrage:Start(args.destName)
-		timerNextBarrage:Start()
-		if args:IsPlayer() then
-			specWarnBarrage:Show()
-			specWarnBarrage:Play("runout")
-			specWarnBarrage:ScheduleVoice(1, "keepmove")
-		else
-			warnBarrage:Show(args.destName)
-		end
-	elseif spellId == 40932 then
-		warnFlame:CombinedShow(0.3, args.destName)
-		--timerFlame:Start(args.destName)
-	elseif spellId == 41083 then
-		warnShadowDemon:CombinedShow(1, args.destName)
-	elseif spellId == 40683 then
-		warnEnrage:Show()
-		timerEnrage:Start()
 	end
 end
 
@@ -231,13 +236,15 @@ mod.SPELL_MISSED = mod.SPELL_DAMAGE
 
 function mod:UNIT_DIED(args)
 	local cid = self:GetCIDFromGUID(args.destGUID)
-	if cid == 22997 or cid == 70055 then
+	if cid == 22997 or cid == 4519 then
 		self.vb.flamesDown = self.vb.flamesDown + 1
 		if self.vb.flamesDown >= 2 then
 			self:SetStage(3)
 			if self.Options.RangeFrame then
 				DBM.RangeCheck:Show(6)
 			end
+			timerNextSoulDraw:Start(31)
+			timerNextSoulAdds:Start(73)
 			timerNextBarrage:Cancel()
 			warnPhase3:Show()
 			timerNextDemon:Start(76)
@@ -282,6 +289,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 	elseif msg == L.Pullf or msg:find(L.Pullf) then
 		timerCombatStart:Start()
 	elseif msg == L.Demon or msg:find(L.Demon) then
+		self.vb.CombatEnded = true
 		warnDemon:Show()
 		timerNextHuman:Start(76)
 		--timerNextFlameBurst:Start()
@@ -289,6 +297,8 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		timerNextSoulDraw:Start(33)
 		timerNextSoulAdds:Start(43)
 	--	self:Schedule(74, humanForms, self)
+	elseif msg == (L.End or msg:find(L.End)) and self.vb.CombatEnded then
+		DBM:EndCombat(self)
 	end
 end
 
@@ -302,3 +312,14 @@ function mod:UNIT_HEALTH(uId)
 		warnPhase4Soon:Show()
 	end
 end
+function mod:SPELL_HEAL(_, _, _, _, _, _, spellId, _, _, amount)
+	--local spellId = args.spellId
+	--local amount = args.amount
+	self.vb.healSpellName = GetSpellInfo(spellId)
+	if spellId == 376249 then
+		self.vb.totalHeal     = self.vb.totalHeal + (amount or 0)
+		self:UnscheduleMethod("HealReport")
+        self:ScheduleMethod(2.0, "HealReport")
+	end
+end
+mod.SPELL_PERIODIC_HEAL = mod.SPELL_HEAL

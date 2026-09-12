@@ -13,7 +13,9 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 41455",
 	"SPELL_CAST_SUCCESS 41455",
 	"SPELL_AURA_APPLIED 376223",
-	"SPELL_AURA_REMOVED 41479 41485"
+	"SPELL_AURA_REMOVED 41479 41485",
+	"SPELL_HEAL 376235",
+	"SPELL_PERIODIC_HEAL 376235"
 )
 
 local warnPoison			= mod:NewTargetNoFilterAnnounce(41485, 3, nil, "Healer", 3)
@@ -43,8 +45,21 @@ local timerNextCoH			= mod:NewCDTimer(14, 41455, nil, nil, nil, 4, nil, DBM_COMM
 local berserkTimer			= mod:NewBerserkTimer(900)
 
 mod:AddSetIconOption("PoisonIcon", 41485)
+mod:AddBoolOption("RaidReportHeal", false)
+mod.vb.bossMaxHealth = 172125000
+mod.vb.totalHeal	= 0
+
+function mod:HealReport()
+	local pctHeal = 0
+    pctHeal = (self.vb.totalHeal / self.vb.bossMaxHealth) * 100
+	if self.vb.RaidReportHeal then
+		SendChatMessage(string.format("DBM: %s исцелило на %s (%.1ff%% от макс. HP)", self.vb.healSpellName,  self.vb.totalHeal, pctHeal), "RAID")
+	self.vb.totalHeal = 0
+	end
+end
 
 function mod:OnCombatStart(delay)
+	self.vb.totalHeal = 0
 	berserkTimer:Start(-delay)
 	timerFlame:Start(16-delay)
 end
@@ -121,3 +136,15 @@ function mod:SPELL_CAST_SUCCESS(args)
 		timerNextCoH:Start(13.3)
 	end
 end
+
+function mod:SPELL_HEAL(_, _, _, _, _, _, spellId, _, _, amount)
+	--local spellId = args.spellId
+	--local amount = args.amount
+	self.vb.healSpellName = GetSpellInfo(spellId)
+	if spellId == 376235 then
+		self.vb.totalHeal     = self.vb.totalHeal + (amount or 0)
+		self:UnscheduleMethod("HealReport")
+        self:ScheduleMethod(2.0, "HealReport")
+	end
+end
+mod.SPELL_PERIODIC_HEAL = mod.SPELL_HEAL
