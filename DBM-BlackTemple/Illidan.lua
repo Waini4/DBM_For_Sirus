@@ -115,7 +115,7 @@ end
 function mod:HealReport()
 	local pctHeal = 0
     pctHeal = (self.vb.totalHeal / self.vb.bossMaxHealth) * 100
-	if self.vb.RaidReportHeal then
+	if self.Options.RaidReportHeal then
 		SendChatMessage(string.format("DBM: %s исцелило на %s (%.1ff%% от макс. HP)", self.vb.healSpellName,  self.vb.totalHeal, pctHeal), "RAID")
 	self.vb.totalHeal = 0
 	end
