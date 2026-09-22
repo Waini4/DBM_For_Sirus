@@ -28,19 +28,26 @@ if not _G.CHAT_SPAM_CHARNOTFOUND then
     _G.CHAT_SPAM_CHARNOTFOUND = true
     ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", function(self, event, msg, ...) return msg:match('Персонаж по имени "([^_]+)" в игре не найден') end)
 end
-
-function IsInGroup()
-	return GetNumPartyMembers() > 0 or GetNumRaidMembers() > 0
+if not IsInGroup then
+	function IsInGroup()
+		return GetNumPartyMembers() > 0 or GetNumRaidMembers() > 0
+	end
 end
 
-function IsInRaid()
-	return GetNumRaidMembers() > 0
+if not IsInRaid then
+	function IsInRaid()
+		return GetNumRaidMembers() > 0
+	end
 end
 
-function GetNumSubgroupMembers()
-	return GetNumPartyMembers()
+if not GetNumSubgroupMembers then
+	function GetNumSubgroupMembers()
+		return GetNumPartyMembers()
+	end
 end
 
-function GetNumGroupMembers()
-	return IsInRaid() and GetNumRaidMembers() or GetNumPartyMembers()
+if not GetNumGroupMembers then
+	function GetNumGroupMembers()
+		return IsInRaid() and GetNumRaidMembers() or GetNumPartyMembers()
+	end
 end
