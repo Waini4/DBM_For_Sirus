@@ -121,6 +121,7 @@ L:SetTimerLocalization({
 })
 
 L:SetOptionLocalization({
+	RemoveHealthBuffs  = "Удалять усиления здоровья в начале боя",
 	WarnRageEnd  = "Show warning for $spell:40604 ends", --Translate
 	TimerRageEnd = "Show timer for $spell:40604 ends" --Translate
 })
@@ -176,7 +177,12 @@ L:SetGeneralLocalization({
 })
 
 L:SetOptionLocalization({
-	PassionThreshold = "Предупреждение на стаках - %d" --Translate
+	PassionThreshold = "Предупреждение на стаках - %d", --Translate
+	RemoveHealthBuffs     = "Удалять усиления темной магии начале боя"
+})
+
+L:SetMiscLocalization({
+	PhaseM = "Не нужно стесняться..."
 })
 ----------------------
 --  Illidari Council  --
@@ -201,7 +207,8 @@ L:SetOptionLocalization({
 	WarnDevAura  = "Показать предупреждение для $spell:41452",                   --Translate
 	WarnResAura  = "Показать предупреждение для $spell:41453",                   --Translate
 	Immune       = "Показать предупреждение, когда Маланда становится неуязвимой к заклинаниям или атакам в ближнем бою", --Translate
-	RaidReportHeal   = "Оповещение о хилке в рейд"
+	RaidReportHeal   = "Оповещение о хилке в рейд",
+	RaidReportHealEnd = "Оповещение о хиле за весь бой"
 })
 
 L:SetMiscLocalization({
@@ -248,7 +255,8 @@ L:SetOptionLocalization({
 	TimerNextHuman   = "Показать время для следующей Обычной Фазы",               --Translate
 	TimerNextDemon   = "Показать время для следующей Демона Фазы",              --Translate
 	RangeFrame       = "Show range frame (10 yards) in Phase 3 and 4",  --Translate
-	RaidReportHeal   = "Оповещение о хилке в рейд"
+	RaidReportHeal   = "Оповещение о хилке в рейд",
+	RaidReportHealEnd = "Оповещение о хиле за весь бой"
 })
 
 L:SetMiscLocalization({

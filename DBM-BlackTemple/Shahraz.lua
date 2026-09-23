@@ -10,7 +10,7 @@ mod:SetUsedIcons(1, 2, 3, 4, 5, 6, 7, 8)
 mod:RegisterCombat("combat")
 
 mod:RegisterEvents(
-	"RAID_BOSS_EMOTE",
+	"CHAT_MSG_MONSTER_YELL",
 	"SPELL_CAST_START 374696 374699 374706",
 	"SPELL_AURA_APPLIED 374701 374707 374690 374693 374691",
 	"SPELL_AURA_APPLIED_DOSE 374701 374707 374690 374693 374691",
@@ -42,13 +42,13 @@ local timerDisire		= mod:NewCDTimer(40, 374693, nil, nil, nil, 3) --МК
 
 mod:AddSetIconOption("SetIconOnFatalAttraction", 374699, true, false, { 3,4,5 })
 mod:AddSetIconOption("SetIconOnDustructiveBond", 374706, true, false, { 3,4,5 })
-
+mod:AddBoolOption("RemoveHealthBuffs", true)
 mod:AddInfoFrameOption(374691, true)
 mod.vb.prewarn_enrage = false
 mod.vb.enrage = false
 mod.vb.FatIcons = 5
 mod.vb.Mobs = 0
-mod.vb.Stage = 2
+mod.vb.Stage = false
 
 --mod:AddSliderOption("Slider", 1, 100, 1)
 local StackBuff = DBM:GetSpellInfoNew(374691)
@@ -71,11 +71,18 @@ local aura = {
 	[40897] = true
 }
 
+function mod:RemoveBuffs()
+	CancelUnitBuff("player", (GetSpellInfo(48169)))
+end
+
 function mod:OnCombatStart(delay)
 	self.vb.prewarn_enrage = false
 	self.vb.enrage = false
 	self.vb.Mobs = 0
-	self.vb.Stage = 2
+	if self.Options.RemoveHealthBuffs then
+		mod:ScheduleMethod(0.1, "RemoveBuffs")
+	end
+	self.vb.Stage = false
 --print("Start")
 	--timerShriekCD:Start(15.8-delay)
 	--timerFACD:Start(24.4-delay)
@@ -167,10 +174,14 @@ function mod:SPELL_CAST_START(args)
 	end
 end
 
-function mod:RAID_BOSS_EMOTE(msg, source)
-	if not self.vb.enrage and (source or "") == L.name then
-		self.vb.enrage = true
-	--	warnEnrage:Show()
+function mod:CHAT_MSG_MONSTER_YELL(msg)
+	if (msg == L.PhaseM or msg:find(L.PhaseM)) and self.vb.Stage then
+			timerPunishment:Start(15)
+			timerCDDA:Start(10)
+			timerDisire:Start(15)
+			timerCdDB:Start(35)
+			StageTimer:Start(nil, 1)
+			self.vb.Stage = false
 	end
 end
 
@@ -197,18 +208,13 @@ function mod:UNIT_DIED(args)
 	if self:GetCIDFromGUID(args.destGUID) == 24504 or self:GetCIDFromGUID(args.destGUID) == 90040 then
 		self.vb.Mobs = self.vb.Mobs + 1
 		--print("Stage "..self.vb.Stage.." complete ".. self.vb.Mobs)
-		if self.vb.Mobs == self.vb.Stage then
+		if self.vb.Mobs >= 1 then
 		--	print("da")
-			timerPunishment:Start(15)
-			timerCDDA:Start(10)
-			timerDisire:Start(15)
-			timerCdDB:Start(35)
-			StageTimer:Start(nil, 1)
-			self.vb.Stage = self.vb.Stage + 1
+			self.vb.Stage = true
 			self.vb.Mobs = 0
 		end
+	end
 	--[[	if self.Options.HealthFrame then
 			DBM.BossHealth:RemoveBoss(24504)
 		end]]
 	end
-end

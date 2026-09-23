@@ -81,10 +81,12 @@ mod:AddSetIconOption("SetIconOnSoul", 376249, true, false, { 7 })
 mod:AddSetIconOption("SetIconOnSoulAdds", 376250, true, false, { 8 })
 --mod:AddSetIconOption("SetIconThreat", 20185, true, false, {3, 4, 5, 6, 7 })
 mod:AddBoolOption("RaidReportHeal", false)
+mod:AddBoolOption("RaidReportHealEnd", false)
 
 mod.vb.flamesDown 	= 0
 mod.vb.totalHeal	= 0
 mod.vb.flameBursts 	= 0
+mod.vb.totalHealEnd	= 0
 mod.vb.bossMaxHealth = 583200640
 mod.vb.warned_preP2 = false
 mod.vb.warned_preP4 = false
@@ -121,12 +123,19 @@ function mod:HealReport()
 	end
 end
 
+function mod:HealReportEnd()
+    local pctHealEnd = 0
+    pctHealEnd = (self.vb.totalHealEnd / self.vb.bossMaxHealth) * 100
+		SendChatMessage(string.format("DBM: %s исцелило за весь бой на %s (%.1ff%% от макс. HP)", self.vb.healSpellName,  self.vb.totalHealEnd, pctHealEnd), "RAID")
+end
+
 function mod:OnCombatStart(delay)
 	self:SetStage(1)
 	timerNextSoulAdds:Start(60 - delay)
 	self.vb.flamesDown = 0
 	self.vb.flameBursts = 0
 	self.vb.totalHeal	= 0
+	self.vb.totalHealEnd = 0
 	self.vb.warned_preP2 = false
 	self.vb.warned_preP4 = false
 	self.vb.CombatEnded = false
@@ -140,7 +149,7 @@ end
 
 function mod:OnCombatEnd(wipe)
 	self:UnregisterShortTermEvents()
-	--DBM:FireCustomEvent("DBM_EncounterEnd", 22917, "Illidan", wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 22917, "Illidan", wipe)
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end
@@ -299,6 +308,9 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 	--	self:Schedule(74, humanForms, self)
 	elseif msg == (L.End or msg:find(L.End)) and self.vb.CombatEnded then
 		DBM:EndCombat(self)
+		if self.Options.RaidReportHealEnd then
+		self:ScheduleMethod(0.1, "HealReportEnd")
+		end
 	end
 end
 
@@ -318,6 +330,7 @@ function mod:SPELL_HEAL(_, _, _, _, _, _, spellId, _, _, amount)
 	self.vb.healSpellName = GetSpellInfo(spellId)
 	if spellId == 376249 then
 		self.vb.totalHeal     = self.vb.totalHeal + (amount or 0)
+		self.vb.totalHealEnd = self.vb.totalHealEnd + (amount or 0)
 		self:UnscheduleMethod("HealReport")
         self:ScheduleMethod(2.0, "HealReport")
 	end

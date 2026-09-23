@@ -46,8 +46,10 @@ local berserkTimer			= mod:NewBerserkTimer(900)
 
 mod:AddSetIconOption("PoisonIcon", 41485)
 mod:AddBoolOption("RaidReportHeal", false)
+mod:AddBoolOption("RaidReportHealEnd", false)
 mod.vb.bossMaxHealth = 172125000
 mod.vb.totalHeal	= 0
+mod.vb.totalHealEnd	= 0
 
 function mod:HealReport()
 	local pctHeal = 0
@@ -58,10 +60,24 @@ function mod:HealReport()
 	end
 end
 
+function mod:HealReportEnd()
+    local pctHealEnd = 0
+    pctHealEnd = (self.vb.totalHealEnd / self.vb.bossMaxHealth) * 100
+		SendChatMessage(string.format("DBM: %s исцелило за весь бой на %s (%.1ff%% от макс. HP)", self.vb.healSpellName,  self.vb.totalHealEnd, pctHealEnd), "RAID")
+end
+
 function mod:OnCombatStart(delay)
 	self.vb.totalHeal = 0
+	self.vb.totalHealEnd = 0
 	berserkTimer:Start(-delay)
 	timerFlame:Start(16-delay)
+end
+
+function mod:OnCombatEnd(wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 22949 or 22950 or 22951 or 22952, "Council", wipe)
+	if self.Options.RaidReportHealEnd then
+		self:ScheduleMethod(0.1, "HealReportEnd")
+	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
@@ -143,6 +159,7 @@ function mod:SPELL_HEAL(_, _, _, _, _, _, spellId, _, _, amount)
 	self.vb.healSpellName = GetSpellInfo(spellId)
 	if spellId == 376235 then
 		self.vb.totalHeal     = self.vb.totalHeal + (amount or 0)
+		self.vb.totalHealEnd = self.vb.totalHealEnd + (amount or 0)
 		self:UnscheduleMethod("HealReport")
         self:ScheduleMethod(2.0, "HealReport")
 	end

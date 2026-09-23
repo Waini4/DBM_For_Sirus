@@ -40,8 +40,16 @@ mod:AddInfoFrameOption(373742)
 --local ApofStack = DBM:GetSpellInfoNew(373747)
 local FilthBuff = DBM:GetSpellInfoNew(373742)
 mod:AddRangeFrameOption(8, nil, true)
+mod:AddBoolOption("RemoveHealthBuffs", true)
 --mod.vb.Filth = 8
 
+
+function mod:RemoveBuffs()
+	CancelUnitBuff("player", (GetSpellInfo(47440)))
+	CancelUnitBuff("player", (GetSpellInfo(48161)))
+	CancelUnitBuff("player", (GetSpellInfo(48162)))
+	CancelUnitBuff("player", (GetSpellInfo(72590)))
+end
 
 function mod:OnCombatStart(delay)
 	--	self.vb.Filth = 8
@@ -51,6 +59,9 @@ function mod:OnCombatStart(delay)
 	end
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Show(8)
+	end
+	if self.Options.RemoveHealthBuffs then
+		mod:ScheduleMethod(0.1, "RemoveBuffs")
 	end
 	timerStrikeCD:Start()
 end
